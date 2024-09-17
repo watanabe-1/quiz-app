@@ -1,0 +1,59 @@
+{
+  "folders": [
+    {
+      "path": "../"
+    }
+  ],
+  "settings": {
+    //対応するかっこに色をつける
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    //prettier,eslint
+    "eslint.format.enable": false,
+    "editor.formatOnSave": true, // ファイル保存時の自動フォーマット有効
+    //"editor.formatOnPaste": true, // ペーストした文字の自動フォーマット有効
+    "editor.formatOnType": true, // 文字入力行の自動フォーマット有効
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit", // ファイル保存時にESLintの自動修正を実行する
+      "source.addMissingImports": "explicit" // 未importのモジュールを自動で探してimport文を追加する
+    },
+    "markuplint.enable": true, // Markuplintを有効化する
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.lineNumbers": "on",
+    "editor.rulers": [80],
+    "editor.wordWrap": "on",
+    // "eslint.packageManager": "yarn",
+    "files.insertFinalNewline": true,
+    "npm.packageManager": "yarn",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "files.autoGuessEncoding": true,
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[python]": {
+      "editor.formatOnType": true
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  }
+}

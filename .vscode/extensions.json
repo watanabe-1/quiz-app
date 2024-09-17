@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "formulahendry.auto-close-tag",
+    "wmaurer.change-case",
+    "oouo-diogo-perdigao.docthis",
+    "cschlosser.doxdocgen",
+    "dbaeumer.vscode-eslint", // ESLint
+    "esbenp.prettier-vscode", // Prettier
+    "yusukehirao.vscode-markuplint", // Markuplint
+    "bradlc.vscode-tailwindcss", // Tailwind CSS IntelliSense
+    "vincaslt.highlight-matching-tag",
+    "zignd.html-css-class-completion",
+    "davidanson.vscode-markdownlint",
+    "christian-kohler.path-intellisense",
+    "mosapride.zenkaku",
+    "vscjava.vscode-gradle",
+    "oderwat.indent-rainbow"
+  ]
+}
