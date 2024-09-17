@@ -9,10 +9,18 @@
   },
   {
     "id": 2,
-    "category": "数学2",
-    "question": "2 + 2 は何ですか？",
+    "category": "数学",
+    "question": "3 + 3 は何ですか？",
     "options": ["3", "4", "5", "6"],
-    "answer": 1,
-    "explanation": "2 + 2 は 4 です。"
+    "answer": 3,
+    "explanation": "3 + 3 は 6 です。"
+  },
+  {
+    "id": 3,
+    "category": "test",
+    "question": "aaaa",
+    "options": ["3", "4", "5", "6"],
+    "answer": 3,
+    "explanation": "bbbb"
   }
 ]
