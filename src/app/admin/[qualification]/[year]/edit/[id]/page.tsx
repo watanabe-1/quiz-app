@@ -43,21 +43,23 @@ const EditQuestion = ({ params }: { params: Params }) => {
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const uploadData = new FormData(); // 変数名を 'uploadData' に変更
+      const uploadData = new FormData();
       uploadData.append("file", file);
-      let targetDir = "images";
+      let targetDir = "";
 
       if (field === "question") {
-        targetDir += "/questions";
+        targetDir = "questions";
       } else if (field === "option") {
         if (subField === "explanationImage") {
-          targetDir += "/explanations";
+          targetDir = "explanations";
         } else {
-          targetDir += "/options";
+          targetDir = "options";
         }
       }
 
       uploadData.append("targetDir", targetDir);
+      uploadData.append("qualification", qualification);
+      uploadData.append("year", year);
 
       const res = await fetch("/api/uploadImage", {
         method: "POST",
