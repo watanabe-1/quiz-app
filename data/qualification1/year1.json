@@ -4,15 +4,15 @@
     "category": "数学",
     "question": {
       "text": "2 + 2 は何ですか？?aa",
-      "image": null
+      "image": ""
     },
     "options": [
       {
         "text": "選択肢1",
-        "image": null,
+        "image": "",
         "explanation": {
           "text": "選択肢1の解説",
-          "image": null
+          "image": ""
         }
       },
       {

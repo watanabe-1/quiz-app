@@ -34,41 +34,90 @@ const EditQuestion = ({ params }: { params: Params }) => {
   if (error) return <div>エラーが発生しました。</div>;
   if (!formData) return <div>読み込み中...</div>;
 
-  // 画像ファイルをBase64エンコードしてセット
-  const handleImageChange = async (
+  // 画像をアップロードしてパスを取得
+  const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
     field: "question" | "option",
     index?: number,
-    subField?: "image" | "explanationImage"
+    subField?: "explanationImage"
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          if (field === "question") {
-            setFormData({
-              ...formData!,
-              question: {
-                ...formData!.question,
-                image: reader.result.toString(),
-              },
-            });
-          } else if (field === "option" && index !== undefined) {
-            const newOptions = [...formData!.options];
-            if (subField === "image") {
-              newOptions[index].image = reader.result.toString();
-            } else if (subField === "explanationImage") {
-              if (!newOptions[index].explanation) {
-                newOptions[index].explanation = {};
-              }
-              newOptions[index].explanation!.image = reader.result.toString();
-            }
-            setFormData({ ...formData!, options: newOptions });
-          }
+      const uploadData = new FormData(); // 変数名を 'uploadData' に変更
+      uploadData.append("file", file);
+      let targetDir = "images";
+
+      if (field === "question") {
+        targetDir += "/questions";
+      } else if (field === "option") {
+        if (subField === "explanationImage") {
+          targetDir += "/explanations";
+        } else {
+          targetDir += "/options";
         }
-      };
-      reader.readAsDataURL(file);
+      }
+
+      uploadData.append("targetDir", targetDir);
+
+      const res = await fetch("/api/uploadImage", {
+        method: "POST",
+        body: uploadData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const imageUrl = data.url;
+
+        if (field === "question") {
+          setFormData({
+            ...formData!,
+            question: {
+              ...formData!.question,
+              image: imageUrl,
+            },
+          });
+        } else if (field === "option" && index !== undefined) {
+          const newOptions = [...formData!.options];
+          if (subField === "explanationImage") {
+            if (!newOptions[index].explanation) {
+              newOptions[index].explanation = {};
+            }
+            newOptions[index].explanation!.image = imageUrl;
+          } else {
+            newOptions[index].image = imageUrl;
+          }
+          setFormData({ ...formData!, options: newOptions });
+        }
+      } else {
+        alert("画像のアップロードに失敗しました。");
+      }
+    }
+  };
+
+  // 画像を削除してフィールドを空に設定
+  const handleImageRemove = (
+    field: "question" | "option",
+    index?: number,
+    subField?: "explanationImage"
+  ) => {
+    if (field === "question") {
+      setFormData({
+        ...formData!,
+        question: {
+          ...formData!.question,
+          image: "",
+        },
+      });
+    } else if (field === "option" && index !== undefined) {
+      const newOptions = [...formData!.options];
+      if (subField === "explanationImage") {
+        if (newOptions[index].explanation) {
+          newOptions[index].explanation!.image = "";
+        }
+      } else {
+        newOptions[index].image = "";
+      }
+      setFormData({ ...formData!, options: newOptions });
     }
   };
 
@@ -146,18 +195,26 @@ const EditQuestion = ({ params }: { params: Params }) => {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleImageChange(e, "question")}
+            onChange={(e) => handleImageUpload(e, "question")}
             className="w-full"
           />
           {formData.question.image && (
-            <Image
-              src={formData.question.image}
-              alt="問題画像"
-              className="mt-2"
-              width={600}
-              height={400}
-              unoptimized
-            />
+            <div className="mt-2">
+              <Image
+                src={formData.question.image}
+                alt="問題画像"
+                width={600}
+                height={400}
+                unoptimized
+              />
+              <button
+                type="button"
+                onClick={() => handleImageRemove("question")}
+                className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                画像を削除
+              </button>
+            </div>
           )}
         </div>
         {/* カテゴリー */}
@@ -166,7 +223,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
           <input
             name="category"
             value={formData.category}
-            onChange={(e) => handleChange(e, undefined, undefined)}
+            onChange={handleChange}
             className="w-full p-2 border rounded"
           />
         </div>
@@ -187,20 +244,26 @@ const EditQuestion = ({ params }: { params: Params }) => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) =>
-                    handleImageChange(e, "option", index, "image")
-                  }
+                  onChange={(e) => handleImageUpload(e, "option", index)}
                   className="w-full"
                 />
                 {option.image && (
-                  <Image
-                    src={option.image}
-                    alt={`選択肢${index + 1}の画像`}
-                    className="mt-2"
-                    width={600}
-                    height={400}
-                    unoptimized
-                  />
+                  <div className="mt-2">
+                    <Image
+                      src={option.image}
+                      alt={`選択肢${index + 1}の画像`}
+                      width={600}
+                      height={400}
+                      unoptimized
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleImageRemove("option", index)}
+                      className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      画像を削除
+                    </button>
+                  </div>
                 )}
               </div>
               <div>
@@ -219,19 +282,29 @@ const EditQuestion = ({ params }: { params: Params }) => {
                   type="file"
                   accept="image/*"
                   onChange={(e) =>
-                    handleImageChange(e, "option", index, "explanationImage")
+                    handleImageUpload(e, "option", index, "explanationImage")
                   }
                   className="w-full"
                 />
                 {option.explanation?.image && (
-                  <Image
-                    src={option.explanation.image}
-                    alt="解説画像"
-                    className="mt-2"
-                    width={600}
-                    height={400}
-                    unoptimized
-                  />
+                  <div className="mt-2">
+                    <Image
+                      src={option.explanation.image}
+                      alt="解説画像"
+                      width={600}
+                      height={400}
+                      unoptimized
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleImageRemove("option", index, "explanationImage")
+                      }
+                      className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                    >
+                      画像を削除
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
