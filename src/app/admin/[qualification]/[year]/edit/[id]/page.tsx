@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
+import { QuestionData } from "@/@types/quizType";
 
 interface Params {
   qualification: string;
@@ -10,26 +11,17 @@ interface Params {
   id: string;
 }
 
-interface Question {
-  id: number;
-  category: string;
-  question: string;
-  options: string[];
-  answer: number;
-  explanation: string;
-}
-
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const EditQuestion = ({ params }: { params: Params }) => {
   const { qualification, year, id } = params;
-  const { data: questionData, error } = useSWR<Question>(
+  const { data: questionData, error } = useSWR<QuestionData>(
     `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
       year
     )}/${id}`,
     fetcher
   );
-  const [formData, setFormData] = useState<Question | null>(null);
+  const [formData, setFormData] = useState<QuestionData | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,12 +37,16 @@ const EditQuestion = ({ params }: { params: Params }) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value } as Question);
+    setFormData({ ...formData, [name]: value } as QuestionData);
   };
 
-  const handleOptionChange = (index: number, value: string) => {
+  const handleOptionChange = (
+    index: number,
+    field: "text" | "explanation",
+    value: string
+  ) => {
     const newOptions = [...formData!.options];
-    newOptions[index] = value;
+    newOptions[index][field] = value;
     setFormData({ ...formData!, options: newOptions });
   };
 
@@ -102,14 +98,27 @@ const EditQuestion = ({ params }: { params: Params }) => {
           />
         </div>
         <div>
-          <label className="block font-medium">選択肢:</label>
+          <label className="block font-medium">選択肢と解説:</label>
           {formData.options.map((option, index) => (
-            <input
-              key={index}
-              value={option}
-              onChange={(e) => handleOptionChange(index, e.target.value)}
-              className="w-full p-2 border rounded mb-2"
-            />
+            <div key={index} className="mb-4">
+              <label className="block font-medium">選択肢 {index + 1}:</label>
+              <input
+                value={option.text}
+                onChange={(e) =>
+                  handleOptionChange(index, "text", e.target.value)
+                }
+                className="w-full p-2 border rounded mb-2"
+              />
+              <label className="block font-medium">解説:</label>
+              <textarea
+                value={option.explanation}
+                onChange={(e) =>
+                  handleOptionChange(index, "explanation", e.target.value)
+                }
+                className="w-full p-2 border rounded"
+                rows={2}
+              />
+            </div>
           ))}
         </div>
         <div>
@@ -126,11 +135,12 @@ const EditQuestion = ({ params }: { params: Params }) => {
             className="w-full p-2 border rounded"
           />
         </div>
+        {/* 全体の解説が必要な場合 */}
         <div>
-          <label className="block font-medium">解説:</label>
+          <label className="block font-medium">全体の解説:</label>
           <textarea
             name="explanation"
-            value={formData.explanation}
+            value={formData.explanation || ""}
             onChange={handleChange}
             className="w-full p-2 border rounded"
             rows={4}

@@ -1,5 +1,6 @@
 "use client";
 
+import { QuestionData } from "@/@types/quizType";
 import React, { useState, useEffect } from "react";
 import useSWR from "swr";
 
@@ -7,15 +8,6 @@ interface QuestionProps {
   qualification: string;
   year: string;
   questionId: number;
-}
-
-interface QuestionData {
-  id: number;
-  category: string;
-  question: string;
-  options: string[];
-  answer: number;
-  explanation: string;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -33,7 +25,6 @@ const Question: React.FC<QuestionProps> = ({
   );
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [showExplanation, setShowExplanation] = useState(false);
 
   useEffect(() => {
     if (questionData) {
@@ -41,14 +32,12 @@ const Question: React.FC<QuestionProps> = ({
       const key = `${qualification}-${year}-${questionData.id}`;
       if (history[key] !== undefined) {
         setSelectedOption(history[key]);
-        setShowExplanation(true);
       }
     }
   }, [qualification, year, questionData]);
 
   const handleOptionClick = (index: number) => {
     setSelectedOption(index);
-    setShowExplanation(true);
 
     const history = JSON.parse(localStorage.getItem("answerHistory") || "{}");
     const key = `${qualification}-${year}-${questionData!.id}`;
@@ -77,13 +66,19 @@ const Question: React.FC<QuestionProps> = ({
                 : "hover:bg-gray-100"
             }`}
           >
-            {option}
+            <div>{option.text}</div>
+            {selectedOption === index && (
+              <div className="mt-2 text-sm text-gray-700">
+                <strong>解説:</strong> {option.explanation}
+              </div>
+            )}
           </li>
         ))}
       </ul>
-      {showExplanation && (
+      {/* 全体の解説を表示する場合 */}
+      {selectedOption !== null && questionData.explanation && (
         <div className="mt-6 p-4 bg-yellow-100 rounded">
-          <h3 className="font-semibold">解説</h3>
+          <h3 className="font-semibold">全体の解説</h3>
           <p>{questionData.explanation}</p>
         </div>
       )}
