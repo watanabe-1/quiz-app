@@ -4,11 +4,14 @@ import Image from "next/image";
 import { QuestionData } from "@/@types/quizType";
 import React, { useState, useEffect } from "react";
 import useSWR from "swr";
+import Link from "next/link";
 
 interface QuestionProps {
   qualification: string;
   year: string;
+  category: string;
   questionId: number;
+  questionIds: number[];
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -16,7 +19,9 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const Question: React.FC<QuestionProps> = ({
   qualification,
   year,
+  category,
   questionId,
+  questionIds,
 }) => {
   const { data: questionData, error } = useSWR<QuestionData>(
     `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
@@ -33,6 +38,8 @@ const Question: React.FC<QuestionProps> = ({
       const key = `${qualification}-${year}-${questionData.id}`;
       if (history[key] !== undefined) {
         setSelectedOption(history[key]);
+      } else {
+        setSelectedOption(null);
       }
     }
   }, [qualification, year, questionData]);
@@ -49,8 +56,23 @@ const Question: React.FC<QuestionProps> = ({
   if (error) return <div>エラーが発生しました。</div>;
   if (!questionData) return <div>読み込み中...</div>;
 
+  // 現在の問題のインデックスを取得
+  const currentIndex = questionIds.indexOf(questionId);
+
+  // 前後の問題IDを計算
+  const prevQuestionId =
+    currentIndex > 0 ? questionIds[currentIndex - 1] : null;
+  const nextQuestionId =
+    currentIndex < questionIds.length - 1
+      ? questionIds[currentIndex + 1]
+      : null;
+
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-6">
+      {/* 進捗の表示 */}
+      <div className="text-right text-sm text-gray-600">
+        {currentIndex + 1} / {questionIds.length} 問
+      </div>
       {/* 問題文の表示 */}
       <div className="mb-4">
         {questionData.question.text && (
@@ -120,6 +142,37 @@ const Question: React.FC<QuestionProps> = ({
           </li>
         ))}
       </ul>
+      {/* ナビゲーションボタン */}
+      <div className="flex justify-between mt-6">
+        {prevQuestionId ? (
+          <Link
+            href={`/quiz/${encodeURIComponent(
+              qualification
+            )}/${encodeURIComponent(year)}/${encodeURIComponent(
+              category
+            )}/${prevQuestionId}`}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            前の問題
+          </Link>
+        ) : (
+          <div />
+        )}
+        {nextQuestionId ? (
+          <Link
+            href={`/quiz/${encodeURIComponent(
+              qualification
+            )}/${encodeURIComponent(year)}/${encodeURIComponent(
+              category
+            )}/${nextQuestionId}`}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            次の問題
+          </Link>
+        ) : (
+          <div />
+        )}
+      </div>
     </div>
   );
 };
