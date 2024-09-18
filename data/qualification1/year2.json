@@ -17,7 +17,7 @@
   },
   {
     "id": 3,
-    "category": "test",
+    "category": "1year2",
     "question": "aaaa",
     "options": ["3", "4", "5", "6"],
     "answer": 3,

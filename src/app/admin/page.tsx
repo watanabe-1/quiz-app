@@ -1,23 +1,18 @@
 import React from "react";
 import Link from "next/link";
-import { getAllQuestions } from "../../lib/questions";
+import { getAllQualifications } from "../../lib/questions";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-
-interface Question {
-  id: number;
-  question: string;
-}
 
 const AdminDashboard = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/auth/signin");
+    redirect("/api/auth/signin");
   }
 
-  const questions: Question[] = await getAllQuestions();
+  const qualifications = await getAllQualifications();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -34,16 +29,17 @@ const AdminDashboard = async () => {
         >
           問題データのアップロード
         </Link>
+        <h2 className="text-xl font-semibold mb-4">資格一覧</h2>
         <ul className="space-y-2">
-          {questions.map((question) => (
-            <li key={question.id} className="p-4 bg-white rounded shadow">
+          {qualifications.map((qualification) => (
+            <li key={qualification} className="p-4 bg-white rounded shadow">
               <div className="flex justify-between items-center">
-                <span>{question.question}</span>
+                <span>{qualification}</span>
                 <Link
-                  href={`/admin/edit/${question.id}`}
+                  href={`/admin/${encodeURIComponent(qualification)}`}
                   className="text-blue-600 hover:underline"
                 >
-                  編集
+                  管理
                 </Link>
               </div>
             </li>

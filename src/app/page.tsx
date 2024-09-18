@@ -1,16 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { getAllQuestions } from "../lib/questions";
-
-interface Question {
-  category: string;
-}
+import { getAllQualifications } from "../lib/questions";
 
 const HomePage = async () => {
-  const questions: Question[] = await getAllQuestions();
-  const categories: string[] = Array.from(
-    new Set(questions.map((q: Question) => q.category))
-  );
+  const qualifications = await getAllQualifications();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -18,17 +11,15 @@ const HomePage = async () => {
         <h1 className="text-2xl font-bold">クイズアプリへようこそ</h1>
       </header>
       <main className="p-6">
-        <h2 className="text-xl font-semibold mb-4">
-          カテゴリを選択してください
-        </h2>
+        <h2 className="text-xl font-semibold mb-4">資格を選択してください</h2>
         <ul className="space-y-2">
-          {categories.map((category: string, index: number) => (
-            <li key={index}>
+          {qualifications.map((qualification) => (
+            <li key={qualification}>
               <Link
-                href={`/category/${encodeURIComponent(category)}`}
+                href={`/quiz/${encodeURIComponent(qualification)}`}
                 className="block p-4 bg-white rounded shadow hover:bg-blue-50"
               >
-                {category}
+                {qualification}
               </Link>
             </li>
           ))}

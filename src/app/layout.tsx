@@ -3,11 +3,6 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "クイズアプリ",
-  description: "Next.js と Tailwind CSS を使用したクイズアプリ",
-};
-
 export default function RootLayout({
   children,
 }: {

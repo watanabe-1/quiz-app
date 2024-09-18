@@ -1,35 +1,58 @@
 "use client";
 
-import { QuestionData, QuestionProps } from "@/@types/quizType";
 import React, { useState, useEffect } from "react";
 import useSWR from "swr";
 
+interface QuestionProps {
+  qualification: string;
+  year: string;
+  questionId: number;
+}
+
+interface QuestionData {
+  id: number;
+  category: string;
+  question: string;
+  options: string[];
+  answer: number;
+  explanation: string;
+}
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Question: React.FC<QuestionProps> = ({ questionId }) => {
+const Question: React.FC<QuestionProps> = ({
+  qualification,
+  year,
+  questionId,
+}) => {
   const { data: questionData, error } = useSWR<QuestionData>(
-    `/api/questions/${questionId}`,
+    `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
+      year
+    )}/${questionId}`,
     fetcher
   );
+
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
 
   useEffect(() => {
     if (questionData) {
       const history = JSON.parse(localStorage.getItem("answerHistory") || "{}");
-      if (history[questionData.id] !== undefined) {
-        setSelectedOption(history[questionData.id]);
+      const key = `${qualification}-${year}-${questionData.id}`;
+      if (history[key] !== undefined) {
+        setSelectedOption(history[key]);
         setShowExplanation(true);
       }
     }
-  }, [questionData]);
+  }, [qualification, year, questionData]);
 
   const handleOptionClick = (index: number) => {
     setSelectedOption(index);
     setShowExplanation(true);
 
     const history = JSON.parse(localStorage.getItem("answerHistory") || "{}");
-    history[questionData!.id] = index;
+    const key = `${qualification}-${year}-${questionData!.id}`;
+    history[key] = index;
     localStorage.setItem("answerHistory", JSON.stringify(history));
   };
 
