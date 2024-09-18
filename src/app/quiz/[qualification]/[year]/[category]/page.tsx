@@ -33,7 +33,7 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
                 )}/${question.id}`}
                 className="block p-4 bg-white rounded shadow hover:bg-blue-50"
               >
-                {question.question}
+                <span>{question.question.text || "（テキストなし）"}</span>
               </Link>
             </li>
           ))}

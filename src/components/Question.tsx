@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { QuestionData } from "@/@types/quizType";
 import React, { useState, useEffect } from "react";
 import useSWR from "swr";
@@ -50,7 +51,25 @@ const Question: React.FC<QuestionProps> = ({
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-6">
-      <h2 className="text-xl font-semibold mb-4">{questionData.question}</h2>
+      {/* 問題文の表示 */}
+      <div className="mb-4">
+        {questionData.question.text && (
+          <h2 className="text-xl font-semibold mb-2">
+            {questionData.question.text}
+          </h2>
+        )}
+        {questionData.question.image && (
+          <Image
+            src={questionData.question.image}
+            alt="問題画像"
+            className="mb-2"
+            width={600}
+            height={400}
+            unoptimized
+          />
+        )}
+      </div>
+      {/* 選択肢の表示 */}
       <ul className="space-y-2">
         {questionData.options.map((option, index) => (
           <li
@@ -66,22 +85,41 @@ const Question: React.FC<QuestionProps> = ({
                 : "hover:bg-gray-100"
             }`}
           >
-            <div>{option.text}</div>
-            {selectedOption === index && (
+            <div>
+              {option.text && <div>{option.text}</div>}
+              {option.image && (
+                <Image
+                  src={option.image}
+                  alt={`選択肢${index + 1}の画像`}
+                  width={600}
+                  height={400}
+                  unoptimized
+                />
+              )}
+            </div>
+            {/* 選択された選択肢の解説を表示 */}
+            {selectedOption === index && option.explanation && (
               <div className="mt-2 text-sm text-gray-700">
-                <strong>解説:</strong> {option.explanation}
+                {option.explanation.text && (
+                  <div>
+                    <strong>解説:</strong> {option.explanation.text}
+                  </div>
+                )}
+                {option.explanation.image && (
+                  <Image
+                    src={option.explanation.image}
+                    alt={`解説画像`}
+                    className="mt-2"
+                    width={600}
+                    height={400}
+                    unoptimized
+                  />
+                )}
               </div>
             )}
           </li>
         ))}
       </ul>
-      {/* 全体の解説を表示する場合 */}
-      {selectedOption !== null && questionData.explanation && (
-        <div className="mt-6 p-4 bg-yellow-100 rounded">
-          <h3 className="font-semibold">全体の解説</h3>
-          <p>{questionData.explanation}</p>
-        </div>
-      )}
     </div>
   );
 };

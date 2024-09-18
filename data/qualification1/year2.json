@@ -2,76 +2,95 @@
   {
     "id": 1,
     "category": "数学",
-    "question": "2 + 2 は何ですか？",
+    "question": {
+      "text": "2 + 2 は何ですか？?aa",
+      "image": null
+    },
     "options": [
       {
         "text": "選択肢1",
-        "explanation": "選択肢1の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢1の解説",
+          "image": null
+        }
       },
       {
         "text": "選択肢2",
-        "explanation": "選択肢2の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢2の解説",
+          "image": null
+        }
       },
       {
         "text": "選択肢3",
-        "explanation": "選択肢3の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢3の解説",
+          "image": null
+        }
       },
       {
         "text": "選択肢4",
-        "explanation": "選択肢4の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢4の解説",
+          "image": null
+        }
       }
     ],
     "answer": 1,
-    "explanation": "2 + 2 は 4 です。"
+    "explanation": {
+      "text": "2 + 2は4です",
+      "image": null
+    }
   },
   {
     "id": 2,
     "category": "数学",
-    "question": "3 + 3 は何ですか？",
+    "question": {
+      "text": "2 + 2 は何ですか？?aa",
+      "image": null
+    },
     "options": [
       {
         "text": "選択肢1",
-        "explanation": "選択肢1の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢1の解説",
+          "image": null
+        }
       },
       {
         "text": "選択肢2",
-        "explanation": "選択肢2の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢2の解説",
+          "image": null
+        }
       },
       {
         "text": "選択肢3",
-        "explanation": "選択肢3の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢3の解説",
+          "image": null
+        }
       },
       {
         "text": "選択肢4",
-        "explanation": "選択肢4の解説"
+        "image": null,
+        "explanation": {
+          "text": "選択肢4の解説",
+          "image": null
+        }
       }
     ],
-    "answer": 3,
-    "explanation": "3 + 3 は 6 です。"
-  },
-  {
-    "id": 3,
-    "category": "1year2",
-    "question": "aaaa",
-    "options": [
-      {
-        "text": "選択肢1",
-        "explanation": "選択肢1の解説"
-      },
-      {
-        "text": "選択肢2",
-        "explanation": "選択肢2の解説"
-      },
-      {
-        "text": "選択肢3",
-        "explanation": "選択肢3の解説"
-      },
-      {
-        "text": "選択肢4",
-        "explanation": "選択肢4の解説"
-      }
-    ],
-    "answer": 3,
-    "explanation": "bbbb"
+    "answer": 1,
+    "explanation": {
+      "text": "2 + 2は4です",
+      "image": null
+    }
   }
 ]

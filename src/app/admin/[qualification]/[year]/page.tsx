@@ -42,7 +42,7 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
           {questions.map((question) => (
             <li key={question.id} className="p-4 bg-white rounded shadow">
               <div className="flex justify-between items-center">
-                <span>{question.question}</span>
+                <span>{question.question.text || "（テキストなし）"}</span>
                 <Link
                   href={`/admin/${encodeURIComponent(
                     qualification
