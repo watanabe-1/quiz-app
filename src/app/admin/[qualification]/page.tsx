@@ -10,12 +10,6 @@ interface Params {
 }
 
 const QualificationAdminPage = async ({ params }: { params: Params }) => {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect("/auth/signin");
-  }
-
   const qualification = decodeURIComponent(params.qualification);
   const years = await getYearsByQualification(qualification);
 

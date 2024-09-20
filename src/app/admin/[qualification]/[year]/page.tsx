@@ -11,12 +11,6 @@ interface Params {
 }
 
 const YearAdminPage = async ({ params }: { params: Params }) => {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    redirect("/auth/signin");
-  }
-
   const qualification = decodeURIComponent(params.qualification);
   const year = decodeURIComponent(params.year);
   const questions = await getQuestions(qualification, year);
@@ -43,7 +37,10 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
           {questions.map((question) => (
             <li key={question.id} className="p-4 bg-white rounded shadow">
               <div className="flex justify-between items-center">
-                <span>{question.question.text || "（テキストなし）"}</span>
+                <span>
+                  {`問題${question.id} ${question.question.text}` ||
+                    "（テキストなし）"}
+                </span>
                 <Link
                   href={`/admin/${encodeURIComponent(
                     qualification

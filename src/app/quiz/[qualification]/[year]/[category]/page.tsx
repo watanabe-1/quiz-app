@@ -40,7 +40,10 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
                 )}/${question.id}`}
                 className="block p-4 bg-white rounded shadow hover:bg-blue-50"
               >
-                <span>{question.question.text || "（テキストなし）"}</span>
+                <span>
+                  {`問題${question.id} ${question.question.text}` ||
+                    "（テキストなし）"}
+                </span>
               </Link>
             </li>
           ))}

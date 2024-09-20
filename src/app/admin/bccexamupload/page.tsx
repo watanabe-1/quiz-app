@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function Home() {
+const BccExamUploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,4 +47,6 @@ export default function Home() {
       </form>
     </div>
   );
-}
+};
+
+export default BccExamUploadPage;

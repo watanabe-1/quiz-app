@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import useSWR from "swr";
 import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 
 interface Params {
   qualification: string;
@@ -14,7 +16,7 @@ interface Params {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const EditQuestion = ({ params }: { params: Params }) => {
+const EditQuestion = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
   const year = decodeURIComponent(params.year);
   const id = decodeURIComponent(params.id);
