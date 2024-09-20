@@ -77,7 +77,7 @@ const Question: React.FC<QuestionProps> = ({
       <div className="mb-4">
         {questionData.question.text && (
           <h2 className="text-xl font-semibold mb-2">
-            {questionData.question.text}
+            {`問題${questionData.id} ${questionData.question.text}`}
           </h2>
         )}
         {questionData.question.image && (
