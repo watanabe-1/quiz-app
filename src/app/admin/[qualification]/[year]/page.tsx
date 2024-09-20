@@ -17,7 +17,8 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
     redirect("/auth/signin");
   }
 
-  const { qualification, year } = params;
+  const qualification = decodeURIComponent(params.qualification);
+  const year = decodeURIComponent(params.year);
   const questions = await getQuestions(qualification, year);
 
   return (

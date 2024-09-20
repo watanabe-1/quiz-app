@@ -1,6 +1,10 @@
 import React from "react";
 import Question from "../../../../../../components/Question";
-import { getQuestionsByCategory } from "../../../../../../lib/questions";
+import {
+  getQuestions,
+  getQuestionsByCategory,
+} from "../../../../../../lib/questions";
+import { allCategory } from "@/lib/constants";
 
 interface Params {
   qualification: string;
@@ -16,7 +20,10 @@ const QuestionPage = async ({ params }: { params: Params }) => {
   const questionId = parseInt(params.id);
 
   // カテゴリー内の全ての問題を取得
-  const questions = await getQuestionsByCategory(qualification, year, category);
+  const questions =
+    category === allCategory
+      ? await getQuestions(qualification, year)
+      : await getQuestionsByCategory(qualification, year, category);
   const questionIds = questions.map((q) => q.id);
 
   return (

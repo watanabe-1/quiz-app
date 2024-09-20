@@ -15,7 +15,9 @@ interface Params {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const EditQuestion = ({ params }: { params: Params }) => {
-  const { qualification, year, id } = params;
+  const qualification = decodeURIComponent(params.qualification);
+  const year = decodeURIComponent(params.year);
+  const id = decodeURIComponent(params.id);
   const { data: questionData, error } = useSWR<QuestionData>(
     `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
       year
@@ -125,7 +127,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field?: "question" | "option",
+    field?: "question" | "category" | "option",
     index?: number,
     subField?: "explanation"
   ) => {
@@ -137,6 +139,11 @@ const EditQuestion = ({ params }: { params: Params }) => {
           ...formData!.question,
           [name]: value,
         },
+      });
+    } else if (field === "category") {
+      setFormData({
+        ...formData!,
+        [name]: value,
       });
     } else if (field === "option" && index !== undefined) {
       const newOptions = [...formData!.options];
@@ -225,7 +232,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
           <input
             name="category"
             value={formData.category}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e, "category")}
             className="w-full p-2 border rounded"
           />
         </div>

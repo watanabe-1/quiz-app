@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { getCategories } from "../../../../lib/questions";
+import { allCategory } from "@/lib/constants";
 
 interface Params {
   qualification: string;
@@ -11,6 +12,9 @@ const CategoriesPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
   const year = decodeURIComponent(params.year);
   const categories = await getCategories(qualification, year);
+
+  // 「すべての問題」を先頭に追加
+  categories.unshift(allCategory);
 
   return (
     <div className="min-h-screen bg-gray-100">

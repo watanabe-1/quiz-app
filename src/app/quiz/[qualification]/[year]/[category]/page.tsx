@@ -1,6 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { getQuestionsByCategory } from "../../../../../lib/questions";
+import {
+  getQuestions,
+  getQuestionsByCategory,
+} from "../../../../../lib/questions";
+import { allCategory } from "@/lib/constants";
 
 interface Params {
   qualification: string;
@@ -12,7 +16,10 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
   const year = decodeURIComponent(params.year);
   const category = decodeURIComponent(params.category);
-  const questions = await getQuestionsByCategory(qualification, year, category);
+  const questions =
+    category === allCategory
+      ? await getQuestions(qualification, year)
+      : await getQuestionsByCategory(qualification, year, category);
 
   return (
     <div className="min-h-screen bg-gray-100">
