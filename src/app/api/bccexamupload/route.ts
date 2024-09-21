@@ -3,6 +3,11 @@ import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
 import { promises as fs } from "fs";
 import path from "path";
+import {
+  extractYear,
+  extractTitle,
+  replaceSpacesWithUnderscore,
+} from "@/lib/bccuploads";
 
 export async function POST(request: Request) {
   const data = await request.formData();
@@ -22,10 +27,10 @@ export async function POST(request: Request) {
     const text = data.text;
 
     // 年度を取得
-    const year = extractYear(text);
+    const year = replaceSpacesWithUnderscore(extractYear(text) || "");
 
     // タイトルを取得
-    const qualification = extractTitle(text);
+    const qualification = replaceSpacesWithUnderscore(extractTitle(text) || "");
 
     // テキストを解析してQuestionData形式のJSONに変換
     const problems = parseProblems(text);
@@ -50,29 +55,11 @@ export async function POST(request: Request) {
   }
 }
 
-function extractYear(text: string) {
-  const yearPattern = /((令和|平成|昭和)?[0-9０-９]+年度\s?[前後]期)/;
-  const yearMatch = text.match(yearPattern);
-  return yearMatch ? convertToHalfWidth(yearMatch[0]) : null;
-}
-
-function extractTitle(text: string) {
-  const titlePattern = /([0-9０-９]+級\s?[^\s]+)/;
-  const titleMatch = text.match(titlePattern);
-  return titleMatch ? convertToHalfWidth(titleMatch[0]) : null;
-}
-
-function convertToHalfWidth(str: string) {
-  return str.replace(/[０-９]/g, function (char) {
-    return String.fromCharCode(char.charCodeAt(0) - 0xfee0);
-  });
-}
-
 function parseProblems(text: string): QuestionData[] {
   const problems: QuestionData[] = [];
 
   // テキストからフッターや不要な情報を除去
-  const preprocessedText = preprocessText(text);
+  const preprocessedText = cleanText(text);
 
   // テキスト内で最初に「問題1」が出現する位置を特定
   const regexForStartIndex = /問題[1１][\s]/;
@@ -116,26 +103,12 @@ function parseProblems(text: string): QuestionData[] {
   return problems;
 }
 
-function preprocessText(text: string): string {
+function cleanText(text: string): string {
   // フッターや不要な情報を除去するパターン
   const unwantedPatterns = [
-    /H\d+前-061B01-\d+/g, // フッターのパターン
+    /[HR]\d{1,2}[前後]-\d{3}[A-Z]\d{2}-\d{1,2}/g, // フッターのパターン
     /禁転載複製/g, // 禁転載複製
     /「中央職業能力開発協会編」/g, // 中央職業能力開発協会編
-  ];
-  let cleanedText = text;
-  for (const pattern of unwantedPatterns) {
-    cleanedText = cleanedText.replace(pattern, "");
-  }
-  return cleanedText;
-}
-
-function cleanText(text: string): string {
-  // フッターや不要な情報を除去
-  const unwantedPatterns = [
-    /H\d+前-061B01-\d+/g,
-    /禁転載複製/g,
-    /「中央職業能力開発協会編」/g,
   ];
   let cleanedText = text;
   for (const pattern of unwantedPatterns) {
@@ -164,8 +137,8 @@ function extractQuestionAndOptions(content: string): {
   let currentOptionText = "";
 
   for (const part of parts) {
-    const trimmedPart = part.replace(/^[\s　]+|[\s　]+$/g, "");
-    if (optionLabels.some((label) => trimmedPart.startsWith(label))) {
+    const trimmedPart = part.replace(/^[\s　\.．]+|[\s　\.．]+$/g, "");
+    if (optionLabels.some((label) => trimmedPart === label)) {
       if (isOption && currentOptionText) {
         // 不要なテキストを除去
         const cleanedOptionText = cleanText(currentOptionText.trim());
