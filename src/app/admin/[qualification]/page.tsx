@@ -1,9 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { getYearsByQualification } from "../../../lib/questions";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 
 interface Params {
   qualification: string;

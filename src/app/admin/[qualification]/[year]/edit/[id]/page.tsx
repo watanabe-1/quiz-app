@@ -2,11 +2,9 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 
 interface Params {
   qualification: string;
@@ -16,7 +14,7 @@ interface Params {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const EditQuestion = async ({ params }: { params: Params }) => {
+const EditQuestion = ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
   const year = decodeURIComponent(params.year);
   const id = decodeURIComponent(params.id);
@@ -214,6 +212,7 @@ const EditQuestion = async ({ params }: { params: Params }) => {
               <Image
                 src={formData.question.image}
                 alt="問題画像"
+                layout="responsive"
                 width={600}
                 height={400}
                 unoptimized
@@ -263,6 +262,7 @@ const EditQuestion = async ({ params }: { params: Params }) => {
                     <Image
                       src={option.image}
                       alt={`選択肢${index + 1}の画像`}
+                      layout="responsive"
                       width={600}
                       height={400}
                       unoptimized
@@ -302,6 +302,7 @@ const EditQuestion = async ({ params }: { params: Params }) => {
                     <Image
                       src={option.explanation.image}
                       alt="解説画像"
+                      layout="responsive"
                       width={600}
                       height={400}
                       unoptimized

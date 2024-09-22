@@ -1,1 +1,2 @@
-export const allCategory = "すべての問題";
+export const ALL_CATEGORY = "all";
+export const ANSWER_HISTORY_KEY = "answerHistory";

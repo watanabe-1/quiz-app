@@ -4,7 +4,7 @@ import {
   getQuestions,
   getQuestionsByCategory,
 } from "../../../../../../lib/questions";
-import { allCategory } from "@/lib/constants";
+import { ALL_CATEGORY } from "@/lib/constants";
 
 interface Params {
   qualification: string;
@@ -21,10 +21,14 @@ const QuestionPage = async ({ params }: { params: Params }) => {
 
   // カテゴリー内の全ての問題を取得
   const questions =
-    category === allCategory
+    category === ALL_CATEGORY
       ? await getQuestions(qualification, year)
       : await getQuestionsByCategory(qualification, year, category);
-  const questionIds = questions.map((q) => q.id);
+  const question = questions.find((question) => question.id === questionId);
+  const questionIdAnswers = questions.map((question) => ({
+    id: question.id,
+    answer: question.answer,
+  }));
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -33,7 +37,8 @@ const QuestionPage = async ({ params }: { params: Params }) => {
         year={year}
         category={category}
         questionId={questionId}
-        questionIds={questionIds}
+        question={question || null}
+        questionIdAnswers={questionIdAnswers}
       />
     </div>
   );

@@ -4,7 +4,7 @@ import {
   getQuestions,
   getQuestionsByCategory,
 } from "../../../../../lib/questions";
-import { allCategory } from "@/lib/constants";
+import { ALL_CATEGORY } from "@/lib/constants";
 
 interface Params {
   qualification: string;
@@ -17,7 +17,7 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
   const year = decodeURIComponent(params.year);
   const category = decodeURIComponent(params.category);
   const questions =
-    category === allCategory
+    category === ALL_CATEGORY
       ? await getQuestions(qualification, year)
       : await getQuestionsByCategory(qualification, year, category);
 

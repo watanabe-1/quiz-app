@@ -8,12 +8,17 @@ export interface QuestionOption {
   image?: string;
   explanation?: MediaContent;
 }
+
 export interface QuestionData {
   id: number;
   category: string;
   question: MediaContent;
   options: QuestionOption[];
   answer: number;
-  // 全体の解説が必要な場合は残す
   explanation?: MediaContent;
+}
+
+export interface QuestionAnswerPair {
+  id: number;
+  answer: number;
 }
