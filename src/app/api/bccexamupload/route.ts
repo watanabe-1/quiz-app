@@ -8,6 +8,7 @@ import {
   extractTitle,
   replaceSpacesWithUnderscore,
 } from "@/lib/bccuploads";
+import { katakanaToNumbersMap } from "@/lib/constants";
 
 export async function POST(request: Request) {
   const data = await request.formData();
@@ -121,7 +122,7 @@ function extractQuestionAndOptions(content: string): {
   questionText: string;
   options: QuestionOption[];
 } {
-  const optionLabels = ["ア", "イ", "ウ", "エ", "オ"];
+  const optionLabels = Array.from(katakanaToNumbersMap.keys());
   const optionSeparator = "[．\\.]"; // 全角・半角のピリオドにマッチ
   const optionRegexString = optionLabels
     .map((label) => `${label}${optionSeparator}\\s*`)

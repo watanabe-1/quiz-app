@@ -1,3 +1,5 @@
+import { katakanaToNumbersMap } from "./constants";
+
 export function extractYear(text: string) {
   const yearPattern = /((令和|平成|昭和)?[0-9０-９]+年度\s?[前後]期)/;
   const yearMatch = text.match(yearPattern);
@@ -17,14 +19,6 @@ export function convertToHalfWidth(str: string) {
 }
 
 export function convertSingleKatakanaToNumber(katakana: string): number | null {
-  const katakanaToNumbersMap = new Map<string, number>([
-    ["ア", 0],
-    ["イ", 1],
-    ["ウ", 2],
-    ["エ", 3],
-    ["オ", 4],
-  ]);
-
   // カタカナがマップに存在するか確認
   return katakanaToNumbersMap.has(katakana)
     ? katakanaToNumbersMap.get(katakana) || null

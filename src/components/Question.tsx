@@ -4,7 +4,7 @@ import Image from "next/image";
 import { QuestionAnswerPair, QuestionData } from "@/@types/quizType";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ANSWER_HISTORY_KEY } from "@/lib/constants";
+import { ANSWER_HISTORY_KEY, numberToKatakanaMap } from "@/lib/constants";
 
 interface QuestionProps {
   qualification: string;
@@ -180,11 +180,15 @@ const Question: React.FC<QuestionProps> = ({
               }`}
             >
               <div>
-                {option.text && <div>{option.text}</div>}
+                {option.text && (
+                  <div>
+                    {`${numberToKatakanaMap.get(index)} ${option.text}`}
+                  </div>
+                )}
                 {option.image && (
                   <Image
                     src={option.image}
-                    alt={`選択肢${index + 1}の画像`}
+                    alt={`選択肢${numberToKatakanaMap.get(index)}の画像`}
                     layout="responsive"
                     width={300}
                     height={200}
@@ -261,7 +265,7 @@ const Question: React.FC<QuestionProps> = ({
           {question.options.map((option, index) =>
             option.explanation?.text || option.explanation?.image ? (
               <div key={index} className="mb-4">
-                <strong>選択肢 {index + 1}:</strong>
+                <strong>選択肢 {numberToKatakanaMap.get(index)}:</strong>
                 {option.explanation?.text && (
                   <div className="mt-2">
                     <strong>説明:</strong> {option.explanation.text}
@@ -270,7 +274,7 @@ const Question: React.FC<QuestionProps> = ({
                 {option.explanation?.image && (
                   <Image
                     src={option.explanation.image}
-                    alt={`選択肢${index + 1}の解説画像`}
+                    alt={`選択肢${numberToKatakanaMap.get(index)}の解説画像`}
                     className="mt-2"
                     layout="responsive"
                     width={600}
@@ -284,9 +288,10 @@ const Question: React.FC<QuestionProps> = ({
 
           {/* 正答の表示 */}
           <div className="mt-4">
-            <strong>答え:</strong>{" "}
-            {question.options[question.answer].text ||
-              `選択肢 ${question.answer + 1}`}
+            <strong>答え:</strong>
+            {`${numberToKatakanaMap.get(question.answer)} ${
+              question.options[question.answer].text
+            }`}
           </div>
         </div>
       )}
