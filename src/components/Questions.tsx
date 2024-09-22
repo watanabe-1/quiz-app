@@ -23,7 +23,9 @@ const Questions: React.FC<QuestionsProps> = ({
   questions,
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
+    null
+  );
   const router = useRouter();
 
   const navigateToQuestionPage = (questionId: number) => {
@@ -40,7 +42,7 @@ const Questions: React.FC<QuestionsProps> = ({
     if (isEmptyObject(getHistoryByQualificationAndYear(qualification, year))) {
       navigateToQuestionPage(questionId);
     } else {
-      setSelectedQuestion(questionId);
+      setSelectedQuestionId(questionId);
       setModalOpen(true);
     }
   };
@@ -50,7 +52,7 @@ const Questions: React.FC<QuestionsProps> = ({
       deleteHistoryByQualificationAndYear(qualification, year);
     }
     setModalOpen(false);
-    navigateToQuestionPage(selectedQuestion || 1);
+    navigateToQuestionPage(selectedQuestionId || 1);
   };
 
   return (
@@ -78,10 +80,16 @@ const Questions: React.FC<QuestionsProps> = ({
         </ul>
 
         {modalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded shadow">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            onClick={() => setModalOpen(false)} // 背景をクリックしたときにモーダルを閉じる
+          >
+            <div
+              className="bg-white p-6 rounded shadow"
+              onClick={(e) => e.stopPropagation()} // モーダル内部のクリックでは閉じないようにする
+            >
               <p>
-                この年度の解答履歴をすべて消して開始するか、引き継いで開始するか選んでください。
+                {`この年度の解答履歴をすべて消して問題${selectedQuestionId}から開始するか、引き継いで開始するか選んでください。`}
               </p>
               <div className="mt-4 space-y-2">
                 <button
