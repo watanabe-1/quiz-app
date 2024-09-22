@@ -4,7 +4,12 @@ import Image from "next/image";
 import { QuestionAnswerPair, QuestionData } from "@/@types/quizType";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ANSWER_HISTORY_KEY, numberToKatakanaMap } from "@/lib/constants";
+import { numberToKatakanaMap } from "@/lib/constants";
+import {
+  createAnswerHistoryKey,
+  getAnswerHistory,
+  setAnswerHistory,
+} from "@/lib/localStorage";
 
 interface QuestionProps {
   qualification: string;
@@ -61,10 +66,8 @@ const Question: React.FC<QuestionProps> = ({
 
   useEffect(() => {
     if (question) {
-      const history = JSON.parse(
-        localStorage.getItem(ANSWER_HISTORY_KEY) || "{}"
-      );
-      const key = `${qualification}-${year}-${question.id}`;
+      const history = getAnswerHistory();
+      const key = createAnswerHistoryKey(qualification, year, question.id);
       if (history[key] !== undefined) {
         setSelectedOption(history[key]);
       } else {
@@ -92,13 +95,11 @@ const Question: React.FC<QuestionProps> = ({
   if (!question) return <div>問題が取得できませんでした</div>;
 
   const handleOptionClick = (index: number) => {
-    const history = JSON.parse(
-      localStorage.getItem(ANSWER_HISTORY_KEY) || "{}"
-    );
-    const key = `${qualification}-${year}-${question.id}`;
+    const history = getAnswerHistory();
+    const key = createAnswerHistoryKey(qualification, year, question.id);
     history[key] = index;
 
-    localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
+    setAnswerHistory(history);
     setSelectedOption(index);
 
     // 正解数と解いた問題数をそれぞれ計算
@@ -121,6 +122,30 @@ const Question: React.FC<QuestionProps> = ({
     if (explanationRef.current) {
       explanationRef.current.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  // 解答リセットの処理
+  const handleResetAnswer = () => {
+    const history = getAnswerHistory();
+    const key = createAnswerHistoryKey(qualification, year, question.id);
+    delete history[key]; // 解答を削除
+    setAnswerHistory(history);
+    setSelectedOption(null); // 選択状態をリセット
+    // 正解数と解答済みの問題数を再計算
+    const totalCorrect = calculateCorrectCount(
+      questionIdAnswers,
+      qualification,
+      year,
+      history
+    );
+    const totalAnswered = calculateAnsweredCount(
+      questionIdAnswers,
+      qualification,
+      year,
+      history
+    );
+    setCorrectCount(totalCorrect);
+    setAnsweredCount(totalAnswered);
   };
 
   const questionIds = questionIdAnswers.map((q) => q.id);
@@ -199,37 +224,16 @@ const Question: React.FC<QuestionProps> = ({
             </li>
           ))}
         </ul>
-        <div className="flex justify-between mt-6">
-          {prevQuestionId ? (
-            <Link
-              href={`/quiz/${encodeURIComponent(
-                qualification
-              )}/${encodeURIComponent(year)}/${encodeURIComponent(
-                category
-              )}/${prevQuestionId}`}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              前の問題
-            </Link>
-          ) : (
-            <div />
-          )}
-          {nextQuestionId ? (
-            <Link
-              href={`/quiz/${encodeURIComponent(
-                qualification
-              )}/${encodeURIComponent(year)}/${encodeURIComponent(
-                category
-              )}/${nextQuestionId}`}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              次の問題
-            </Link>
-          ) : (
-            <div />
-          )}
-        </div>
       </div>
+
+      {/* 解答リセットボタン */}
+      <button
+        onClick={handleResetAnswer}
+        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+      >
+        解答をリセットする
+      </button>
+
       {/* 画面下部に解説と正答を表示し、スクロール対象のrefを設定 */}
       {selectedOption !== null && (
         <div ref={explanationRef} className="mt-6 p-4 border-t">
@@ -295,6 +299,36 @@ const Question: React.FC<QuestionProps> = ({
           </div>
         </div>
       )}
+      <div className="flex justify-between mt-6">
+        {prevQuestionId ? (
+          <Link
+            href={`/quiz/${encodeURIComponent(
+              qualification
+            )}/${encodeURIComponent(year)}/${encodeURIComponent(
+              category
+            )}/${prevQuestionId}`}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            前の問題
+          </Link>
+        ) : (
+          <div />
+        )}
+        {nextQuestionId ? (
+          <Link
+            href={`/quiz/${encodeURIComponent(
+              qualification
+            )}/${encodeURIComponent(year)}/${encodeURIComponent(
+              category
+            )}/${nextQuestionId}`}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            次の問題
+          </Link>
+        ) : (
+          <div />
+        )}
+      </div>
     </div>
   );
 };
