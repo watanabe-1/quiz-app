@@ -1,3 +1,5 @@
+"use client";
+
 import { ANSWER_HISTORY_KEY } from "./constants";
 
 // Utility function to get history from localStorage

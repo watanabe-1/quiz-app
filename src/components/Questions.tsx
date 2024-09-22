@@ -8,6 +8,7 @@ import {
 import { isEmptyObject } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import Modal from "@/components/ui/Modal";
 
 interface QuestionsProps {
   qualification: string;
@@ -79,15 +80,13 @@ const Questions: React.FC<QuestionsProps> = ({
           ))}
         </ul>
 
-        {modalOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-            onClick={() => setModalOpen(false)} // 背景をクリックしたときにモーダルを閉じる
+        {
+          <Modal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            showCloseButton={false}
           >
-            <div
-              className="bg-white p-6 rounded shadow"
-              onClick={(e) => e.stopPropagation()} // モーダル内部のクリックでは閉じないようにする
-            >
+            <div>
               <p>
                 {`この年度の解答履歴をすべて消して問題${selectedQuestionId}から開始するか、引き継いで開始するか選んでください。`}
               </p>
@@ -106,8 +105,8 @@ const Questions: React.FC<QuestionsProps> = ({
                 </button>
               </div>
             </div>
-          </div>
-        )}
+          </Modal>
+        }
       </main>
     </div>
   );

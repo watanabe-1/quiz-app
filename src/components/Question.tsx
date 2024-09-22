@@ -10,6 +10,7 @@ import {
   getAnswerHistory,
   setAnswerHistory,
 } from "@/lib/localStorage";
+import Modal from "@/components/ui/Modal";
 
 interface QuestionProps {
   qualification: string;
@@ -60,6 +61,7 @@ const Question: React.FC<QuestionProps> = ({
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
   const [answeredCount, setAnsweredCount] = useState(0);
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   // 解説部分を参照するためのref
   const explanationRef = useRef<HTMLDivElement | null>(null);
@@ -93,6 +95,10 @@ const Question: React.FC<QuestionProps> = ({
   }, [qualification, year, questionIdAnswers, question]);
 
   if (!question) return <div>問題が取得できませんでした</div>;
+
+  const toggleReportModal = () => {
+    setIsReportOpen(!isReportOpen);
+  };
 
   const handleOptionClick = (index: number) => {
     const history = getAnswerHistory();
@@ -165,8 +171,14 @@ const Question: React.FC<QuestionProps> = ({
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-6 flex flex-col min-h-screen">
       <div className="flex-grow">
-        <div className="text-left text-sm text-gray-600 mb-2">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-start text-left text-sm text-gray-600 mb-2">
           {`【前問まで】正解数 ${correctCount} / ${answeredCount} 問中  正答率 ${accuracy}%`}
+          <button
+            onClick={toggleReportModal}
+            className="md:ml-4 mt-2 md:mt-0 border border-green-500 text-green-500 rounded px-4 py-2 hover:bg-green-500 hover:text-white transition-colors"
+          >
+            成績詳細
+          </button>
         </div>
         <div className="text-right text-sm text-gray-600">
           {currentIndex + 1} / {questionIds.length} 問
@@ -329,6 +341,77 @@ const Question: React.FC<QuestionProps> = ({
           <div />
         )}
       </div>
+      {/* Modal for performance report */}
+      {isReportOpen && (
+        <Modal isOpen={isReportOpen} onClose={toggleReportModal}>
+          <div>
+            <h2 className="text-xl font-bold mb-4">成績レポート</h2>
+            <div className="mb-4">
+              <div>総合成績: {accuracy}%</div>
+              <div>正解数: {correctCount}</div>
+              <div>解答済みの問題数: {answeredCount}</div>
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold mb-2">解答済みの問題</h3>
+                <table className="table-auto w-full border-collapse border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-200">
+                      <th className="border border-gray-300 px-4 py-2">
+                        問題番号
+                      </th>
+                      <th className="border border-gray-300 px-4 py-2">
+                        正解/不正解
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {questionIdAnswers
+                      .filter((qAnswer) => {
+                        const history = getAnswerHistory();
+                        return (
+                          history[`${qualification}-${year}-${qAnswer.id}`] !==
+                          undefined
+                        );
+                      })
+                      .map((qAnswer) => {
+                        const history = getAnswerHistory();
+                        const isCorrect =
+                          history[`${qualification}-${year}-${qAnswer.id}`] ===
+                          qAnswer.answer;
+
+                        // URLを生成するためにエンコード
+                        const questionLink = `/quiz/${encodeURIComponent(
+                          qualification
+                        )}/${encodeURIComponent(year)}/${encodeURIComponent(
+                          category
+                        )}/${qAnswer.id}`;
+
+                        return (
+                          <tr key={qAnswer.id} className="text-center">
+                            <td className="border border-gray-300 px-4 py-2">
+                              <Link
+                                href={questionLink}
+                                className="text-blue-600 hover:underline"
+                              >
+                                問題 {qAnswer.id}
+                              </Link>
+                            </td>
+                            <td
+                              className={`border border-gray-300 px-4 py-2 ${
+                                isCorrect ? "text-green-600" : "text-red-600"
+                              }`}
+                            >
+                              {isCorrect ? "正解" : "不正解"}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
