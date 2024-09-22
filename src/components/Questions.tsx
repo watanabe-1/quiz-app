@@ -3,8 +3,9 @@
 import { QuestionData } from "@/@types/quizType";
 import {
   deleteHistoryByQualificationAndYear,
-  getAnswerHistory,
+  getHistoryByQualificationAndYear,
 } from "@/lib/localStorage";
+import { isEmptyObject } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -25,23 +26,31 @@ const Questions: React.FC<QuestionsProps> = ({
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
   const router = useRouter();
 
-  const openModal = (questionId: number) => {
-    setSelectedQuestion(questionId);
-    setModalOpen(true);
-  };
-
-  const handleNavigate = (clearHistory: boolean) => {
-    if (clearHistory) {
-      deleteHistoryByQualificationAndYear(qualification, year);
-    }
+  const navigateToQuestionPage = (questionId: number) => {
     const href = `/quiz/${encodeURIComponent(
       qualification
     )}/${encodeURIComponent(year)}/${encodeURIComponent(
       category
-    )}/${selectedQuestion}`;
-    setModalOpen(false);
+    )}/${questionId}`;
 
     router.push(href);
+  };
+
+  const handleQuestionClick = (questionId: number) => {
+    if (isEmptyObject(getHistoryByQualificationAndYear(qualification, year))) {
+      navigateToQuestionPage(questionId);
+    } else {
+      setSelectedQuestion(questionId);
+      setModalOpen(true);
+    }
+  };
+
+  const handleModalSelection = (clearHistory: boolean) => {
+    if (clearHistory) {
+      deleteHistoryByQualificationAndYear(qualification, year);
+    }
+    setModalOpen(false);
+    navigateToQuestionPage(selectedQuestion || 1);
   };
 
   return (
@@ -56,7 +65,7 @@ const Questions: React.FC<QuestionsProps> = ({
           {questions.map((question) => (
             <li key={question.id}>
               <a
-                onClick={() => openModal(question.id)}
+                onClick={() => handleQuestionClick(question.id)}
                 className="block p-4 bg-white rounded shadow hover:bg-blue-50"
               >
                 <span>
@@ -74,16 +83,16 @@ const Questions: React.FC<QuestionsProps> = ({
               <p>
                 この年度の解答履歴をすべて消して開始するか、引き継いで開始するか選んでください。
               </p>
-              <div className="mt-4 space-x-2">
+              <div className="mt-4 space-y-2">
                 <button
-                  onClick={() => handleNavigate(true)}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  onClick={() => handleModalSelection(true)}
+                  className="bg-red-500 text-white px-4 py-2 rounded w-full"
                 >
                   この年度の解答履歴をすべて消す
                 </button>
                 <button
-                  onClick={() => handleNavigate(false)}
-                  className="bg-green-500 text-white px-4 py-2 rounded"
+                  onClick={() => handleModalSelection(false)}
+                  className="bg-green-500 text-white px-4 py-2 rounded w-full"
                 >
                   解答履歴を引き継ぐ
                 </button>

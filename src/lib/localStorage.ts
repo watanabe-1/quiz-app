@@ -39,3 +39,25 @@ export const deleteHistoryByQualificationAndYear = (
   // Save the updated history back to localStorage
   setAnswerHistory(history);
 };
+
+// Utility function to get all history entries with a matching qualification and year
+export const getHistoryByQualificationAndYear = (
+  qualification: string,
+  year: string
+): Record<string, any> => {
+  const history = getAnswerHistory();
+
+  // Create the keyPrefix using the qualification and year
+  const keyPrefix = `${qualification}-${year}`;
+
+  // Filter the history to return only the matching entries
+  const filteredHistory: Record<string, any> = {};
+
+  Object.keys(history).forEach((key) => {
+    if (key.startsWith(keyPrefix)) {
+      filteredHistory[key] = history[key];
+    }
+  });
+
+  return filteredHistory;
+};
