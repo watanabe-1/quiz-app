@@ -4,6 +4,9 @@ import { ANSWER_HISTORY_KEY } from "./constants";
 
 // Utility function to get history from localStorage
 export const getAnswerHistory = (): Record<string, any> => {
+  if (typeof window === "undefined") {
+    return {};
+  }
   return JSON.parse(localStorage.getItem(ANSWER_HISTORY_KEY) || "{}");
 };
 

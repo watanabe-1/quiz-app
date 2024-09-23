@@ -87,3 +87,22 @@ export async function saveQuestions(
     return false;
   }
 }
+
+// 指定した資格と年度のファイルが存在するかチェックする
+export async function existsFile(
+  qualification: string,
+  year: string
+): Promise<boolean> {
+  const dataFilePath = path.join(
+    process.cwd(),
+    "data",
+    qualification,
+    `${year}.json`
+  );
+  try {
+    await fs.access(dataFilePath);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

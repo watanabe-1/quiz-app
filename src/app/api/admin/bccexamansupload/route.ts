@@ -103,7 +103,7 @@ const existsFile = async (fullPath: string) => {
 };
 
 export function modifyGradeText(input: string): string {
-  return input.replace(/[【】]/g, "").replace(/(\d+)級/g, "$1級_");
+  return input.replace(/【(.+?)\s+(.+?)】/, "$1_$2");
 }
 
 function extractCategories(

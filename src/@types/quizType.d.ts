@@ -26,3 +26,9 @@ export interface QuestionAnswerPair {
 export interface AnswerHistory {
   [key: string]: number | undefined;
 }
+
+export interface MenuItem {
+  name: string;
+  href?: string;
+  children?: MenuItem[];
+}

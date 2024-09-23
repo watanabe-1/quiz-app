@@ -63,7 +63,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
       uploadData.append("qualification", qualification);
       uploadData.append("year", year);
 
-      const res = await fetch("/api/uploadImage", {
+      const res = await fetch("/api/admin/uploadImage", {
         method: "POST",
         body: uploadData,
       });

@@ -1,4 +1,5 @@
 import React from "react";
+import { FaTimes } from "react-icons/fa";
 
 interface ModalProps {
   isOpen: boolean;
@@ -37,9 +38,9 @@ const Modal: React.FC<ModalProps> = ({
           <div className="flex justify-end">
             <button
               onClick={handleClose}
-              className="text-gray-500 hover:text-gray-800 text-2xl px-4 py-2"
+              className="text-gray-500 hover:text-gray-800 text-2xl py-2"
             >
-              &times;
+              <FaTimes />
             </button>
           </div>
         )}

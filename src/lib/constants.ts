@@ -13,3 +13,6 @@ export const katakanaToNumbersMap = new Map<string, number>([
 export const numberToKatakanaMap = new Map<number, string>(
   Array.from(katakanaToNumbersMap, ([katakana, number]) => [number, katakana])
 );
+
+export const HEADERS_URL = "x-url";
+export const HEADERS_PATHNAME = "x-pathname";

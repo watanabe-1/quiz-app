@@ -2,13 +2,66 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FaBars, FaTimes } from "react-icons/fa"; // React Iconsのインポート
+import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { MenuItem } from "@/@types/quizType";
 
-const Menu: React.FC = () => {
+interface MenuProps {
+  menuItems: MenuItem[];
+}
+
+const Menu: React.FC<MenuProps> = ({ menuItems }) => {
   const [isOpen, setIsOpen] = useState(false);
+  // サブメニューの開閉状態を管理するステート
+  const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleSubmenu = (name: string) => {
+    setOpenSubmenus((prev) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
+  };
+
+  // 再帰的にメニューをレンダリングする関数
+  const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
+    return items.map((item) => (
+      <div key={item.name}>
+        {item.children ? (
+          <>
+            <button
+              onClick={() => toggleSubmenu(item.name)}
+              className={`flex items-center justify-between w-full px-4 py-2 text-left hover:bg-gray-700 focus:outline-none ${
+                depth > 0 ? "pl-4" : ""
+              }`}
+            >
+              <span>{item.name}</span>
+              {openSubmenus[item.name] ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
+            {/* サブメニュー */}
+            {openSubmenus[item.name] && (
+              <div className="ml-4">
+                {renderMenuItems(item.children, depth + 1)}
+              </div>
+            )}
+          </>
+        ) : (
+          <Link
+            href={item.href || "#"}
+            className={`block px-4 py-2 hover:bg-gray-700 ${
+              depth > 0 ? "pl-6" : ""
+            }`}
+            onClick={toggleMenu} // メニュー項目をクリックしたらメニューを閉じる
+          >
+            {item.name}
+          </Link>
+        )}
+      </div>
+    ));
   };
 
   return (
@@ -39,9 +92,9 @@ const Menu: React.FC = () => {
       {/* メニューコンテンツ */}
       <div
         id="menu"
-        className={`fixed top-0 right-0 h-full w-48 md:w-64 bg-gray-800 text-white transform ${
+        className={`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50`}
+        } transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
       >
         {/* メニュー内の閉じるボタン */}
         <button onClick={toggleMenu} className="text-white p-4">
@@ -49,26 +102,7 @@ const Menu: React.FC = () => {
         </button>
 
         {/* メニュー項目 */}
-        <nav className="mt-8 space-y-4">
-          <Link
-            href="/"
-            className="block px-4 py-2 text-white hover:bg-gray-700"
-          >
-            ホーム
-          </Link>
-          <Link
-            href="/about"
-            className="block px-4 py-2 text-white hover:bg-gray-700"
-          >
-            アバウト
-          </Link>
-          <Link
-            href="/contact"
-            className="block px-4 py-2 text-white hover:bg-gray-700"
-          >
-            お問い合わせ
-          </Link>
-        </nav>
+        <nav className="mt-8 space-y-2">{renderMenuItems(menuItems)}</nav>
       </div>
     </div>
   );

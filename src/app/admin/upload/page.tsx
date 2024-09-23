@@ -20,7 +20,7 @@ const UploadPage = () => {
     formData.append("qualification", qualification);
     formData.append("year", year);
 
-    const res = await fetch("/api/upload", {
+    const res = await fetch("/api/admin/upload", {
       method: "POST",
       body: formData,
     });
