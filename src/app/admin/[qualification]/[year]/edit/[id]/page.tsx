@@ -5,6 +5,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
+import LoadingState from "@/components/ui/LoadingState";
+import ErrorState from "@/components/ui/ErrorState";
 
 interface Params {
   qualification: string;
@@ -33,8 +35,8 @@ const EditQuestion = ({ params }: { params: Params }) => {
     }
   }, [questionData]);
 
-  if (error) return <div>エラーが発生しました。</div>;
-  if (!formData) return <div>読み込み中...</div>;
+  if (error) return <ErrorState />;
+  if (!formData) return <LoadingState />;
 
   // 画像をアップロードしてパスを取得
   const handleImageUpload = async (

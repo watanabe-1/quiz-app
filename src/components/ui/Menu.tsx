@@ -2,17 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  FaBars,
-  FaTimes,
-  FaChevronDown,
-  FaChevronUp,
-  FaSpinner,
-  FaExclamationCircle,
-} from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { MenuItem } from "@/@types/quizType";
 import useSWR from "swr";
 import { usePathname } from "next/navigation";
+import LoadingState from "./LoadingState";
+import ErrorState from "./ErrorState";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -76,22 +71,6 @@ const Menu: React.FC = () => {
       </div>
     ));
   };
-
-  // ローディング状態のコンポーネント
-  const LoadingState = () => (
-    <div className="flex items-center justify-center p-4 text-gray-300">
-      <FaSpinner className="mr-2 animate-spin" />
-      <span>読み込み中...</span>
-    </div>
-  );
-
-  // エラー状態のコンポーネント
-  const ErrorState = () => (
-    <div className="flex items-center justify-center p-4 text-red-500">
-      <FaExclamationCircle className="mr-2" />
-      <span>エラーが発生しました。</span>
-    </div>
-  );
 
   return (
     <div className="relative">
