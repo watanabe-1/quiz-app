@@ -22,3 +22,7 @@ export interface QuestionAnswerPair {
   id: number;
   answer: number;
 }
+
+export interface AnswerHistory {
+  [key: string]: number | undefined;
+}

@@ -1,7 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { QuestionAnswerPair, QuestionData } from "@/@types/quizType";
+import {
+  AnswerHistory,
+  QuestionAnswerPair,
+  QuestionData,
+} from "@/@types/quizType";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { ALL_CATEGORY, numberToKatakanaMap } from "@/lib/constants";
@@ -19,10 +23,6 @@ interface QuestionProps {
   questionId: number;
   question: QuestionData | null;
   questionIdAnswers: QuestionAnswerPair[];
-}
-
-interface AnswerHistory {
-  [key: string]: number | undefined;
 }
 
 const calculateCorrectCount = (
