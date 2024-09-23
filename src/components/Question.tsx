@@ -4,7 +4,7 @@ import Image from "next/image";
 import { QuestionAnswerPair, QuestionData } from "@/@types/quizType";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { numberToKatakanaMap } from "@/lib/constants";
+import { ALL_CATEGORY, numberToKatakanaMap } from "@/lib/constants";
 import {
   createAnswerHistoryKey,
   getAnswerHistory,
@@ -143,14 +143,14 @@ const Question: React.FC<QuestionProps> = ({
   );
 
   // 解答リセットの処理
-  const handleResetAnswer = () => {
+  const handleResetAnswer = useCallback(() => {
     const key = createAnswerHistoryKey(qualification, year, question.id);
     const { [key]: _, ...rest } = history;
     setHistory(rest);
     setAnswerHistory(rest); // ローカルストレージも更新
     setSelectedOption(null);
     setShouldScroll(false);
-  };
+  }, [qualification, year, question, history]);
 
   const questionIds = questionIdAnswers.map((q) => q.id);
   const currentIndex = questionIds.indexOf(questionId);
@@ -352,7 +352,10 @@ const Question: React.FC<QuestionProps> = ({
           <div>
             <h2 className="text-xl font-bold mb-4">成績レポート</h2>
             <div className="mb-4">
-              <div>総合成績: {accuracy}%</div>
+              <div>{`${qualification} - ${year} - ${
+                category === ALL_CATEGORY ? "全ての問題" : category
+              } `}</div>
+              <div>正答率: {accuracy}%</div>
               <div>正解数: {correctCount}</div>
               <div>解答済みの問題数: {answeredCount}</div>
               <div className="mt-4">
