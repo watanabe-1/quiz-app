@@ -37,3 +37,4 @@ next-env.d.ts
 
 # quiz-app
 /public/images
+/data
