@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaChevronDown,
+  FaChevronUp,
+  FaSpinner,
+  FaExclamationCircle,
+} from "react-icons/fa";
 import { MenuItem } from "@/@types/quizType";
 import useSWR from "swr";
 import { usePathname } from "next/navigation";
@@ -21,9 +28,6 @@ const Menu: React.FC = () => {
     `/api/menu?path=${encodeURIComponent(pathname)}`,
     fetcher
   );
-
-  if (error) return <div>エラーが発生しました。</div>;
-  if (!menuItems) return <div>読み込み中...</div>;
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -73,6 +77,22 @@ const Menu: React.FC = () => {
     ));
   };
 
+  // ローディング状態のコンポーネント
+  const LoadingState = () => (
+    <div className="flex items-center justify-center p-4 text-gray-300">
+      <FaSpinner className="mr-2 animate-spin" />
+      <span>読み込み中...</span>
+    </div>
+  );
+
+  // エラー状態のコンポーネント
+  const ErrorState = () => (
+    <div className="flex items-center justify-center p-4 text-red-500">
+      <FaExclamationCircle className="mr-2" />
+      <span>エラーが発生しました。</span>
+    </div>
+  );
+
   return (
     <div className="relative">
       {/* ハンバーガーメニューボタン */}
@@ -106,12 +126,23 @@ const Menu: React.FC = () => {
         } transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
       >
         {/* メニュー内の閉じるボタン */}
-        <button onClick={toggleMenu} className="text-white p-4">
-          <FaTimes className="text-2xl" /> {/* 閉じるアイコン */}
+        <button
+          onClick={toggleMenu}
+          className="text-white p-4 focus:outline-none"
+        >
+          <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>
 
-        {/* メニュー項目 */}
-        <nav className="mt-8 space-y-2">{renderMenuItems(menuItems)}</nav>
+        {/* メニュー項目またはローディング/エラー状態 */}
+        <nav className="mt-8 space-y-2 px-4">
+          {error ? (
+            <ErrorState />
+          ) : !menuItems ? (
+            <LoadingState />
+          ) : (
+            renderMenuItems(menuItems)
+          )}
+        </nav>
       </div>
     </div>
   );
