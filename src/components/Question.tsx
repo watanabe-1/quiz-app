@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { QuestionAnswerPair, QuestionData } from "@/@types/quizType";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { numberToKatakanaMap } from "@/lib/constants";
 import {
@@ -21,15 +21,19 @@ interface QuestionProps {
   questionIdAnswers: QuestionAnswerPair[];
 }
 
+interface AnswerHistory {
+  [key: string]: number | undefined;
+}
+
 const calculateCorrectCount = (
   questionIdAnswers: QuestionAnswerPair[],
   qualification: string,
   year: string,
-  history: { [x: string]: undefined }
+  history: AnswerHistory
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
     const storedAnswer = history[`${qualification}-${year}-${idAnswer.id}`];
-    if (storedAnswer === idAnswer?.answer) {
+    if (storedAnswer === idAnswer.answer) {
       return count + 1;
     }
     return count;
@@ -40,7 +44,7 @@ const calculateAnsweredCount = (
   questionIdAnswers: QuestionAnswerPair[],
   qualification: string,
   year: string,
-  history: { [x: string]: undefined }
+  history: AnswerHistory
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
     if (history[`${qualification}-${year}-${idAnswer.id}`] !== undefined) {
@@ -62,21 +66,29 @@ const Question: React.FC<QuestionProps> = ({
   const [correctCount, setCorrectCount] = useState(0);
   const [answeredCount, setAnsweredCount] = useState(0);
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [shouldScroll, setShouldScroll] = useState(false);
+  const [history, setHistory] = useState<AnswerHistory>(() =>
+    getAnswerHistory()
+  );
 
   // 解説部分を参照するためのref
   const explanationRef = useRef<HTMLDivElement | null>(null);
 
+  // 更新された履歴を反映してselectedOptionを設定
   useEffect(() => {
     if (question) {
-      const history = getAnswerHistory();
       const key = createAnswerHistoryKey(qualification, year, question.id);
       if (history[key] !== undefined) {
         setSelectedOption(history[key]);
       } else {
         setSelectedOption(null);
       }
+    }
+  }, [qualification, year, question, history]);
 
-      // 正解数と解いた問題数をそれぞれ計算
+  // 正解数と解答済みの問題数を計算
+  useEffect(() => {
+    if (question) {
       const totalCorrect = calculateCorrectCount(
         questionIdAnswers,
         qualification,
@@ -92,66 +104,52 @@ const Question: React.FC<QuestionProps> = ({
       setCorrectCount(totalCorrect);
       setAnsweredCount(totalAnswered);
     }
-  }, [qualification, year, questionIdAnswers, question]);
+  }, [questionIdAnswers, qualification, year, history, question]);
+
+  // スクロール処理
+  useEffect(() => {
+    if (shouldScroll && selectedOption !== null && explanationRef.current) {
+      const headerElement = document.querySelector("header");
+      const headerHeight = headerElement?.clientHeight || 0;
+      const elementPosition =
+        explanationRef.current.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+
+      setShouldScroll(false);
+    }
+  }, [shouldScroll, selectedOption]);
 
   if (!question) return <div>問題が取得できませんでした</div>;
 
   const toggleReportModal = () => {
-    setIsReportOpen(!isReportOpen);
+    setIsReportOpen((prev) => !prev);
   };
 
-  const handleOptionClick = (index: number) => {
-    const history = getAnswerHistory();
-    const key = createAnswerHistoryKey(qualification, year, question.id);
-    history[key] = index;
-
-    setAnswerHistory(history);
-    setSelectedOption(index);
-
-    // 正解数と解いた問題数をそれぞれ計算
-    const totalCorrect = calculateCorrectCount(
-      questionIdAnswers,
-      qualification,
-      year,
-      history
-    );
-    const totalAnswered = calculateAnsweredCount(
-      questionIdAnswers,
-      qualification,
-      year,
-      history
-    );
-    setCorrectCount(totalCorrect);
-    setAnsweredCount(totalAnswered);
-
-    // 解説が表示される位置にスクロール
-    if (explanationRef.current) {
-      explanationRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const handleOptionClick = useCallback(
+    (index: number) => {
+      const key = createAnswerHistoryKey(qualification, year, question.id);
+      const updatedHistory = { ...history, [key]: index };
+      setHistory(updatedHistory);
+      setAnswerHistory(updatedHistory); // ローカルストレージも更新
+      setSelectedOption(index);
+      setShouldScroll(true);
+    },
+    [qualification, year, question, history]
+  );
 
   // 解答リセットの処理
   const handleResetAnswer = () => {
-    const history = getAnswerHistory();
     const key = createAnswerHistoryKey(qualification, year, question.id);
-    delete history[key]; // 解答を削除
-    setAnswerHistory(history);
-    setSelectedOption(null); // 選択状態をリセット
-    // 正解数と解答済みの問題数を再計算
-    const totalCorrect = calculateCorrectCount(
-      questionIdAnswers,
-      qualification,
-      year,
-      history
-    );
-    const totalAnswered = calculateAnsweredCount(
-      questionIdAnswers,
-      qualification,
-      year,
-      history
-    );
-    setCorrectCount(totalCorrect);
-    setAnsweredCount(totalAnswered);
+    const { [key]: _, ...rest } = history;
+    setHistory(rest);
+    setAnswerHistory(rest); // ローカルストレージも更新
+    setSelectedOption(null);
+    setShouldScroll(false);
   };
 
   const questionIds = questionIdAnswers.map((q) => q.id);
@@ -171,16 +169,17 @@ const Question: React.FC<QuestionProps> = ({
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-6 flex flex-col min-h-screen">
       <div className="flex-grow">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-start text-left text-sm text-gray-600 mb-2">
-          {`【前問まで】正解数 ${correctCount} / ${answeredCount} 問中  正答率 ${accuracy}%`}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between text-left text-sm text-gray-600 mb-2">
+          <span>{`【前問まで】正解数 ${correctCount} / ${answeredCount} 問中 正答率 ${accuracy}%`}</span>
           <button
             onClick={toggleReportModal}
-            className="md:ml-4 mt-2 md:mt-0 border border-green-500 text-green-500 rounded px-4 py-2 hover:bg-green-500 hover:text-white transition-colors"
+            className="mt-2 md:mt-0 border border-green-500 text-green-500 rounded px-4 py-2 hover:bg-green-500 hover:text-white transition-colors"
+            aria-label="成績詳細を表示"
           >
             成績詳細
           </button>
         </div>
-        <div className="text-right text-sm text-gray-600">
+        <div className="text-right text-sm text-gray-600 mb-4">
           {currentIndex + 1} / {questionIds.length} 問
         </div>
         <div className="mb-4">
@@ -194,123 +193,128 @@ const Question: React.FC<QuestionProps> = ({
               src={question.question.image}
               alt="問題画像"
               className="mb-2"
-              layout="responsive"
               width={600}
               height={300}
-              unoptimized
+              priority
             />
           )}
         </div>
         <ul className="space-y-2">
-          {question.options.map((option, index) => (
-            <li
-              key={index}
-              onClick={() => handleOptionClick(index)}
-              className={`p-4 border rounded cursor-pointer ${
-                selectedOption !== null
-                  ? index === question.answer
-                    ? "bg-green-200"
-                    : index === selectedOption
-                    ? "bg-red-200"
-                    : ""
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              <div>
-                {option.text && (
+          {question.options.map((option, index) => {
+            const isCorrect = index === question.answer;
+            const isSelected = selectedOption === index;
+            const isAnswered = selectedOption !== null;
+            const optionClass = isAnswered
+              ? isCorrect
+                ? "bg-green-200"
+                : isSelected
+                ? "bg-red-200"
+                : ""
+              : "hover:bg-gray-100";
+
+            return (
+              <li key={index}>
+                <button
+                  onClick={() => handleOptionClick(index)}
+                  className={`w-full text-left p-4 border rounded cursor-pointer ${optionClass}`}
+                  aria-pressed={isSelected}
+                >
                   <div>
-                    {`${numberToKatakanaMap.get(index)} ${option.text}`}
+                    {option.text && (
+                      <span>{`${numberToKatakanaMap.get(index)} ${
+                        option.text
+                      }`}</span>
+                    )}
+                    {option.image && (
+                      <Image
+                        src={option.image}
+                        alt={`選択肢${numberToKatakanaMap.get(index)}の画像`}
+                        layout="responsive"
+                        width={300}
+                        height={200}
+                        priority
+                      />
+                    )}
                   </div>
-                )}
-                {option.image && (
-                  <Image
-                    src={option.image}
-                    alt={`選択肢${numberToKatakanaMap.get(index)}の画像`}
-                    layout="responsive"
-                    width={300}
-                    height={200}
-                    unoptimized
-                  />
-                )}
-              </div>
-            </li>
-          ))}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
 
       {/* 解答リセットボタン */}
       <button
         onClick={handleResetAnswer}
-        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
       >
         解答をリセットする
       </button>
 
-      {/* 画面下部に解説と正答を表示し、スクロール対象のrefを設定 */}
+      {/* 解説セクション */}
       {selectedOption !== null && (
         <div ref={explanationRef} className="mt-6 p-4 border-t">
-          {/* 問題の解説がある場合のみ表示 */}
-          {question.explanation?.text || question.explanation?.image ? (
+          {/* 正答の表示 */}
+          <div className="mt-4">
+            <strong>答え:</strong>{" "}
+            {`${numberToKatakanaMap.get(question.answer)} ${
+              question.options[question.answer].text
+            }`}
+          </div>
+          {/* 問題の解説 */}
+          {question.explanation && (
             <>
-              <h3 className="text-lg font-semibold mb-2">問題の解説</h3>
-              {question.explanation?.text && (
+              <h3 className="text-lg font-semibold mb-2 mt-4">問題の解説</h3>
+              {question.explanation.text && (
                 <div className="mb-2">
                   <strong>説明:</strong> {question.explanation.text}
                 </div>
               )}
-              {question.explanation?.image && (
+              {question.explanation.image && (
                 <Image
                   src={question.explanation.image}
                   alt={`問題の解説画像`}
                   className="mt-2"
-                  layout="responsive"
                   width={600}
                   height={400}
-                  unoptimized
+                  priority
                 />
               )}
             </>
-          ) : null}
+          )}
 
-          {/* 選択肢の解説がある場合のみ表示 */}
+          {/* 選択肢の解説 */}
           {question.options.some(
             (option) => option.explanation?.text || option.explanation?.image
           ) && (
             <h3 className="text-lg font-semibold mb-2 mt-4">選択肢の解説</h3>
           )}
           {question.options.map((option, index) =>
-            option.explanation?.text || option.explanation?.image ? (
+            option.explanation ? (
               <div key={index} className="mb-4">
                 <strong>選択肢 {numberToKatakanaMap.get(index)}:</strong>
-                {option.explanation?.text && (
+                {option.explanation.text && (
                   <div className="mt-2">
                     <strong>説明:</strong> {option.explanation.text}
                   </div>
                 )}
-                {option.explanation?.image && (
+                {option.explanation.image && (
                   <Image
                     src={option.explanation.image}
                     alt={`選択肢${numberToKatakanaMap.get(index)}の解説画像`}
                     className="mt-2"
-                    layout="responsive"
                     width={600}
                     height={400}
-                    unoptimized
+                    priority
                   />
                 )}
               </div>
             ) : null
           )}
-
-          {/* 正答の表示 */}
-          <div className="mt-4">
-            <strong>答え:</strong>
-            {`${numberToKatakanaMap.get(question.answer)} ${
-              question.options[question.answer].text
-            }`}
-          </div>
         </div>
       )}
+
+      {/* ナビゲーションボタン */}
       <div className="flex justify-between mt-6">
         {prevQuestionId ? (
           <Link
@@ -319,7 +323,7 @@ const Question: React.FC<QuestionProps> = ({
             )}/${encodeURIComponent(year)}/${encodeURIComponent(
               category
             )}/${prevQuestionId}`}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             前の問題
           </Link>
@@ -333,7 +337,7 @@ const Question: React.FC<QuestionProps> = ({
             )}/${encodeURIComponent(year)}/${encodeURIComponent(
               category
             )}/${nextQuestionId}`}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             次の問題
           </Link>
@@ -341,7 +345,8 @@ const Question: React.FC<QuestionProps> = ({
           <div />
         )}
       </div>
-      {/* Modal for performance report */}
+
+      {/* モーダル: 成績レポート */}
       {isReportOpen && (
         <Modal isOpen={isReportOpen} onClose={toggleReportModal}>
           <div>
@@ -365,20 +370,15 @@ const Question: React.FC<QuestionProps> = ({
                   </thead>
                   <tbody>
                     {questionIdAnswers
-                      .filter((qAnswer) => {
-                        const history = getAnswerHistory();
-                        return (
+                      .filter(
+                        (qAnswer) =>
                           history[`${qualification}-${year}-${qAnswer.id}`] !==
                           undefined
-                        );
-                      })
+                      )
                       .map((qAnswer) => {
-                        const history = getAnswerHistory();
                         const isCorrect =
                           history[`${qualification}-${year}-${qAnswer.id}`] ===
                           qAnswer.answer;
-
-                        // URLを生成するためにエンコード
                         const questionLink = `/quiz/${encodeURIComponent(
                           qualification
                         )}/${encodeURIComponent(year)}/${encodeURIComponent(
