@@ -109,6 +109,7 @@ const Question: React.FC<QuestionProps> = ({
   // スクロール処理
   useEffect(() => {
     if (shouldScroll && selectedOption !== null && explanationRef.current) {
+      // ヘッダーをstickyで定義しているため、スクロールがずれないようにheaderの高さ分オフセットをとるようにする
       const headerElement = document.querySelector("header");
       const headerHeight = headerElement?.clientHeight || 0;
       const elementPosition =
