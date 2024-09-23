@@ -168,7 +168,7 @@ const Question: React.FC<QuestionProps> = ({
       : "0.0";
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow mt-6 flex flex-col min-h-screen">
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow flex flex-col min-h-screen">
       <div className="flex-grow">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between text-left text-sm text-gray-600 mb-2">
           <span>{`【前問まで】正解数 ${correctCount} / ${answeredCount} 問中 正答率 ${accuracy}%`}</span>

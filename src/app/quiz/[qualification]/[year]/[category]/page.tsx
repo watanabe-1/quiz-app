@@ -3,9 +3,10 @@ import {
   getQuestions,
   getQuestionsByCategory,
 } from "../../../../../lib/questions";
-import { ALL_CATEGORY } from "@/lib/constants";
+import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Questions from "@/components/Questions";
 import Header from "@/components/ui/Header";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 interface Params {
   qualification: string;
@@ -29,13 +30,16 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
           category === ALL_CATEGORY ? "全ての問題" : category
         } の問題`}
       />
-      <main className="p-6">
-        <Questions
-          qualification={qualification}
-          year={year}
-          category={category}
-          questions={questions}
-        />
+      <main className="pt-3 pr-6 pl-6">
+        <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByQuiz} />
+        <div className="mt-3">
+          <Questions
+            qualification={qualification}
+            year={year}
+            category={category}
+            questions={questions}
+          />
+        </div>
       </main>
     </div>
   );

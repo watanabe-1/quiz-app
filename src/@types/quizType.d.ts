@@ -32,3 +32,8 @@ export interface MenuItem {
   href?: string;
   children?: MenuItem[];
 }
+
+export interface NonLinkableSegment {
+  label: string;
+  index: number;
+}

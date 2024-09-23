@@ -4,8 +4,9 @@ import {
   getQuestions,
   getQuestionsByCategory,
 } from "../../../../../../lib/questions";
-import { ALL_CATEGORY } from "@/lib/constants";
+import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Header from "@/components/ui/Header";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 
 interface Params {
   qualification: string;
@@ -39,14 +40,19 @@ const QuestionPage = async ({ params }: { params: Params }) => {
         } `}
       />
       <main>
-        <Question
-          qualification={qualification}
-          year={year}
-          category={category}
-          questionId={questionId}
-          question={question || null}
-          questionIdAnswers={questionIdAnswers}
-        />
+        <div className="pt-3 pr-6 pl-6">
+          <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByQuiz} />
+        </div>
+        <div className="mt-3">
+          <Question
+            qualification={qualification}
+            year={year}
+            category={category}
+            questionId={questionId}
+            question={question || null}
+            questionIdAnswers={questionIdAnswers}
+          />
+        </div>
       </main>
     </div>
   );

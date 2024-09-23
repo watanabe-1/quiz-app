@@ -16,3 +16,7 @@ export const numberToKatakanaMap = new Map<number, string>(
 
 export const HEADERS_URL = "x-url";
 export const HEADERS_PATHNAME = "x-pathname";
+
+export const nonLinkableSegmentsByQuiz = [
+  { label: "quiz", index: 0 }, // 'quiz' is the first part of the URL
+];
