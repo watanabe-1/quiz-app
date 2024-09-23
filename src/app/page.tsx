@@ -1,15 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import { getAllQualifications } from "../lib/questions";
+import Header from "@/components/ui/Header";
 
 const HomePage = async () => {
   const qualifications = await getAllQualifications();
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl font-bold">クイズアプリへようこそ</h1>
-      </header>
+    <div>
+      <Header title="クイズアプリへようこそ" />
       <main className="p-6">
         <h2 className="text-xl font-semibold mb-4">資格を選択してください</h2>
         <ul className="space-y-2">

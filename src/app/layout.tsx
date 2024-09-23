@@ -10,7 +10,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="min-h-screen bg-gray-100">{children}</div>
+      </body>
     </html>
   );
 }

@@ -11,7 +11,7 @@ const QualificationAdminPage = async ({ params }: { params: Params }) => {
   const years = await getYearsByQualification(qualification);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div>
       <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">{qualification} の管理</h1>
         <Link href="/api/auth/signout" className="text-sm underline">

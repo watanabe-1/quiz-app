@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { getYearsByQualification } from "../../../lib/questions";
+import Header from "@/components/ui/Header";
 
 interface Params {
   qualification: string;
@@ -11,12 +12,8 @@ const YearsPage = async ({ params }: { params: Params }) => {
   const years = await getYearsByQualification(qualification);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl font-bold">
-          {qualification}の年度を選択してください
-        </h1>
-      </header>
+    <div>
+      <Header title={`${qualification}の年度を選択`} />
       <main className="p-6">
         <ul className="space-y-2">
           {years.map((year) => (

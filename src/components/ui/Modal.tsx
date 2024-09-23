@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 
 interface ModalProps {
@@ -25,21 +23,21 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
       onClick={() => {
-        if (closeOnBackgroundClick) handleClose(); // closeOnBackgroundClickがtrueの場合のみ閉じる
+        if (closeOnBackgroundClick) handleClose();
       }}
     >
       <div
-        className="bg-white rounded shadow-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto" // 縦スクロールと高さ制限を追加
-        onClick={(e) => e.stopPropagation()} // コンテンツをクリックしてもモーダルを閉じない
+        className="bg-white rounded shadow-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* ×ボタンを表示するかどうか */}
+        {/* モーダルの内容 */}
         {showCloseButton && (
           <div className="flex justify-end">
             <button
               onClick={handleClose}
-              className="text-gray-500 hover:text-gray-800 text-2xl px-4 py-2" // ここでサイズを調整
+              className="text-gray-500 hover:text-gray-800 text-2xl px-4 py-2"
             >
               &times;
             </button>

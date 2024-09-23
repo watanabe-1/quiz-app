@@ -5,6 +5,7 @@ import {
   getQuestionsByCategory,
 } from "../../../../../../lib/questions";
 import { ALL_CATEGORY } from "@/lib/constants";
+import Header from "@/components/ui/Header";
 
 interface Params {
   qualification: string;
@@ -31,15 +32,22 @@ const QuestionPage = async ({ params }: { params: Params }) => {
   }));
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Question
-        qualification={qualification}
-        year={year}
-        category={category}
-        questionId={questionId}
-        question={question || null}
-        questionIdAnswers={questionIdAnswers}
+    <div>
+      <Header
+        title={`${qualification} - ${year} - ${
+          category === ALL_CATEGORY ? "全ての問題" : category
+        } `}
       />
+      <main>
+        <Question
+          qualification={qualification}
+          year={year}
+          category={category}
+          questionId={questionId}
+          question={question || null}
+          questionIdAnswers={questionIdAnswers}
+        />
+      </main>
     </div>
   );
 };

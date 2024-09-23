@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { getCategories } from "../../../../lib/questions";
 import { ALL_CATEGORY } from "@/lib/constants";
+import Header from "@/components/ui/Header";
 
 interface Params {
   qualification: string;
@@ -17,12 +18,10 @@ const CategoriesPage = async ({ params }: { params: Params }) => {
   categories.unshift(ALL_CATEGORY);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl font-bold">
-          {qualification} - {year} 年度のカテゴリを選択してください
-        </h1>
-      </header>
+    <div>
+      <Header
+        title={`${qualification} - ${year} のカテゴリを選択してください`}
+      />
       <main className="p-6">
         <ul className="space-y-2">
           {categories.map((category) => (

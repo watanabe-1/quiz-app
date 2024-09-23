@@ -57,57 +57,50 @@ const Questions: React.FC<QuestionsProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl font-bold">
-          {qualification} - {year} 年度 - {category} の問題一覧
-        </h1>
-      </header>
-      <main className="p-6">
-        <ul className="space-y-2">
-          {questions.map((question) => (
-            <li key={question.id}>
-              <a
-                onClick={() => handleQuestionClick(question.id)}
-                className="block p-4 bg-white rounded shadow hover:bg-blue-50"
-              >
-                <span>
-                  {`問題${question.id} ${question.question.text}` ||
-                    "（テキストなし）"}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
+    <div>
+      <ul className="space-y-2">
+        {questions.map((question) => (
+          <li key={question.id}>
+            <a
+              onClick={() => handleQuestionClick(question.id)}
+              className="block p-4 bg-white rounded shadow hover:bg-blue-50"
+            >
+              <span>
+                {`問題${question.id} ${question.question.text}` ||
+                  "（テキストなし）"}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
 
-        {
-          <Modal
-            isOpen={modalOpen}
-            onClose={() => setModalOpen(false)}
-            showCloseButton={false}
-          >
-            <div>
-              <p>
-                {`この年度の解答履歴をすべて消して問題${selectedQuestionId}から開始するか、引き継いで開始するか選んでください。`}
-              </p>
-              <div className="mt-4 space-y-2">
-                <button
-                  onClick={() => handleModalSelection(true)}
-                  className="bg-red-500 text-white px-4 py-2 rounded w-full"
-                >
-                  この年度の解答履歴をすべて消す
-                </button>
-                <button
-                  onClick={() => handleModalSelection(false)}
-                  className="bg-green-500 text-white px-4 py-2 rounded w-full"
-                >
-                  解答履歴を引き継ぐ
-                </button>
-              </div>
+      {
+        <Modal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          showCloseButton={false}
+        >
+          <div>
+            <p>
+              {`この年度の解答履歴をすべて消して問題${selectedQuestionId}から開始するか、引き継いで開始するか選んでください。`}
+            </p>
+            <div className="mt-4 space-y-2">
+              <button
+                onClick={() => handleModalSelection(true)}
+                className="bg-red-500 text-white px-4 py-2 rounded w-full"
+              >
+                この年度の解答履歴をすべて消す
+              </button>
+              <button
+                onClick={() => handleModalSelection(false)}
+                className="bg-green-500 text-white px-4 py-2 rounded w-full"
+              >
+                解答履歴を引き継ぐ
+              </button>
             </div>
-          </Modal>
-        }
-      </main>
+          </div>
+        </Modal>
+      }
     </div>
   );
 };

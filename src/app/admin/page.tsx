@@ -6,7 +6,7 @@ const AdminDashboard = async () => {
   const qualifications = await getAllQualifications();
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div>
       <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">管理者ダッシュボード</h1>
         <Link href="/api/auth/signout" className="text-sm underline">
