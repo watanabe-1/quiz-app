@@ -4,17 +4,26 @@ import { useState } from "react";
 import Link from "next/link";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { MenuItem } from "@/@types/quizType";
+import useSWR from "swr";
+import { usePathname } from "next/navigation";
 
-interface MenuProps {
-  menuItems: MenuItem[];
-}
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Menu: React.FC<MenuProps> = ({ menuItems }) => {
+const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   // サブメニューの開閉状態を管理するステート
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const pathname = usePathname();
+
+  const { data: menuItems, error } = useSWR<MenuItem[]>(
+    `/api/menu?path=${encodeURIComponent(pathname)}`,
+    fetcher
+  );
+
+  if (error) return <div>エラーが発生しました。</div>;
+  if (!menuItems) return <div>読み込み中...</div>;
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
