@@ -43,7 +43,7 @@ const Menu: React.FC = () => {
           <>
             <button
               onClick={() => toggleSubmenu(item.name)}
-              className={`flex items-center justify-between w-full px-4 py-2 text-left hover:bg-gray-700 focus:outline-none ${
+              className={`flex items-center justify-between w-full px-4 py-2 text-left hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out ${
                 depth > 0 ? "pl-4" : ""
               }`}
             >
@@ -51,16 +51,18 @@ const Menu: React.FC = () => {
               {openSubmenus[item.name] ? <FaChevronUp /> : <FaChevronDown />}
             </button>
             {/* サブメニュー */}
-            {openSubmenus[item.name] && (
-              <div className="ml-4">
-                {renderMenuItems(item.children, depth + 1)}
-              </div>
-            )}
+            <div
+              className={`ml-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                openSubmenus[item.name] ? "max-h-screen" : "max-h-0"
+              }`}
+            >
+              {renderMenuItems(item.children, depth + 1)}
+            </div>
           </>
         ) : (
           <Link
             href={item.href || "#"}
-            className={`block px-4 py-2 hover:bg-gray-700 ${
+            className={`block px-4 py-2 hover:bg-gray-700 transition-all duration-300 ease-in-out ${
               depth > 0 ? "pl-6" : ""
             }`}
             onClick={toggleMenu} // メニュー項目をクリックしたらメニューを閉じる
@@ -91,7 +93,7 @@ const Menu: React.FC = () => {
       {/* オーバーレイ（メニュー外クリック用） */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ease-in-out"
           aria-hidden="true"
           onClick={toggleMenu} // オーバーレイがクリックされたらメニューを閉じる
         ></div>
@@ -100,9 +102,9 @@ const Menu: React.FC = () => {
       {/* メニューコンテンツ */}
       <div
         id="menu"
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform ${
+        className={`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto ${
           isOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out z-50 overflow-y-auto`}
+        }`}
       >
         {/* メニュー内の閉じるボタン */}
         <button
