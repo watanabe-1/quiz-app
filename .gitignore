@@ -37,4 +37,5 @@ next-env.d.ts
 
 # quiz-app
 /public/images
-/data
+data/*
+!data/.gitkeep
