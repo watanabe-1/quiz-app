@@ -1,5 +1,5 @@
 import { chainMiddlewares } from "@/middlewares/chainMiddlewares";
-import { widthLogin } from "@/middlewares/widthLogin";
+import { withLogin } from "@/middlewares/withLogin";
 
 // ミドルウェアを連結
-export default chainMiddlewares([widthLogin]);
+export default chainMiddlewares([withLogin]);
