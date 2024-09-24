@@ -35,8 +35,8 @@
 # 管理者のユーザー名
 ADMIN_USERNAME=admin
 
-# 管理者のパスワードのハッシュ（bcryptでハッシュ化されたもの）
-ADMIN_PASSWORD_HASH=$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36F.z3s9jz4bG0KjU/FyX1K
+# 管理者のパスワードのハッシュ（bcryptでハッシュ化されたもの、$を\でエスケープした値を設定）
+ADMIN_PASSWORD_HASH=\$2b\$10\$6LjoTU3W7NIIdfVlUCr5X.dnSacabEHoYcgBxoYbU5LtsMcyHRPFO
 
 # サインインページのパス
 SIGN_IN_PAGE=/auth/signin
@@ -47,8 +47,8 @@ PROTECTED_PATHS=/admin,/api/admin
 # NextAuth.js の URL
 NEXTAUTH_URL=http://localhost:3000
 
-# NextAuth.js のシークレットキー（強力でランダムな文字列）
-NEXTAUTH_SECRET=your-very-secure-secret-key
+# NextAuth.js のシークレットキー（''で囲んで設定）
+NEXTAUTH_SECRET='your-very-secure-secret-key'
 ```
 
 ## パスワードのハッシュ化
