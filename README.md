@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 資格問題解答サイト
 
-## Getting Started
+このサイトは資格勉強用に問題を解くためのサイトです。
 
-First, run the development server:
+## 目次
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. [環境変数の設定](#環境変数の設定)
+   - [必要な環境変数](#必要な環境変数)
+   - [`.env.local` ファイルの例](#envlocal-ファイルの例)
+2. [パスワードのハッシュ化](#パスワードのハッシュ化)
+   - [ハッシュ化スクリプトの実行方法](#ハッシュ化スクリプトの実行方法)
+3. [シークレットキーの生成](#シークレットキーの生成)
+   - [シークレットキーの生成方法](#シークレットキーの生成方法)
+
+---
+
+## 環境変数の設定
+
+プロジェクトのルートディレクトリに `.env.local` ファイルを作成し、以下の環境変数を設定してください。これらの環境変数は、認証システムの動作に必要な情報を提供します。
+
+### 必要な環境変数
+
+- `ADMIN_USERNAME`: 管理者のユーザー名。
+- `ADMIN_PASSWORD_HASH`: 管理者のパスワードの bcrypt ハッシュ。
+- `SIGN_IN_PAGE`: サインインページのパス。
+- `PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
+- `NEXTAUTH_URL`: NextAuth.js の URL。
+- `NEXTAUTH_SECRET`: NextAuth.js のシークレットキー。
+
+### `.env.local` ファイルの例
+
+以下は、`.env.local` ファイルのサンプルです。実際の値に置き換えて使用してください。
+
+```env
+# 管理者のユーザー名
+ADMIN_USERNAME=admin
+
+# 管理者のパスワードのハッシュ（bcryptでハッシュ化されたもの）
+ADMIN_PASSWORD_HASH=$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36F.z3s9jz4bG0KjU/FyX1K
+
+# サインインページのパス
+SIGN_IN_PAGE=/auth/signin
+
+# 認証が必要なパス（カンマ区切り）
+PROTECTED_PATHS=/admin,/api/admin
+
+# NextAuth.js の URL
+NEXTAUTH_URL=http://localhost:3000
+
+# NextAuth.js のシークレットキー（強力でランダムな文字列）
+NEXTAUTH_SECRET=your-very-secure-secret-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## パスワードのハッシュ化
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+ハッシュ化スクリプトをコマンドラインから実行しパスワードをハッシュ化します。エスケープされた値を設定してください。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### ハッシュ化スクリプトの実行方法
 
-## Learn More
+```cmd
+node hashPassword.js your-plain-password
+```
 
-To learn more about Next.js, take a look at the following resources:
+## シークレットキーの生成
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+openssl などを利用して生成可能です。openssl がインストールされていない場合は別途インストールしてください。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### シークレットキーの生成方法
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```cmd
+openssl rand -base64 32
+```

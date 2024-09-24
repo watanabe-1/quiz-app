@@ -1,7 +1,6 @@
-// authOptions.ts
-import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt";
+import bcrypt from "bcrypt";
 
 // NextAuthの設定オプション
 export const authOptions: NextAuthOptions = {
@@ -18,46 +17,52 @@ export const authOptions: NextAuthOptions = {
           password: string;
         };
 
-        // 環境変数からユーザー名とパスワードを取得
         const adminUsername = process.env.ADMIN_USERNAME;
-        const adminPassword = process.env.ADMIN_PASSWORD;
+        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
 
-        if (username === adminUsername && password === adminPassword) {
-          // 必要に応じてロールなどの追加情報を返す
-          return { id: "1", name: "Admin", role: "admin" };
+        if (username === adminUsername && adminPasswordHash) {
+          // 入力されたパスワードとハッシュ化されたパスワードを比較
+          const isPasswordValid = await bcrypt.compare(
+            password,
+            adminPasswordHash
+          );
+          if (isPasswordValid) {
+            return { id: "1", name: "Admin", role: "admin" };
+          }
         }
-        throw new Error("ユーザー名またはパスワードが正しくありません");
+
+        // 認証に失敗した場合はnullを返す
+        throw new Error(
+          process.env.AUTH_ERROR_MESSAGE ||
+            "ユーザー名またはパスワードが正しくありません"
+        );
       },
     }),
   ],
   pages: {
     signIn: process.env.SIGN_IN_PAGE || "/auth/signin",
   },
-  // JWTの設定
+  secret: process.env.NEXTAUTH_SECRET,
   jwt: {
     maxAge: 60 * 60, // 1時間 (秒単位)
   },
-  // セッションの設定
   session: {
     strategy: "jwt",
     maxAge: 60 * 60, // 1時間 (秒単位)
   },
-  // コールバックの設定
   callbacks: {
-    jwt: async ({ token, user }: { token: JWT; user?: User }) => {
+    jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
         token.name = user.name || "";
-        // 追加情報をトークンに含める
         token.role = (user as any).role;
       }
       return token;
     },
-    session: async ({ session, token }: { session: Session; token: JWT }) => {
+    session: async ({ session, token }) => {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.name = token.name as string;
-        // 追加情報をセッションに含める
         (session.user as any).role = token.role as string;
       }
       return session;
