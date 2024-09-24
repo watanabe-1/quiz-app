@@ -5,8 +5,13 @@ import path from "path";
 // 資格一覧を取得
 export async function getAllQualifications(): Promise<string[]> {
   const dataDir = path.join(process.cwd(), "data");
-  const qualifications = await fs.readdir(dataDir);
-  return qualifications;
+  // ディレクトリエントリを取得（ファイル情報も含む）
+  const dirents = await fs.readdir(dataDir, { withFileTypes: true });
+  // ディレクトリのみをフィルタリング
+  const directories = dirents
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+  return directories;
 }
 
 // 指定した資格の年度一覧を取得
