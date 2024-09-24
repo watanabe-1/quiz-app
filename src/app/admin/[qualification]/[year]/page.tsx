@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getQuestions } from "../../../../lib/questions";
+import { getQuestions } from "@/lib/questions";
 
 interface Params {
   qualification: string;

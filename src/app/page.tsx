@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { getAllQualifications } from "../lib/questions";
-import Header from "@/components/ui/Header";
+import { getAllQualifications } from "@/lib/questions";
+import Header from "@/components/layout/Header";
 
 const HomePage = async () => {
   const qualifications = await getAllQualifications();

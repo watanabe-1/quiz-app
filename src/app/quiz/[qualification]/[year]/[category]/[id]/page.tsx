@@ -1,11 +1,8 @@
 import React from "react";
-import Question from "../../../../../../components/Question";
-import {
-  getQuestions,
-  getQuestionsByCategory,
-} from "../../../../../../lib/questions";
+import Question from "@/components/quiz/Question";
+import { getQuestions, getQuestionsByCategory } from "@/lib/questions";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import Header from "@/components/ui/Header";
+import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
 interface Params {
