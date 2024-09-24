@@ -102,7 +102,7 @@ const existsFile = async (fullPath: string) => {
   }
 };
 
-export function modifyGradeText(input: string): string {
+function modifyGradeText(input: string): string {
   return input.replace(/【(.+?)\s+(.+?)】/, "$1_$2");
 }
 

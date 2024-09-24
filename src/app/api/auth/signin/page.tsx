@@ -1,11 +1,10 @@
-// app/auth/signin/page.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const SignInPage = () => {
+const SignInForm = () => {
   const [userInfo, setUserInfo] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +14,6 @@ const SignInPage = () => {
   useEffect(() => {
     const errorParam = searchParams.get("error");
     if (errorParam) {
-      // NextAuth.jsが提供するエラーメッセージに基づいてエラーメッセージを設定
       switch (errorParam) {
         case "CredentialsSignin":
           setError("ユーザー名またはパスワードが正しくありません。");
@@ -32,7 +30,6 @@ const SignInPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 入力バリデーション
     if (!userInfo.username || !userInfo.password) {
       setError("ユーザー名とパスワードを入力してください。");
       return;
@@ -115,5 +112,11 @@ const SignInPage = () => {
     </div>
   );
 };
+
+const SignInPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SignInForm />
+  </Suspense>
+);
 
 export default SignInPage;

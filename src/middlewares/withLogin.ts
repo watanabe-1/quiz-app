@@ -1,10 +1,5 @@
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
-import {
-  NextFetchEvent,
-  NextMiddleware,
-  NextRequest,
-  NextResponse,
-} from "next/server";
+import { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
 
 // 環境変数から保護するパスを取得
 const protectedPaths = process.env.PROTECTED_PATHS
@@ -47,12 +42,3 @@ export function withLogin(middleware: NextMiddleware) {
     return middleware(request, event);
   };
 }
-
-// 既存のミドルウェアを適用する例
-const exampleMiddleware = async (req: NextRequest): Promise<NextResponse> => {
-  const response = NextResponse.next();
-  // ここに追加の処理を記述
-  return response;
-};
-
-export default withLogin(exampleMiddleware);

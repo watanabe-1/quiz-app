@@ -71,4 +71,5 @@ const ExplanationSection = forwardRef<HTMLDivElement, ExplanationSectionProps>(
   }
 );
 
+ExplanationSection.displayName = "ExplanationSection";
 export default ExplanationSection;

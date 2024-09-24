@@ -1,17 +1,31 @@
 "use client";
 
+import { AnswerHistory } from "@/@types/quizType";
 import { ANSWER_HISTORY_KEY } from "./constants";
 
 // Utility function to get history from localStorage
-export const getAnswerHistory = (): Record<string, any> => {
+export const getAnswerHistory = (): AnswerHistory => {
   if (typeof window === "undefined") {
     return {};
   }
-  return JSON.parse(localStorage.getItem(ANSWER_HISTORY_KEY) || "{}");
+
+  const historyString = localStorage.getItem(ANSWER_HISTORY_KEY);
+
+  if (!historyString) {
+    return {};
+  }
+
+  try {
+    const parsedHistory: AnswerHistory = JSON.parse(historyString);
+    return parsedHistory;
+  } catch (error) {
+    console.error("Failed to parse answer history:", error);
+    return {};
+  }
 };
 
 // Utility function to set history in localStorage
-export const setAnswerHistory = (history: Record<string, any>): void => {
+export const setAnswerHistory = (history: AnswerHistory): void => {
   localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
 };
 
@@ -49,14 +63,14 @@ export const deleteHistoryByQualificationAndYear = (
 export const getHistoryByQualificationAndYear = (
   qualification: string,
   year: string
-): Record<string, any> => {
+): AnswerHistory => {
   const history = getAnswerHistory();
 
   // Create the keyPrefix using the qualification and year
   const keyPrefix = `${qualification}-${year}`;
 
   // Filter the history to return only the matching entries
-  const filteredHistory: Record<string, any> = {};
+  const filteredHistory: AnswerHistory = {};
 
   Object.keys(history).forEach((key) => {
     if (key.startsWith(keyPrefix)) {

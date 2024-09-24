@@ -44,10 +44,9 @@ const Question: React.FC<QuestionProps> = ({
     getAnswerHistory()
   );
 
-  // 解説部分を参照するためのref
   const explanationRef = useRef<HTMLDivElement | null>(null);
 
-  // 更新された履歴を反映してselectedOptionを設定
+  // Update selectedOption based on history
   useEffect(() => {
     if (question) {
       const key = createAnswerHistoryKey(qualification, year, question.id);
@@ -59,7 +58,7 @@ const Question: React.FC<QuestionProps> = ({
     }
   }, [qualification, year, question, history]);
 
-  // 正解数と解答済みの問題数を計算
+  // Calculate correct and answered counts
   useEffect(() => {
     if (question) {
       const totalCorrect = calculateCorrectCount(
@@ -79,10 +78,9 @@ const Question: React.FC<QuestionProps> = ({
     }
   }, [questionIdAnswers, qualification, year, history, question]);
 
-  // スクロール処理
+  // Handle scrolling
   useEffect(() => {
     if (shouldScroll && selectedOption !== null && explanationRef.current) {
-      // ヘッダーをstickyで定義しているため、スクロールがずれないようにheaderの高さ分オフセットをとるようにする
       const headerElement = document.querySelector("header");
       const headerHeight = headerElement?.clientHeight || 0;
       const elementPosition =
@@ -98,33 +96,41 @@ const Question: React.FC<QuestionProps> = ({
     }
   }, [shouldScroll, selectedOption]);
 
-  if (!question) return <div>問題が取得できませんでした</div>;
-
   const toggleReportModal = () => {
     setIsReportOpen((prev) => !prev);
   };
 
   const handleOptionClick = useCallback(
     (index: number) => {
+      if (!question) return;
       const key = createAnswerHistoryKey(qualification, year, question.id);
       const updatedHistory = { ...history, [key]: index };
       setHistory(updatedHistory);
-      setAnswerHistory(updatedHistory); // ローカルストレージも更新
+      setAnswerHistory(updatedHistory); // Update localStorage
       setSelectedOption(index);
       setShouldScroll(true);
     },
     [qualification, year, question, history]
   );
 
-  // 解答リセットの処理
   const handleResetAnswer = useCallback(() => {
+    if (!question) return;
     const key = createAnswerHistoryKey(qualification, year, question.id);
-    const { [key]: _, ...rest } = history;
+
+    // Create a shallow copy and remove the specific key
+    const rest = { ...history };
+    delete rest[key];
+
+    // Update state and localStorage
     setHistory(rest);
-    setAnswerHistory(rest); // ローカルストレージも更新
+    setAnswerHistory(rest);
+
+    // Reset selection and scrolling
     setSelectedOption(null);
     setShouldScroll(false);
   }, [qualification, year, question, history]);
+
+  if (!question) return <div>問題が取得できませんでした</div>;
 
   const questionIds = questionIdAnswers.map((q) => q.id);
   const currentIndex = questionIds.indexOf(questionId);
