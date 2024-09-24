@@ -33,7 +33,6 @@
     "editor.lineNumbers": "on",
     "editor.rulers": [80],
     "editor.wordWrap": "on",
-    // "eslint.packageManager": "yarn",
     "files.insertFinalNewline": true,
     "npm.packageManager": "yarn",
     "typescript.enablePromptUseWorkspaceTsdk": true,
@@ -46,9 +45,6 @@
     },
     "[markdown]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[python]": {
-      "editor.formatOnType": true
     },
     "diffEditor.ignoreTrimWhitespace": false,
     "javascript.updateImportsOnFileMove.enabled": "always",

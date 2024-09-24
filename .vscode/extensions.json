@@ -13,7 +13,6 @@
     "davidanson.vscode-markdownlint",
     "christian-kohler.path-intellisense",
     "mosapride.zenkaku",
-    "vscjava.vscode-gradle",
     "oderwat.indent-rainbow"
   ]
 }
