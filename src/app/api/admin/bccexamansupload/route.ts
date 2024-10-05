@@ -64,13 +64,13 @@ export async function POST(request: Request) {
       let qualificationId: number;
       let yearId: number;
 
-      try {
-        const ids = await getQualificationAndYearIds(qualification, year);
+      const ids = await getQualificationAndYearIds(qualification, year);
+      if (ids) {
         qualificationId = ids.qualificationId;
         yearId = ids.yearId;
-      } catch (error) {
-        console.error(error);
-        continue; // 次のカテゴリに進む
+      } else {
+        // 次のカテゴリに進む
+        continue;
       }
 
       // データが存在するかチェック

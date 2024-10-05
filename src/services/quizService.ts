@@ -564,13 +564,13 @@ export async function updateQuestionAnswer(
 export async function getQualificationAndYearIds(
   qualification: string,
   year: string
-): Promise<{ qualificationId: number; yearId: number }> {
+): Promise<{ qualificationId: number; yearId: number } | undefined> {
   const qualificationRecord = await prisma.qualification.findUnique({
     where: { name: qualification },
   });
 
   if (!qualificationRecord) {
-    throw new Error(`Qualification ${qualification} not found.`);
+    return undefined;
   }
 
   const yearRecord = await prisma.year.findUnique({
@@ -583,9 +583,7 @@ export async function getQualificationAndYearIds(
   });
 
   if (!yearRecord) {
-    throw new Error(
-      `Year ${year} for qualification ${qualification} not found.`
-    );
+    return undefined;
   }
 
   return {
