@@ -371,246 +371,256 @@ export async function saveQuestions(
   questionsData: QuestionData[]
 ): Promise<boolean> {
   try {
-    await prisma.$transaction(async (prisma) => {
-      // 資格のアップサート
-      const qualification = await prisma.qualification.upsert({
-        where: { name: qualificationName },
-        create: { name: qualificationName },
-        update: {},
-      });
+    await prisma.$transaction(
+      async (prisma) => {
+        // 資格のアップサート
+        const qualification = await prisma.qualification.upsert({
+          where: { name: qualificationName },
+          create: { name: qualificationName },
+          update: {},
+        });
 
-      // 級のアップサート
-      const grade = await prisma.grade.upsert({
-        where: {
-          qualificationId_name: {
+        // 級のアップサート
+        const grade = await prisma.grade.upsert({
+          where: {
+            qualificationId_name: {
+              qualificationId: qualification.id,
+              name: gradeName,
+            },
+          },
+          create: {
             qualificationId: qualification.id,
             name: gradeName,
           },
-        },
-        create: {
-          qualificationId: qualification.id,
-          name: gradeName,
-        },
-        update: {},
-      });
+          update: {},
+        });
 
-      // 年度のアップサート
-      const year = await prisma.year.upsert({
-        where: {
-          qualificationId_year: {
+        // 年度のアップサート
+        const year = await prisma.year.upsert({
+          where: {
+            qualificationId_year: {
+              qualificationId: qualification.id,
+              year: yearValue,
+            },
+          },
+          create: {
             qualificationId: qualification.id,
             year: yearValue,
           },
-        },
-        create: {
-          qualificationId: qualification.id,
-          year: yearValue,
-        },
-        update: {},
-      });
-
-      // カテゴリーのキャッシュを作成
-      const categoryCache = new Map<string, { id: number }>();
-
-      // 質問データの保存
-      for (const questionData of questionsData) {
-        // カテゴリーの取得または作成
-        let categoryRecord = categoryCache.get(questionData.category);
-        if (!categoryRecord) {
-          // カテゴリーをアップサート
-          const category = await prisma.category.upsert({
-            where: { name: questionData.category },
-            create: { name: questionData.category },
-            update: {},
-          });
-          categoryCache.set(questionData.category, { id: category.id });
-          categoryRecord = { id: category.id };
-        }
-
-        // 既存のQuestionDataを確認
-        const existingQuestion = await prisma.questionData.findUnique({
-          where: {
-            qualificationId_gradeId_yearId_questionId: {
-              qualificationId: qualification.id,
-              gradeId: grade.id,
-              yearId: year.id,
-              questionId: questionData.questionId,
-            },
-          },
-          include: {
-            question: true, // questionContent
-            explanation: true,
-            options: {
-              include: {
-                explanation: true,
-              },
-            },
-          },
+          update: {},
         });
 
-        if (existingQuestion) {
-          // 既存のquestionContentを更新
-          await prisma.mediaContent.update({
-            where: { id: existingQuestion.questionContentId },
-            data: {
-              text: questionData.question.text,
-              image: questionData.question.image,
+        // カテゴリーのキャッシュを作成
+        const categoryCache = new Map<string, { id: number }>();
+
+        // 質問データの保存
+        for (const questionData of questionsData) {
+          // カテゴリーの取得または作成
+          let categoryRecord = categoryCache.get(questionData.category);
+          if (!categoryRecord) {
+            // カテゴリーをアップサート
+            const category = await prisma.category.upsert({
+              where: { name: questionData.category },
+              create: { name: questionData.category },
+              update: {},
+            });
+            categoryCache.set(questionData.category, { id: category.id });
+            categoryRecord = { id: category.id };
+          }
+
+          // 既存のQuestionDataを確認
+          const existingQuestion = await prisma.questionData.findUnique({
+            where: {
+              qualificationId_gradeId_yearId_questionId: {
+                qualificationId: qualification.id,
+                gradeId: grade.id,
+                yearId: year.id,
+                questionId: questionData.questionId,
+              },
+            },
+            include: {
+              question: true, // questionContent
+              explanation: true,
+              options: {
+                include: {
+                  explanation: true,
+                },
+              },
             },
           });
 
-          // 解説の更新または作成
-          if (questionData.explanation) {
-            if (existingQuestion.explanationId) {
-              // 既存の解説を更新
-              await prisma.mediaContent.update({
+          if (existingQuestion) {
+            // 既存のquestionContentを更新
+            await prisma.mediaContent.update({
+              where: { id: existingQuestion.questionContentId },
+              data: {
+                text: questionData.question.text,
+                image: questionData.question.image,
+              },
+            });
+
+            // 解説の更新または作成
+            if (questionData.explanation) {
+              if (existingQuestion.explanationId) {
+                // 既存の解説を更新
+                await prisma.mediaContent.update({
+                  where: { id: existingQuestion.explanationId },
+                  data: {
+                    text: questionData.explanation.text,
+                    image: questionData.explanation.image,
+                  },
+                });
+              } else {
+                // 新しい解説を作成
+                const explanationContent = await prisma.mediaContent.create({
+                  data: {
+                    text: questionData.explanation.text,
+                    image: questionData.explanation.image,
+                  },
+                });
+                await prisma.questionData.update({
+                  where: { id: existingQuestion.id },
+                  data: {
+                    explanationId: explanationContent.id,
+                  },
+                });
+              }
+            } else if (existingQuestion.explanationId) {
+              // 既存の解説を削除
+              await prisma.mediaContent.delete({
                 where: { id: existingQuestion.explanationId },
-                data: {
-                  text: questionData.explanation.text,
-                  image: questionData.explanation.image,
-                },
-              });
-            } else {
-              // 新しい解説を作成
-              const explanationContent = await prisma.mediaContent.create({
-                data: {
-                  text: questionData.explanation.text,
-                  image: questionData.explanation.image,
-                },
               });
               await prisma.questionData.update({
                 where: { id: existingQuestion.id },
                 data: {
-                  explanationId: explanationContent.id,
+                  explanationId: null,
                 },
               });
             }
-          } else if (existingQuestion.explanationId) {
-            // 既存の解説を削除
-            await prisma.mediaContent.delete({
-              where: { id: existingQuestion.explanationId },
-            });
+
+            // QuestionDataの更新
             await prisma.questionData.update({
               where: { id: existingQuestion.id },
               data: {
-                explanationId: null,
+                categoryId: categoryRecord.id,
+                answer: questionData.answer,
               },
             });
-          }
 
-          // QuestionDataの更新
-          await prisma.questionData.update({
-            where: { id: existingQuestion.id },
-            data: {
-              categoryId: categoryRecord.id,
-              answer: questionData.answer,
-            },
-          });
+            // 既存のオプションとその解説を削除
+            const optionIds = existingQuestion.options.map(
+              (option) => option.id
+            );
+            const optionExplanationIds = existingQuestion.options
+              .filter((option) => option.explanationId)
+              .map((option) => option.explanationId!);
 
-          // 既存のオプションとその解説を削除
-          const optionIds = existingQuestion.options.map((option) => option.id);
-          const optionExplanationIds = existingQuestion.options
-            .filter((option) => option.explanationId)
-            .map((option) => option.explanationId!);
+            if (optionExplanationIds.length > 0) {
+              await prisma.mediaContent.deleteMany({
+                where: { id: { in: optionExplanationIds } },
+              });
+            }
 
-          if (optionExplanationIds.length > 0) {
-            await prisma.mediaContent.deleteMany({
-              where: { id: { in: optionExplanationIds } },
-            });
-          }
+            if (optionIds.length > 0) {
+              await prisma.questionOption.deleteMany({
+                where: { id: { in: optionIds } },
+              });
+            }
 
-          if (optionIds.length > 0) {
-            await prisma.questionOption.deleteMany({
-              where: { id: { in: optionIds } },
-            });
-          }
+            // 新しいオプションを作成
+            for (const optionData of questionData.options) {
+              // オプションの解説を作成（存在する場合）
+              let optionExplanationContent = null;
+              if (optionData.explanation) {
+                optionExplanationContent = await prisma.mediaContent.create({
+                  data: {
+                    text: optionData.explanation.text,
+                    image: optionData.explanation.image,
+                  },
+                });
+              }
 
-          // 新しいオプションを作成
-          for (const optionData of questionData.options) {
-            // オプションの解説を作成（存在する場合）
-            let optionExplanationContent = null;
-            if (optionData.explanation) {
-              optionExplanationContent = await prisma.mediaContent.create({
+              // QuestionOptionの作成
+              await prisma.questionOption.create({
                 data: {
-                  text: optionData.explanation.text,
-                  image: optionData.explanation.image,
+                  text: optionData.text,
+                  image: optionData.image,
+                  explanationId: optionExplanationContent
+                    ? optionExplanationContent.id
+                    : null,
+                  questionId: existingQuestion.id,
+                },
+              });
+            }
+          } else {
+            // 新しいquestionContentを作成
+            const questionContent = await prisma.mediaContent.create({
+              data: {
+                text: questionData.question.text,
+                image: questionData.question.image,
+              },
+            });
+
+            // 解説のMediaContentを作成（存在する場合）
+            let explanationContent = null;
+            if (questionData.explanation) {
+              explanationContent = await prisma.mediaContent.create({
+                data: {
+                  text: questionData.explanation.text,
+                  image: questionData.explanation.image,
                 },
               });
             }
 
-            // QuestionOptionの作成
-            await prisma.questionOption.create({
+            // 新しいQuestionDataを作成
+            const questionRecord = await prisma.questionData.create({
               data: {
-                text: optionData.text,
-                image: optionData.image,
-                explanationId: optionExplanationContent
-                  ? optionExplanationContent.id
+                questionId: questionData.questionId,
+                categoryId: categoryRecord.id,
+                questionContentId: questionContent.id,
+                answer: questionData.answer,
+                explanationId: explanationContent
+                  ? explanationContent.id
                   : null,
-                questionId: existingQuestion.id,
+                qualificationId: qualification.id,
+                gradeId: grade.id,
+                yearId: year.id,
               },
             });
-          }
-        } else {
-          // 新しいquestionContentを作成
-          const questionContent = await prisma.mediaContent.create({
-            data: {
-              text: questionData.question.text,
-              image: questionData.question.image,
-            },
-          });
 
-          // 解説のMediaContentを作成（存在する場合）
-          let explanationContent = null;
-          if (questionData.explanation) {
-            explanationContent = await prisma.mediaContent.create({
-              data: {
-                text: questionData.explanation.text,
-                image: questionData.explanation.image,
-              },
-            });
-          }
+            // オプションの保存
+            for (const optionData of questionData.options) {
+              // オプションの解説を作成（存在する場合）
+              let optionExplanationContent = null;
+              if (optionData.explanation) {
+                optionExplanationContent = await prisma.mediaContent.create({
+                  data: {
+                    text: optionData.explanation.text,
+                    image: optionData.explanation.image,
+                  },
+                });
+              }
 
-          // 新しいQuestionDataを作成
-          const questionRecord = await prisma.questionData.create({
-            data: {
-              questionId: questionData.questionId,
-              categoryId: categoryRecord.id,
-              questionContentId: questionContent.id,
-              answer: questionData.answer,
-              explanationId: explanationContent ? explanationContent.id : null,
-              qualificationId: qualification.id,
-              gradeId: grade.id,
-              yearId: year.id,
-            },
-          });
-
-          // オプションの保存
-          for (const optionData of questionData.options) {
-            // オプションの解説を作成（存在する場合）
-            let optionExplanationContent = null;
-            if (optionData.explanation) {
-              optionExplanationContent = await prisma.mediaContent.create({
+              // QuestionOptionの作成
+              await prisma.questionOption.create({
                 data: {
-                  text: optionData.explanation.text,
-                  image: optionData.explanation.image,
+                  text: optionData.text,
+                  image: optionData.image,
+                  explanationId: optionExplanationContent
+                    ? optionExplanationContent.id
+                    : null,
+                  questionId: questionRecord.id,
                 },
               });
             }
-
-            // QuestionOptionの作成
-            await prisma.questionOption.create({
-              data: {
-                text: optionData.text,
-                image: optionData.image,
-                explanationId: optionExplanationContent
-                  ? optionExplanationContent.id
-                  : null,
-                questionId: questionRecord.id,
-              },
-            });
           }
         }
+      },
+      {
+        maxWait: 5000, // default: 2000
+        timeout: 10000, // default: 5000
       }
-    });
+    );
     return true;
   } catch (error) {
     console.error("Error saving questions:", error);

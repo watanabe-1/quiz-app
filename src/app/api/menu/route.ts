@@ -77,7 +77,7 @@ const getGradeItemsByQualification = async (
         grade
       );
       return {
-        name: `${grade}級`,
+        name: grade,
         href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
           grade
         )}`,
