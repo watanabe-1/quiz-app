@@ -4,19 +4,22 @@
 
 ## 目次
 
-1. [環境変数の設定](#環境変数の設定)
+1. [環境変数の設定-ローカル](#環境変数の設定-ローカル)
    - [必要な環境変数](#必要な環境変数)
    - [`.env.local` ファイルの例](#envlocal-ファイルの例)
-2. [パスワードのハッシュ化](#パスワードのハッシュ化)
+   - [`.env` ファイルの例](#env-ファイルの例)
+2. [環境変数の設定-vercel](#環境変数の設定-vercel)
+3. [パスワードのハッシュ化](#パスワードのハッシュ化)
    - [ハッシュ化スクリプトの実行方法](#ハッシュ化スクリプトの実行方法)
-3. [シークレットキーの生成](#シークレットキーの生成)
+4. [シークレットキーの生成](#シークレットキーの生成)
    - [シークレットキーの生成方法](#シークレットキーの生成方法)
 
 ---
 
-## 環境変数の設定
+## 環境変数の設定-ローカル
 
-プロジェクトのルートディレクトリに `.env.local` ファイルを作成し、以下の環境変数を設定してください。これらの環境変数は、認証システムの動作に必要な情報を提供します。
+ローカルマシン上で実行する場合は、プロジェクトのルートディレクトリに `.env.local` `.env` ファイルを作成し、以下の環境変数を設定してください。
+これらの環境変数は、認証システムの動作に必要な情報を提供します。
 
 ### 必要な環境変数
 
@@ -26,12 +29,13 @@
 - `PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
 - `NEXTAUTH_URL`: NextAuth.js の URL。
 - `NEXTAUTH_SECRET`: NextAuth.js のシークレットキー。
+- `POSTGRES_～`: DB 接続用 URL。
 
 ### `.env.local` ファイルの例
 
 以下は、`.env.local` ファイルのサンプルです。実際の値に置き換えて使用してください。
 
-```env
+```.env.local
 # 管理者のユーザー名
 ADMIN_USERNAME=admin
 
@@ -49,6 +53,36 @@ NEXTAUTH_URL=http://localhost:3000
 
 # NextAuth.js のシークレットキー（''で囲んで設定）
 NEXTAUTH_SECRET='your-very-secure-secret-key'
+```
+
+### `.env` ファイルの例
+
+以下は、`.env` ファイルのサンプルです。実際の値に置き換えて使用してください。
+
+```.env
+# DB接続用URL
+POSTGRES_PRISMA_URL="postgresql://${username}:${password}@localhost:${port}/${database}"
+POSTGRES_URL_NO_SSL="postgresql://${username}:${password}@localhost:${port}/${database}"
+POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}/${database}"
+```
+
+## 環境変数の設定-vercel
+
+```vercel-environment-variables
+# 管理者のユーザー名
+ADMIN_USERNAME=admin
+
+# 管理者のパスワードのハッシュ（bcryptでハッシュ化されたもの、エスケープしていない値を設定）
+ADMIN_PASSWORD_HASH=\$2b\$10\$6LjoTU3W7NIIdfVlUCr5X.dnSacabEHoYcgBxoYbU5LtsMcyHRPFO
+
+# サインインページのパス
+SIGN_IN_PAGE=/auth/signin
+
+# 認証が必要なパス（カンマ区切り）
+PROTECTED_PATHS=/admin,/api/admin
+
+# NextAuth.js のシークレットキー（''で囲んで設定）
+NEXTAUTH_SECRET=your-very-secure-secret-key
 ```
 
 ## パスワードのハッシュ化
