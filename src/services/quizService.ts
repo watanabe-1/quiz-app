@@ -302,72 +302,187 @@ export async function saveQuestions(
         update: {},
       });
 
-      // 既存の問題データを削除（必要に応じて）
-      // await prisma.questionData.deleteMany({
-      //   where: {
-      //     qualificationId: qualification.id,
-      //     yearId: year.id,
-      //   },
-      // });
-
       // 質問データの保存
       for (const questionData of questionsData) {
-        // 質問のMediaContentを作成
-        const questionContent = await prisma.mediaContent.create({
-          data: {
-            text: questionData.question.text,
-            image: questionData.question.image,
+        // 既存のQuestionDataを確認
+        const existingQuestion = await prisma.questionData.findUnique({
+          where: {
+            qualificationId_yearId_questionId: {
+              qualificationId: qualification.id,
+              yearId: year.id,
+              questionId: questionData.questionId,
+            },
+          },
+          include: {
+            question: true, // questionContent
+            explanation: true,
+            options: {
+              include: {
+                explanation: true,
+              },
+            },
           },
         });
 
-        // 解説のMediaContentを作成（存在する場合）
-        let explanationContent = null;
-        if (questionData.explanation) {
-          explanationContent = await prisma.mediaContent.create({
+        if (existingQuestion) {
+          // 既存のquestionContentを更新
+          await prisma.mediaContent.update({
+            where: { id: existingQuestion.questionContentId },
             data: {
-              text: questionData.explanation.text,
-              image: questionData.explanation.image,
+              text: questionData.question.text,
+              image: questionData.question.image,
             },
           });
-        }
 
-        // QuestionDataの作成
-        const questionRecord = await prisma.questionData.create({
-          data: {
-            questionId: questionData.questionId,
-            category: questionData.category,
-            questionContentId: questionContent.id,
-            answer: questionData.answer,
-            explanationId: explanationContent ? explanationContent.id : null,
-            qualificationId: qualification.id,
-            yearId: year.id,
-          },
-        });
-
-        // オプションの保存
-        for (const optionData of questionData.options) {
-          // オプションの解説を作成（存在する場合）
-          let optionExplanationContent = null;
-          if (optionData.explanation) {
-            optionExplanationContent = await prisma.mediaContent.create({
+          // 解説の更新または作成
+          if (questionData.explanation) {
+            if (existingQuestion.explanationId) {
+              // 既存の解説を更新
+              await prisma.mediaContent.update({
+                where: { id: existingQuestion.explanationId },
+                data: {
+                  text: questionData.explanation.text,
+                  image: questionData.explanation.image,
+                },
+              });
+            } else {
+              // 新しい解説を作成
+              const explanationContent = await prisma.mediaContent.create({
+                data: {
+                  text: questionData.explanation.text,
+                  image: questionData.explanation.image,
+                },
+              });
+              await prisma.questionData.update({
+                where: { id: existingQuestion.id },
+                data: {
+                  explanationId: explanationContent.id,
+                },
+              });
+            }
+          } else if (existingQuestion.explanationId) {
+            // 既存の解説を削除
+            await prisma.mediaContent.delete({
+              where: { id: existingQuestion.explanationId },
+            });
+            await prisma.questionData.update({
+              where: { id: existingQuestion.id },
               data: {
-                text: optionData.explanation.text,
-                image: optionData.explanation.image,
+                explanationId: null,
               },
             });
           }
 
-          // QuestionOptionの作成
-          await prisma.questionOption.create({
+          // QuestionDataの更新
+          await prisma.questionData.update({
+            where: { id: existingQuestion.id },
             data: {
-              text: optionData.text,
-              image: optionData.image,
-              explanationId: optionExplanationContent
-                ? optionExplanationContent.id
-                : null,
-              questionId: questionRecord.questionId,
+              category: questionData.category,
+              answer: questionData.answer,
             },
           });
+
+          // 既存のオプションとその解説を削除
+          const optionIds = existingQuestion.options.map((option) => option.id);
+          const optionExplanationIds = existingQuestion.options
+            .filter((option) => option.explanationId)
+            .map((option) => option.explanationId!);
+
+          if (optionExplanationIds.length > 0) {
+            await prisma.mediaContent.deleteMany({
+              where: { id: { in: optionExplanationIds } },
+            });
+          }
+
+          if (optionIds.length > 0) {
+            await prisma.questionOption.deleteMany({
+              where: { id: { in: optionIds } },
+            });
+          }
+
+          // 新しいオプションを作成
+          for (const optionData of questionData.options) {
+            // オプションの解説を作成（存在する場合）
+            let optionExplanationContent = null;
+            if (optionData.explanation) {
+              optionExplanationContent = await prisma.mediaContent.create({
+                data: {
+                  text: optionData.explanation.text,
+                  image: optionData.explanation.image,
+                },
+              });
+            }
+
+            // QuestionOptionの作成
+            await prisma.questionOption.create({
+              data: {
+                text: optionData.text,
+                image: optionData.image,
+                explanationId: optionExplanationContent
+                  ? optionExplanationContent.id
+                  : null,
+                questionId: existingQuestion.id,
+              },
+            });
+          }
+        } else {
+          // 新しいquestionContentを作成
+          const questionContent = await prisma.mediaContent.create({
+            data: {
+              text: questionData.question.text,
+              image: questionData.question.image,
+            },
+          });
+
+          // 解説のMediaContentを作成（存在する場合）
+          let explanationContent = null;
+          if (questionData.explanation) {
+            explanationContent = await prisma.mediaContent.create({
+              data: {
+                text: questionData.explanation.text,
+                image: questionData.explanation.image,
+              },
+            });
+          }
+
+          // 新しいQuestionDataを作成
+          const questionRecord = await prisma.questionData.create({
+            data: {
+              questionId: questionData.questionId,
+              category: questionData.category,
+              questionContentId: questionContent.id,
+              answer: questionData.answer,
+              explanationId: explanationContent ? explanationContent.id : null,
+              qualificationId: qualification.id,
+              yearId: year.id,
+            },
+          });
+
+          // オプションの保存
+          for (const optionData of questionData.options) {
+            // オプションの解説を作成（存在する場合）
+            let optionExplanationContent = null;
+            if (optionData.explanation) {
+              optionExplanationContent = await prisma.mediaContent.create({
+                data: {
+                  text: optionData.explanation.text,
+                  image: optionData.explanation.image,
+                },
+              });
+            }
+
+            // QuestionOptionの作成
+            await prisma.questionOption.create({
+              data: {
+                text: optionData.text,
+                image: optionData.image,
+                explanationId: optionExplanationContent
+                  ? optionExplanationContent.id
+                  : null,
+                questionId: questionRecord.id,
+              },
+            });
+          }
         }
       }
     });

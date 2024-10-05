@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "set NODE_OPTIONS=--inspect && next dev",
-    "build": "next build",
+    "build": "prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint"
   },
