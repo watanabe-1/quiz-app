@@ -26,6 +26,12 @@ const AdminDashboard = async () => {
         >
           問題データのアップロード(ビジキャリPDFから)
         </Link>
+        <Link
+          href="/admin/export"
+          className="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          問題データのエクスポート
+        </Link>
         <h2 className="text-xl font-semibold mb-4">資格一覧</h2>
         <ul className="space-y-2">
           {qualifications.map((qualification) => (
