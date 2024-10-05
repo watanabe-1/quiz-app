@@ -42,7 +42,11 @@ const Questions: React.FC<QuestionsProps> = ({
   };
 
   const handleQuestionClick = (questionId: number) => {
-    if (isEmptyObject(getHistoryByQualificationAndYear(qualification, year))) {
+    if (
+      isEmptyObject(
+        getHistoryByQualificationAndYear(qualification, grade, year)
+      )
+    ) {
       navigateToQuestionPage(questionId);
     } else {
       setSelectedQuestionId(questionId);
@@ -52,7 +56,7 @@ const Questions: React.FC<QuestionsProps> = ({
 
   const handleModalSelection = (clearHistory: boolean) => {
     if (clearHistory) {
-      deleteHistoryByQualificationAndYear(qualification, year);
+      deleteHistoryByQualificationAndYear(qualification, grade, year);
     }
     setModalOpen(false);
     navigateToQuestionPage(selectedQuestionId || 1);

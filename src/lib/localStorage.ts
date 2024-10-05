@@ -42,12 +42,13 @@ export const createAnswerHistoryKey = (
 // Utility function to delete all history entries with a matching qualification and year
 export const deleteHistoryByQualificationAndYear = (
   qualification: string,
+  grade: string,
   year: string
 ): void => {
   const history = getAnswerHistory();
 
-  // Create the keyPrefix using the qualification and year
-  const keyPrefix = `${qualification}-${year}`;
+  // Create the keyPrefix using the qualification and grade and year
+  const keyPrefix = `${qualification}-${grade}-${year}`;
 
   // Iterate over the keys in history and delete matching ones
   Object.keys(history).forEach((key) => {
@@ -63,12 +64,13 @@ export const deleteHistoryByQualificationAndYear = (
 // Utility function to get all history entries with a matching qualification and year
 export const getHistoryByQualificationAndYear = (
   qualification: string,
+  grade: string,
   year: string
 ): AnswerHistory => {
   const history = getAnswerHistory();
 
-  // Create the keyPrefix using the qualification and year
-  const keyPrefix = `${qualification}-${year}`;
+  // Create the keyPrefix using the qualification and grade and year
+  const keyPrefix = `${qualification}-${grade}-${year}`;
 
   // Filter the history to return only the matching entries
   const filteredHistory: AnswerHistory = {};
