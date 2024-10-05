@@ -50,7 +50,11 @@ export async function getQuestions(
     select: {
       id: true,
       questionId: true,
-      category: true,
+      category: {
+        select: {
+          name: true,
+        },
+      },
       answer: true,
       question: true, // MediaContent
       explanation: true, // MediaContent
@@ -69,7 +73,7 @@ export async function getQuestions(
   return questions.map((q) => ({
     id: q.id,
     questionId: q.questionId,
-    category: q.category,
+    category: q.category.name,
     question: {
       id: q.question?.id,
       text: q.question?.text || undefined,
@@ -103,32 +107,32 @@ export async function getCategories(
   qualification: string,
   year: string
 ): Promise<string[]> {
-  const categories = await prisma.questionData.findMany({
+  const categories = await prisma.category.findMany({
     where: {
-      qualification: {
-        name: qualification,
-      },
-      year: {
-        year: year,
+      questions: {
+        some: {
+          qualification: {
+            name: qualification,
+          },
+          year: {
+            year: year,
+          },
+        },
       },
     },
     select: {
-      category: true,
-    },
-    distinct: ["category"],
-    orderBy: {
-      questionId: "asc",
+      name: true,
     },
   });
 
-  return categories.map((c) => c.category);
+  return categories.map((c) => c.name);
 }
 
 // 指定した資格、年度、カテゴリの問題を取得
 export async function getQuestionsByCategory(
   qualification: string,
   year: string,
-  category: string
+  categoryName: string
 ): Promise<QuestionData[]> {
   const questions = await prisma.questionData.findMany({
     where: {
@@ -138,12 +142,18 @@ export async function getQuestionsByCategory(
       year: {
         year: year,
       },
-      category: category,
+      category: {
+        name: categoryName,
+      },
     },
     select: {
       id: true,
       questionId: true,
-      category: true,
+      category: {
+        select: {
+          name: true,
+        },
+      },
       answer: true,
       question: true,
       explanation: true,
@@ -161,7 +171,7 @@ export async function getQuestionsByCategory(
   return questions.map((q) => ({
     id: q.id,
     questionId: q.questionId,
-    category: q.category,
+    category: q.category.name,
     question: {
       id: q.question?.id,
       text: q.question?.text || undefined,
@@ -224,7 +234,11 @@ export async function getQuestionById(
     select: {
       id: true,
       questionId: true,
-      category: true,
+      category: {
+        select: {
+          name: true,
+        },
+      },
       answer: true,
       question: true,
       explanation: true,
@@ -243,7 +257,7 @@ export async function getQuestionById(
   return {
     id: question.id,
     questionId: question.questionId,
-    category: question.category,
+    category: question.category.name,
     question: {
       id: question.question?.id,
       text: question.question?.text || undefined,
@@ -302,8 +316,24 @@ export async function saveQuestions(
         update: {},
       });
 
+      // カテゴリーのキャッシュを作成
+      const categoryCache = new Map<string, { id: number }>();
+
       // 質問データの保存
       for (const questionData of questionsData) {
+        // カテゴリーの取得または作成
+        let categoryRecord = categoryCache.get(questionData.category);
+        if (!categoryRecord) {
+          // カテゴリーをアップサート
+          const category = await prisma.category.upsert({
+            where: { name: questionData.category },
+            create: { name: questionData.category },
+            update: {},
+          });
+          categoryCache.set(questionData.category, { id: category.id });
+          categoryRecord = { id: category.id };
+        }
+
         // 既存のQuestionDataを確認
         const existingQuestion = await prisma.questionData.findUnique({
           where: {
@@ -377,7 +407,7 @@ export async function saveQuestions(
           await prisma.questionData.update({
             where: { id: existingQuestion.id },
             data: {
-              category: questionData.category,
+              categoryId: categoryRecord.id,
               answer: questionData.answer,
             },
           });
@@ -449,7 +479,7 @@ export async function saveQuestions(
           const questionRecord = await prisma.questionData.create({
             data: {
               questionId: questionData.questionId,
-              category: questionData.category,
+              categoryId: categoryRecord.id,
               questionContentId: questionContent.id,
               answer: questionData.answer,
               explanationId: explanationContent ? explanationContent.id : null,

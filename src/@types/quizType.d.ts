@@ -11,10 +11,15 @@ export interface QuestionOption {
   explanation?: MediaContent;
 }
 
+export interface Category {
+  id?: number;
+  name: string;
+}
+
 export interface QuestionData {
   id?: number;
   questionId: number;
-  category: string;
+  category: string; // カテゴリー名を文字列として扱う
   question: MediaContent;
   options: QuestionOption[];
   answer: number;

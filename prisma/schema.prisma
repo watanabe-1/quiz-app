@@ -33,7 +33,9 @@ model QuestionOption {
 model QuestionData {
   id                Int             @id @default(autoincrement())
   questionId        Int
-  category          String
+
+  categoryId        Int
+  category          Category        @relation(fields: [categoryId], references: [id])
 
   questionContentId Int
   question          MediaContent    @relation("QuestionContent", fields: [questionContentId], references: [id])
@@ -50,7 +52,7 @@ model QuestionData {
 
   yearId            Int
   year              Year            @relation(fields: [yearId], references: [id])
-  
+
   @@unique([qualificationId, yearId, questionId]) 
 }
 
@@ -69,4 +71,10 @@ model Year {
   questions       QuestionData[]
 
   @@unique([qualificationId, year])
+}
+
+model Category {
+  id        Int           @id @default(autoincrement())
+  name      String        @unique
+  questions QuestionData[]
 }
