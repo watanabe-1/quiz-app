@@ -20,3 +20,7 @@ export const HEADERS_PATHNAME = "x-pathname";
 export const nonLinkableSegmentsByQuiz = [
   { label: "quiz", index: 0 }, // 'quiz' is the first part of the URL
 ];
+
+export const nonLinkableSegmentsByAdmin = [
+  { label: "edit", index: 4 }, // 'edit' is the fifth part of the URL
+];

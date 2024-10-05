@@ -20,6 +20,7 @@ import ReportModal from "./ReportModal";
 
 interface QuestionProps {
   qualification: string;
+  grade: string;
   year: string;
   category: string;
   questionId: number;
@@ -29,6 +30,7 @@ interface QuestionProps {
 
 const Question: React.FC<QuestionProps> = ({
   qualification,
+  grade,
   year,
   category,
   questionId,
@@ -51,6 +53,7 @@ const Question: React.FC<QuestionProps> = ({
     if (question) {
       const key = createAnswerHistoryKey(
         qualification,
+        grade,
         year,
         question.questionId
       );
@@ -60,7 +63,7 @@ const Question: React.FC<QuestionProps> = ({
         setSelectedOption(null);
       }
     }
-  }, [qualification, year, question, history]);
+  }, [qualification, grade, year, question, history]);
 
   // Calculate correct and answered counts
   useEffect(() => {
@@ -68,19 +71,21 @@ const Question: React.FC<QuestionProps> = ({
       const totalCorrect = calculateCorrectCount(
         questionIdAnswers,
         qualification,
+        grade,
         year,
         history
       );
       const totalAnswered = calculateAnsweredCount(
         questionIdAnswers,
         qualification,
+        grade,
         year,
         history
       );
       setCorrectCount(totalCorrect);
       setAnsweredCount(totalAnswered);
     }
-  }, [questionIdAnswers, qualification, year, history, question]);
+  }, [questionIdAnswers, qualification, grade, year, history, question]);
 
   // Handle scrolling
   useEffect(() => {
@@ -109,6 +114,7 @@ const Question: React.FC<QuestionProps> = ({
       if (!question) return;
       const key = createAnswerHistoryKey(
         qualification,
+        grade,
         year,
         question.questionId
       );
@@ -118,13 +124,14 @@ const Question: React.FC<QuestionProps> = ({
       setSelectedOption(index);
       setShouldScroll(true);
     },
-    [qualification, year, question, history]
+    [qualification, grade, year, question, history]
   );
 
   const handleResetAnswer = useCallback(() => {
     if (!question) return;
     const key = createAnswerHistoryKey(
       qualification,
+      grade,
       year,
       question.questionId
     );
@@ -140,7 +147,7 @@ const Question: React.FC<QuestionProps> = ({
     // Reset selection and scrolling
     setSelectedOption(null);
     setShouldScroll(false);
-  }, [qualification, year, question, history]);
+  }, [qualification, grade, year, question, history]);
 
   if (!question) return <div>問題が取得できませんでした</div>;
 
@@ -225,9 +232,9 @@ const Question: React.FC<QuestionProps> = ({
           <Link
             href={`/quiz/${encodeURIComponent(
               qualification
-            )}/${encodeURIComponent(year)}/${encodeURIComponent(
-              category
-            )}/${prevQuestionId}`}
+            )}/${encodeURIComponent(grade)}/${encodeURIComponent(
+              year
+            )}/${encodeURIComponent(category)}/${prevQuestionId}`}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             前の問題
@@ -239,9 +246,9 @@ const Question: React.FC<QuestionProps> = ({
           <Link
             href={`/quiz/${encodeURIComponent(
               qualification
-            )}/${encodeURIComponent(year)}/${encodeURIComponent(
-              category
-            )}/${nextQuestionId}`}
+            )}/${encodeURIComponent(grade)}/${encodeURIComponent(
+              year
+            )}/${encodeURIComponent(category)}/${nextQuestionId}`}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             次の問題
@@ -257,6 +264,7 @@ const Question: React.FC<QuestionProps> = ({
           isOpen={isReportOpen}
           onClose={toggleReportModal}
           qualification={qualification}
+          grade={grade}
           year={year}
           category={category}
           questionIdAnswers={questionIdAnswers}

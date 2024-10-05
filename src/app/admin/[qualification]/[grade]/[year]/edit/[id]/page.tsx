@@ -7,9 +7,12 @@ import useSWR from "swr";
 import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
 import LoadingState from "@/components/ui/LoadingState";
 import ErrorState from "@/components/ui/ErrorState";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
 
 interface Params {
   qualification: string;
+  grade: string;
   year: string;
   id: string;
 }
@@ -18,12 +21,13 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const EditQuestion = ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
+  const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);
   const id = decodeURIComponent(params.id);
   const { data: questionData, error } = useSWR<QuestionData>(
     `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
-      year
-    )}/${id}`,
+      grade
+    )}/${encodeURIComponent(year)}/${id}`,
     fetcher
   );
   const [formData, setFormData] = useState<QuestionData | null>(null);
@@ -63,6 +67,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
 
       uploadData.append("targetDir", targetDir);
       uploadData.append("qualification", qualification);
+      uploadData.append("grade", grade);
       uploadData.append("year", year);
 
       const res = await fetch("/api/admin/uploadImage", {
@@ -171,8 +176,8 @@ const EditQuestion = ({ params }: { params: Params }) => {
     e.preventDefault();
     const res = await fetch(
       `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
-        year
-      )}/${id}`,
+        grade
+      )}/${encodeURIComponent(year)}/${id}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -183,8 +188,8 @@ const EditQuestion = ({ params }: { params: Params }) => {
       alert("問題を更新しました。");
       router.push(
         `/admin/${encodeURIComponent(qualification)}/${encodeURIComponent(
-          year
-        )}`
+          grade
+        )}/${encodeURIComponent(year)}`
       );
     } else {
       alert("エラーが発生しました。");
@@ -193,6 +198,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
+      <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
       <h1 className="text-2xl font-bold mb-4">問題の編集</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* 問題文 */}

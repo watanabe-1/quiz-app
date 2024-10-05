@@ -7,6 +7,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 
 interface Params {
   qualification: string;
+  grade: string;
   year: string;
   category: string;
   id: string;
@@ -14,6 +15,7 @@ interface Params {
 
 const QuestionPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
+  const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);
   const category = decodeURIComponent(params.category);
   const questionId = parseInt(params.id);
@@ -21,8 +23,8 @@ const QuestionPage = async ({ params }: { params: Params }) => {
   // カテゴリー内の全ての問題を取得
   const questions =
     category === ALL_CATEGORY
-      ? await getQuestions(qualification, year)
-      : await getQuestionsByCategory(qualification, year, category);
+      ? await getQuestions(qualification, grade, year)
+      : await getQuestionsByCategory(qualification, grade, year, category);
   const question = questions.find(
     (question) => question.questionId === questionId
   );
@@ -34,7 +36,7 @@ const QuestionPage = async ({ params }: { params: Params }) => {
   return (
     <div>
       <Header
-        title={`${qualification} - ${year} - ${
+        title={`${qualification} - ${grade} - ${year} - ${
           category === ALL_CATEGORY ? "全ての問題" : category
         } `}
       />
@@ -46,6 +48,7 @@ const QuestionPage = async ({ params }: { params: Params }) => {
           <Question
             qualification={qualification}
             year={year}
+            grade={grade}
             category={category}
             questionId={questionId}
             question={question || null}

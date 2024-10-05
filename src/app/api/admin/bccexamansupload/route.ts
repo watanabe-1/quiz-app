@@ -6,13 +6,14 @@ import {
   getQuestions,
   existsData,
   updateQuestionAnswer,
-  getQualificationAndYearIds,
+  getQualificationGradeYearIds,
 } from "@/services/quizService";
 import {
   extractYear,
   convertToHalfWidth,
   convertSingleKatakanaToNumber,
   replaceSpacesWithUnderscore,
+  extractGradeAndQualification,
 } from "@/lib/bccuploads";
 
 interface AnswerData {
@@ -58,15 +59,27 @@ export async function POST(request: Request) {
     const year = replaceSpacesWithUnderscore(examData.year);
 
     for (const category of examData.categories) {
-      const qualification = modifyGradeText(category.category);
+      const title = modifyGradeText(category.category);
+      const { grade, qualification } =
+        extractGradeAndQualification(title) || {};
+
+      if (!grade || !qualification) {
+        continue;
+      }
 
       // 資格IDと年度IDを取得
       let qualificationId: number;
+      let gradeId: number;
       let yearId: number;
 
-      const ids = await getQualificationAndYearIds(qualification, year);
+      const ids = await getQualificationGradeYearIds(
+        qualification,
+        grade,
+        year
+      );
       if (ids) {
         qualificationId = ids.qualificationId;
+        gradeId = ids.gradeId;
         yearId = ids.yearId;
       } else {
         // 次のカテゴリに進む
@@ -74,11 +87,11 @@ export async function POST(request: Request) {
       }
 
       // データが存在するかチェック
-      const dataExists = await existsData(qualification, year);
+      const dataExists = await existsData(qualification, grade, year);
 
       if (dataExists) {
         // 質問データを取得
-        const questions = await getQuestions(qualification, year);
+        const questions = await getQuestions(qualification, grade, year);
 
         // 質問データの更新
         for (const question of questions) {
@@ -92,6 +105,7 @@ export async function POST(request: Request) {
             // 質問の解答をデータベースに更新
             await updateQuestionAnswer(
               qualificationId,
+              gradeId,
               yearId,
               question.questionId,
               convertedAnswer

@@ -4,6 +4,7 @@ import {
   extractYear,
   extractTitle,
   replaceSpacesWithUnderscore,
+  extractGradeAndQualification,
 } from "@/lib/bccuploads";
 import { katakanaToNumbersMap } from "@/lib/constants";
 import { saveQuestions } from "@/services/quizService";
@@ -30,17 +31,18 @@ export async function POST(request: Request) {
     const year = replaceSpacesWithUnderscore(extractYear(text) || "");
 
     // タイトルを取得
-    const qualification = replaceSpacesWithUnderscore(extractTitle(text) || "");
+    const title = replaceSpacesWithUnderscore(extractTitle(text) || "");
+    const { grade, qualification } = extractGradeAndQualification(title) || {};
 
     // テキストを解析してQuestionData形式のJSONに変換
     const problems = parseProblems(text);
 
-    if (!problems || !qualification || !year) {
+    if (!problems || !qualification || !grade || !year) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
 
     // 問題データをデータベースに保存
-    const success = await saveQuestions(qualification, year, problems);
+    const success = await saveQuestions(qualification, grade, year, problems);
 
     if (!success) {
       return NextResponse.json(

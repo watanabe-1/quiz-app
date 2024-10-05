@@ -6,6 +6,7 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const file = formData.get("file") as File;
   const qualification = formData.get("qualification") as string;
+  const grade = formData.get("grade") as string;
   const year = formData.get("year") as string;
 
   if (!file || !qualification || !year) {
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
   const questions = JSON.parse(content) as QuestionData[];
 
   // 問題データをデータベースに保存
-  const success = await saveQuestions(qualification, year, questions);
+  const success = await saveQuestions(qualification, grade, year, questions);
 
   if (!success) {
     return NextResponse.json(

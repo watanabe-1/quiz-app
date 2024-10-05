@@ -1,16 +1,18 @@
 import React from "react";
 import Link from "next/link";
-import { getGradesByQualification } from "@/services/quizService";
+import { getYearsByQualificationAndGrade } from "@/services/quizService";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
 
 interface Params {
   qualification: string;
+  grade: string;
 }
 
 const QualificationAdminPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
-  const grades = await getGradesByQualification(qualification);
+  const grade = decodeURIComponent(params.grade);
+  const years = await getYearsByQualificationAndGrade(qualification, grade);
 
   return (
     <div>
@@ -22,16 +24,16 @@ const QualificationAdminPage = async ({ params }: { params: Params }) => {
       </header>
       <main className="p-6">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
-        <h2 className="text-xl font-semibold mb-4">級一覧</h2>
+        <h2 className="text-xl font-semibold mb-4">年度一覧</h2>
         <ul className="space-y-2">
-          {grades.map((grade) => (
-            <li key={grade} className="p-4 bg-white rounded shadow">
+          {years.map((year) => (
+            <li key={year} className="p-4 bg-white rounded shadow">
               <div className="flex justify-between items-center">
-                <span>{grade}</span>
+                <span>{year}</span>
                 <Link
                   href={`/admin/${encodeURIComponent(
                     qualification
-                  )}/${encodeURIComponent(grade)}`}
+                  )}/${encodeURIComponent(grade)}/${encodeURIComponent(year)}`}
                   className="text-blue-600 hover:underline"
                 >
                   管理

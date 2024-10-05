@@ -32,10 +32,11 @@ export const setAnswerHistory = (history: AnswerHistory): void => {
 // Utility function to create a history key
 export const createAnswerHistoryKey = (
   qualification: string,
+  grade: string,
   year: string,
   questionId: number
 ): string => {
-  return `${qualification}-${year}-${questionId}`;
+  return `${qualification}-${grade}-${year}-${questionId}`;
 };
 
 // Utility function to delete all history entries with a matching qualification and year

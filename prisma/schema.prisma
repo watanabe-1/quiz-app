@@ -51,17 +51,21 @@ model QuestionData {
   qualificationId   Int
   qualification     Qualification   @relation(fields: [qualificationId], references: [id])
 
+  gradeId           Int
+  grade             Grade           @relation(fields: [gradeId], references: [id])
+
   yearId            Int
   year              Year            @relation(fields: [yearId], references: [id])
 
-  @@unique([qualificationId, yearId, questionId]) 
+  @@unique([qualificationId, gradeId, yearId, questionId]) 
 }
 
 model Qualification {
-  id        Int           @id @default(autoincrement())
-  name      String        @unique
-  questions QuestionData[]
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  grades    Grade[]
   years     Year[]
+  questions QuestionData[]
 }
 
 model Year {
@@ -78,4 +82,14 @@ model Category {
   id        Int           @id @default(autoincrement())
   name      String        @unique
   questions QuestionData[]
+}
+
+model Grade {
+  id              Int             @id @default(autoincrement())
+  name            String
+  qualificationId Int
+  qualification   Qualification   @relation(fields: [qualificationId], references: [id])
+  questions       QuestionData[]
+
+  @@unique([qualificationId, name])
 }

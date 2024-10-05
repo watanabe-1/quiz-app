@@ -3,11 +3,13 @@ import Modal from "@/components/ui/Modal";
 import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
 import Link from "next/link";
 import { ALL_CATEGORY } from "@/lib/constants";
+import { createAnswerHistoryKey } from "@/lib/localStorage";
 
 interface ReportModalProps {
   isOpen: boolean;
   onClose: () => void;
   qualification: string;
+  grade: string;
   year: string;
   category: string;
   questionIdAnswers: QuestionAnswerPair[];
@@ -21,6 +23,7 @@ const ReportModal: FC<ReportModalProps> = ({
   isOpen,
   onClose,
   qualification,
+  grade,
   year,
   category,
   questionIdAnswers,
@@ -34,7 +37,7 @@ const ReportModal: FC<ReportModalProps> = ({
       <div>
         <h2 className="text-xl font-bold mb-4">成績レポート</h2>
         <div className="mb-4">
-          <div>{`${qualification} - ${year} - ${
+          <div>{`${qualification} - ${grade} - ${year} - ${
             category === ALL_CATEGORY ? "全ての問題" : category
           } `}</div>
           <div>正答率: {accuracy}%</div>
@@ -56,19 +59,29 @@ const ReportModal: FC<ReportModalProps> = ({
                   .filter(
                     (qAnswer) =>
                       history[
-                        `${qualification}-${year}-${qAnswer.questionId}`
+                        createAnswerHistoryKey(
+                          qualification,
+                          grade,
+                          year,
+                          qAnswer.questionId
+                        )
                       ] !== undefined
                   )
                   .map((qAnswer) => {
                     const isCorrect =
                       history[
-                        `${qualification}-${year}-${qAnswer.questionId}`
+                        createAnswerHistoryKey(
+                          qualification,
+                          grade,
+                          year,
+                          qAnswer.questionId
+                        )
                       ] === qAnswer.answer;
                     const questionLink = `/quiz/${encodeURIComponent(
                       qualification
-                    )}/${encodeURIComponent(year)}/${encodeURIComponent(
-                      category
-                    )}/${qAnswer.questionId}`;
+                    )}/${encodeURIComponent(grade)}/${encodeURIComponent(
+                      year
+                    )}/${encodeURIComponent(category)}/${qAnswer.questionId}`;
 
                     return (
                       <tr key={qAnswer.questionId} className="text-center">

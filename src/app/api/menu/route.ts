@@ -3,10 +3,11 @@ import { ALL_CATEGORY } from "@/lib/constants";
 import {
   getQuestions,
   getAllQualifications,
-  getYearsByQualification,
   getCategories,
   getQuestionsByCategory,
   existsData,
+  getGradesByQualification,
+  getYearsByQualificationAndGrade,
 } from "@/services/quizService";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -26,19 +27,25 @@ export async function GET(req: NextRequest) {
 }
 
 // 正規表現を使用してURLをパース
-const quizUrlPattern = /^\/quiz\/([^\/]+)\/([^\/]+)\/([^\/]+)\/[^\/]+$/;
+const quizUrlPattern =
+  /^\/quiz\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\/[^\/]+$/;
 
 /**
- * 現在のURLが `/quiz/[qualification]/[year]/[category]/[id]` にマッチするかを判定し、
- * マッチする場合は `{ qualification, year, category }` を返す。
+ * 現在のURLが `/quiz/[qualification]/[grade]/[year]/[category]/[id]` にマッチするかを判定し、
+ * マッチする場合は `{ qualification, grade, year, category }` を返す。
  */
 const parseCurrentUrl = (
   url: string
-): { qualification: string; year: string; category: string } | null => {
+): {
+  qualification: string;
+  grade: string;
+  year: string;
+  category: string;
+} | null => {
   const match = url.match(quizUrlPattern);
   if (match) {
-    const [, qualification, year, category] = match;
-    return { qualification, year, category };
+    const [, qualification, grade, year, category] = match;
+    return { qualification, grade, year, category };
   }
   return null;
 };
@@ -48,7 +55,7 @@ const getQualificationItems = async (): Promise<MenuItem[]> => {
   const qualifications = await getAllQualifications();
   return Promise.all(
     qualifications.map(async (qualification) => {
-      const yearItems = await getYearItemsByQualification(qualification);
+      const yearItems = await getGradeItemsByQualification(qualification);
       return {
         name: qualification,
         href: `/quiz/${encodeURIComponent(qualification)}`,
@@ -58,19 +65,46 @@ const getQualificationItems = async (): Promise<MenuItem[]> => {
   );
 };
 
-// 年度ごとのメニュー項目を取得
-const getYearItemsByQualification = async (
+// 級ごとのメニュー項目を取得
+const getGradeItemsByQualification = async (
   qualification: string
 ): Promise<MenuItem[]> => {
-  const years = await getYearsByQualification(qualification);
+  const grades = await getGradesByQualification(qualification);
+  return Promise.all(
+    grades.map(async (grade) => {
+      const yearsItems = await getYearItemsByQualificationAndGrade(
+        qualification,
+        grade
+      );
+      return {
+        name: `${grade}級`,
+        href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
+          grade
+        )}`,
+        children: yearsItems,
+      };
+    })
+  );
+};
+
+// 年度ごとのメニュー項目を取得
+const getYearItemsByQualificationAndGrade = async (
+  qualification: string,
+  grade: string
+): Promise<MenuItem[]> => {
+  const years = await getYearsByQualificationAndGrade(qualification, grade);
   return Promise.all(
     years.map(async (year) => {
-      const categoryItems = await getCategoryItemsByYear(qualification, year);
+      const categoryItems = await getCategoryItemsByGradeAndYear(
+        qualification,
+        grade,
+        year
+      );
       return {
         name: year,
         href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
-          year
-        )}`,
+          grade
+        )}/${encodeURIComponent(year)}`,
         children: categoryItems,
       };
     })
@@ -78,18 +112,19 @@ const getYearItemsByQualification = async (
 };
 
 // カテゴリごとのメニュー項目を取得
-const getCategoryItemsByYear = async (
+const getCategoryItemsByGradeAndYear = async (
   qualification: string,
+  grade: string,
   year: string
 ): Promise<MenuItem[]> => {
-  const categories = await getCategories(qualification, year);
+  const categories = await getCategories(qualification, grade, year);
   const allCategories = [ALL_CATEGORY, ...categories];
 
   return allCategories.map((category) => ({
     name: category === ALL_CATEGORY ? "全ての問題" : category,
     href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
-      year
-    )}/${encodeURIComponent(category)}`,
+      grade
+    )}/${encodeURIComponent(year)}/${encodeURIComponent(category)}`,
   }));
 };
 
@@ -100,21 +135,21 @@ const getCurrentQuestionItems = async (
   const parsedUrl = parseCurrentUrl(currentUrl);
   if (!parsedUrl) return [];
 
-  const { qualification, year, category } = parsedUrl;
-  if (!existsData(qualification, year)) return [];
+  const { qualification, grade, year, category } = parsedUrl;
+  if (!existsData(qualification, grade, year)) return [];
 
   const questions =
     category === ALL_CATEGORY
-      ? await getQuestions(qualification, year)
-      : await getQuestionsByCategory(qualification, year, category);
+      ? await getQuestions(qualification, grade, year)
+      : await getQuestionsByCategory(qualification, grade, year, category);
 
   return questions.map((question) => ({
     name: `問題 ${question.questionId}`,
     href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
-      year
-    )}/${encodeURIComponent(category)}/${encodeURIComponent(
-      question.questionId
-    )}`,
+      grade
+    )}/${encodeURIComponent(year)}/${encodeURIComponent(
+      category
+    )}/${encodeURIComponent(question.questionId)}`,
   }));
 };
 

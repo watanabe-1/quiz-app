@@ -3,11 +3,15 @@ import { getQuestions, saveQuestions } from "@/services/quizService";
 
 export async function GET(
   request: Request,
-  { params }: { params: { qualification: string; year: string; id: string } }
+  {
+    params,
+  }: {
+    params: { qualification: string; grade: string; year: string; id: string };
+  }
 ) {
-  const { qualification, year, id } = params;
+  const { qualification, grade, year, id } = params;
   const questionId = parseInt(id);
-  const questions = await getQuestions(qualification, year);
+  const questions = await getQuestions(qualification, grade, year);
   const questionData = questions.find((q) => q.questionId === questionId);
 
   if (!questionData) {
@@ -19,13 +23,17 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { qualification: string; year: string; id: string } }
+  {
+    params,
+  }: {
+    params: { qualification: string; grade: string; year: string; id: string };
+  }
 ) {
-  const { qualification, year, id } = params;
+  const { qualification, grade, year, id } = params;
   const questionId = parseInt(id);
   const updatedQuestion = await request.json();
 
-  const questions = await getQuestions(qualification, year);
+  const questions = await getQuestions(qualification, grade, year);
   const index = questions.findIndex((q) => q.questionId === questionId);
 
   if (index === -1) {
@@ -34,7 +42,7 @@ export async function PUT(
 
   questions[index] = updatedQuestion;
 
-  const success = await saveQuestions(qualification, year, questions);
+  const success = await saveQuestions(qualification, grade, year, questions);
 
   if (!success) {
     return NextResponse.json(

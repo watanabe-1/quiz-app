@@ -16,6 +16,11 @@ export interface Category {
   name: string;
 }
 
+export interface Grade {
+  id?: number;
+  name: string;
+}
+
 export interface QuestionData {
   id?: number;
   questionId: number;

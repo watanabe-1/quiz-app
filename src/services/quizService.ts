@@ -11,16 +11,16 @@ export async function getAllQualifications(): Promise<string[]> {
   return qualifications.map((q) => q.name);
 }
 
-// 指定した資格の年度一覧を取得
-export async function getYearsByQualification(
+// 指定した資格の級一覧を取得
+export async function getGradesByQualification(
   qualification: string
 ): Promise<string[]> {
   const qualificationRecord = await prisma.qualification.findUnique({
     where: { name: qualification },
     select: {
-      years: {
+      grades: {
         select: {
-          year: true,
+          name: true,
         },
       },
     },
@@ -30,18 +30,57 @@ export async function getYearsByQualification(
     return [];
   }
 
-  return qualificationRecord.years.map((y) => y.year);
+  return qualificationRecord.grades.map((g) => g.name);
 }
 
-// 指定した資格と年度の問題を取得
+// 指定した資格、級の年度一覧を取得
+export async function getYearsByQualificationAndGrade(
+  qualification: string,
+  grade: string
+): Promise<string[]> {
+  const qualificationRecord = await prisma.qualification.findUnique({
+    where: { name: qualification },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!qualificationRecord) {
+    return [];
+  }
+
+  const years = await prisma.year.findMany({
+    where: {
+      qualificationId: qualificationRecord.id,
+      questions: {
+        some: {
+          grade: {
+            name: grade,
+          },
+        },
+      },
+    },
+    select: {
+      year: true,
+    },
+  });
+
+  return years.map((y) => y.year);
+}
+
+// 指定した資格、級、年度の問題を取得
 export async function getQuestions(
   qualification: string,
+  grade: string,
   year: string
 ): Promise<QuestionData[]> {
   const questions = await prisma.questionData.findMany({
     where: {
       qualification: {
         name: qualification,
+      },
+      grade: {
+        name: grade,
       },
       year: {
         year: year,
@@ -51,6 +90,11 @@ export async function getQuestions(
       id: true,
       questionId: true,
       category: {
+        select: {
+          name: true,
+        },
+      },
+      grade: {
         select: {
           name: true,
         },
@@ -74,6 +118,7 @@ export async function getQuestions(
     id: q.id,
     questionId: q.questionId,
     category: q.category.name,
+    grade: q.grade.name,
     question: {
       id: q.question?.id,
       text: q.question?.text || undefined,
@@ -102,9 +147,10 @@ export async function getQuestions(
   }));
 }
 
-// 指定した資格と年度のカテゴリ一覧を取得
+// 指定した資格、級、年度のカテゴリ一覧を取得
 export async function getCategories(
   qualification: string,
+  grade: string,
   year: string
 ): Promise<string[]> {
   const categories = await prisma.category.findMany({
@@ -113,6 +159,9 @@ export async function getCategories(
         some: {
           qualification: {
             name: qualification,
+          },
+          grade: {
+            name: grade,
           },
           year: {
             year: year,
@@ -128,9 +177,10 @@ export async function getCategories(
   return categories.map((c) => c.name);
 }
 
-// 指定した資格、年度、カテゴリの問題を取得
+// 指定した資格、級、年度、カテゴリの問題を取得
 export async function getQuestionsByCategory(
   qualification: string,
+  grade: string,
   year: string,
   categoryName: string
 ): Promise<QuestionData[]> {
@@ -138,6 +188,9 @@ export async function getQuestionsByCategory(
     where: {
       qualification: {
         name: qualification,
+      },
+      grade: {
+        name: grade,
       },
       year: {
         year: year,
@@ -150,6 +203,11 @@ export async function getQuestionsByCategory(
       id: true,
       questionId: true,
       category: {
+        select: {
+          name: true,
+        },
+      },
+      grade: {
         select: {
           name: true,
         },
@@ -172,6 +230,7 @@ export async function getQuestionsByCategory(
     id: q.id,
     questionId: q.questionId,
     category: q.category.name,
+    grade: q.grade.name,
     question: {
       id: q.question?.id,
       text: q.question?.text || undefined,
@@ -200,9 +259,10 @@ export async function getQuestionsByCategory(
   }));
 }
 
-// 指定した資格、年度、IDの問題を取得
+// 指定した資格、級、年度、IDの問題を取得
 export async function getQuestionById(
   qualification: string,
+  grade: string,
   year: string,
   id: number
 ): Promise<QuestionData | undefined> {
@@ -211,6 +271,17 @@ export async function getQuestionById(
   });
 
   if (!qualificationRecord) return undefined;
+
+  const gradeRecord = await prisma.grade.findUnique({
+    where: {
+      qualificationId_name: {
+        qualificationId: qualificationRecord.id,
+        name: grade,
+      },
+    },
+  });
+
+  if (!gradeRecord) return undefined;
 
   const yearRecord = await prisma.year.findUnique({
     where: {
@@ -225,8 +296,9 @@ export async function getQuestionById(
 
   const question = await prisma.questionData.findUnique({
     where: {
-      qualificationId_yearId_questionId: {
+      qualificationId_gradeId_yearId_questionId: {
         qualificationId: qualificationRecord.id,
+        gradeId: gradeRecord.id,
         yearId: yearRecord.id,
         questionId: id,
       },
@@ -235,6 +307,11 @@ export async function getQuestionById(
       id: true,
       questionId: true,
       category: {
+        select: {
+          name: true,
+        },
+      },
+      grade: {
         select: {
           name: true,
         },
@@ -286,9 +363,10 @@ export async function getQuestionById(
   };
 }
 
-// 問題データを保存（資格、年度ごと）
+// 問題データを保存（資格、級、年度ごと）
 export async function saveQuestions(
   qualificationName: string,
+  gradeName: string,
   yearValue: string,
   questionsData: QuestionData[]
 ): Promise<boolean> {
@@ -298,6 +376,21 @@ export async function saveQuestions(
       const qualification = await prisma.qualification.upsert({
         where: { name: qualificationName },
         create: { name: qualificationName },
+        update: {},
+      });
+
+      // 級のアップサート
+      const grade = await prisma.grade.upsert({
+        where: {
+          qualificationId_name: {
+            qualificationId: qualification.id,
+            name: gradeName,
+          },
+        },
+        create: {
+          qualificationId: qualification.id,
+          name: gradeName,
+        },
         update: {},
       });
 
@@ -337,8 +430,9 @@ export async function saveQuestions(
         // 既存のQuestionDataを確認
         const existingQuestion = await prisma.questionData.findUnique({
           where: {
-            qualificationId_yearId_questionId: {
+            qualificationId_gradeId_yearId_questionId: {
               qualificationId: qualification.id,
+              gradeId: grade.id,
               yearId: year.id,
               questionId: questionData.questionId,
             },
@@ -484,6 +578,7 @@ export async function saveQuestions(
               answer: questionData.answer,
               explanationId: explanationContent ? explanationContent.id : null,
               qualificationId: qualification.id,
+              gradeId: grade.id,
               yearId: year.id,
             },
           });
@@ -523,15 +618,19 @@ export async function saveQuestions(
   }
 }
 
-// 指定した資格と年度のデータが存在するかチェックする
+// 指定した資格、級、年度のデータが存在するかチェックする
 export async function existsData(
   qualification: string,
+  grade: string,
   year: string
 ): Promise<boolean> {
   const count = await prisma.questionData.count({
     where: {
       qualification: {
         name: qualification,
+      },
+      grade: {
+        name: grade,
       },
       year: {
         year: year,
@@ -543,14 +642,16 @@ export async function existsData(
 
 export async function updateQuestionAnswer(
   qualificationId: number,
+  gradeId: number,
   yearId: number,
   questionId: number,
   answer: number
 ) {
   await prisma.questionData.update({
     where: {
-      qualificationId_yearId_questionId: {
+      qualificationId_gradeId_yearId_questionId: {
         qualificationId,
+        gradeId,
         yearId,
         questionId,
       },
@@ -561,15 +662,33 @@ export async function updateQuestionAnswer(
   });
 }
 
-export async function getQualificationAndYearIds(
+export async function getQualificationGradeYearIds(
   qualification: string,
+  grade: string,
   year: string
-): Promise<{ qualificationId: number; yearId: number } | undefined> {
+): Promise<
+  { qualificationId: number; gradeId: number; yearId: number } | undefined
+> {
   const qualificationRecord = await prisma.qualification.findUnique({
     where: { name: qualification },
   });
 
   if (!qualificationRecord) {
+    //console.log(`Qualification ${qualification} not found.`);
+    return undefined;
+  }
+
+  const gradeRecord = await prisma.grade.findUnique({
+    where: {
+      qualificationId_name: {
+        qualificationId: qualificationRecord.id,
+        name: grade,
+      },
+    },
+  });
+
+  if (!gradeRecord) {
+    //console.log(`Grade ${grade} for qualification ${qualification} not found.`);
     return undefined;
   }
 
@@ -583,11 +702,13 @@ export async function getQualificationAndYearIds(
   });
 
   if (!yearRecord) {
+    //console.log(`Year ${year} for qualification ${qualification} not found.`);
     return undefined;
   }
 
   return {
     qualificationId: qualificationRecord.id,
+    gradeId: gradeRecord.id,
     yearId: yearRecord.id,
   };
 }

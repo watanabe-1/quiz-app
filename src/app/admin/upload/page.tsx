@@ -5,6 +5,7 @@ import React, { useState } from "react";
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [qualification, setQualification] = useState("");
+  const [grade, setGrade] = useState("");
   const [year, setYear] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,6 +19,7 @@ const UploadPage = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("qualification", qualification);
+    formData.append("grade", grade);
     formData.append("year", year);
 
     const res = await fetch("/api/admin/upload", {
@@ -42,6 +44,15 @@ const UploadPage = () => {
             type="text"
             value={qualification}
             onChange={(e) => setQualification(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label className="block font-medium">級</label>
+          <input
+            type="text"
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
             className="w-full p-2 border rounded"
           />
         </div>

@@ -12,6 +12,23 @@ export function extractTitle(text: string) {
   return titleMatch ? convertToHalfWidth(titleMatch[0]) : null;
 }
 
+// 級と試験名を抽出する関数
+export function extractGradeAndQualification(
+  input: string
+): { grade: string; qualification: string } | null {
+  // 正規表現: 数字＋級_で始まるものと、それ以降の資格名を分離
+  const match = input.match(/^(\d+級)_(.*)$/);
+
+  if (match) {
+    const grade = match[1]; // 例えば "3級"
+    const qualification = match[2]; // 例えば "テスト試験"
+    return { grade, qualification };
+  }
+
+  // パターンにマッチしなかった場合は null を返す
+  return null;
+}
+
 export function convertToHalfWidth(str: string) {
   return str.replace(/[０-９]/g, function (char) {
     return String.fromCharCode(char.charCodeAt(0) - 0xfee0);

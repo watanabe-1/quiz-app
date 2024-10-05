@@ -1,14 +1,21 @@
 import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
+import { createAnswerHistoryKey } from "@/lib/localStorage";
 
 export const calculateCorrectCount = (
   questionIdAnswers: QuestionAnswerPair[],
   qualification: string,
+  grade: string,
   year: string,
   history: AnswerHistory
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
-    const storedAnswer =
-      history[`${qualification}-${year}-${idAnswer.questionId}`];
+    const key = createAnswerHistoryKey(
+      qualification,
+      grade,
+      year,
+      idAnswer.questionId
+    );
+    const storedAnswer = history[key];
     if (storedAnswer === idAnswer.answer) {
       return count + 1;
     }
@@ -19,13 +26,18 @@ export const calculateCorrectCount = (
 export const calculateAnsweredCount = (
   questionIdAnswers: QuestionAnswerPair[],
   qualification: string,
+  grade: string,
   year: string,
   history: AnswerHistory
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
-    if (
-      history[`${qualification}-${year}-${idAnswer.questionId}`] !== undefined
-    ) {
+    const key = createAnswerHistoryKey(
+      qualification,
+      grade,
+      year,
+      idAnswer.questionId
+    );
+    if (history[key] !== undefined) {
       return count + 1;
     }
     return count;

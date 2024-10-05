@@ -12,6 +12,7 @@ import Modal from "@/components/ui/Modal";
 
 interface QuestionsProps {
   qualification: string;
+  grade: string;
   year: string;
   category: string;
   questions: QuestionData[];
@@ -19,6 +20,7 @@ interface QuestionsProps {
 
 const Questions: React.FC<QuestionsProps> = ({
   qualification,
+  grade,
   year,
   category,
   questions,
@@ -32,9 +34,9 @@ const Questions: React.FC<QuestionsProps> = ({
   const navigateToQuestionPage = (questionId: number) => {
     const href = `/quiz/${encodeURIComponent(
       qualification
-    )}/${encodeURIComponent(year)}/${encodeURIComponent(
-      category
-    )}/${questionId}`;
+    )}/${encodeURIComponent(grade)}/${encodeURIComponent(
+      year
+    )}/${encodeURIComponent(category)}/${questionId}`;
 
     router.push(href);
   };
