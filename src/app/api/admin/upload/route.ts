@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { saveQuestions } from "@/services/quizService";
+import { QuestionData } from "@/@types/quizType";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -13,13 +13,17 @@ export async function POST(request: Request) {
   }
 
   const content = await file.text();
-  const questions = JSON.parse(content);
+  const questions = JSON.parse(content) as QuestionData[];
 
-  const dirPath = path.join(process.cwd(), "data", qualification);
-  await fs.mkdir(dirPath, { recursive: true });
+  // 問題データをデータベースに保存
+  const success = await saveQuestions(qualification, year, questions);
 
-  const filePath = path.join(dirPath, `${year}.json`);
-  await fs.writeFile(filePath, JSON.stringify(questions, null, 2), "utf8");
+  if (!success) {
+    return NextResponse.json(
+      { error: "データベースへの保存に失敗しました" },
+      { status: 500 }
+    );
+  }
 
-  return NextResponse.json({ message: "Questions uploaded successfully" });
+  return NextResponse.json({ message: "データが正常に保存されました" });
 }
