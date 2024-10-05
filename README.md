@@ -81,7 +81,7 @@ SIGN_IN_PAGE=/auth/signin
 # 認証が必要なパス（カンマ区切り）
 PROTECTED_PATHS=/admin,/api/admin
 
-# NextAuth.js のシークレットキー（''で囲んで設定）
+# NextAuth.js のシークレットキー
 NEXTAUTH_SECRET=your-very-secure-secret-key
 ```
 
