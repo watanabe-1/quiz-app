@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getYearsByQualification } from "@/lib/questions";
+import { getYearsByQualification } from "@/services/quizService";
 
 interface Params {
   qualification: string;

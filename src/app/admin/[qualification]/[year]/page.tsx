@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getQuestions } from "@/lib/questions";
+import { getQuestions } from "@/services/quizService";
 
 interface Params {
   qualification: string;
@@ -32,16 +32,19 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
         <h2 className="text-xl font-semibold mb-4">問題一覧</h2>
         <ul className="space-y-2">
           {questions.map((question) => (
-            <li key={question.id} className="p-4 bg-white rounded shadow">
+            <li
+              key={question.questionId}
+              className="p-4 bg-white rounded shadow"
+            >
               <div className="flex justify-between items-center">
                 <span>
-                  {`問題${question.id} ${question.question.text}` ||
+                  {`問題${question.questionId} ${question.question.text}` ||
                     "（テキストなし）"}
                 </span>
                 <Link
                   href={`/admin/${encodeURIComponent(
                     qualification
-                  )}/${encodeURIComponent(year)}/edit/${question.id}`}
+                  )}/${encodeURIComponent(year)}/edit/${question.questionId}`}
                   className="text-blue-600 hover:underline"
                 >
                   編集

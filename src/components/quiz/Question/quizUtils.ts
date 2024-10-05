@@ -7,7 +7,8 @@ export const calculateCorrectCount = (
   history: AnswerHistory
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
-    const storedAnswer = history[`${qualification}-${year}-${idAnswer.id}`];
+    const storedAnswer =
+      history[`${qualification}-${year}-${idAnswer.questionId}`];
     if (storedAnswer === idAnswer.answer) {
       return count + 1;
     }
@@ -22,7 +23,9 @@ export const calculateAnsweredCount = (
   history: AnswerHistory
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
-    if (history[`${qualification}-${year}-${idAnswer.id}`] !== undefined) {
+    if (
+      history[`${qualification}-${year}-${idAnswer.questionId}`] !== undefined
+    ) {
       return count + 1;
     }
     return count;

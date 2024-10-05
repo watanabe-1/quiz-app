@@ -1,16 +1,19 @@
 export interface MediaContent {
+  id?: number;
   text?: string;
   image?: string;
 }
 
 export interface QuestionOption {
+  id?: number;
   text: string;
   image?: string;
   explanation?: MediaContent;
 }
 
 export interface QuestionData {
-  id: number;
+  id?: number;
+  questionId: number;
   category: string;
   question: MediaContent;
   options: QuestionOption[];
@@ -19,7 +22,7 @@ export interface QuestionData {
 }
 
 export interface QuestionAnswerPair {
-  id: number;
+  questionId: number;
   answer: number;
 }
 

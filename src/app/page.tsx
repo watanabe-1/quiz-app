@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getAllQualifications } from "@/lib/questions";
+import { getAllQualifications } from "@/services/quizService";
 import Header from "@/components/layout/Header";
 
 const HomePage = async () => {

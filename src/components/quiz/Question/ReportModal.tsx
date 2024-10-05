@@ -55,27 +55,29 @@ const ReportModal: FC<ReportModalProps> = ({
                 {questionIdAnswers
                   .filter(
                     (qAnswer) =>
-                      history[`${qualification}-${year}-${qAnswer.id}`] !==
-                      undefined
+                      history[
+                        `${qualification}-${year}-${qAnswer.questionId}`
+                      ] !== undefined
                   )
                   .map((qAnswer) => {
                     const isCorrect =
-                      history[`${qualification}-${year}-${qAnswer.id}`] ===
-                      qAnswer.answer;
+                      history[
+                        `${qualification}-${year}-${qAnswer.questionId}`
+                      ] === qAnswer.answer;
                     const questionLink = `/quiz/${encodeURIComponent(
                       qualification
                     )}/${encodeURIComponent(year)}/${encodeURIComponent(
                       category
-                    )}/${qAnswer.id}`;
+                    )}/${qAnswer.questionId}`;
 
                     return (
-                      <tr key={qAnswer.id} className="text-center">
+                      <tr key={qAnswer.questionId} className="text-center">
                         <td className="border border-gray-300 px-4 py-2">
                           <Link
                             href={questionLink}
                             className="text-blue-600 hover:underline"
                           >
-                            問題 {qAnswer.id}
+                            問題 {qAnswer.questionId}
                           </Link>
                         </td>
                         <td

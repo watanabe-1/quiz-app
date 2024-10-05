@@ -5,9 +5,9 @@ import {
   getAllQualifications,
   getYearsByQualification,
   getCategories,
-  existsFile,
   getQuestionsByCategory,
-} from "@/lib/questions";
+  existsData,
+} from "@/services/quizService";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -101,7 +101,7 @@ const getCurrentQuestionItems = async (
   if (!parsedUrl) return [];
 
   const { qualification, year, category } = parsedUrl;
-  if (!existsFile(qualification, year)) return [];
+  if (!existsData(qualification, year)) return [];
 
   const questions =
     category === ALL_CATEGORY
@@ -109,10 +109,12 @@ const getCurrentQuestionItems = async (
       : await getQuestionsByCategory(qualification, year, category);
 
   return questions.map((question) => ({
-    name: `問題 ${question.id}`,
+    name: `問題 ${question.questionId}`,
     href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
       year
-    )}/${encodeURIComponent(category)}/${encodeURIComponent(question.id)}`,
+    )}/${encodeURIComponent(category)}/${encodeURIComponent(
+      question.questionId
+    )}`,
   }));
 };
 

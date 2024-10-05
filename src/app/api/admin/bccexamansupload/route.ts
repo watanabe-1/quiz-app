@@ -1,9 +1,13 @@
-// import { QuestionData, QuestionOption } from "@/@types/quizType";
+// pages/api/uploadAnswers.ts
+
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
-import { promises as fs } from "fs";
-import path from "path";
-import { getQuestions } from "@/lib/questions";
+import {
+  getQuestions,
+  existsData,
+  updateQuestionAnswer,
+  getQualificationAndYearIds,
+} from "@/services/quizService";
 import {
   extractYear,
   convertToHalfWidth,
@@ -53,33 +57,49 @@ export async function POST(request: Request) {
     const examData = parseExamData(text);
     const year = replaceSpacesWithUnderscore(examData.year);
 
-    examData.categories.forEach(async (category) => {
+    for (const category of examData.categories) {
       const qualification = modifyGradeText(category.category);
-      const dirPath = path.join(process.cwd(), "data", qualification);
-      const filePath = path.join(dirPath, `${year}.json`);
 
-      if (await existsFile(filePath)) {
+      // 資格IDと年度IDを取得
+      let qualificationId: number;
+      let yearId: number;
+
+      try {
+        const ids = await getQualificationAndYearIds(qualification, year);
+        qualificationId = ids.qualificationId;
+        yearId = ids.yearId;
+      } catch (error) {
+        console.error(error);
+        continue; // 次のカテゴリに進む
+      }
+
+      // データが存在するかチェック
+      const dataExists = await existsData(qualification, year);
+
+      if (dataExists) {
+        // 質問データを取得
         const questions = await getQuestions(qualification, year);
 
-        const newQuestions = questions.map((question) => {
+        // 質問データの更新
+        for (const question of questions) {
           const answer = category.answers.find(
-            (answer) => answer.questionNumber === question.id
+            (ans) => ans.questionNumber === question.questionId
           );
           if (answer) {
-            question.answer =
+            const convertedAnswer =
               convertSingleKatakanaToNumber(answer.answer) || question.answer;
+
+            // 質問の解答をデータベースに更新
+            await updateQuestionAnswer(
+              qualificationId,
+              yearId,
+              question.questionId,
+              convertedAnswer
+            );
           }
-
-          return question;
-        });
-
-        await fs.writeFile(
-          filePath,
-          JSON.stringify(newQuestions, null, 2),
-          "utf8"
-        );
+        }
       }
-    });
+    }
 
     return NextResponse.json(examData);
   } catch (error) {
@@ -91,19 +111,8 @@ export async function POST(request: Request) {
   }
 }
 
-const existsFile = async (fullPath: string) => {
-  try {
-    // ファイルが存在するかどうか確認
-    await fs.access(fullPath);
-
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-
 function modifyGradeText(input: string): string {
-  return input.replace(/【(.+?)\s+(.+?)】/, "$1_$2");
+  return input.replace(/【(\d+級)([^】]+)】/, "$1_$2");
 }
 
 function extractCategories(
@@ -189,17 +198,18 @@ function extractAnswersFromSection(sectionText: string): Answer[] {
 }
 
 const adjustAnswers = (answers: AnswerData[]): Answer[] => {
-  const newAnswers = [] as Answer[];
+  const newAnswers: Answer[] = [];
+  const maxQuestionNumber = Math.max(...answers.map((a) => a.questionNumber));
+
   answers
-    .sort((item1, item2) => item1.questionNumber - item2.questionNumber)
-    .forEach((item, _, array) => {
+    .sort((a, b) => a.questionNumber - b.questionNumber)
+    .forEach((item) => {
       newAnswers.push({
         questionNumber: item.questionNumber,
         answer: item.answer1,
       });
       newAnswers.push({
-        questionNumber:
-          item.questionNumber + array[array.length - 1].questionNumber,
+        questionNumber: item.questionNumber + maxQuestionNumber,
         answer: item.answer2,
       });
     });

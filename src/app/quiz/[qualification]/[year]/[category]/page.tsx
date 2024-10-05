@@ -1,5 +1,5 @@
 import React from "react";
-import { getQuestions, getQuestionsByCategory } from "@/lib/questions";
+import { getQuestions, getQuestionsByCategory } from "@/services/quizService";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Questions from "@/components/quiz/Questions";
 import Header from "@/components/layout/Header";

@@ -153,9 +153,15 @@ const EditQuestion = ({ params }: { params: Params }) => {
         if (!newOptions[index].explanation) {
           newOptions[index].explanation = {};
         }
-        newOptions[index].explanation![name as keyof MediaContent] = value;
+        const key = name as keyof MediaContent;
+        if (key !== "id") {
+          newOptions[index].explanation![key] = value;
+        }
       } else {
-        newOptions[index][name as keyof QuestionOption] = value;
+        const key = name as keyof QuestionOption;
+        if (key !== "id") {
+          newOptions[index][key] = value;
+        }
       }
       setFormData({ ...formData!, options: newOptions });
     }

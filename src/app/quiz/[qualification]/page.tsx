@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getYearsByQualification } from "@/lib/questions";
+import { getYearsByQualification } from "@/services/quizService";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";

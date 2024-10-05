@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { getCategories } from "@/lib/questions";
+import { getCategories } from "@/services/quizService";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";

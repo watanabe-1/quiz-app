@@ -1,6 +1,6 @@
 import React from "react";
 import Question from "@/components/quiz/Question";
-import { getQuestions, getQuestionsByCategory } from "@/lib/questions";
+import { getQuestions, getQuestionsByCategory } from "@/services/quizService";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -23,9 +23,11 @@ const QuestionPage = async ({ params }: { params: Params }) => {
     category === ALL_CATEGORY
       ? await getQuestions(qualification, year)
       : await getQuestionsByCategory(qualification, year, category);
-  const question = questions.find((question) => question.id === questionId);
+  const question = questions.find(
+    (question) => question.questionId === questionId
+  );
   const questionIdAnswers = questions.map((question) => ({
-    id: question.id,
+    questionId: question.questionId,
     answer: question.answer,
   }));
 

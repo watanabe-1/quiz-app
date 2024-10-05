@@ -1,14 +1,13 @@
-import { QuestionData, QuestionOption } from "@/@types/quizType";
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
-import { promises as fs } from "fs";
-import path from "path";
 import {
   extractYear,
   extractTitle,
   replaceSpacesWithUnderscore,
 } from "@/lib/bccuploads";
 import { katakanaToNumbersMap } from "@/lib/constants";
+import { saveQuestions } from "@/services/quizService";
+import { QuestionData, QuestionOption } from "@/@types/quizType";
 
 export async function POST(request: Request) {
   const data = await request.formData();
@@ -40,13 +39,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
     }
 
-    const dirPath = path.join(process.cwd(), "data", qualification);
-    await fs.mkdir(dirPath, { recursive: true });
+    // 問題データをデータベースに保存
+    const success = await saveQuestions(qualification, year, problems);
 
-    const filePath = path.join(dirPath, `${year}.json`);
-    await fs.writeFile(filePath, JSON.stringify(problems, null, 2), "utf8");
+    if (!success) {
+      return NextResponse.json(
+        { error: "データベースへの保存に失敗しました" },
+        { status: 500 }
+      );
+    }
 
-    return NextResponse.json({ problems });
+    return NextResponse.json({ message: "データが正常に保存されました" });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -91,7 +94,7 @@ function parseProblems(text: string): QuestionData[] {
     const { questionText, options } = extractQuestionAndOptions(content);
 
     const problem: QuestionData = {
-      id,
+      questionId: id,
       category: "なし",
       question: { text: questionText },
       options,

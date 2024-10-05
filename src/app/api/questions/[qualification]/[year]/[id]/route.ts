@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getQuestions, saveQuestions } from "../../../../../../lib/questions";
+import { getQuestions, saveQuestions } from "@/services/quizService";
 
 export async function GET(
   request: Request,
@@ -8,7 +8,7 @@ export async function GET(
   const { qualification, year, id } = params;
   const questionId = parseInt(id);
   const questions = await getQuestions(qualification, year);
-  const questionData = questions.find((q) => q.id === questionId);
+  const questionData = questions.find((q) => q.questionId === questionId);
 
   if (!questionData) {
     return NextResponse.json({ error: "Question not found" }, { status: 404 });
@@ -26,7 +26,7 @@ export async function PUT(
   const updatedQuestion = await request.json();
 
   const questions = await getQuestions(qualification, year);
-  const index = questions.findIndex((q) => q.id === questionId);
+  const index = questions.findIndex((q) => q.questionId === questionId);
 
   if (index === -1) {
     return NextResponse.json({ error: "Question not found" }, { status: 404 });

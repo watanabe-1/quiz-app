@@ -60,13 +60,13 @@ const Questions: React.FC<QuestionsProps> = ({
     <div>
       <ul className="space-y-2">
         {questions.map((question) => (
-          <li key={question.id}>
+          <li key={question.questionId}>
             <a
-              onClick={() => handleQuestionClick(question.id)}
+              onClick={() => handleQuestionClick(question.questionId)}
               className="block p-4 bg-white rounded shadow hover:bg-blue-50"
             >
               <span>
-                {`問題${question.id} ${question.question.text}` ||
+                {`問題${question.questionId} ${question.question.text}` ||
                   "（テキストなし）"}
               </span>
             </a>

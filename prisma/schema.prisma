@@ -1,0 +1,72 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model MediaContent {
+  id    Int     @id @default(autoincrement())
+  text  String?
+  image String?
+
+  // リレーションフィールド
+  questionOptionExplanations QuestionOption[] @relation("OptionExplanation")
+  questionDataQuestions      QuestionData[]   @relation("QuestionContent")
+  questionDataExplanations   QuestionData[]   @relation("QuestionExplanation")
+}
+
+model QuestionOption {
+  id            Int           @id @default(autoincrement())
+  text          String
+  image         String?
+
+  explanationId Int?
+  explanation   MediaContent? @relation("OptionExplanation", fields: [explanationId], references: [id])
+
+  questionId    Int
+  question      QuestionData  @relation(fields: [questionId], references: [id])
+}
+
+model QuestionData {
+  id                Int             @id @default(autoincrement())
+  questionId        Int
+  category          String
+
+  questionContentId Int
+  question          MediaContent    @relation("QuestionContent", fields: [questionContentId], references: [id])
+
+  options           QuestionOption[]
+
+  answer            Int
+
+  explanationId     Int?
+  explanation       MediaContent?   @relation("QuestionExplanation", fields: [explanationId], references: [id])
+
+  qualificationId   Int
+  qualification     Qualification   @relation(fields: [qualificationId], references: [id])
+
+  yearId            Int
+  year              Year            @relation(fields: [yearId], references: [id])
+  
+  @@unique([qualificationId, yearId, questionId]) 
+}
+
+model Qualification {
+  id        Int           @id @default(autoincrement())
+  name      String        @unique
+  questions QuestionData[]
+  years     Year[]
+}
+
+model Year {
+  id              Int             @id @default(autoincrement())
+  year            String
+  qualificationId Int
+  qualification   Qualification   @relation(fields: [qualificationId], references: [id])
+  questions       QuestionData[]
+
+  @@unique([qualificationId, year])
+}

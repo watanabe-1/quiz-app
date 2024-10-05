@@ -49,7 +49,11 @@ const Question: React.FC<QuestionProps> = ({
   // Update selectedOption based on history
   useEffect(() => {
     if (question) {
-      const key = createAnswerHistoryKey(qualification, year, question.id);
+      const key = createAnswerHistoryKey(
+        qualification,
+        year,
+        question.questionId
+      );
       if (history[key] !== undefined) {
         setSelectedOption(history[key]);
       } else {
@@ -103,7 +107,11 @@ const Question: React.FC<QuestionProps> = ({
   const handleOptionClick = useCallback(
     (index: number) => {
       if (!question) return;
-      const key = createAnswerHistoryKey(qualification, year, question.id);
+      const key = createAnswerHistoryKey(
+        qualification,
+        year,
+        question.questionId
+      );
       const updatedHistory = { ...history, [key]: index };
       setHistory(updatedHistory);
       setAnswerHistory(updatedHistory); // Update localStorage
@@ -115,7 +123,11 @@ const Question: React.FC<QuestionProps> = ({
 
   const handleResetAnswer = useCallback(() => {
     if (!question) return;
-    const key = createAnswerHistoryKey(qualification, year, question.id);
+    const key = createAnswerHistoryKey(
+      qualification,
+      year,
+      question.questionId
+    );
 
     // Create a shallow copy and remove the specific key
     const rest = { ...history };
@@ -132,7 +144,7 @@ const Question: React.FC<QuestionProps> = ({
 
   if (!question) return <div>問題が取得できませんでした</div>;
 
-  const questionIds = questionIdAnswers.map((q) => q.id);
+  const questionIds = questionIdAnswers.map((q) => q.questionId);
   const currentIndex = questionIds.indexOf(questionId);
   const prevQuestionId =
     currentIndex > 0 ? questionIds[currentIndex - 1] : null;
@@ -165,7 +177,7 @@ const Question: React.FC<QuestionProps> = ({
         <div className="mb-4">
           {question.question.text && (
             <h2 className="text-xl font-semibold mb-2">
-              {`問題${question.id} ${question.question.text}`}
+              {`問題${question.questionId} ${question.question.text}`}
             </h2>
           )}
           {question.question.image && (
