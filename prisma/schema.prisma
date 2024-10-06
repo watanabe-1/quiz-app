@@ -63,19 +63,13 @@ model QuestionData {
 model Qualification {
   id        Int        @id @default(autoincrement())
   name      String     @unique
-  grades    Grade[]
-  years     Year[]
   questions QuestionData[]
 }
 
 model Year {
-  id              Int             @id @default(autoincrement())
-  year            String
-  qualificationId Int
-  qualification   Qualification   @relation(fields: [qualificationId], references: [id])
-  questions       QuestionData[]
-
-  @@unique([qualificationId, year])
+  id        Int             @id @default(autoincrement())
+  year      String          @unique
+  questions QuestionData[]
 }
 
 model Category {
@@ -85,11 +79,7 @@ model Category {
 }
 
 model Grade {
-  id              Int             @id @default(autoincrement())
-  name            String
-  qualificationId Int
-  qualification   Qualification   @relation(fields: [qualificationId], references: [id])
-  questions       QuestionData[]
-
-  @@unique([qualificationId, name])
+  id        Int             @id @default(autoincrement())
+  name      String          @unique
+  questions QuestionData[]
 }

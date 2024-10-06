@@ -21,7 +21,7 @@ const AdminDashboard = async () => {
           問題データのアップロード
         </Link>
         <Link
-          href="/admin/bccexamupload"
+          href="/admin/uploadBccExam"
           className="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           問題データのアップロード(ビジキャリPDFから)

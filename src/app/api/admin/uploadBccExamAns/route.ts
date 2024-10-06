@@ -6,7 +6,6 @@ import {
   getQuestions,
   existsData,
   updateQuestionAnswer,
-  getQualificationGradeYearIds,
 } from "@/services/quizService";
 import {
   extractYear,
@@ -67,25 +66,6 @@ export async function POST(request: Request) {
         continue;
       }
 
-      // 資格IDと年度IDを取得
-      let qualificationId: number;
-      let gradeId: number;
-      let yearId: number;
-
-      const ids = await getQualificationGradeYearIds(
-        qualification,
-        grade,
-        year
-      );
-      if (ids) {
-        qualificationId = ids.qualificationId;
-        gradeId = ids.gradeId;
-        yearId = ids.yearId;
-      } else {
-        // 次のカテゴリに進む
-        continue;
-      }
-
       // データが存在するかチェック
       const dataExists = await existsData(qualification, grade, year);
 
@@ -104,9 +84,9 @@ export async function POST(request: Request) {
 
             // 質問の解答をデータベースに更新
             await updateQuestionAnswer(
-              qualificationId,
-              gradeId,
-              yearId,
+              qualification,
+              grade,
+              year,
               question.questionId,
               convertedAnswer
             );

@@ -8,11 +8,11 @@ const BccExamUploadPage = () => {
   const fileAnInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    handleSubmitBase(e, "/api/admin/bccexamupload");
+    handleSubmitBase(e, "/api/admin/uploadBccExam");
   };
 
   const handleSubmitAnswer = async (e: React.FormEvent) => {
-    handleSubmitBase(e, "/api/admin/bccexamansupload");
+    handleSubmitBase(e, "/api/admin/uploadBccExamAns");
   };
 
   const handleSubmitBase = async (e: React.FormEvent, url: string) => {
