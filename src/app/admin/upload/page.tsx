@@ -7,6 +7,28 @@ const UploadPage = () => {
   const [qualification, setQualification] = useState("");
   const [grade, setGrade] = useState("");
   const [year, setYear] = useState("");
+  const [autoFill, setAutoFill] = useState(false); // 自動入力のチェックボックス状態
+
+  const handleFileChange = (file: File | null) => {
+    setFile(file);
+    if (autoFill && file) {
+      const fileName = file.name.split(".")[0]; // 拡張子を除く
+      const parts = fileName.split("_");
+
+      if (parts.length >= 3) {
+        setQualification(parts[0]);
+        setGrade(parts[1]);
+
+        // parts[2]以降のすべてを結合してyearとする
+        const yearPart = parts.slice(2).join("_");
+        setYear(yearPart);
+      } else {
+        alert(
+          "ファイル名の形式が正しくありません。資格名_級_年度の形式にしてください。"
+        );
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +67,7 @@ const UploadPage = () => {
             value={qualification}
             onChange={(e) => setQualification(e.target.value)}
             className="w-full p-2 border rounded"
+            disabled={autoFill} // 自動入力がオンの時は手動入力を無効化
           />
         </div>
         <div>
@@ -54,6 +77,7 @@ const UploadPage = () => {
             value={grade}
             onChange={(e) => setGrade(e.target.value)}
             className="w-full p-2 border rounded"
+            disabled={autoFill}
           />
         </div>
         <div>
@@ -63,6 +87,7 @@ const UploadPage = () => {
             value={year}
             onChange={(e) => setYear(e.target.value)}
             className="w-full p-2 border rounded"
+            disabled={autoFill}
           />
         </div>
         <div>
@@ -70,9 +95,20 @@ const UploadPage = () => {
           <input
             type="file"
             accept=".json"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
             className="w-full"
           />
+        </div>
+        <div className="flex items-center">
+          <input
+            type="checkbox"
+            checked={autoFill}
+            onChange={(e) => setAutoFill(e.target.checked)}
+            className="mr-2"
+          />
+          <label className="font-medium">
+            ファイル名から資格名、級、年度を自動入力する
+          </label>
         </div>
         <button
           type="submit"
