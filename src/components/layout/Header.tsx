@@ -5,14 +5,14 @@ interface HeaderProps {
   title: string;
 }
 
-const Header: React.FC<HeaderProps> = async ({ title }) => {
+const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <header className="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-40">
-      <div className="container mx-auto flex items-center justify-between">
+      <div className="flex items-center justify-between w-full">
         <h1 className="text-sm sm:text-base md:text-lg font-bold tracking-tight truncate">
           {title}
         </h1>
-        <div className="ml-3">
+        <div>
           <Menu />
         </div>
       </div>
