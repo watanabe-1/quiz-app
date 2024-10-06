@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { MenuItem } from "@/@types/quizType";
@@ -13,7 +13,6 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // サブメニューの開閉状態を管理するステート
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -35,7 +34,20 @@ const Menu: React.FC = () => {
     }));
   };
 
-  // 再帰的にメニューをレンダリングする関数
+  // メニューが開いているときに背景のスクロールを防止
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    // クリーンアップ関数
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  // メニュー項目を再帰的にレンダリング
   const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
     return items.map((item) => (
       <div key={item.name}>
@@ -52,8 +64,10 @@ const Menu: React.FC = () => {
             </button>
             {/* サブメニュー */}
             <div
-              className={`ml-4 overflow-hidden transition-all duration-300 ease-in-out ${
-                openSubmenus[item.name] ? "max-h-screen" : "max-h-0"
+              className={`ml-4 transition-all duration-300 ease-in-out ${
+                openSubmenus[item.name]
+                  ? "max-h-screen"
+                  : "max-h-0 overflow-hidden"
               }`}
             >
               {renderMenuItems(item.children, depth + 1)}
@@ -65,7 +79,7 @@ const Menu: React.FC = () => {
             className={`block px-4 py-2 hover:bg-gray-700 transition-all duration-300 ease-in-out ${
               depth > 0 ? "pl-6" : ""
             }`}
-            onClick={toggleMenu} // メニュー項目をクリックしたらメニューを閉じる
+            onClick={toggleMenu}
           >
             {item.name}
           </Link>
@@ -82,27 +96,26 @@ const Menu: React.FC = () => {
         className="text-white focus:outline-none"
         aria-label="Toggle menu"
       >
-        {/* メニューの開閉状態に応じてアイコンを表示 */}
         {isOpen ? (
-          <FaTimes className="text-2xl" /> // メニューが開いているときの閉じるアイコン
+          <FaTimes className="text-2xl" />
         ) : (
-          <FaBars className="text-2xl" /> // メニューが閉じているときのハンバーガーアイコン
+          <FaBars className="text-2xl" />
         )}
       </button>
 
-      {/* オーバーレイ（メニュー外クリック用） */}
+      {/* オーバーレイ */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ease-in-out"
           aria-hidden="true"
-          onClick={toggleMenu} // オーバーレイがクリックされたらメニューを閉じる
+          onClick={toggleMenu}
         ></div>
       )}
 
       {/* メニューコンテンツ */}
       <div
         id="menu"
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out z-50 overflow-y-auto ${
+        className={`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out z-50 flex flex-col ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -114,8 +127,8 @@ const Menu: React.FC = () => {
           <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>
 
-        {/* メニュー項目またはローディング/エラー状態 */}
-        <nav className="mt-8 space-y-2 px-4">
+        {/* メニュー項目 */}
+        <nav className="mt-2 px-4 flex-1 overflow-y-auto">
           {error ? (
             <ErrorState />
           ) : !menuItems ? (
