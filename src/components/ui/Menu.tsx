@@ -50,22 +50,26 @@ const Menu: React.FC = () => {
   // メニュー項目を再帰的にレンダリング
   const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
     return items.map((item) => (
-      <div key={item.name}>
+      <div key={`${item.href}${item.name}`}>
         {item.children ? (
           <>
             <button
-              onClick={() => toggleSubmenu(item.name)}
+              onClick={() => toggleSubmenu(`${item.href}${item.name}`)}
               className={`flex items-center justify-between w-full px-4 py-2 text-left hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out ${
                 depth > 0 ? "pl-4" : ""
               }`}
             >
               <span>{item.name}</span>
-              {openSubmenus[item.name] ? <FaChevronUp /> : <FaChevronDown />}
+              {openSubmenus[`${item.href}${item.name}`] ? (
+                <FaChevronUp />
+              ) : (
+                <FaChevronDown />
+              )}
             </button>
             {/* サブメニュー */}
             <div
               className={`ml-4 transition-all duration-300 ease-in-out ${
-                openSubmenus[item.name]
+                openSubmenus[`${item.href}${item.name}`]
                   ? "max-h-screen"
                   : "max-h-0 overflow-hidden"
               }`}
