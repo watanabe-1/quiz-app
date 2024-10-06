@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { getAllQualifications } from "@/services/quizService";
+import { fetchGetAllQualifications } from "@/lib/api";
 
 const AdminDashboard = async () => {
-  const qualifications = await getAllQualifications();
+  const qualifications = await fetchGetAllQualifications();
 
   return (
     <div>

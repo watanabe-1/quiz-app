@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { getGradesByQualification } from "@/services/quizService";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
+import { fetchGetGradesByQualification } from "@/lib/api";
 
 interface Params {
   qualification: string;
@@ -10,7 +10,7 @@ interface Params {
 
 const QualificationAdminPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
-  const grades = await getGradesByQualification(qualification);
+  const grades = await fetchGetGradesByQualification(qualification);
 
   return (
     <div>

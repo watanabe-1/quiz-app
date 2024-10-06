@@ -14,14 +14,14 @@ const ExportPage = () => {
 
   // 資格一覧を取得
   const { data: qualifications, error: qualificationsError } = useSWR(
-    "/api/qualifications",
+    "/api/questions",
     fetcher
   );
 
   // 選択された資格の級一覧を取得
   const { data: grades, error: gradesError } = useSWR(
     selectedQualification
-      ? `/api/grades?qualification=${encodeURIComponent(selectedQualification)}`
+      ? `/api/questions/${encodeURIComponent(selectedQualification)}`
       : null,
     fetcher
   );
@@ -29,9 +29,9 @@ const ExportPage = () => {
   // 選択された資格と級の年度一覧を取得
   const { data: years, error: yearsError } = useSWR(
     selectedQualification && selectedGrade
-      ? `/api/years?qualification=${encodeURIComponent(
+      ? `/api/questions/${encodeURIComponent(
           selectedQualification
-        )}&grade=${encodeURIComponent(selectedGrade)}`
+        )}/${encodeURIComponent(selectedGrade)}`
       : null,
     fetcher
   );

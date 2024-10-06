@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { getAllQualifications } from "@/services/quizService";
 import Header from "@/components/layout/Header";
+import { fetchGetAllQualifications } from "@/lib/api";
 
 const HomePage = async () => {
-  const qualifications = await getAllQualifications();
+  const qualifications = await fetchGetAllQualifications();
 
   return (
     <div>

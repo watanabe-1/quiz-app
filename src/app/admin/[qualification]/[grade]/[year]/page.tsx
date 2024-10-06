@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { getQuestions } from "@/services/quizService";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
+import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
+import { fetchGetQuestionsByCategory } from "@/lib/api";
 
 interface Params {
   qualification: string;
@@ -14,7 +14,12 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
   const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);
-  const questions = await getQuestions(qualification, grade, year);
+  const questions = await fetchGetQuestionsByCategory(
+    qualification,
+    grade,
+    year,
+    ALL_CATEGORY
+  );
 
   return (
     <div>

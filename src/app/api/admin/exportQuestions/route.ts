@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import JSZip from "jszip";
 import {
-  getQuestions,
-  getYearsByQualificationAndGrade,
-} from "@/services/quizService";
+  fetchGetQuestionsByCategory,
+  fetchGetYearsByQualificationAndGrade,
+} from "@/lib/api";
+import { ALL_CATEGORY } from "@/lib/constants";
 
 export const runtime = "nodejs";
 
@@ -25,7 +26,12 @@ export async function GET(req: NextRequest) {
 
     if (year) {
       // 資格、級、年度が指定された場合、その組み合わせのデータを取得
-      const questionsData = await getQuestions(qualification, grade, year);
+      const questionsData = await fetchGetQuestionsByCategory(
+        qualification,
+        grade,
+        year,
+        ALL_CATEGORY
+      );
 
       if (questionsData.length > 0) {
         const fileName = `${qualification}_${grade}_${year}.json`;
@@ -33,10 +39,18 @@ export async function GET(req: NextRequest) {
       }
     } else {
       // 資格と級が指定された場合、すべての年度を対象にデータを取得
-      const years = await getYearsByQualificationAndGrade(qualification, grade);
+      const years = await fetchGetYearsByQualificationAndGrade(
+        qualification,
+        grade
+      );
 
       for (const yr of years) {
-        const questionsData = await getQuestions(qualification, grade, yr);
+        const questionsData = await fetchGetQuestionsByCategory(
+          qualification,
+          grade,
+          yr,
+          ALL_CATEGORY
+        );
 
         if (questionsData.length > 0) {
           const fileName = `${qualification}_${grade}_${yr}.json`;

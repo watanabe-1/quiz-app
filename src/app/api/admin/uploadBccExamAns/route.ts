@@ -1,5 +1,3 @@
-// pages/api/uploadAnswers.ts
-
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
 import {

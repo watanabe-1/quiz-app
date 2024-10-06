@@ -1,14 +1,13 @@
 import { MenuItem } from "@/@types/quizType";
-import { ALL_CATEGORY } from "@/lib/constants";
 import {
-  getQuestions,
-  getAllQualifications,
-  getCategories,
-  getQuestionsByCategory,
-  existsData,
-  getGradesByQualification,
-  getYearsByQualificationAndGrade,
-} from "@/services/quizService";
+  fetchGetAllQualifications,
+  fetchGetCategories,
+  fetchGetGradesByQualification,
+  fetchGetQuestionsByCategory,
+  fetchGetYearsByQualificationAndGrade,
+} from "@/lib/api";
+import { ALL_CATEGORY } from "@/lib/constants";
+import { createPath } from "@/lib/path";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -52,13 +51,13 @@ const parseCurrentUrl = (
 
 // 資格ごとのメニュー項目を取得
 const getQualificationItems = async (): Promise<MenuItem[]> => {
-  const qualifications = await getAllQualifications();
+  const qualifications = await fetchGetAllQualifications();
   return Promise.all(
     qualifications.map(async (qualification) => {
       const yearItems = await getGradeItemsByQualification(qualification);
       return {
         name: qualification,
-        href: `/quiz/${encodeURIComponent(qualification)}`,
+        href: createPath("quiz", qualification),
         children: yearItems,
       };
     })
@@ -69,7 +68,7 @@ const getQualificationItems = async (): Promise<MenuItem[]> => {
 const getGradeItemsByQualification = async (
   qualification: string
 ): Promise<MenuItem[]> => {
-  const grades = await getGradesByQualification(qualification);
+  const grades = await fetchGetGradesByQualification(qualification);
   return Promise.all(
     grades.map(async (grade) => {
       const yearsItems = await getYearItemsByQualificationAndGrade(
@@ -78,9 +77,7 @@ const getGradeItemsByQualification = async (
       );
       return {
         name: grade,
-        href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
-          grade
-        )}`,
+        href: createPath("quiz", qualification, grade),
         children: yearsItems,
       };
     })
@@ -92,7 +89,10 @@ const getYearItemsByQualificationAndGrade = async (
   qualification: string,
   grade: string
 ): Promise<MenuItem[]> => {
-  const years = await getYearsByQualificationAndGrade(qualification, grade);
+  const years = await fetchGetYearsByQualificationAndGrade(
+    qualification,
+    grade
+  );
   return Promise.all(
     years.map(async (year) => {
       const categoryItems = await getCategoryItemsByGradeAndYear(
@@ -102,9 +102,7 @@ const getYearItemsByQualificationAndGrade = async (
       );
       return {
         name: year,
-        href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
-          grade
-        )}/${encodeURIComponent(year)}`,
+        href: createPath("quiz", qualification, grade, year),
         children: categoryItems,
       };
     })
@@ -117,14 +115,12 @@ const getCategoryItemsByGradeAndYear = async (
   grade: string,
   year: string
 ): Promise<MenuItem[]> => {
-  const categories = await getCategories(qualification, grade, year);
+  const categories = await fetchGetCategories(qualification, grade, year);
   const allCategories = [ALL_CATEGORY, ...categories];
 
   return allCategories.map((category) => ({
     name: category === ALL_CATEGORY ? "全ての問題" : category,
-    href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
-      grade
-    )}/${encodeURIComponent(year)}/${encodeURIComponent(category)}`,
+    href: createPath("quiz", qualification, grade, year, category),
   }));
 };
 
@@ -136,20 +132,24 @@ const getCurrentQuestionItems = async (
   if (!parsedUrl) return [];
 
   const { qualification, grade, year, category } = parsedUrl;
-  if (!existsData(qualification, grade, year)) return [];
 
-  const questions =
-    category === ALL_CATEGORY
-      ? await getQuestions(qualification, grade, year)
-      : await getQuestionsByCategory(qualification, grade, year, category);
+  const questions = await fetchGetQuestionsByCategory(
+    qualification,
+    grade,
+    year,
+    category
+  );
 
   return questions.map((question) => ({
     name: `問題 ${question.questionId}`,
-    href: `/quiz/${encodeURIComponent(qualification)}/${encodeURIComponent(
-      grade
-    )}/${encodeURIComponent(year)}/${encodeURIComponent(
-      category
-    )}/${encodeURIComponent(question.questionId)}`,
+    href: createPath(
+      "quiz",
+      qualification,
+      grade,
+      year,
+      category,
+      question.questionId
+    ),
   }));
 };
 

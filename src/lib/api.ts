@@ -2,11 +2,22 @@ import { createApiUrl } from "@/lib/url";
 import { FETCH_REVALIDATE } from "./constants";
 import { QuestionData } from "@/@types/quizType";
 
+const TAG_QUALIFICATIONS = "qualifications";
 const TAG_GRADES = "grades";
 const TAG_YEARS = "years";
 const TAG_CATEGORIES = "categories";
 const TAG_QUESTIONS = "questions";
 const TAG_ID = "id";
+
+export async function fetchGetAllQualifications(): Promise<string[]> {
+  return fetch(createApiUrl("api/questions"), {
+    method: "GET",
+    next: {
+      revalidate: FETCH_REVALIDATE,
+      tags: [TAG_QUALIFICATIONS],
+    },
+  }).then((response) => response.json());
+}
 
 export async function fetchGetGradesByQualification(
   qualification: string
