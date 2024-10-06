@@ -9,6 +9,7 @@ import {
 import { katakanaToNumbersMap } from "@/lib/constants";
 import { saveQuestions } from "@/services/quizService";
 import { QuestionData, QuestionOption } from "@/@types/quizType";
+import { revalidateTagByUpdateQuestions } from "@/lib/api";
 
 export async function POST(request: Request) {
   const data = await request.formData();
@@ -50,6 +51,8 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
+
+    revalidateTagByUpdateQuestions();
 
     return NextResponse.json({ message: "データが正常に保存されました" });
   } catch (error) {

@@ -175,9 +175,9 @@ const EditQuestion = ({ params }: { params: Params }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch(
-      `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
-        grade
-      )}/${encodeURIComponent(year)}/${id}`,
+      `/api/admin/questions/${encodeURIComponent(
+        qualification
+      )}/${encodeURIComponent(grade)}/${encodeURIComponent(year)}/${id}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

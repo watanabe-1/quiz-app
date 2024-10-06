@@ -12,6 +12,7 @@ import {
   replaceSpacesWithUnderscore,
   extractGradeAndQualification,
 } from "@/lib/bccuploads";
+import { revalidateTagByUpdateQuestion } from "@/lib/api";
 
 interface AnswerData {
   questionNumber: number;
@@ -92,6 +93,8 @@ export async function POST(request: Request) {
         }
       }
     }
+
+    revalidateTagByUpdateQuestion();
 
     return NextResponse.json(examData);
   } catch (error) {

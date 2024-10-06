@@ -1,6 +1,7 @@
 import { createApiUrl } from "@/lib/url";
 import { FETCH_REVALIDATE } from "./constants";
 import { QuestionData } from "@/@types/quizType";
+import { revalidateTag } from "next/cache";
 
 const TAG_QUALIFICATIONS = "qualifications";
 const TAG_GRADES = "grades";
@@ -8,6 +9,19 @@ const TAG_YEARS = "years";
 const TAG_CATEGORIES = "categories";
 const TAG_QUESTIONS = "questions";
 const TAG_ID = "id";
+
+export function revalidateTagByUpdateQuestions() {
+  revalidateTag(TAG_QUALIFICATIONS);
+  revalidateTag(TAG_GRADES);
+  revalidateTag(TAG_YEARS);
+  revalidateTagByUpdateQuestion();
+}
+
+export function revalidateTagByUpdateQuestion() {
+  revalidateTag(TAG_CATEGORIES);
+  revalidateTag(TAG_QUESTIONS);
+  revalidateTag(TAG_ID);
+}
 
 export async function fetchGetAllQualifications(): Promise<string[]> {
   return fetch(createApiUrl("api/questions"), {
