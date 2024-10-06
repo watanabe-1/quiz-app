@@ -30,6 +30,7 @@
 - `PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
 - `NEXTAUTH_URL`: NextAuth.js の URL。
 - `NEXTAUTH_SECRET`: NextAuth.js のシークレットキー。
+- `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用する PROTOCOL。
 - `POSTGRES_～`: DB 接続用 URL。
 
 ### `.env.local` ファイルの例
@@ -54,6 +55,9 @@ NEXTAUTH_URL=http://localhost:3000
 
 # NextAuth.js のシークレットキー（''で囲んで設定）
 NEXTAUTH_SECRET='your-very-secure-secret-key'
+
+# URL 作成に使用する PROTOCOL
+NEXT_PUBLIC_PROTOCOL=http
 ```
 
 ### `.env` ファイルの例
@@ -88,6 +92,9 @@ PROTECTED_PATHS=/admin,/api/admin
 
 # NextAuth.js のシークレットキー
 NEXTAUTH_SECRET=your-very-secure-secret-key
+
+# URL 作成に使用する PROTOCOL
+NEXT_PUBLIC_PROTOCOL=https
 ```
 
 ## パスワードのハッシュ化

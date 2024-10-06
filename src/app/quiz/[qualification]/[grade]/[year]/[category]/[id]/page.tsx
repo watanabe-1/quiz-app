@@ -1,9 +1,9 @@
 import React from "react";
 import Question from "@/components/quiz/Question";
-import { getQuestions, getQuestionsByCategory } from "@/services/quizService";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { fetchGetQuestionsByCategory } from "@/lib/api";
 
 interface Params {
   qualification: string;
@@ -21,10 +21,12 @@ const QuestionPage = async ({ params }: { params: Params }) => {
   const questionId = parseInt(params.id);
 
   // カテゴリー内の全ての問題を取得
-  const questions =
-    category === ALL_CATEGORY
-      ? await getQuestions(qualification, grade, year)
-      : await getQuestionsByCategory(qualification, grade, year, category);
+  const questions = await fetchGetQuestionsByCategory(
+    qualification,
+    grade,
+    year,
+    category
+  );
   const question = questions.find(
     (question) => question.questionId === questionId
   );

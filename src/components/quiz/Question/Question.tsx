@@ -17,6 +17,7 @@ import { calculateCorrectCount, calculateAnsweredCount } from "./quizUtils";
 import AnswerOption from "./AnswerOption";
 import ExplanationSection from "./ExplanationSection";
 import ReportModal from "./ReportModal";
+import { createPath } from "@/lib/path";
 
 interface QuestionProps {
   qualification: string;
@@ -230,11 +231,14 @@ const Question: React.FC<QuestionProps> = ({
       <div className="flex justify-between mt-6">
         {prevQuestionId ? (
           <Link
-            href={`/quiz/${encodeURIComponent(
-              qualification
-            )}/${encodeURIComponent(grade)}/${encodeURIComponent(
-              year
-            )}/${encodeURIComponent(category)}/${prevQuestionId}`}
+            href={createPath(
+              "quiz",
+              qualification,
+              grade,
+              year,
+              category,
+              prevQuestionId
+            )}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             前の問題
@@ -244,11 +248,14 @@ const Question: React.FC<QuestionProps> = ({
         )}
         {nextQuestionId ? (
           <Link
-            href={`/quiz/${encodeURIComponent(
-              qualification
-            )}/${encodeURIComponent(grade)}/${encodeURIComponent(
-              year
-            )}/${encodeURIComponent(category)}/${nextQuestionId}`}
+            href={createPath(
+              "quiz",
+              qualification,
+              grade,
+              year,
+              category,
+              nextQuestionId
+            )}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
           >
             次の問題

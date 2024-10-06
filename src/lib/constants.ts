@@ -24,3 +24,7 @@ export const nonLinkableSegmentsByQuiz = [
 export const nonLinkableSegmentsByAdmin = [
   { label: "edit", index: 4 }, // 'edit' is the fifth part of the URL
 ];
+
+// fetchのcash保持時間 31日
+// 基本的にはrevalidateTag()を使用してキャッシュの破棄を行う想定
+export const FETCH_REVALIDATE = 2678400;

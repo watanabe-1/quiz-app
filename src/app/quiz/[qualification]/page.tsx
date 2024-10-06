@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { getGradesByQualification } from "@/services/quizService";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
+import { fetchGetGradesByQualification } from "@/lib/api";
+import { createPath } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -11,7 +12,7 @@ interface Params {
 
 const GradesPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
-  const grades = await getGradesByQualification(qualification);
+  const grades = await fetchGetGradesByQualification(qualification);
 
   return (
     <div>
@@ -23,9 +24,7 @@ const GradesPage = async ({ params }: { params: Params }) => {
             {grades.map((grade) => (
               <li key={grade}>
                 <Link
-                  href={`/quiz/${encodeURIComponent(
-                    qualification
-                  )}/${encodeURIComponent(grade)}`}
+                  href={createPath("quiz", qualification, grade)}
                   className="block p-4 bg-white rounded shadow hover:bg-blue-50"
                 >
                   {grade}

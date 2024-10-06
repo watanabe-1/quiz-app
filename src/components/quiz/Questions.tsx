@@ -9,6 +9,7 @@ import { isEmptyObject } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Modal from "@/components/ui/Modal";
+import { createPath } from "@/lib/path";
 
 interface QuestionsProps {
   qualification: string;
@@ -32,11 +33,14 @@ const Questions: React.FC<QuestionsProps> = ({
   const router = useRouter();
 
   const navigateToQuestionPage = (questionId: number) => {
-    const href = `/quiz/${encodeURIComponent(
-      qualification
-    )}/${encodeURIComponent(grade)}/${encodeURIComponent(
-      year
-    )}/${encodeURIComponent(category)}/${questionId}`;
+    const href = createPath(
+      "quiz",
+      qualification,
+      grade,
+      year,
+      category,
+      questionId
+    );
 
     router.push(href);
   };

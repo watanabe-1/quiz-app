@@ -1,9 +1,9 @@
 import React from "react";
-import { getQuestions, getQuestionsByCategory } from "@/services/quizService";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Questions from "@/components/quiz/Questions";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { fetchGetQuestionsByCategory } from "@/lib/api";
 
 interface Params {
   qualification: string;
@@ -17,10 +17,12 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
   const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);
   const category = decodeURIComponent(params.category);
-  const questions =
-    category === ALL_CATEGORY
-      ? await getQuestions(qualification, grade, year)
-      : await getQuestionsByCategory(qualification, grade, year, category);
+  const questions = await fetchGetQuestionsByCategory(
+    qualification,
+    grade,
+    year,
+    category
+  );
 
   return (
     <div>

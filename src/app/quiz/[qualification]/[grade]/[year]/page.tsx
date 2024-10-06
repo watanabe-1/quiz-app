@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { getCategories } from "@/services/quizService";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { fetchGetCategories } from "@/lib/api";
+import { createPath } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -15,7 +16,7 @@ const CategoriesPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
   const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);
-  const categories = await getCategories(qualification, grade, year);
+  const categories = await fetchGetCategories(qualification, grade, year);
 
   // 「すべての問題」を先頭に追加
   categories.unshift(ALL_CATEGORY);
@@ -32,11 +33,13 @@ const CategoriesPage = async ({ params }: { params: Params }) => {
             {categories.map((category) => (
               <li key={category}>
                 <Link
-                  href={`/quiz/${encodeURIComponent(
-                    qualification
-                  )}/${encodeURIComponent(grade)}/${encodeURIComponent(
-                    year
-                  )}/${encodeURIComponent(category)}`}
+                  href={createPath(
+                    "quiz",
+                    qualification,
+                    grade,
+                    year,
+                    category
+                  )}
                   className="block p-4 bg-white rounded shadow hover:bg-blue-50"
                 >
                   {category === ALL_CATEGORY ? "全ての問題" : category}

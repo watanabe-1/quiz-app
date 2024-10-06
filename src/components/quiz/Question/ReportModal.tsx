@@ -4,6 +4,7 @@ import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
 import Link from "next/link";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
+import { createPath } from "@/lib/path";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -77,11 +78,14 @@ const ReportModal: FC<ReportModalProps> = ({
                           qAnswer.questionId
                         )
                       ] === qAnswer.answer;
-                    const questionLink = `/quiz/${encodeURIComponent(
-                      qualification
-                    )}/${encodeURIComponent(grade)}/${encodeURIComponent(
-                      year
-                    )}/${encodeURIComponent(category)}/${qAnswer.questionId}`;
+                    const questionLink = createPath(
+                      "quiz",
+                      qualification,
+                      grade,
+                      year,
+                      category,
+                      qAnswer.questionId
+                    );
 
                     return (
                       <tr key={qAnswer.questionId} className="text-center">

@@ -8,7 +8,7 @@ import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
 import LoadingState from "@/components/ui/LoadingState";
 import ErrorState from "@/components/ui/ErrorState";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
+import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
 
 interface Params {
   qualification: string;
@@ -27,7 +27,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
   const { data: questionData, error } = useSWR<QuestionData>(
     `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
       grade
-    )}/${encodeURIComponent(year)}/${id}`,
+    )}/${encodeURIComponent(year)}/${ALL_CATEGORY}/${id}`,
     fetcher
   );
   const [formData, setFormData] = useState<QuestionData | null>(null);

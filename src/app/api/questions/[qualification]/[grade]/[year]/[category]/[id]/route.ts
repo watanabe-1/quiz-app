@@ -1,17 +1,30 @@
 import { NextResponse } from "next/server";
 import { getQuestions, saveQuestions } from "@/services/quizService";
+import { fetchGetQuestionsByCategory } from "@/lib/api";
 
 export async function GET(
   request: Request,
   {
     params,
   }: {
-    params: { qualification: string; grade: string; year: string; id: string };
+    params: {
+      qualification: string;
+      grade: string;
+      year: string;
+      category: string;
+      id: string;
+    };
   }
 ) {
-  const { qualification, grade, year, id } = params;
+  const { qualification, grade, year, category, id } = params;
   const questionId = parseInt(id);
-  const questions = await getQuestions(qualification, grade, year);
+  // できるだけキャッシュから取得したいので、questionId単位でのSQL発行は行わない
+  const questions = await fetchGetQuestionsByCategory(
+    qualification,
+    grade,
+    year,
+    category
+  );
   const questionData = questions.find((q) => q.questionId === questionId);
 
   if (!questionData) {
