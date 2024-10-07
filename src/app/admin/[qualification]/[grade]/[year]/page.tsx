@@ -3,6 +3,7 @@ import Link from "next/link";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
+import { createPath } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -46,11 +47,14 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
                     "（テキストなし）"}
                 </span>
                 <Link
-                  href={`/admin/${encodeURIComponent(
-                    qualification
-                  )}/${encodeURIComponent(grade)}/${encodeURIComponent(
-                    year
-                  )}/edit/${question.questionId}`}
+                  href={createPath(
+                    "admin",
+                    qualification,
+                    grade,
+                    year,
+                    "edit",
+                    question.questionId
+                  )}
                   className="text-blue-600 hover:underline"
                 >
                   編集

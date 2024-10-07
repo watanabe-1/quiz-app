@@ -3,6 +3,7 @@ import Link from "next/link";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import { fetchGetYearsByQualificationAndGrade } from "@/lib/api";
+import { createPath } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -34,9 +35,7 @@ const QualificationAdminPage = async ({ params }: { params: Params }) => {
               <div className="flex justify-between items-center">
                 <span>{year}</span>
                 <Link
-                  href={`/admin/${encodeURIComponent(
-                    qualification
-                  )}/${encodeURIComponent(grade)}/${encodeURIComponent(year)}`}
+                  href={createPath("admin", qualification, grade, year)}
                   className="text-blue-600 hover:underline"
                 >
                   管理

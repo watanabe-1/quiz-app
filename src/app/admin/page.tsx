@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { fetchGetAllQualifications } from "@/lib/api";
+import { createPath } from "@/lib/path";
 
 const AdminDashboard = async () => {
   const qualifications = await fetchGetAllQualifications();
@@ -39,7 +40,7 @@ const AdminDashboard = async () => {
               <div className="flex justify-between items-center">
                 <span>{qualification}</span>
                 <Link
-                  href={`/admin/${encodeURIComponent(qualification)}`}
+                  href={createPath("admin", qualification)}
                   className="text-blue-600 hover:underline"
                 >
                   管理

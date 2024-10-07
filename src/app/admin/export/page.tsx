@@ -2,6 +2,7 @@
 
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import { createPath } from "@/lib/path";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -21,7 +22,7 @@ const ExportPage = () => {
   // 選択された資格の級一覧を取得
   const { data: grades, error: gradesError } = useSWR(
     selectedQualification
-      ? `/api/questions/${encodeURIComponent(selectedQualification)}`
+      ? createPath("api/questions", selectedQualification)
       : null,
     fetcher
   );
@@ -29,9 +30,7 @@ const ExportPage = () => {
   // 選択された資格と級の年度一覧を取得
   const { data: years, error: yearsError } = useSWR(
     selectedQualification && selectedGrade
-      ? `/api/questions/${encodeURIComponent(
-          selectedQualification
-        )}/${encodeURIComponent(selectedGrade)}`
+      ? createPath("api/questions", selectedQualification, selectedGrade)
       : null,
     fetcher
   );

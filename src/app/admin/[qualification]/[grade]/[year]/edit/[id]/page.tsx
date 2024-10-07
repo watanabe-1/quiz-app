@@ -9,6 +9,7 @@ import LoadingState from "@/components/ui/LoadingState";
 import ErrorState from "@/components/ui/ErrorState";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
+import { createPath } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -25,9 +26,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
   const year = decodeURIComponent(params.year);
   const id = decodeURIComponent(params.id);
   const { data: questionData, error } = useSWR<QuestionData>(
-    `/api/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(
-      grade
-    )}/${encodeURIComponent(year)}/${ALL_CATEGORY}/${id}`,
+    createPath("api/questions", qualification, grade, year, ALL_CATEGORY, id),
     fetcher
   );
   const [formData, setFormData] = useState<QuestionData | null>(null);
@@ -175,9 +174,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch(
-      `/api/admin/questions/${encodeURIComponent(
-        qualification
-      )}/${encodeURIComponent(grade)}/${encodeURIComponent(year)}/${id}`,
+      createPath("api/admin/questions", qualification, grade, year, id),
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -186,11 +183,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
     );
     if (res.ok) {
       alert("問題を更新しました。");
-      router.push(
-        `/admin/${encodeURIComponent(qualification)}/${encodeURIComponent(
-          grade
-        )}/${encodeURIComponent(year)}`
-      );
+      router.push(createPath("admin", qualification, grade, year));
     } else {
       alert("エラーが発生しました。");
     }

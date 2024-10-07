@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { fetchGetAllQualifications } from "@/lib/api";
+import { createPath } from "@/lib/path";
 
 const HomePage = async () => {
   const qualifications = await fetchGetAllQualifications();
@@ -15,7 +16,7 @@ const HomePage = async () => {
           {qualifications.map((qualification) => (
             <li key={qualification}>
               <Link
-                href={`/quiz/${encodeURIComponent(qualification)}`}
+                href={createPath("quiz", qualification)}
                 className="block p-4 bg-white rounded shadow hover:bg-blue-50"
               >
                 {qualification}
