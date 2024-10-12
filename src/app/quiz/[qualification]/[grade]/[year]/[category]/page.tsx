@@ -4,6 +4,7 @@ import Questions from "@/components/quiz/Questions";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
+import { Metadata } from "next";
 
 interface Params {
   qualification: string;
@@ -11,6 +12,10 @@ interface Params {
   year: string;
   category: string;
 }
+
+export const metadata: Metadata = {
+  title: "問題選択",
+};
 
 const QuestionsPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);

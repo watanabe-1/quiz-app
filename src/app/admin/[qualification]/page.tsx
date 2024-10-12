@@ -4,10 +4,15 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import { fetchGetGradesByQualification } from "@/lib/api";
 import { createPath } from "@/lib/path";
+import { Metadata } from "next";
 
 interface Params {
   qualification: string;
 }
+
+export const metadata: Metadata = {
+  title: "級選択",
+};
 
 const QualificationAdminPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);

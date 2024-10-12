@@ -5,12 +5,17 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetCategories } from "@/lib/api";
 import { createPath } from "@/lib/path";
+import { Metadata } from "next";
 
 interface Params {
   qualification: string;
   grade: string;
   year: string;
 }
+
+export const metadata: Metadata = {
+  title: "カテゴリー選択",
+};
 
 const CategoriesPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);

@@ -4,6 +4,7 @@ import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
+import { Metadata } from "next";
 
 interface Params {
   qualification: string;
@@ -12,6 +13,10 @@ interface Params {
   category: string;
   id: string;
 }
+
+export const metadata: Metadata = {
+  title: "問題",
+};
 
 const QuestionPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);

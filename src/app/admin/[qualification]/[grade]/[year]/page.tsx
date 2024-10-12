@@ -4,12 +4,17 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
 import { createPath } from "@/lib/path";
+import { Metadata } from "next";
 
 interface Params {
   qualification: string;
   grade: string;
   year: string;
 }
+
+export const metadata: Metadata = {
+  title: "問題選択",
+};
 
 const YearAdminPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);

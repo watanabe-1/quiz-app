@@ -3,6 +3,11 @@ import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { fetchGetAllQualifications } from "@/lib/api";
 import { createPath } from "@/lib/path";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ホーム",
+};
 
 const HomePage = async () => {
   const qualifications = await fetchGetAllQualifications();

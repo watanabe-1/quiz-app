@@ -5,10 +5,15 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import { fetchGetGradesByQualification } from "@/lib/api";
 import { createPath } from "@/lib/path";
+import { Metadata } from "next";
 
 interface Params {
   qualification: string;
 }
+
+export const metadata: Metadata = {
+  title: "資格選択",
+};
 
 const GradesPage = async ({ params }: { params: Params }) => {
   const qualification = decodeURIComponent(params.qualification);
