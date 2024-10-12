@@ -4,7 +4,7 @@ import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 // 環境変数から保護するパスを取得
 const protectedPaths = process.env.PROTECTED_PATHS
   ? process.env.PROTECTED_PATHS.split(",").map(
-      (path) => new RegExp(`^${path.trim()}(\\/.*)?$`)
+      (path) => new RegExp(`^${path.trim()}(\\/.*)?$`),
     )
   : [
       /^\/admin(\/.*)?$/, // デフォルトの保護パス
@@ -18,7 +18,7 @@ export function withLogin(middleware: NextMiddleware) {
 
     // 認証が必要なパスかどうかを判定
     const isProtectedPath = protectedPaths.some((pathRegex) =>
-      pathRegex.test(pathname)
+      pathRegex.test(pathname),
     );
 
     if (isProtectedPath) {
@@ -33,7 +33,7 @@ export function withLogin(middleware: NextMiddleware) {
               return !!token && token.role === "admin";
             },
           },
-        }
+        },
       );
       return authMiddleware(request as NextRequestWithAuth, event);
     }

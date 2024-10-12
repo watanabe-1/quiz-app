@@ -14,7 +14,7 @@ export function extractTitle(text: string) {
 
 // 級と試験名を抽出する関数
 export function extractGradeAndQualification(
-  input: string
+  input: string,
 ): { grade: string; qualification: string } | null {
   // 正規表現: 数字＋級_で始まるものと、それ以降の資格名を分離
   const match = input.match(/^(\d+級)_(.*)$/);

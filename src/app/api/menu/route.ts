@@ -34,7 +34,7 @@ const quizUrlPattern =
  * マッチする場合は `{ qualification, grade, year, category }` を返す。
  */
 const parseCurrentUrl = (
-  url: string
+  url: string,
 ): {
   qualification: string;
   grade: string;
@@ -60,52 +60,52 @@ const getQualificationItems = async (): Promise<MenuItem[]> => {
         href: createPath("quiz", qualification),
         children: yearItems,
       };
-    })
+    }),
   );
 };
 
 // 級ごとのメニュー項目を取得
 const getGradeItemsByQualification = async (
-  qualification: string
+  qualification: string,
 ): Promise<MenuItem[]> => {
   const grades = await fetchGetGradesByQualification(qualification);
   return Promise.all(
     grades.map(async (grade) => {
       const yearsItems = await getYearItemsByQualificationAndGrade(
         qualification,
-        grade
+        grade,
       );
       return {
         name: grade,
         href: createPath("quiz", qualification, grade),
         children: yearsItems,
       };
-    })
+    }),
   );
 };
 
 // 年度ごとのメニュー項目を取得
 const getYearItemsByQualificationAndGrade = async (
   qualification: string,
-  grade: string
+  grade: string,
 ): Promise<MenuItem[]> => {
   const years = await fetchGetYearsByQualificationAndGrade(
     qualification,
-    grade
+    grade,
   );
   return Promise.all(
     years.map(async (year) => {
       const categoryItems = await getCategoryItemsByGradeAndYear(
         qualification,
         grade,
-        year
+        year,
       );
       return {
         name: year,
         href: createPath("quiz", qualification, grade, year),
         children: categoryItems,
       };
-    })
+    }),
   );
 };
 
@@ -113,7 +113,7 @@ const getYearItemsByQualificationAndGrade = async (
 const getCategoryItemsByGradeAndYear = async (
   qualification: string,
   grade: string,
-  year: string
+  year: string,
 ): Promise<MenuItem[]> => {
   const categories = await fetchGetCategories(qualification, grade, year);
   const allCategories = [ALL_CATEGORY, ...categories];
@@ -126,7 +126,7 @@ const getCategoryItemsByGradeAndYear = async (
 
 // 現在のURLに基づいて解いている問題のメニュー項目を取得
 const getCurrentQuestionItems = async (
-  currentUrl: string
+  currentUrl: string,
 ): Promise<MenuItem[]> => {
   const parsedUrl = parseCurrentUrl(currentUrl);
   if (!parsedUrl) return [];
@@ -137,7 +137,7 @@ const getCurrentQuestionItems = async (
     qualification,
     grade,
     year,
-    category
+    category,
   );
 
   return questions.map((question) => ({
@@ -148,7 +148,7 @@ const getCurrentQuestionItems = async (
       grade,
       year,
       category,
-      question.questionId
+      question.questionId,
     ),
   }));
 };

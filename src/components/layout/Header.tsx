@@ -7,9 +7,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-    <header className="bg-gray-900 text-white p-4 shadow-md sticky top-0 z-40">
-      <div className="flex items-center justify-between w-full">
-        <h1 className="text-sm sm:text-base md:text-lg font-bold tracking-tight truncate">
+    <header className="sticky top-0 z-40 bg-gray-900 p-4 text-white shadow-md">
+      <div className="flex w-full items-center justify-between">
+        <h1 className="truncate text-sm font-bold tracking-tight sm:text-base md:text-lg">
           {title}
         </h1>
         <div>

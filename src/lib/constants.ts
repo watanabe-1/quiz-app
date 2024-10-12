@@ -11,7 +11,7 @@ export const katakanaToNumbersMap = new Map<string, number>([
 ]);
 
 export const numberToKatakanaMap = new Map<number, string>(
-  Array.from(katakanaToNumbersMap, ([katakana, number]) => [number, katakana])
+  Array.from(katakanaToNumbersMap, ([katakana, number]) => [number, katakana]),
 );
 
 export const HEADERS_URL = "x-url";

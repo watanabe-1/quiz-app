@@ -13,7 +13,7 @@ export async function GET(
       year: string;
       category: string;
     };
-  }
+  },
 ) {
   const { qualification, grade, year, category } = params;
   const questions =

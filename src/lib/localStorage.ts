@@ -34,7 +34,7 @@ export const createAnswerHistoryKey = (
   qualification: string,
   grade: string,
   year: string,
-  questionId: number
+  questionId: number,
 ): string => {
   return `${qualification}-${grade}-${year}-${questionId}`;
 };
@@ -43,7 +43,7 @@ export const createAnswerHistoryKey = (
 export const deleteHistoryByQualificationAndYear = (
   qualification: string,
   grade: string,
-  year: string
+  year: string,
 ): void => {
   const history = getAnswerHistory();
 
@@ -65,7 +65,7 @@ export const deleteHistoryByQualificationAndYear = (
 export const getHistoryByQualificationAndYear = (
   qualification: string,
   grade: string,
-  year: string
+  year: string,
 ): AnswerHistory => {
   const history = getAnswerHistory();
 

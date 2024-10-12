@@ -31,7 +31,7 @@ const CategoriesPage = async ({ params }: { params: Params }) => {
       <Header
         title={`${qualification} - ${grade} - ${year} のカテゴリを選択してください`}
       />
-      <main className="pt-3 pr-6 pl-6">
+      <main className="pl-6 pr-6 pt-3">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByQuiz} />
         <div className="mt-3">
           <ul className="space-y-2">
@@ -43,9 +43,9 @@ const CategoriesPage = async ({ params }: { params: Params }) => {
                     qualification,
                     grade,
                     year,
-                    category
+                    category,
                   )}
-                  className="block p-4 bg-white rounded shadow hover:bg-blue-50"
+                  className="block rounded bg-white p-4 shadow hover:bg-blue-50"
                 >
                   {category === ALL_CATEGORY ? "全ての問題" : category}
                 </Link>

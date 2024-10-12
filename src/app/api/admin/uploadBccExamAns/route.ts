@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   if (!file) {
     return NextResponse.json(
       { error: "ファイルがありません" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
         // 質問データの更新
         for (const question of questions) {
           const answer = category.answers.find(
-            (ans) => ans.questionNumber === question.questionId
+            (ans) => ans.questionNumber === question.questionId,
           );
           if (answer) {
             const convertedAnswer =
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
               grade,
               year,
               question.questionId,
-              convertedAnswer
+              convertedAnswer,
             );
           }
         }
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
     console.error(error);
     return NextResponse.json(
       { error: "PDFの解析に失敗しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -111,7 +111,7 @@ function modifyGradeText(input: string): string {
 }
 
 function extractCategories(
-  text: string
+  text: string,
 ): { title: string; startIndex: number }[] {
   const categoryPattern = /【[0-9０-９]級[^】]+】/g;
   const categories = [];
@@ -128,7 +128,7 @@ function extractCategories(
 }
 
 function extractSections(
-  text: string
+  text: string,
 ): { category: string; sectionText: string }[] {
   const categories = extractCategories(text);
   const sections = [];
@@ -139,7 +139,7 @@ function extractSections(
 
     const sectionText = text.substring(
       currentCategory.startIndex,
-      nextCategory ? nextCategory.startIndex : text.length // 次のカテゴリの開始位置まで
+      nextCategory ? nextCategory.startIndex : text.length, // 次のカテゴリの開始位置まで
     );
 
     sections.push({

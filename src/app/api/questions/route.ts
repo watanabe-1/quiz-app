@@ -7,7 +7,7 @@ export async function GET() {
   if (!qualifications) {
     return NextResponse.json(
       { error: "Qualifications not found" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 

@@ -55,11 +55,11 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="max-w-md w-full bg-white p-6 rounded shadow">
-        <h1 className="text-2xl font-bold mb-6 text-center">サインイン</h1>
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md rounded bg-white p-6 shadow">
+        <h1 className="mb-6 text-center text-2xl font-bold">サインイン</h1>
         {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+          <div className="mb-4 rounded bg-red-100 p-3 text-red-700">
             {error}
           </div>
         )}
@@ -77,7 +77,7 @@ const SignInForm = () => {
               onChange={(e) =>
                 setUserInfo({ ...userInfo, username: e.target.value })
               }
-              className="w-full p-2 border rounded"
+              className="w-full rounded border p-2"
               required
             />
           </div>
@@ -94,14 +94,14 @@ const SignInForm = () => {
               onChange={(e) =>
                 setUserInfo({ ...userInfo, password: e.target.value })
               }
-              className="w-full p-2 border rounded"
+              className="w-full rounded border p-2"
               required
             />
           </div>
           <button
             type="submit"
-            className={`w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200 ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            className={`w-full rounded bg-blue-600 py-2 text-white transition duration-200 hover:bg-blue-700 ${
+              isLoading ? "cursor-not-allowed opacity-50" : ""
             }`}
             disabled={isLoading}
           >

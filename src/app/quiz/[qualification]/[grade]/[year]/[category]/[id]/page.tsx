@@ -30,10 +30,10 @@ const QuestionPage = async ({ params }: { params: Params }) => {
     qualification,
     grade,
     year,
-    category
+    category,
   );
   const question = questions.find(
-    (question) => question.questionId === questionId
+    (question) => question.questionId === questionId,
   );
   const questionIdAnswers = questions.map((question) => ({
     questionId: question.questionId,
@@ -48,7 +48,7 @@ const QuestionPage = async ({ params }: { params: Params }) => {
         } `}
       />
       <main>
-        <div className="pt-3 pr-6 pl-6">
+        <div className="pl-6 pr-6 pt-3">
           <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByQuiz} />
         </div>
         <div className="mt-3">

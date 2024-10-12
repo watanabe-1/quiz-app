@@ -11,13 +11,13 @@ const HomePage = async () => {
     <div>
       <Header title="過去問テストサイトへようこそ" />
       <main className="p-6">
-        <h2 className="text-xl font-semibold mb-4">資格を選択してください</h2>
+        <h2 className="mb-4 text-xl font-semibold">資格を選択してください</h2>
         <ul className="space-y-2">
           {qualifications.map((qualification) => (
             <li key={qualification}>
               <Link
                 href={createPath("quiz", qualification)}
-                className="block p-4 bg-white rounded shadow hover:bg-blue-50"
+                className="block rounded bg-white p-4 shadow hover:bg-blue-50"
               >
                 {qualification}
               </Link>

@@ -14,13 +14,13 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>(
-    {}
+    {},
   );
   const pathname = usePathname();
 
   const { data: menuItems, error } = useSWR<MenuItem[]>(
     `/api/menu?path=${encodeURIComponent(pathname)}`,
-    fetcher
+    fetcher,
   );
 
   const toggleMenu = () => {
@@ -55,7 +55,7 @@ const Menu: React.FC = () => {
           <>
             <button
               onClick={() => toggleSubmenu(`${item.href}${item.name}`)}
-              className={`flex items-center justify-between w-full px-4 py-2 text-left hover:bg-gray-700 focus:outline-none transition-all duration-300 ease-in-out ${
+              className={`flex w-full items-center justify-between px-4 py-2 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none ${
                 depth > 0 ? "pl-4" : ""
               }`}
             >
@@ -80,7 +80,7 @@ const Menu: React.FC = () => {
         ) : (
           <Link
             href={item.href || "#"}
-            className={`block px-4 py-2 hover:bg-gray-700 transition-all duration-300 ease-in-out ${
+            className={`block px-4 py-2 transition-all duration-300 ease-in-out hover:bg-gray-700 ${
               depth > 0 ? "pl-6" : ""
             }`}
             onClick={toggleMenu}
@@ -110,7 +110,7 @@ const Menu: React.FC = () => {
       {/* オーバーレイ */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ease-in-out"
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
           aria-hidden="true"
           onClick={toggleMenu}
         ></div>
@@ -119,20 +119,20 @@ const Menu: React.FC = () => {
       {/* メニューコンテンツ */}
       <div
         id="menu"
-        className={`fixed top-0 right-0 h-full w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out z-50 flex flex-col ${
+        className={`fixed right-0 top-0 z-50 flex h-full w-64 transform flex-col bg-gray-800 text-white transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* メニュー内の閉じるボタン */}
         <button
           onClick={toggleMenu}
-          className="text-white p-4 focus:outline-none"
+          className="p-4 text-white focus:outline-none"
         >
           <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>
 
         {/* メニュー項目 */}
-        <nav className="mt-2 px-4 flex-1 overflow-y-auto">
+        <nav className="mt-2 flex-1 overflow-y-auto px-4">
           {error ? (
             <ErrorState />
           ) : !menuItems ? (

@@ -68,7 +68,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      questionData
+      questionData,
     );
     expect(saveResult).toBe(true);
 
@@ -110,13 +110,13 @@ describe("quizService", () => {
       qualificationName,
       gradeName1,
       yearValue,
-      questionData1
+      questionData1,
     );
     await saveQuestions(
       qualificationName,
       gradeName2,
       yearValue,
-      questionData2
+      questionData2,
     );
 
     const grades = await getGradesByQualification(qualificationName);
@@ -157,18 +157,18 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue1,
-      questionData1
+      questionData1,
     );
     await saveQuestions(
       qualificationName,
       gradeName,
       yearValue2,
-      questionData2
+      questionData2,
     );
 
     const years = await getYearsByQualificationAndGrade(
       qualificationName,
-      gradeName
+      gradeName,
     );
     expect(years).toEqual(expect.arrayContaining([yearValue1, yearValue2]));
   });
@@ -204,7 +204,7 @@ describe("quizService", () => {
     const questions = await getQuestions(
       qualificationName,
       gradeName,
-      yearValue
+      yearValue,
     );
 
     expect(questions.length).toBe(2);
@@ -237,7 +237,7 @@ describe("quizService", () => {
           ]),
           answer: 1,
         }),
-      ])
+      ]),
     );
   });
 
@@ -272,7 +272,7 @@ describe("quizService", () => {
     const categories = await getCategories(
       qualificationName,
       gradeName,
-      yearValue
+      yearValue,
     );
     expect(categories).toEqual(expect.arrayContaining(["数学", "科学"]));
   });
@@ -309,7 +309,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      "数学"
+      "数学",
     );
     expect(mathQuestions.length).toBe(1);
     expect(mathQuestions[0].question.text).toBe("2 + 2 は何ですか？");
@@ -318,7 +318,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      "科学"
+      "科学",
     );
     expect(scienceQuestions.length).toBe(1);
     expect(scienceQuestions[0].question.text).toBe("H2O は何ですか？");
@@ -359,7 +359,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      updatedQuestionData
+      updatedQuestionData,
     );
     expect(saveResult).toBe(true);
 
@@ -367,7 +367,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      1
+      1,
     );
     expect(question?.question.text).toBe("2 + 3 は何ですか？");
     expect(question?.options).toEqual(
@@ -375,7 +375,7 @@ describe("quizService", () => {
         expect.objectContaining({ text: "4" }),
         expect.objectContaining({ text: "5" }),
         expect.objectContaining({ text: "6" }),
-      ])
+      ]),
     );
   });
 
@@ -398,7 +398,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      questionData
+      questionData,
     );
     expect(saveResult).toBe(true);
 
@@ -406,7 +406,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      2
+      2,
     );
     expect(question).not.toBeUndefined();
     expect(question?.question.text).toBe("H2O は何ですか？");
@@ -437,7 +437,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      1
+      1,
     );
     expect(question).not.toBeUndefined();
     expect(question?.question.text).toBe("2 + 2 は何ですか？");
@@ -491,7 +491,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      1
+      1,
     );
     expect(exists).toBe(true);
   });
@@ -521,7 +521,7 @@ describe("quizService", () => {
       qualificationName,
       gradeName,
       yearValue,
-      1
+      1,
     );
     expect(question?.answer).toBe(1);
   });

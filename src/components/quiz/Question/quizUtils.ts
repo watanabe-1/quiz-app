@@ -6,14 +6,14 @@ export const calculateCorrectCount = (
   qualification: string,
   grade: string,
   year: string,
-  history: AnswerHistory
+  history: AnswerHistory,
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
     const key = createAnswerHistoryKey(
       qualification,
       grade,
       year,
-      idAnswer.questionId
+      idAnswer.questionId,
     );
     const storedAnswer = history[key];
     if (storedAnswer === idAnswer.answer) {
@@ -28,14 +28,14 @@ export const calculateAnsweredCount = (
   qualification: string,
   grade: string,
   year: string,
-  history: AnswerHistory
+  history: AnswerHistory,
 ): number => {
   return questionIdAnswers.reduce((count, idAnswer) => {
     const key = createAnswerHistoryKey(
       qualification,
       grade,
       year,
-      idAnswer.questionId
+      idAnswer.questionId,
     );
     if (history[key] !== undefined) {
       return count + 1;

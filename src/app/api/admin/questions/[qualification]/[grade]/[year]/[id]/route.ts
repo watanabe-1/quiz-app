@@ -8,7 +8,7 @@ export async function PUT(
     params,
   }: {
     params: { qualification: string; grade: string; year: string; id: string };
-  }
+  },
 ) {
   const { qualification, grade, year, id } = params;
   const questionId = parseInt(id);
@@ -22,13 +22,13 @@ export async function PUT(
     qualification,
     grade,
     year,
-    updatedQuestion
+    updatedQuestion,
   );
 
   if (!success) {
     return NextResponse.json(
       { error: "Failed to update question" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

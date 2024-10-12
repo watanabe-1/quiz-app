@@ -36,7 +36,7 @@ const ReportModal: FC<ReportModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div>
-        <h2 className="text-xl font-bold mb-4">成績レポート</h2>
+        <h2 className="mb-4 text-xl font-bold">成績レポート</h2>
         <div className="mb-4">
           <div>{`${qualification} - ${grade} - ${year} - ${
             category === ALL_CATEGORY ? "全ての問題" : category
@@ -45,8 +45,8 @@ const ReportModal: FC<ReportModalProps> = ({
           <div>正解数: {correctCount}</div>
           <div>解答済みの問題数: {answeredCount}</div>
           <div className="mt-4">
-            <h3 className="text-lg font-semibold mb-2">解答済みの問題</h3>
-            <table className="table-auto w-full border-collapse border border-gray-300">
+            <h3 className="mb-2 text-lg font-semibold">解答済みの問題</h3>
+            <table className="w-full table-auto border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-200">
                   <th className="border border-gray-300 px-4 py-2">問題番号</th>
@@ -64,9 +64,9 @@ const ReportModal: FC<ReportModalProps> = ({
                           qualification,
                           grade,
                           year,
-                          qAnswer.questionId
+                          qAnswer.questionId,
                         )
-                      ] !== undefined
+                      ] !== undefined,
                   )
                   .map((qAnswer) => {
                     const isCorrect =
@@ -75,7 +75,7 @@ const ReportModal: FC<ReportModalProps> = ({
                           qualification,
                           grade,
                           year,
-                          qAnswer.questionId
+                          qAnswer.questionId,
                         )
                       ] === qAnswer.answer;
                     const questionLink = createPath(
@@ -84,7 +84,7 @@ const ReportModal: FC<ReportModalProps> = ({
                       grade,
                       year,
                       category,
-                      qAnswer.questionId
+                      qAnswer.questionId,
                     );
 
                     return (

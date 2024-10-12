@@ -20,7 +20,7 @@ const QualificationAdminPage = async ({ params }: { params: Params }) => {
 
   return (
     <div>
-      <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
+      <header className="flex items-center justify-between bg-gray-800 p-4 text-white">
         <h1 className="text-2xl font-bold">{qualification} の管理</h1>
         <Link href="/api/auth/signout" className="text-sm underline">
           サインアウト
@@ -28,11 +28,11 @@ const QualificationAdminPage = async ({ params }: { params: Params }) => {
       </header>
       <main className="p-6">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
-        <h2 className="text-xl font-semibold mb-4">級一覧</h2>
+        <h2 className="mb-4 text-xl font-semibold">級一覧</h2>
         <ul className="space-y-2">
           {grades.map((grade) => (
-            <li key={grade} className="p-4 bg-white rounded shadow">
-              <div className="flex justify-between items-center">
+            <li key={grade} className="rounded bg-white p-4 shadow">
+              <div className="flex items-center justify-between">
                 <span>{grade}</span>
                 <Link
                   href={createPath("admin", qualification, grade)}

@@ -27,7 +27,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
   const id = decodeURIComponent(params.id);
   const { data: questionData, error } = useSWR<QuestionData>(
     createPath("api/questions", qualification, grade, year, ALL_CATEGORY, id),
-    fetcher
+    fetcher,
   );
   const [formData, setFormData] = useState<QuestionData | null>(null);
   const router = useRouter();
@@ -46,7 +46,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: "question" | "option",
     index?: number,
-    subField?: "explanationImage"
+    subField?: "explanationImage",
   ) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -108,7 +108,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
   const handleImageRemove = (
     field: "question" | "option",
     index?: number,
-    subField?: "explanationImage"
+    subField?: "explanationImage",
   ) => {
     if (field === "question") {
       setFormData({
@@ -135,7 +135,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field?: "question" | "category" | "option",
     index?: number,
-    subField?: "explanation"
+    subField?: "explanation",
   ) => {
     const { name, value } = e.target;
     if (field === "question") {
@@ -179,7 +179,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      }
+      },
     );
     if (res.ok) {
       alert("問題を更新しました。");
@@ -192,7 +192,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
-      <h1 className="text-2xl font-bold mb-4">問題の編集</h1>
+      <h1 className="mb-4 text-2xl font-bold">問題の編集</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* 問題文 */}
         <div>
@@ -201,7 +201,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
             name="text"
             value={formData.question.text || ""}
             onChange={(e) => handleChange(e, "question")}
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             rows={4}
           />
         </div>
@@ -227,7 +227,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
               <button
                 type="button"
                 onClick={() => handleImageRemove("question")}
-                className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
               >
                 画像を削除
               </button>
@@ -241,21 +241,21 @@ const EditQuestion = ({ params }: { params: Params }) => {
             name="category"
             value={formData.category}
             onChange={(e) => handleChange(e, "category")}
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
           />
         </div>
         {/* 選択肢と解説 */}
         <div>
           <label className="block font-medium">選択肢と解説:</label>
           {formData.options.map((option, index) => (
-            <div key={index} className="mb-6 border p-4 rounded">
+            <div key={index} className="mb-6 rounded border p-4">
               <div className="mb-2">
                 <label className="block font-medium">選択肢 {index + 1}:</label>
                 <input
                   name="text"
                   value={option.text}
                   onChange={(e) => handleChange(e, "option", index)}
-                  className="w-full p-2 border rounded mb-2"
+                  className="mb-2 w-full rounded border p-2"
                 />
                 <label className="block font-medium">選択肢画像:</label>
                 <input
@@ -277,7 +277,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
                     <button
                       type="button"
                       onClick={() => handleImageRemove("option", index)}
-                      className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                      className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
                     >
                       画像を削除
                     </button>
@@ -292,7 +292,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
                   onChange={(e) =>
                     handleChange(e, "option", index, "explanation")
                   }
-                  className="w-full p-2 border rounded mb-2"
+                  className="mb-2 w-full rounded border p-2"
                   rows={2}
                 />
                 <label className="block font-medium">解説画像:</label>
@@ -319,7 +319,7 @@ const EditQuestion = ({ params }: { params: Params }) => {
                       onClick={() =>
                         handleImageRemove("option", index, "explanationImage")
                       }
-                      className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                      className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
                     >
                       画像を削除
                     </button>
@@ -341,12 +341,12 @@ const EditQuestion = ({ params }: { params: Params }) => {
             onChange={(e) =>
               setFormData({ ...formData!, answer: parseInt(e.target.value) })
             }
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
           />
         </div>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           更新
         </button>

@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
           // Compare the entered password with the hashed password
           const isPasswordValid = await bcrypt.compare(
             password,
-            adminPasswordHash
+            adminPasswordHash,
           );
           if (isPasswordValid) {
             return { id: "1", name: "Admin", role: "admin" };
@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
         // Return null if authentication fails
         throw new Error(
           process.env.AUTH_ERROR_MESSAGE ||
-            "ユーザー名またはパスワードが正しくありません"
+            "ユーザー名またはパスワードが正しくありません",
         );
       },
     }),

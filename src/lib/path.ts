@@ -3,7 +3,7 @@ export const createPath = (
   ...segments: (string | number)[]
 ): string => {
   const encodedSegments = segments.map((segment) =>
-    encodeURIComponent(segment.toString())
+    encodeURIComponent(segment.toString()),
   );
   return `/${basePath}/${encodedSegments.join("/")}`;
 };

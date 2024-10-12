@@ -7,7 +7,7 @@ export async function GET(
     params,
   }: {
     params: { qualification: string; grade: string };
-  }
+  },
 ) {
   const { qualification, grade } = params;
   const years = await getYearsByQualificationAndGrade(qualification, grade);

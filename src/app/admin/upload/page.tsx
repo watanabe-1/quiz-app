@@ -24,7 +24,7 @@ const UploadPage = () => {
         setYear(yearPart);
       } else {
         alert(
-          "ファイル名の形式が正しくありません。資格名_級_年度の形式にしてください。"
+          "ファイル名の形式が正しくありません。資格名_級_年度の形式にしてください。",
         );
       }
     }
@@ -58,7 +58,7 @@ const UploadPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold mb-4">問題データのアップロード</h1>
+      <h1 className="mb-4 text-2xl font-bold">問題データのアップロード</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-medium">資格名</label>
@@ -66,7 +66,7 @@ const UploadPage = () => {
             type="text"
             value={qualification}
             onChange={(e) => setQualification(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             disabled={autoFill} // 自動入力がオンの時は手動入力を無効化
           />
         </div>
@@ -76,7 +76,7 @@ const UploadPage = () => {
             type="text"
             value={grade}
             onChange={(e) => setGrade(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             disabled={autoFill}
           />
         </div>
@@ -86,7 +86,7 @@ const UploadPage = () => {
             type="text"
             value={year}
             onChange={(e) => setYear(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full rounded border p-2"
             disabled={autoFill}
           />
         </div>
@@ -112,7 +112,7 @@ const UploadPage = () => {
         </div>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           アップロード
         </button>

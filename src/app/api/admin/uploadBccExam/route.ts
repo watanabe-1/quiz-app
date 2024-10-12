@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   if (!file) {
     return NextResponse.json(
       { error: "ファイルがありません" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     if (!success) {
       return NextResponse.json(
         { error: "データベースへの保存に失敗しました" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     console.error(error);
     return NextResponse.json(
       { error: "PDFの解析に失敗しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -91,7 +91,7 @@ function parseProblems(text: string): QuestionData[] {
   while ((match = problemRegex.exec(targetText2)) !== null && match[0] != "") {
     // 全角数字を半角数字に変換
     const idStr = match[1].replace(/[０-９]/g, (s) =>
-      String.fromCharCode(s.charCodeAt(0) - 0xfee0)
+      String.fromCharCode(s.charCodeAt(0) - 0xfee0),
     );
     const id = parseInt(idStr, 10);
     const content = match[2].trim();

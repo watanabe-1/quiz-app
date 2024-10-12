@@ -22,7 +22,7 @@ const GradesPage = async ({ params }: { params: Params }) => {
   return (
     <div>
       <Header title={`${qualification}の級を選択`} />
-      <main className="pt-3 pr-6 pl-6">
+      <main className="pl-6 pr-6 pt-3">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByQuiz} />
         <div className="mt-3">
           <ul className="space-y-2">
@@ -30,7 +30,7 @@ const GradesPage = async ({ params }: { params: Params }) => {
               <li key={grade}>
                 <Link
                   href={createPath("quiz", qualification, grade)}
-                  className="block p-4 bg-white rounded shadow hover:bg-blue-50"
+                  className="block rounded bg-white p-4 shadow hover:bg-blue-50"
                 >
                   {grade}
                 </Link>

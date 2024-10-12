@@ -25,7 +25,7 @@ const Breadcrumb = ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
 
   return (
     <nav aria-label="breadcrumb">
-      <ol className="flex flex-wrap items-center space-x-1 sm:space-x-2 text-sm sm:text-base break-words">
+      <ol className="flex flex-wrap items-center space-x-1 break-words text-sm sm:space-x-2 sm:text-base">
         <li>
           <Link href="/" className="text-green-500 hover:underline">
             ホーム
@@ -35,7 +35,7 @@ const Breadcrumb = ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
           (breadcrumb, index) =>
             !nonLinkableSegments.some(
               (segment) =>
-                segment.label === breadcrumb.label && segment.index === index
+                segment.label === breadcrumb.label && segment.index === index,
             ) && (
               <li key={index} className="flex items-center break-words">
                 <span className="mx-1 sm:mx-2">»</span>
@@ -50,7 +50,7 @@ const Breadcrumb = ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
                   </Link>
                 )}
               </li>
-            )
+            ),
         )}
       </ol>
     </nav>

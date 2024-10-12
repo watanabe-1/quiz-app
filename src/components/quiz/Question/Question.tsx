@@ -44,7 +44,7 @@ const Question: React.FC<QuestionProps> = ({
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [shouldScroll, setShouldScroll] = useState(false);
   const [history, setHistory] = useState<AnswerHistory>(() =>
-    getAnswerHistory()
+    getAnswerHistory(),
   );
 
   const explanationRef = useRef<HTMLDivElement | null>(null);
@@ -56,7 +56,7 @@ const Question: React.FC<QuestionProps> = ({
         qualification,
         grade,
         year,
-        question.questionId
+        question.questionId,
       );
       if (history[key] !== undefined) {
         setSelectedOption(history[key]);
@@ -74,14 +74,14 @@ const Question: React.FC<QuestionProps> = ({
         qualification,
         grade,
         year,
-        history
+        history,
       );
       const totalAnswered = calculateAnsweredCount(
         questionIdAnswers,
         qualification,
         grade,
         year,
-        history
+        history,
       );
       setCorrectCount(totalCorrect);
       setAnsweredCount(totalAnswered);
@@ -117,7 +117,7 @@ const Question: React.FC<QuestionProps> = ({
         qualification,
         grade,
         year,
-        question.questionId
+        question.questionId,
       );
       const updatedHistory = { ...history, [key]: index };
       setHistory(updatedHistory);
@@ -125,7 +125,7 @@ const Question: React.FC<QuestionProps> = ({
       setSelectedOption(index);
       setShouldScroll(true);
     },
-    [qualification, grade, year, question, history]
+    [qualification, grade, year, question, history],
   );
 
   const handleResetAnswer = useCallback(() => {
@@ -134,7 +134,7 @@ const Question: React.FC<QuestionProps> = ({
       qualification,
       grade,
       year,
-      question.questionId
+      question.questionId,
     );
 
     // Create a shallow copy and remove the specific key
@@ -167,24 +167,24 @@ const Question: React.FC<QuestionProps> = ({
       : "0.0";
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow flex flex-col min-h-screen">
+    <div className="mx-auto flex min-h-screen max-w-2xl flex-col rounded bg-white p-6 shadow">
       <div className="flex-grow">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between text-left text-sm text-gray-600 mb-2">
+        <div className="mb-2 flex flex-col text-left text-sm text-gray-600 md:flex-row md:items-center md:justify-between">
           <span>{`【前問まで】正解数 ${correctCount} / ${answeredCount} 問中 正答率 ${accuracy}%`}</span>
           <button
             onClick={toggleReportModal}
-            className="mt-2 md:mt-0 border border-green-500 text-green-500 rounded px-4 py-2 hover:bg-green-500 hover:text-white transition-colors"
+            className="mt-2 rounded border border-green-500 px-4 py-2 text-green-500 transition-colors hover:bg-green-500 hover:text-white md:mt-0"
             aria-label="成績詳細を表示"
           >
             成績詳細
           </button>
         </div>
-        <div className="text-right text-sm text-gray-600 mb-4">
+        <div className="mb-4 text-right text-sm text-gray-600">
           {currentIndex + 1} / {questionIds.length} 問
         </div>
         <div className="mb-4">
           {question.question.text && (
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="mb-2 text-xl font-semibold">
               {`問題${question.questionId} ${question.question.text}`}
             </h2>
           )}
@@ -217,7 +217,7 @@ const Question: React.FC<QuestionProps> = ({
       {/* 解答リセットボタン */}
       <button
         onClick={handleResetAnswer}
-        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+        className="mt-4 rounded bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
       >
         解答をリセットする
       </button>
@@ -228,7 +228,7 @@ const Question: React.FC<QuestionProps> = ({
       )}
 
       {/* ナビゲーションボタン */}
-      <div className="flex justify-between mt-6">
+      <div className="mt-6 flex justify-between">
         {prevQuestionId ? (
           <Link
             href={createPath(
@@ -237,9 +237,9 @@ const Question: React.FC<QuestionProps> = ({
               grade,
               year,
               category,
-              prevQuestionId
+              prevQuestionId,
             )}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
             前の問題
           </Link>
@@ -254,9 +254,9 @@ const Question: React.FC<QuestionProps> = ({
               grade,
               year,
               category,
-              nextQuestionId
+              nextQuestionId,
             )}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
             次の問題
           </Link>

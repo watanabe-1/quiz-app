@@ -16,7 +16,7 @@ const ExportPage = () => {
   // 資格一覧を取得
   const { data: qualifications, error: qualificationsError } = useSWR(
     "/api/questions",
-    fetcher
+    fetcher,
   );
 
   // 選択された資格の級一覧を取得
@@ -24,7 +24,7 @@ const ExportPage = () => {
     selectedQualification
       ? createPath("api/questions", selectedQualification)
       : null,
-    fetcher
+    fetcher,
   );
 
   // 選択された資格と級の年度一覧を取得
@@ -32,7 +32,7 @@ const ExportPage = () => {
     selectedQualification && selectedGrade
       ? createPath("api/questions", selectedQualification, selectedGrade)
       : null,
-    fetcher
+    fetcher,
   );
 
   const handleDownload = async () => {
@@ -48,7 +48,7 @@ const ExportPage = () => {
         `/api/admin/exportQuestions?${params.toString()}`,
         {
           method: "GET",
-        }
+        },
       );
 
       if (!response.ok) {

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   if (!success) {
     return NextResponse.json(
       { error: "データベースへの保存に失敗しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

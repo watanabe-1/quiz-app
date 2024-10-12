@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     "images",
     safeQualification,
     safeYear,
-    safeTargetDir
+    safeTargetDir,
   );
   const savePath = path.join(saveDir, fileName);
 

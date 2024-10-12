@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     if (!qualification || !grade) {
       return NextResponse.json(
         { error: "Qualification and grade parameters are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         qualification,
         grade,
         year,
-        ALL_CATEGORY
+        ALL_CATEGORY,
       );
 
       if (questionsData.length > 0) {
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
       // 資格と級が指定された場合、すべての年度を対象にデータを取得
       const years = await fetchGetYearsByQualificationAndGrade(
         qualification,
-        grade
+        grade,
       );
 
       for (const yr of years) {
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
           qualification,
           grade,
           yr,
-          ALL_CATEGORY
+          ALL_CATEGORY,
         );
 
         if (questionsData.length > 0) {
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
       : `${qualification}_${grade}.zip`;
     headers.append(
       "Content-Disposition",
-      `attachment; filename=${encodeURIComponent(fileName)}`
+      `attachment; filename=${encodeURIComponent(fileName)}`,
     );
 
     return new NextResponse(content, {
@@ -83,7 +83,7 @@ export async function GET(req: NextRequest) {
     console.error("Error exporting questions:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

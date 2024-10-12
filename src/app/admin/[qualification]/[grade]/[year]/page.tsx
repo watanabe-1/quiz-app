@@ -24,12 +24,12 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
     qualification,
     grade,
     year,
-    ALL_CATEGORY
+    ALL_CATEGORY,
   );
 
   return (
     <div>
-      <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
+      <header className="flex items-center justify-between bg-gray-800 p-4 text-white">
         <h1 className="text-2xl font-bold">
           {qualification} - {grade} - {year} の管理
         </h1>
@@ -39,14 +39,14 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
       </header>
       <main className="p-6">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
-        <h2 className="text-xl font-semibold mb-4">問題一覧</h2>
+        <h2 className="mb-4 text-xl font-semibold">問題一覧</h2>
         <ul className="space-y-2">
           {questions.map((question) => (
             <li
               key={question.questionId}
-              className="p-4 bg-white rounded shadow"
+              className="rounded bg-white p-4 shadow"
             >
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <span>
                   {`問題${question.questionId} ${question.question.text}` ||
                     "（テキストなし）"}
@@ -58,7 +58,7 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
                     grade,
                     year,
                     "edit",
-                    question.questionId
+                    question.questionId,
                   )}
                   className="text-blue-600 hover:underline"
                 >

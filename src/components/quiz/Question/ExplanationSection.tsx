@@ -10,7 +10,7 @@ interface ExplanationSectionProps {
 const ExplanationSection = forwardRef<HTMLDivElement, ExplanationSectionProps>(
   ({ question }, ref) => {
     return (
-      <div ref={ref} className="mt-6 p-4 border-t">
+      <div ref={ref} className="mt-6 border-t p-4">
         {/* 正答の表示 */}
         <div className="mt-4">
           <strong>答え:</strong>{" "}
@@ -21,7 +21,7 @@ const ExplanationSection = forwardRef<HTMLDivElement, ExplanationSectionProps>(
         {/* 問題の解説 */}
         {question.explanation && (
           <>
-            <h3 className="text-lg font-semibold mb-2 mt-4">問題の解説</h3>
+            <h3 className="mb-2 mt-4 text-lg font-semibold">問題の解説</h3>
             {question.explanation.text && (
               <div className="mb-2">
                 <strong>説明:</strong> {question.explanation.text}
@@ -42,8 +42,8 @@ const ExplanationSection = forwardRef<HTMLDivElement, ExplanationSectionProps>(
 
         {/* 選択肢の解説 */}
         {question.options.some(
-          (option) => option.explanation?.text || option.explanation?.image
-        ) && <h3 className="text-lg font-semibold mb-2 mt-4">選択肢の解説</h3>}
+          (option) => option.explanation?.text || option.explanation?.image,
+        ) && <h3 className="mb-2 mt-4 text-lg font-semibold">選択肢の解説</h3>}
         {question.options.map((option, index) =>
           option.explanation ? (
             <div key={index} className="mb-4">
@@ -64,11 +64,11 @@ const ExplanationSection = forwardRef<HTMLDivElement, ExplanationSectionProps>(
                 />
               )}
             </div>
-          ) : null
+          ) : null,
         )}
       </div>
     );
-  }
+  },
 );
 
 ExplanationSection.displayName = "ExplanationSection";

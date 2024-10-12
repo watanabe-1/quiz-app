@@ -14,7 +14,7 @@ export async function getAllQualifications(): Promise<string[]> {
 
 // 指定した資格の級一覧を取得
 export async function getGradesByQualification(
-  qualification: string
+  qualification: string,
 ): Promise<string[]> {
   const grades = await prisma.grade.findMany({
     where: {
@@ -37,7 +37,7 @@ export async function getGradesByQualification(
 // 指定した資格、級の年度一覧を取得
 export async function getYearsByQualificationAndGrade(
   qualification: string,
-  grade: string
+  grade: string,
 ): Promise<string[]> {
   const years = await prisma.year.findMany({
     where: {
@@ -64,7 +64,7 @@ export async function getYearsByQualificationAndGrade(
 export async function getQuestions(
   qualification: string,
   grade: string,
-  year: string
+  year: string,
 ): Promise<QuestionData[]> {
   const questions = await prisma.questionData.findMany({
     where: {
@@ -143,7 +143,7 @@ export async function getQuestions(
 export async function getCategories(
   qualification: string,
   grade: string,
-  year: string
+  year: string,
 ): Promise<string[]> {
   const categories = await prisma.category.findMany({
     where: {
@@ -174,7 +174,7 @@ export async function getQuestionsByCategory(
   qualification: string,
   grade: string,
   year: string,
-  categoryName: string
+  categoryName: string,
 ): Promise<QuestionData[]> {
   const questions = await prisma.questionData.findMany({
     where: {
@@ -256,7 +256,7 @@ export async function getQuestionById(
   qualification: string,
   grade: string,
   year: string,
-  id: number
+  id: number,
 ): Promise<QuestionData | undefined> {
   const question = await prisma.questionData.findFirst({
     where: {
@@ -334,7 +334,7 @@ export async function getQuestionById(
 // 資格の取得または作成
 async function getOrCreateQualification(
   prismaClient: Prisma.TransactionClient,
-  qualificationName: string
+  qualificationName: string,
 ) {
   return await prismaClient.qualification.upsert({
     where: { name: qualificationName },
@@ -346,7 +346,7 @@ async function getOrCreateQualification(
 // 級の取得または作成
 async function getOrCreateGrade(
   prismaClient: Prisma.TransactionClient,
-  gradeName: string
+  gradeName: string,
 ) {
   return await prismaClient.grade.upsert({
     where: { name: gradeName },
@@ -358,7 +358,7 @@ async function getOrCreateGrade(
 // 年度の取得または作成
 async function getOrCreateYear(
   prismaClient: Prisma.TransactionClient,
-  yearValue: string
+  yearValue: string,
 ) {
   return await prismaClient.year.upsert({
     where: { year: yearValue },
@@ -371,7 +371,7 @@ async function getOrCreateYear(
 async function getOrCreateCategory(
   prismaClient: Prisma.TransactionClient,
   categoryName: string,
-  categoryCache: Map<string, { id: number }>
+  categoryCache: Map<string, { id: number }>,
 ) {
   if (categoryCache.has(categoryName)) {
     return categoryCache.get(categoryName)!;
@@ -392,13 +392,13 @@ async function processQuestionData(
   qualificationId: number,
   gradeId: number,
   yearId: number,
-  categoryCache: Map<string, { id: number }>
+  categoryCache: Map<string, { id: number }>,
 ) {
   // カテゴリーの取得または作成
   const categoryRecord = await getOrCreateCategory(
     prismaClient,
     questionData.category,
-    categoryCache
+    categoryCache,
   );
 
   // 既存のQuestionDataを確認
@@ -583,14 +583,14 @@ export async function saveQuestions(
   qualificationName: string,
   gradeName: string,
   yearValue: string,
-  questionsData: QuestionData[]
+  questionsData: QuestionData[],
 ): Promise<boolean> {
   try {
     await prisma.$transaction(
       async (prismaClient: Prisma.TransactionClient) => {
         const qualification = await getOrCreateQualification(
           prismaClient,
-          qualificationName
+          qualificationName,
         );
         const grade = await getOrCreateGrade(prismaClient, gradeName);
         const year = await getOrCreateYear(prismaClient, yearValue);
@@ -604,14 +604,14 @@ export async function saveQuestions(
             qualification.id,
             grade.id,
             year.id,
-            categoryCache
+            categoryCache,
           );
         }
       },
       {
         maxWait: 5000,
         timeout: 10000,
-      }
+      },
     );
     return true;
   } catch (error) {
@@ -625,14 +625,14 @@ export async function saveQuestion(
   qualificationName: string,
   gradeName: string,
   yearValue: string,
-  questionData: QuestionData
+  questionData: QuestionData,
 ): Promise<boolean> {
   try {
     await prisma.$transaction(
       async (prismaClient: Prisma.TransactionClient) => {
         const qualification = await getOrCreateQualification(
           prismaClient,
-          qualificationName
+          qualificationName,
         );
         const grade = await getOrCreateGrade(prismaClient, gradeName);
         const year = await getOrCreateYear(prismaClient, yearValue);
@@ -645,13 +645,13 @@ export async function saveQuestion(
           qualification.id,
           grade.id,
           year.id,
-          categoryCache
+          categoryCache,
         );
       },
       {
         maxWait: 5000,
         timeout: 10000,
-      }
+      },
     );
     return true;
   } catch (error) {
@@ -664,7 +664,7 @@ export async function saveQuestion(
 export async function existsData(
   qualification: string,
   grade: string,
-  year: string
+  year: string,
 ): Promise<boolean> {
   const count = await prisma.questionData.count({
     where: {
@@ -687,7 +687,7 @@ export async function existsQuestion(
   qualification: string,
   grade: string,
   year: string,
-  questionId: number
+  questionId: number,
 ): Promise<boolean> {
   const count = await prisma.questionData.count({
     where: {
@@ -711,7 +711,7 @@ export async function updateQuestionAnswer(
   gradeName: string,
   yearValue: string,
   questionId: number,
-  answer: number
+  answer: number,
 ) {
   await prisma.questionData.updateMany({
     where: {

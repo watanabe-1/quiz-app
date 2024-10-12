@@ -24,15 +24,15 @@ const AnswerOption: FC<AnswerOptionProps> = ({
     ? isCorrect
       ? "bg-green-200"
       : isSelected
-      ? "bg-red-200"
-      : ""
+        ? "bg-red-200"
+        : ""
     : "hover:bg-gray-100";
 
   return (
     <li>
       <button
         onClick={() => handleOptionClick(index)}
-        className={`w-full text-left p-4 border rounded cursor-pointer ${optionClass}`}
+        className={`w-full cursor-pointer rounded border p-4 text-left ${optionClass}`}
         aria-pressed={isSelected}
       >
         <div>

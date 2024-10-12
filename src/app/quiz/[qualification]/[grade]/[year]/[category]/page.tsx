@@ -26,7 +26,7 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
     qualification,
     grade,
     year,
-    category
+    category,
   );
 
   return (
@@ -36,7 +36,7 @@ const QuestionsPage = async ({ params }: { params: Params }) => {
           category === ALL_CATEGORY ? "全ての問題" : category
         } の問題`}
       />
-      <main className="pt-3 pr-6 pl-6">
+      <main className="pl-6 pr-6 pt-3">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByQuiz} />
         <div className="mt-3">
           <Questions

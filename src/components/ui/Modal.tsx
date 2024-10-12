@@ -24,13 +24,13 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       onClick={() => {
         if (closeOnBackgroundClick) handleClose();
       }}
     >
       <div
-        className="bg-white rounded shadow-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto"
+        className="max-h-screen w-full max-w-2xl overflow-y-auto rounded bg-white p-6 shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {/* モーダルの内容 */}
@@ -38,7 +38,7 @@ const Modal: React.FC<ModalProps> = ({
           <div className="flex justify-end">
             <button
               onClick={handleClose}
-              className="text-gray-500 hover:text-gray-800 text-2xl py-2"
+              className="py-2 text-2xl text-gray-500 hover:text-gray-800"
             >
               <FaTimes />
             </button>

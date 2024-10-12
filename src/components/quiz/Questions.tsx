@@ -28,7 +28,7 @@ const Questions: React.FC<QuestionsProps> = ({
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(
-    null
+    null,
   );
   const router = useRouter();
 
@@ -39,7 +39,7 @@ const Questions: React.FC<QuestionsProps> = ({
       grade,
       year,
       category,
-      questionId
+      questionId,
     );
 
     router.push(href);
@@ -48,7 +48,7 @@ const Questions: React.FC<QuestionsProps> = ({
   const handleQuestionClick = (questionId: number) => {
     if (
       isEmptyObject(
-        getHistoryByQualificationAndYear(qualification, grade, year)
+        getHistoryByQualificationAndYear(qualification, grade, year),
       )
     ) {
       navigateToQuestionPage(questionId);
@@ -73,7 +73,7 @@ const Questions: React.FC<QuestionsProps> = ({
           <li key={question.questionId}>
             <a
               onClick={() => handleQuestionClick(question.questionId)}
-              className="block p-4 bg-white rounded shadow hover:bg-blue-50"
+              className="block rounded bg-white p-4 shadow hover:bg-blue-50"
             >
               <span>
                 {`問題${question.questionId} ${question.question.text}` ||
@@ -97,13 +97,13 @@ const Questions: React.FC<QuestionsProps> = ({
             <div className="mt-4 space-y-2">
               <button
                 onClick={() => handleModalSelection(true)}
-                className="bg-red-500 text-white px-4 py-2 rounded w-full"
+                className="w-full rounded bg-red-500 px-4 py-2 text-white"
               >
                 この年度の解答履歴をすべて消す
               </button>
               <button
                 onClick={() => handleModalSelection(false)}
-                className="bg-green-500 text-white px-4 py-2 rounded w-full"
+                className="w-full rounded bg-green-500 px-4 py-2 text-white"
               >
                 解答履歴を引き継ぐ
               </button>

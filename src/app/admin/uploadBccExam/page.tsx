@@ -52,7 +52,7 @@ const BccExamUploadPage = () => {
   return (
     <div>
       <div className="p-8">
-        <h1 className="text-2xl mb-4">PDFから問題データを抽出</h1>
+        <h1 className="mb-4 text-2xl">PDFから問題データを抽出</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="file"
@@ -67,14 +67,14 @@ const BccExamUploadPage = () => {
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="rounded bg-blue-500 px-4 py-2 text-white"
           >
             アップロードして登録
           </button>
         </form>
       </div>
       <div className="p-8">
-        <h1 className="text-2xl mb-4">PDFから解答データを抽出</h1>
+        <h1 className="mb-4 text-2xl">PDFから解答データを抽出</h1>
         <form onSubmit={handleSubmitAnswer}>
           <input
             type="file"
@@ -89,7 +89,7 @@ const BccExamUploadPage = () => {
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="rounded bg-blue-500 px-4 py-2 text-white"
           >
             アップロードして更新
           </button>

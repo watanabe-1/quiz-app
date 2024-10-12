@@ -13,7 +13,7 @@ export async function GET(
       category: string;
       id: string;
     };
-  }
+  },
 ) {
   const { qualification, grade, year, category, id } = params;
   const questionId = parseInt(id);
@@ -22,7 +22,7 @@ export async function GET(
     qualification,
     grade,
     year,
-    category
+    category,
   );
   const questionData = questions.find((q) => q.questionId === questionId);
 

@@ -21,13 +21,13 @@ const YearsPage = async ({ params }: { params: Params }) => {
   const grade = decodeURIComponent(params.grade);
   const years = await fetchGetYearsByQualificationAndGrade(
     qualification,
-    grade
+    grade,
   );
 
   return (
     <div>
       <Header title={`${qualification}の年度を選択`} />
-      <main className="pt-3 pr-6 pl-6">
+      <main className="pl-6 pr-6 pt-3">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByQuiz} />
         <div className="mt-3">
           <ul className="space-y-2">
@@ -35,7 +35,7 @@ const YearsPage = async ({ params }: { params: Params }) => {
               <li key={year}>
                 <Link
                   href={createPath("quiz", qualification, grade, year)}
-                  className="block p-4 bg-white rounded shadow hover:bg-blue-50"
+                  className="block rounded bg-white p-4 shadow hover:bg-blue-50"
                 >
                   {year}
                 </Link>

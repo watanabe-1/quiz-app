@@ -34,7 +34,7 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
 }
 
 export async function fetchGetGradesByQualification(
-  qualification: string
+  qualification: string,
 ): Promise<string[]> {
   return fetch(createApiUrl("api/questions", qualification), {
     method: "GET",
@@ -47,7 +47,7 @@ export async function fetchGetGradesByQualification(
 
 export async function fetchGetYearsByQualificationAndGrade(
   qualification: string,
-  grade: string
+  grade: string,
 ): Promise<string[]> {
   return fetch(createApiUrl("api/questions", qualification, grade), {
     method: "GET",
@@ -61,7 +61,7 @@ export async function fetchGetYearsByQualificationAndGrade(
 export async function fetchGetCategories(
   qualification: string,
   grade: string,
-  year: string
+  year: string,
 ): Promise<string[]> {
   return fetch(createApiUrl("api/questions", qualification, grade, year), {
     method: "GET",
@@ -76,7 +76,7 @@ export async function fetchGetQuestionsByCategory(
   qualification: string,
   grade: string,
   year: string,
-  category: string
+  category: string,
 ): Promise<QuestionData[]> {
   return fetch(
     createApiUrl("api/questions", qualification, grade, year, category),
@@ -86,7 +86,7 @@ export async function fetchGetQuestionsByCategory(
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_QUESTIONS],
       },
-    }
+    },
   ).then((response) => response.json());
 }
 
@@ -95,7 +95,7 @@ export async function fetchGetQuestionsByCategoryAndId(
   grade: string,
   year: string,
   category: string,
-  id: number
+  id: number,
 ): Promise<QuestionData> {
   return fetch(
     createApiUrl("api/questions", qualification, grade, year, category, id),
@@ -105,6 +105,6 @@ export async function fetchGetQuestionsByCategoryAndId(
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_ID],
       },
-    }
+    },
   ).then((response) => response.json());
 }
