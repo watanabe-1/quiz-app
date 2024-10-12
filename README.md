@@ -8,18 +8,20 @@
    - [必要な環境変数](#必要な環境変数)
    - [`.env.local` ファイルの例](#envlocal-ファイルの例)
    - [`.env` ファイルの例](#env-ファイルの例)
+   - [`.env.test` ファイルの例](#envtest-ファイルの例)
 2. [環境変数の設定-vercel](#環境変数の設定-vercel)
    - [`vercel 環境変数 の例`](#vercel 環境変数 の例)
 3. [パスワードのハッシュ化](#パスワードのハッシュ化)
    - [ハッシュ化スクリプトの実行方法](#ハッシュ化スクリプトの実行方法)
 4. [シークレットキーの生成](#シークレットキーの生成)
    - [シークレットキーの生成方法](#シークレットキーの生成方法)
+5. [利用可能なスクリプト](#利用可能なスクリプト)
 
 ---
 
 ## 環境変数の設定-ローカル
 
-ローカルマシン上で実行する場合は、プロジェクトのルートディレクトリに `.env.local` `.env` ファイルを作成し、以下の環境変数を設定してください。
+ローカルマシン上で実行する場合は、プロジェクトのルートディレクトリに `.env.local` `.env` `.env.test` ファイルを作成し、以下の環境変数を設定してください。
 これらの環境変数は、認証システムの動作に必要な情報を提供します。
 
 ### 必要な環境変数
@@ -71,6 +73,17 @@ POSTGRES_URL_NO_SSL="postgresql://${username}:${password}@localhost:${port}/${da
 POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}/${database}"
 ```
 
+### `.env.test` ファイルの例
+
+以下は、`.env.test` ファイルのサンプルです。実際の値に置き換えて使用してください。
+
+```.env.test
+# テスト環境DB接続用URL
+POSTGRES_PRISMA_URL="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
+POSTGRES_URL_NO_SSL="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
+POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
+```
+
 ## 環境変数の設定-vercel
 
 vercel にデプロイする場合は、以下の環境変数を設定してください。
@@ -116,3 +129,45 @@ openssl などを利用して生成可能です。openssl がインストール�
 ```cmd
 openssl rand -base64 32
 ```
+
+## 利用可能なスクリプト
+
+このプロジェクトでは、開発、テスト、データベース操作を管理するためにいくつかの npm スクリプトが用意されています。以下は、それぞれのコマンドとその説明です。
+
+### 開発関連
+
+#### `npm run dev`
+
+Next.js の開発サーバーをデバッグモード (`--inspect`) で起動します。Node.js プロセスのデバッグが可能で、開発時にはホットリロードや簡単なデバッグができます。
+
+#### `npm run build`
+
+Prisma クライアントを生成し、`prisma db push`を使ってデータベーススキーマを同期します。この際、`--accept-data-loss`フラグが使用されます（このフラグはデータ損失の可能性があるため、注意が必要です）。その後、Next.js アプリケーションを本番用にビルドします。
+
+#### `npm run start`
+
+Next.js アプリケーションを本番モードで起動します。このコマンドを実行する前に、`npm run build`を実行してアプリケーションをビルドする必要があります。
+
+### コードチェック
+
+#### `npm run lint`
+
+Next.js のリントツールを使用して、コードのリントチェックを実行します。このコマンドを使用して、コードの品質と一貫性を保つことができます。
+
+### テスト関連
+
+#### `npm run test`
+
+テストスイートを実行する前に、`migrate:test`コマンドを実行してテスト環境のデータベースマイグレーションをリセットし、最新のマイグレーションを適用します。環境変数には`.env.test`ファイルを使用します。マイグレーションが完了した後、Jest を使用してテストを実行します。
+
+**注意**: 別途テスト用のデータベースを設定し、必要な環境変数を`.env.test`ファイルに記載しておいてください。
+
+### データベースマイグレーション
+
+#### `npm run migrate`
+
+Prisma クライアントを生成し、`prisma db push`を使用してデータベースに最新のスキーマ変更を適用します。`--accept-data-loss`フラグは破壊的なスキーマ変更がある場合、データ損失の可能性があるため、使用には注意が必要です。
+
+#### `npm run migrate:test`
+
+`migrate`コマンドと似ていますが、テスト環境用です。`.env.test`ファイルを使用して環境変数を読み込み、`prisma migrate reset`でテストデータベースをリセットします。このコマンドは、通常テストスイートを実行する前に使用し、クリーンなデータベース状態を確保します。
