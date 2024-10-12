@@ -1,22 +1,22 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import AnswerOption from "./AnswerOption";
+import ExplanationSection from "./ExplanationSection";
+import ReportModal from "./ReportModal";
+import { calculateCorrectCount, calculateAnsweredCount } from "./quizUtils";
 import {
   AnswerHistory,
   QuestionAnswerPair,
   QuestionData,
 } from "@/@types/quizType";
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
 import {
   createAnswerHistoryKey,
   getAnswerHistory,
   setAnswerHistory,
 } from "@/lib/localStorage";
-import { calculateCorrectCount, calculateAnsweredCount } from "./quizUtils";
-import AnswerOption from "./AnswerOption";
-import ExplanationSection from "./ExplanationSection";
-import ReportModal from "./ReportModal";
 import { createPath } from "@/lib/path";
 
 interface QuestionProps {

@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { NextResponse } from "next/server";
 
 function sanitizePathSegment(segment: string): string {
   return segment.replace(/[^a-zA-Z0-9\-_]/g, "_");

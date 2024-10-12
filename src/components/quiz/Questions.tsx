@@ -1,15 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { QuestionData } from "@/@types/quizType";
+import Modal from "@/components/ui/Modal";
 import {
   deleteHistoryByQualificationAndYear,
   getHistoryByQualificationAndYear,
 } from "@/lib/localStorage";
-import { isEmptyObject } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import Modal from "@/components/ui/Modal";
 import { createPath } from "@/lib/path";
+import { isEmptyObject } from "@/lib/utils";
 
 interface QuestionsProps {
   qualification: string;

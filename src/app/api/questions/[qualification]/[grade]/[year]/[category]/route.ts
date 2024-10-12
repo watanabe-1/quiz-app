@@ -1,6 +1,6 @@
+import { NextResponse } from "next/server";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { getQuestions, getQuestionsByCategory } from "@/services/quizService";
-import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,

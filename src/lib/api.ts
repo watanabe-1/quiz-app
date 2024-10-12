@@ -1,7 +1,7 @@
-import { createApiUrl } from "@/lib/url";
+import { revalidateTag } from "next/cache";
 import { FETCH_REVALIDATE } from "./constants";
 import { QuestionData } from "@/@types/quizType";
-import { revalidateTag } from "next/cache";
+import { createApiUrl } from "@/lib/url";
 
 const TAG_QUALIFICATIONS = "qualifications";
 const TAG_GRADES = "grades";

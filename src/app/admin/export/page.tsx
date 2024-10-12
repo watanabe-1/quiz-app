@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import useSWR from "swr";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import { createPath } from "@/lib/path";
-import { useState } from "react";
-import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

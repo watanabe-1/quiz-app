@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma";
-import { QuestionData } from "@/@types/quizType";
 import { Prisma } from "@prisma/client";
+import { QuestionData } from "@/@types/quizType";
+import prisma from "@/lib/prisma";
 
 // 資格一覧を取得
 export async function getAllQualifications(): Promise<string[]> {

@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from "next/server";
 import { MenuItem } from "@/@types/quizType";
 import {
   fetchGetAllQualifications,
@@ -8,7 +9,6 @@ import {
 } from "@/lib/api";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createPath } from "@/lib/path";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   // URLからクエリパラメータを取得

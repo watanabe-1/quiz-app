@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import Modal from "@/components/ui/Modal";
-import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
 import Link from "next/link";
+import React, { FC } from "react";
+import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
+import Modal from "@/components/ui/Modal";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
 import { createPath } from "@/lib/path";

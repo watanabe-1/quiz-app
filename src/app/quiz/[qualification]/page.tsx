@@ -1,11 +1,11 @@
-import React from "react";
+import { Metadata } from "next";
 import Link from "next/link";
+import React from "react";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import { fetchGetGradesByQualification } from "@/lib/api";
+import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import { createPath } from "@/lib/path";
-import { Metadata } from "next";
 
 interface Params {
   qualification: string;

@@ -1,5 +1,5 @@
-import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
+import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 
 // 環境変数から保護するパスを取得
 const protectedPaths = process.env.PROTECTED_PATHS

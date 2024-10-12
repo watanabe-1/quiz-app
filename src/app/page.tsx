@@ -1,5 +1,5 @@
-import React from "react";
 import Link from "next/link";
+import React from "react";
 import Header from "@/components/layout/Header";
 import { fetchGetAllQualifications } from "@/lib/api";
 import { createPath } from "@/lib/path";

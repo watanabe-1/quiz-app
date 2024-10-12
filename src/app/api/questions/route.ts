@@ -1,5 +1,5 @@
-import { getAllQualifications } from "@/services/quizService";
 import { NextResponse } from "next/server";
+import { getAllQualifications } from "@/services/quizService";
 
 export async function GET() {
   const qualifications = await getAllQualifications();

@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { MenuItem } from "@/@types/quizType";
-import useSWR from "swr";
 import { usePathname } from "next/navigation";
-import LoadingState from "./LoadingState";
+import { useState, useEffect } from "react";
+import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import useSWR from "swr";
 import ErrorState from "./ErrorState";
+import LoadingState from "./LoadingState";
+import { MenuItem } from "@/@types/quizType";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

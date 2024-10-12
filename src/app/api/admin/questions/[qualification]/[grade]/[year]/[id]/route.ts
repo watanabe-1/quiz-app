@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { existsQuestion, saveQuestion } from "@/services/quizService";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
+import { existsQuestion, saveQuestion } from "@/services/quizService";
 
 export async function PUT(
   request: Request,

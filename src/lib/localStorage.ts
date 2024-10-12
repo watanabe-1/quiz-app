@@ -1,7 +1,7 @@
 "use client";
 
-import { AnswerHistory } from "@/@types/quizType";
 import { ANSWER_HISTORY_KEY } from "./constants";
+import { AnswerHistory } from "@/@types/quizType";
 
 // Utility function to get history from localStorage
 export const getAnswerHistory = (): AnswerHistory => {

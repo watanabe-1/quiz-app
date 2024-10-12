@@ -1,10 +1,10 @@
+import { Metadata } from "next";
 import React from "react";
-import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import Questions from "@/components/quiz/Questions";
 import Header from "@/components/layout/Header";
+import Questions from "@/components/quiz/Questions";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
-import { Metadata } from "next";
+import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 
 interface Params {
   qualification: string;

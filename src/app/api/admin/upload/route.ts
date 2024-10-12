@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { saveQuestions } from "@/services/quizService";
 import { QuestionData } from "@/@types/quizType";
+import { saveQuestions } from "@/services/quizService";
 
 export async function POST(request: Request) {
   const formData = await request.formData();

@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
-import {
-  getQuestions,
-  existsData,
-  updateQuestionAnswer,
-} from "@/services/quizService";
+import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {
   extractYear,
   convertToHalfWidth,
@@ -12,7 +8,11 @@ import {
   replaceSpacesWithUnderscore,
   extractGradeAndQualification,
 } from "@/lib/bccuploads";
-import { revalidateTagByUpdateQuestion } from "@/lib/api";
+import {
+  getQuestions,
+  existsData,
+  updateQuestionAnswer,
+} from "@/services/quizService";
 
 interface AnswerData {
   questionNumber: number;

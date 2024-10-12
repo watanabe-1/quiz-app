@@ -1,5 +1,5 @@
-import { getGradesByQualification } from "@/services/quizService";
 import { NextResponse } from "next/server";
+import { getGradesByQualification } from "@/services/quizService";
 
 export async function GET(
   request: Request,

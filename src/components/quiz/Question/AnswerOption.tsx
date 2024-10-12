@@ -1,5 +1,5 @@
-import React, { FC } from "react";
 import Image from "next/image";
+import React, { FC } from "react";
 import { QuestionOption } from "@/@types/quizType";
 import { numberToKatakanaMap } from "@/lib/constants";
 

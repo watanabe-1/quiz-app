@@ -1,10 +1,10 @@
-import React from "react";
-import Link from "next/link";
-import Breadcrumb from "@/components/ui/Breadcrumb";
-import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
-import { fetchGetGradesByQualification } from "@/lib/api";
-import { createPath } from "@/lib/path";
 import { Metadata } from "next";
+import Link from "next/link";
+import React from "react";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import { fetchGetGradesByQualification } from "@/lib/api";
+import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
+import { createPath } from "@/lib/path";
 
 interface Params {
   qualification: string;

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
+import { QuestionData, QuestionOption } from "@/@types/quizType";
+import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import {
   extractYear,
   extractTitle,
@@ -8,8 +10,6 @@ import {
 } from "@/lib/bccuploads";
 import { katakanaToNumbersMap } from "@/lib/constants";
 import { saveQuestions } from "@/services/quizService";
-import { QuestionData, QuestionOption } from "@/@types/quizType";
-import { revalidateTagByUpdateQuestions } from "@/lib/api";
 
 export async function POST(request: Request) {
   const data = await request.formData();
