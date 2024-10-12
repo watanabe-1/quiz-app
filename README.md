@@ -10,7 +10,7 @@
    - [`.env` ファイルの例](#env-ファイルの例)
    - [`.env.test` ファイルの例](#envtest-ファイルの例)
 2. [環境変数の設定-vercel](#環境変数の設定-vercel)
-   - [`vercel 環境変数 の例`](#vercel環境変数の例)
+   - [`vercel` 環境変数の例](#vercel-環境変数の例)
 3. [パスワードのハッシュ化](#パスワードのハッシュ化)
    - [ハッシュ化スクリプトの実行方法](#ハッシュ化スクリプトの実行方法)
 4. [シークレットキーの生成](#シークレットキーの生成)
@@ -88,7 +88,7 @@ POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}
 
 vercel にデプロイする場合は、以下の環境変数を設定してください。
 
-### vercel環境変数の例
+### `vercel` 環境変数の例
 
 ```vercel-environment-variables
 # 管理者のユーザー名
