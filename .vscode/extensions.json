@@ -13,6 +13,8 @@
     "davidanson.vscode-markdownlint",
     "christian-kohler.path-intellisense",
     "mosapride.zenkaku",
-    "oderwat.indent-rainbow"
+    "oderwat.indent-rainbow",
+    "yoavbls.pretty-ts-errors",
+    "chakrounanas.turbo-console-log"
   ]
 }
