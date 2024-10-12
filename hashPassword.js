@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require("bcrypt");
 
 // ソルトのラウンド数（セキュリティレベルに応じて調整）
@@ -22,7 +23,7 @@ const args = process.argv.slice(2);
 
 if (args.length === 0) {
   console.error(
-    "エラー: ハッシュ化したいパスワードを引数として渡してください。"
+    "エラー: ハッシュ化したいパスワードを引数として渡してください。",
   );
   console.error("使用方法: node hashPassword.js <password>");
   process.exit(1);
