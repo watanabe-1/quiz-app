@@ -47,8 +47,8 @@ const createMethodsAll = (indent, slugs, pathname, isCatchAll) => {
   const queryParam = "url?: { query?: Record<string, string>, hash?: string }";
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const pathExpression = isCatchAll
-    ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.join('/') ?? ''}`)}\${generateSuffix(url)}\``
-    : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${${p1}}`)}\${generateSuffix(url)}\``;
+    ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
+    : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${encodeURIComponent(${p1})}`)}\${generateSuffix(url)}\``;
 
   return `${indent}$url: (${queryParam}) => ({${
     printPathname ? ` pathname: '${pathname}' as const,` : ""
@@ -62,8 +62,8 @@ const createMethodsOne = (slugs, pathname, isCatchAll) => {
   const queryParam = "url?: { query?: Record<string, string>, hash?: string }";
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const pathExpression = isCatchAll
-    ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.join('/') ?? ''}`)}\${generateSuffix(url)}\``
-    : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${${p1}}`)}\${generateSuffix(url)}\``;
+    ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
+    : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${encodeURIComponent(${p1})}`)}\${generateSuffix(url)}\``;
 
   return `(${paramList}) => {
           return {
