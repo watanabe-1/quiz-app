@@ -3,30 +3,28 @@ const fs = require("fs");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require("path");
 
-// コマンドライン引数を取得
+// コマンドライン引数の処理
 const [baseDir, outputPath, methodOption, printPathnameArg] =
   process.argv.slice(2);
-
-// printPathnameフラグをbooleanに変換
 const printPathname = printPathnameArg === "true";
 
-if (!baseDir || !outputPath || !methodOption) {
-  console.error(
-    "Usage: node generatePagesPath.js <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>",
-  );
-  process.exit(1);
-}
+// 引数チェック
+const validateArguments = (baseDir, outputPath, methodOption) => {
+  if (
+    !baseDir ||
+    !outputPath ||
+    !["all", "one", "both"].includes(methodOption)
+  ) {
+    console.error(
+      "Usage: node generatePagesPath.js <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>",
+    );
+    process.exit(1);
+  }
+};
+validateArguments(baseDir, outputPath, methodOption);
 
-// オプションのバリデーション
-if (!["all", "one", "both"].includes(methodOption)) {
-  console.error("Invalid method option. Use 'all', 'one', or 'both'.");
-  process.exit(1);
-}
-
-// 特殊なファイル名を定義
+// 定数の定義
 const pageFileNames = ["page.tsx", "page.jsx", "route.ts", "route.js"];
-
-// generateSuffix関数の定義
 const generateSuffixFunction = `
 const generateSuffix = (url?: { query?: Record<string, string>, hash?: string }) => {
   if (!url) return "";
@@ -37,44 +35,26 @@ const generateSuffix = (url?: { query?: Record<string, string>, hash?: string })
   return \`\${search}\${hash ? \`#\${hash}\` : ''}\`;
 };`;
 
-// 変数名の無効な文字を削除
-const sanitizeVariableName = (name) => {
-  return name.replace(/\//g, "_").replace(/\[|\]/g, "").replace("...", "___");
-};
+// 変数名のサニタイズ
+const sanitizeVariableName = (name) =>
+  name.replace(/\//g, "_").replace(/\[|\]/g, "").replace("...", "___");
 
-// createMethods関数の定義
-const createMethodsAll = (indent, slugs, pathname, isCatchAll) => {
+// 共通のメソッド生成関数
+const createMethods = (indent, slugs, pathname, isCatchAll, method) => {
   const queryParam = "url?: { query?: Record<string, string>, hash?: string }";
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const pathExpression = isCatchAll
     ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
     : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${encodeURIComponent(${p1})}`)}\${generateSuffix(url)}\``;
 
-  return `${indent}$url: (${queryParam}) => ({${
-    printPathname ? ` pathname: '${pathname}' as const,` : ""
-  }${slugParam ? ` ${slugParam}` : ""} hash: url?.hash, path: ${pathExpression} })`;
+  return method === "all"
+    ? `${indent}$url: (${queryParam}) => ({${printPathname ? ` pathname: '${pathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} })`
+    : `(${slugs.map((slug) => `${slug}: string${isCatchAll ? "[]" : ""}`)}) => {
+        return { $url: (${queryParam}) => ({${printPathname ? ` pathname: '${pathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} }) };
+      }`;
 };
 
-const createMethodsOne = (slugs, pathname, isCatchAll) => {
-  const paramList = slugs.map(
-    (slug) => `${slug}: string${isCatchAll ? "[]" : ""}`,
-  );
-  const queryParam = "url?: { query?: Record<string, string>, hash?: string }";
-  const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
-  const pathExpression = isCatchAll
-    ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
-    : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${encodeURIComponent(${p1})}`)}\${generateSuffix(url)}\``;
-
-  return `(${paramList}) => {
-          return {
-            $url: (${queryParam}) => ({${
-              printPathname ? ` pathname: '${pathname}' as const,` : ""
-            }${slugParam ? ` ${slugParam}` : ""} hash: url?.hash, path: ${pathExpression} })
-          }
-        }`;
-};
-
-// ディレクトリを再帰的に走査して各パスごとの変数を構築
+// ディレクトリ解析処理
 const parseAppDir = (
   input,
   indent = "",
@@ -85,130 +65,100 @@ const parseAppDir = (
   exportPaths = {},
 ) => {
   indent += "  ";
-  const props = [];
-  const entries = fs.readdirSync(input, { withFileTypes: true });
-
-  entries
+  const pagesObject = [];
+  const entries = fs
+    .readdirSync(input, { withFileTypes: true })
     .filter(
       (entry) =>
         !entry.name.startsWith("_") &&
         !entry.name.startsWith(".") &&
-        !["node_modules"].includes(entry.name),
+        entry.name !== "node_modules",
     )
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .forEach((entry) => {
-      const fullPath = path.join(input, entry.name);
-      const nameWithoutExt = entry.isFile()
-        ? entry.name.replace(/\.[^/.]+$/, "") // 拡張子を除去
-        : entry.name;
+    .sort((a, b) => a.name.localeCompare(b.name));
 
-      // 特殊なファイル以外を無視
-      if (entry.isFile() && !pageFileNames.includes(entry.name)) {
-        return;
+  entries.forEach((entry) => {
+    const fullPath = path.join(input, entry.name);
+    const nameWithoutExt = entry.isFile()
+      ? entry.name.replace(/\.[^/.]+$/, "")
+      : entry.name;
+
+    if (entry.isFile() && !pageFileNames.includes(entry.name)) return;
+
+    const newSlugs = [...slugs];
+    let isCatchAll = parentCatchAll;
+    let isOptionalCatchAll = parentOptionalCatchAll;
+
+    if (entry.isDirectory()) {
+      const newUrl = `${url}/${nameWithoutExt}`;
+      const isDynamic =
+        nameWithoutExt.startsWith("[") && nameWithoutExt.endsWith("]");
+      isCatchAll =
+        nameWithoutExt.startsWith("[...") && nameWithoutExt.endsWith("]");
+      isOptionalCatchAll =
+        nameWithoutExt.startsWith("[[...") && nameWithoutExt.endsWith("]]");
+      const paramName = isDynamic ? nameWithoutExt.slice(1, -1) : null;
+      const keyName = isDynamic
+        ? `_${paramName.replace("...", "")}`
+        : nameWithoutExt;
+
+      if (isDynamic) newSlugs.push(paramName.replace("...", ""));
+      const child = parseAppDir(
+        fullPath,
+        indent,
+        newSlugs,
+        newUrl,
+        isCatchAll,
+        isOptionalCatchAll,
+        exportPaths,
+      );
+
+      if (methodOption === "all" || methodOption === "both") {
+        pagesObject.push(
+          isDynamic
+            ? `${indent}${keyName}: (${paramName}: ${isCatchAll || isOptionalCatchAll ? "string[]" : "string"}) => (${child})`
+            : `${indent}"${keyName}": ${child}`,
+        );
       }
-
-      const newSlugs = [...slugs];
-
-      let isCatchAll = parentCatchAll; // 親から継承する
-      let isOptionalCatchAll = parentOptionalCatchAll; // 親から継承する
-      if (entry.isDirectory()) {
-        let newUrl = `${url}/${nameWithoutExt}`;
-        const isDynamic =
-          nameWithoutExt.startsWith("[") && nameWithoutExt.endsWith("]");
-        isCatchAll =
-          nameWithoutExt.startsWith("[...") && nameWithoutExt.endsWith("]");
-        isOptionalCatchAll =
-          nameWithoutExt.startsWith("[[...") && nameWithoutExt.endsWith("]]");
-        const paramName = isDynamic ? nameWithoutExt.slice(1, -1) : null;
-        const keyName = isDynamic
-          ? `_${paramName.replace("...", "")}`
-          : nameWithoutExt;
-
-        let paramType = "string";
-        if (isCatchAll || isOptionalCatchAll) {
-          paramType = "string[]";
-        }
-
-        if (isDynamic) {
-          newSlugs.push(paramName.replace("...", ""));
-        }
-
-        const child = parseAppDir(
-          fullPath,
+    } else if (entry.isFile() && pageFileNames.includes(entry.name)) {
+      if (methodOption === "all" || methodOption === "both") {
+        const method = createMethods(
           indent,
           newSlugs,
-          newUrl,
-          isCatchAll,
-          isOptionalCatchAll,
-          exportPaths,
+          url,
+          isCatchAll || isOptionalCatchAll,
+          methodOption === "one" ? "one" : "all",
         );
-
-        if (isDynamic) {
-          const paramOptional = isOptionalCatchAll ? "?" : "";
-          props.push(
-            `${indent}${keyName}: (${paramName.replace("...", "")}${paramOptional}: ${paramType}) => (${child})`,
-          );
-        } else {
-          props.push(`${indent}"${keyName}": ${child}`);
-        }
-      } else if (entry.isFile()) {
-        // ファイルがpageファイルの場合のみ$urlを生成
-        if (pageFileNames.includes(entry.name)) {
-          if (methodOption === "all" || methodOption === "both") {
-            const methodAll = createMethodsAll(
-              indent,
-              newSlugs,
-              url,
-              isCatchAll || isOptionalCatchAll,
-            );
-            props.push(methodAll);
-          }
-
-          if (methodOption === "one" || methodOption === "both") {
-            // 無効な文字を取り除き、変数名として扱えるようにする
-            const sanitizedExportKey = sanitizeVariableName(url);
-
-            exportPaths[sanitizedExportKey] = createMethodsOne(
-              newSlugs,
-              url,
-              isCatchAll || isOptionalCatchAll,
-            );
-          }
-        }
+        pagesObject.push(method);
       }
-    });
+      if (methodOption === "one" || methodOption === "both") {
+        const sanitizedExportKey = sanitizeVariableName(url);
+        exportPaths[sanitizedExportKey] = createMethods(
+          "",
+          newSlugs,
+          url,
+          isCatchAll || isOptionalCatchAll,
+          "one",
+        );
+      }
+    }
+  });
 
-  return `{\n${props.join(",\n")}\n${indent}}`;
+  return `{\n${pagesObject.join(",\n")}\n${indent}}`;
 };
 
-// 出力ファイルを作成する関数
+// ページパス生成
 const generatePages = (baseDir) => {
   const exportPaths = {};
-  const pagesObjectString = `export const pagesPath = ${parseAppDir(
-    baseDir,
-    "",
-    [],
-    "",
-    false,
-    false,
-    exportPaths,
-  )};\n\nexport type PagesPath = typeof pagesPath;`;
+  const pagesObjectString = `export const pagesPath = ${parseAppDir(baseDir, "", [], "", false, false, exportPaths)};\n\nexport type PagesPath = typeof pagesPath;`;
 
-  // 各パスごとのエクスポートを生成
   const individualExports = Object.keys(exportPaths)
     .map((key) => `export const path${key} = ${exportPaths[key]};`)
     .join("\n\n");
 
-  if (methodOption === "all") {
-    return `${generateSuffixFunction}\n\n${pagesObjectString}`;
-  } else if (methodOption === "one") {
-    return `${generateSuffixFunction}\n\n${individualExports}`;
-  } else if (methodOption === "both") {
-    return `${generateSuffixFunction}\n\n${pagesObjectString}\n\n${individualExports}`;
-  }
+  return `${generateSuffixFunction}${methodOption === "all" || methodOption === "both" ? `\n\n${pagesObjectString}` : ""}${methodOption === "one" || methodOption === "both" ? `\n\n${individualExports}` : ""}`;
 };
 
-// 出力ファイルに書き込み
+// ファイルに出力
 const outputContent = generatePages(baseDir);
 fs.writeFileSync(outputPath, outputContent);
 
