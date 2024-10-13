@@ -4,11 +4,15 @@ const fs = require("fs");
 const path = require("path");
 
 // コマンドライン引数を取得
-const [baseDir, outputPath, methodOption] = process.argv.slice(2);
+const [baseDir, outputPath, methodOption, printPathnameArg] =
+  process.argv.slice(2);
+
+// printPathnameフラグをbooleanに変換
+const printPathname = printPathnameArg === "true";
 
 if (!baseDir || !outputPath || !methodOption) {
   console.error(
-    "Usage: node generatePagesPath.js <baseDir> <outputPath> <methodOption(all|one|both)>",
+    "Usage: node generatePagesPath.js <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>",
   );
   process.exit(1);
 }
@@ -46,9 +50,9 @@ const createMethodsAll = (indent, slugs, pathname, isCatchAll) => {
     ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.join('/') ?? ''}`)}\${generateSuffix(url)}\``
     : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${${p1}}`)}\${generateSuffix(url)}\``;
 
-  return `${indent}$url: (${queryParam}) => ({ pathname: '${pathname}' as const${
-    slugParam ? `, ${slugParam}` : ","
-  } hash: url?.hash, path: ${pathExpression} })`;
+  return `${indent}$url: (${queryParam}) => ({${
+    printPathname ? ` pathname: '${pathname}' as const,` : ""
+  }${slugParam ? ` ${slugParam}` : ""} hash: url?.hash, path: ${pathExpression} })`;
 };
 
 const createMethodsOne = (slugs, pathname, isCatchAll) => {
@@ -62,12 +66,12 @@ const createMethodsOne = (slugs, pathname, isCatchAll) => {
     : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${${p1}}`)}\${generateSuffix(url)}\``;
 
   return `(${paramList}) => {
-        return {
-          $url: (${queryParam}) => ({ pathname: '${pathname}' as const${
-            slugParam ? `, ${slugParam}` : ","
-          } hash: url?.hash, path: ${pathExpression} })
-        }
-      }`;
+          return {
+            $url: (${queryParam}) => ({${
+              printPathname ? ` pathname: '${pathname}' as const,` : ""
+            }${slugParam ? ` ${slugParam}` : ""} hash: url?.hash, path: ${pathExpression} })
+          }
+        }`;
 };
 
 // ディレクトリを再帰的に走査して各パスごとの変数を構築

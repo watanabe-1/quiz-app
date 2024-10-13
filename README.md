@@ -140,25 +140,31 @@ openssl rand -base64 32
 次のコマンドでスクリプトを実行し、ページパスを生成します。
 
 ```cmd
-node generateRoutes.js <baseDir> <outputPath> <methodOption>
+node generateRoutes.js <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>
 ```
 
 - `<baseDir>`: ページの探索を開始するベースディレクトリのパス。
 - `<outputPath>`: 生成されたページパスを出力するファイルのパス。
 - `<methodOption>`: 生成するメソッドのオプションです。`all`、`one`、`both` のいずれかを指定します。
+- `<printPathname>`: 生成するメソッドのオプションです。`true`、`false` のいずれかを指定します。
 
 ##### `methodOption` の説明
 
-- `all`: すべてのページに対して共通の URL メソッド (`$url`) を生成します。
+- `all`: すべてのページに対して共通のメソッドを生成します。
 - `one`: 各ページに個別のメソッドを生成します。
 - `both`: 共通の URL メソッドと個別のメソッドの両方を生成します。
+
+##### `printPathname` の説明
+
+- `true`: pathnameを生成します。
+- `false`: pathnameを生成しません。
 
 #### 使用例
 
 例えば、`src/app` ディレクトリ内のページパスを生成し、結果を `pagesPath.ts` ファイルに出力するには、次のコマンドを使用します。
 
 ```cmd
-node generateRoutes.js ./src/app ./src/lib/pagesPath.ts all
+node generateRoutes.js ./src/app ./src/lib/pagesPath.ts one false
 ```
 
 このコマンドにより、指定したディレクトリ内のページに対応するすべてのパスとメソッドが `pagesPath.ts` に出力されます。
