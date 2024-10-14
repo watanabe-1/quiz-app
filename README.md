@@ -133,7 +133,7 @@ openssl rand -base64 32
 
 ### `path定義` の作成方法
 
-`generateRoutes.js` スクリプトは、アプリディレクトリの構造からページパスを生成するためのツールです。このスクリプトを使用して、指定したディレクトリ内のページに対応する TypeScript オブジェクトを生成できます。また、Queryパラメータをurlに設定したい場合は、設定したいパスに紐づくファイル内で、Query or OptionalQuery 型で型を定義しexportしてください。
+`generateRoutes.js` スクリプトは、[pathpida](https://github.com/aspida/pathpida)を参考に作成しています。これはアプリディレクトリの構造からページパスを生成するためのツールです。このスクリプトを使用して、指定したディレクトリ内のページに対応する TypeScript オブジェクトを生成できます。また、Queryパラメータをurlに設定したい場合は、設定したいパスに紐づくファイル内で、Query or OptionalQuery 型で型を定義しexportしてください。
 
 #### コマンドの実行
 
