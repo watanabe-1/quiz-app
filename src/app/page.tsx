@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Header from "@/components/layout/Header";
 import { fetchGetAllQualifications } from "@/lib/api";
-import { createPath } from "@/lib/path";
+import { path_quiz_qualification } from "@/lib/path";
 
 const HomePage = async () => {
   const qualifications = await fetchGetAllQualifications();
@@ -16,7 +16,11 @@ const HomePage = async () => {
           {qualifications.map((qualification) => (
             <li key={qualification}>
               <Link
-                href={createPath("quiz", qualification)}
+                href={
+                  path_quiz_qualification(qualification).$url({
+                    query: { test: "こんにちは" },
+                  }).path
+                }
                 className="block rounded bg-white p-4 shadow hover:bg-blue-50"
               >
                 {qualification}

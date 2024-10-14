@@ -4,7 +4,12 @@ import { useState } from "react";
 import useSWR from "swr";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
-import { createPath } from "@/lib/path";
+import {
+  path_api_admin_exportQuestions,
+  path_api_questions,
+  path_api_questions_qualification,
+  path_api_questions_qualification_grade,
+} from "@/lib/path";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -15,14 +20,14 @@ const ExportPage = () => {
 
   // 資格一覧を取得
   const { data: qualifications, error: qualificationsError } = useSWR(
-    "/api/questions",
+    path_api_questions().$url().path,
     fetcher,
   );
 
   // 選択された資格の級一覧を取得
   const { data: grades, error: gradesError } = useSWR(
     selectedQualification
-      ? createPath("api/questions", selectedQualification)
+      ? path_api_questions_qualification(selectedQualification).$url().path
       : null,
     fetcher,
   );
@@ -30,22 +35,24 @@ const ExportPage = () => {
   // 選択された資格と級の年度一覧を取得
   const { data: years, error: yearsError } = useSWR(
     selectedQualification && selectedGrade
-      ? createPath("api/questions", selectedQualification, selectedGrade)
+      ? path_api_questions_qualification_grade(
+          selectedQualification,
+          selectedGrade,
+        ).$url().path
       : null,
     fetcher,
   );
 
   const handleDownload = async () => {
     try {
-      const params = new URLSearchParams();
-      params.append("qualification", selectedQualification);
-      params.append("grade", selectedGrade);
-      if (selectedYear) {
-        params.append("year", selectedYear);
-      }
-
       const response = await fetch(
-        `/api/admin/exportQuestions?${params.toString()}`,
+        path_api_admin_exportQuestions().$url({
+          query: {
+            qualification: selectedQualification,
+            grade: selectedGrade,
+            year: selectedYear,
+          },
+        }).path,
         {
           method: "GET",
         },

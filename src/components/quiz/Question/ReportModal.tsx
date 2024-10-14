@@ -4,7 +4,7 @@ import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
 import Modal from "@/components/ui/Modal";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
-import { createPath } from "@/lib/path";
+import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -78,14 +78,14 @@ const ReportModal: FC<ReportModalProps> = ({
                           qAnswer.questionId,
                         )
                       ] === qAnswer.answer;
-                    const questionLink = createPath(
-                      "quiz",
-                      qualification,
-                      grade,
-                      year,
-                      category,
-                      qAnswer.questionId,
-                    );
+                    const questionLink =
+                      path_quiz_qualification_grade_year_category_id(
+                        qualification,
+                        grade,
+                        year,
+                        category,
+                        qAnswer.questionId,
+                      ).$url().path;
 
                     return (
                       <tr key={qAnswer.questionId} className="text-center">

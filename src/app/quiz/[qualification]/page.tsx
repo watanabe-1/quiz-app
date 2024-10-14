@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetGradesByQualification } from "@/lib/api";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import { createPath } from "@/lib/path";
+import { path_quiz_qualification_grade } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -29,7 +29,10 @@ const GradesPage = async ({ params }: { params: Params }) => {
             {grades.map((grade) => (
               <li key={grade}>
                 <Link
-                  href={createPath("quiz", qualification, grade)}
+                  href={
+                    path_quiz_qualification_grade(qualification, grade).$url()
+                      .path
+                  }
                   className="block rounded bg-white p-4 shadow hover:bg-blue-50"
                 >
                   {grade}

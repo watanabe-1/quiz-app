@@ -1,5 +1,4 @@
 import { headers } from "next/headers";
-import { createPath } from "@/lib/path";
 
 const createBaseUrl = (): string => {
   const host = headers().get("host");
@@ -8,9 +7,6 @@ const createBaseUrl = (): string => {
   return `${protocol}://${host}`;
 };
 
-export const createApiUrl = (
-  basePath: string,
-  ...segments: (string | number)[]
-): string => {
-  return `${createBaseUrl()}${createPath(basePath, ...segments)}`;
+export const addBaseUrl = (path: string): string => {
+  return `${createBaseUrl()}${path}`;
 };

@@ -4,7 +4,7 @@ import React from "react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetGradesByQualification } from "@/lib/api";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
-import { createPath } from "@/lib/path";
+import { path_admin_qualification_grade } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -35,7 +35,10 @@ const QualificationAdminPage = async ({ params }: { params: Params }) => {
               <div className="flex items-center justify-between">
                 <span>{grade}</span>
                 <Link
-                  href={createPath("admin", qualification, grade)}
+                  href={
+                    path_admin_qualification_grade(qualification, grade).$url()
+                      .path
+                  }
                   className="text-blue-600 hover:underline"
                 >
                   管理

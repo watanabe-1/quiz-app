@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetCategories } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import { createPath } from "@/lib/path";
+import { path_quiz_qualification_grade_year_category } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -38,13 +38,14 @@ const CategoriesPage = async ({ params }: { params: Params }) => {
             {categories.map((category) => (
               <li key={category}>
                 <Link
-                  href={createPath(
-                    "quiz",
-                    qualification,
-                    grade,
-                    year,
-                    category,
-                  )}
+                  href={
+                    path_quiz_qualification_grade_year_category(
+                      qualification,
+                      grade,
+                      year,
+                      category,
+                    ).$url().path
+                  }
                   className="block rounded bg-white p-4 shadow hover:bg-blue-50"
                 >
                   {category === ALL_CATEGORY ? "全ての問題" : category}

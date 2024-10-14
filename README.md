@@ -164,7 +164,7 @@ node generateRoutes.js <baseDir> <outputPath> <methodOption(all|one|both)> <prin
 例えば、`src/app` ディレクトリ内のページパスを生成し、結果を `pagesPath.ts` ファイルに出力するには、次のコマンドを使用します。
 
 ```cmd
-node generateRoutes.js ./src/app ./src/lib/pagesPath.ts one false
+node generateRoutes.js ./src/app ./src/lib/path.ts one false
 ```
 
 このコマンドにより、指定したディレクトリ内のページに対応するすべてのパスとメソッドが `pagesPath.ts` に出力されます。

@@ -8,6 +8,12 @@ import { ALL_CATEGORY } from "@/lib/constants";
 
 export const runtime = "nodejs";
 
+export type Query = {
+  qualification: string;
+  grade: string;
+  year?: string;
+};
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);

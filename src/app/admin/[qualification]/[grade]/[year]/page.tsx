@@ -4,7 +4,7 @@ import React from "react";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
-import { createPath } from "@/lib/path";
+import { path_admin_qualification_grade_year_edit_id } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -52,14 +52,14 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
                     "（テキストなし）"}
                 </span>
                 <Link
-                  href={createPath(
-                    "admin",
-                    qualification,
-                    grade,
-                    year,
-                    "edit",
-                    question.questionId,
-                  )}
+                  href={
+                    path_admin_qualification_grade_year_edit_id(
+                      qualification,
+                      grade,
+                      year,
+                      question.questionId,
+                    ).$url().path
+                  }
                   className="text-blue-600 hover:underline"
                 >
                   編集

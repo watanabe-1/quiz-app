@@ -8,7 +8,14 @@ import {
   fetchGetYearsByQualificationAndGrade,
 } from "@/lib/api";
 import { ALL_CATEGORY } from "@/lib/constants";
-import { createPath } from "@/lib/path";
+import {
+  path,
+  path_quiz_qualification,
+  path_quiz_qualification_grade,
+  path_quiz_qualification_grade_year,
+  path_quiz_qualification_grade_year_category,
+  path_quiz_qualification_grade_year_category_id,
+} from "@/lib/path";
 
 export async function GET(req: NextRequest) {
   // URLからクエリパラメータを取得
@@ -57,7 +64,7 @@ const getQualificationItems = async (): Promise<MenuItem[]> => {
       const yearItems = await getGradeItemsByQualification(qualification);
       return {
         name: qualification,
-        href: createPath("quiz", qualification),
+        href: path_quiz_qualification(qualification).$url().path,
         children: yearItems,
       };
     }),
@@ -77,7 +84,7 @@ const getGradeItemsByQualification = async (
       );
       return {
         name: grade,
-        href: createPath("quiz", qualification, grade),
+        href: path_quiz_qualification_grade(qualification, grade).$url().path,
         children: yearsItems,
       };
     }),
@@ -102,7 +109,11 @@ const getYearItemsByQualificationAndGrade = async (
       );
       return {
         name: year,
-        href: createPath("quiz", qualification, grade, year),
+        href: path_quiz_qualification_grade_year(
+          qualification,
+          grade,
+          year,
+        ).$url().path,
         children: categoryItems,
       };
     }),
@@ -120,7 +131,12 @@ const getCategoryItemsByGradeAndYear = async (
 
   return allCategories.map((category) => ({
     name: category === ALL_CATEGORY ? "全ての問題" : category,
-    href: createPath("quiz", qualification, grade, year, category),
+    href: path_quiz_qualification_grade_year_category(
+      qualification,
+      grade,
+      year,
+      category,
+    ).$url().path,
   }));
 };
 
@@ -142,14 +158,13 @@ const getCurrentQuestionItems = async (
 
   return questions.map((question) => ({
     name: `問題 ${question.questionId}`,
-    href: createPath(
-      "quiz",
+    href: path_quiz_qualification_grade_year_category_id(
       qualification,
       grade,
       year,
       category,
       question.questionId,
-    ),
+    ).$url().path,
   }));
 };
 
@@ -159,7 +174,7 @@ const getMenuItems = async (currentUrl: string): Promise<MenuItem[]> => {
   const menuItems: MenuItem[] = [
     {
       name: "ホーム",
-      href: "/",
+      href: path().$url().path,
     },
     {
       name: "資格",

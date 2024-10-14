@@ -90,7 +90,8 @@ const createMethods = (
   method,
   queryType,
 ) => {
-  const queryParam = `url?: { query${queryType && queryType.startsWith("Query") > 0 ? "" : "?"}: ${queryType ? queryType : "Record<string, string | number>"}, hash?: string }`;
+  const optional = queryType && queryType.startsWith("Query") > 0 ? "" : "?";
+  const queryParam = `url${optional}: { query${optional}: ${queryType ? queryType : "Record<string, string | number>"}, hash?: string }`;
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const pathExpression = isCatchAll
     ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``

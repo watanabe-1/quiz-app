@@ -1,7 +1,15 @@
 import { revalidateTag } from "next/cache";
 import { FETCH_REVALIDATE } from "./constants";
+import {
+  path_api_questions,
+  path_api_questions_qualification,
+  path_api_questions_qualification_grade,
+  path_api_questions_qualification_grade_year,
+  path_api_questions_qualification_grade_year_category,
+  path_api_questions_qualification_grade_year_category_id,
+} from "./path";
+import { addBaseUrl } from "./url";
 import { QuestionData } from "@/@types/quizType";
-import { createApiUrl } from "@/lib/url";
 
 const TAG_QUALIFICATIONS = "qualifications";
 const TAG_GRADES = "grades";
@@ -24,7 +32,7 @@ export function revalidateTagByUpdateQuestion() {
 }
 
 export async function fetchGetAllQualifications(): Promise<string[]> {
-  return fetch(createApiUrl("api/questions"), {
+  return fetch(addBaseUrl(path_api_questions().$url().path), {
     method: "GET",
     next: {
       revalidate: FETCH_REVALIDATE,
@@ -36,26 +44,34 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
 export async function fetchGetGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
-  return fetch(createApiUrl("api/questions", qualification), {
-    method: "GET",
-    next: {
-      revalidate: FETCH_REVALIDATE,
-      tags: [TAG_GRADES],
+  return fetch(
+    addBaseUrl(path_api_questions_qualification(qualification).$url().path),
+    {
+      method: "GET",
+      next: {
+        revalidate: FETCH_REVALIDATE,
+        tags: [TAG_GRADES],
+      },
     },
-  }).then((response) => response.json());
+  ).then((response) => response.json());
 }
 
 export async function fetchGetYearsByQualificationAndGrade(
   qualification: string,
   grade: string,
 ): Promise<string[]> {
-  return fetch(createApiUrl("api/questions", qualification, grade), {
-    method: "GET",
-    next: {
-      revalidate: FETCH_REVALIDATE,
-      tags: [TAG_YEARS],
+  return fetch(
+    addBaseUrl(
+      path_api_questions_qualification_grade(qualification, grade).$url().path,
+    ),
+    {
+      method: "GET",
+      next: {
+        revalidate: FETCH_REVALIDATE,
+        tags: [TAG_YEARS],
+      },
     },
-  }).then((response) => response.json());
+  ).then((response) => response.json());
 }
 
 export async function fetchGetCategories(
@@ -63,13 +79,22 @@ export async function fetchGetCategories(
   grade: string,
   year: string,
 ): Promise<string[]> {
-  return fetch(createApiUrl("api/questions", qualification, grade, year), {
-    method: "GET",
-    next: {
-      revalidate: FETCH_REVALIDATE,
-      tags: [TAG_CATEGORIES],
+  return fetch(
+    addBaseUrl(
+      path_api_questions_qualification_grade_year(
+        qualification,
+        grade,
+        year,
+      ).$url().path,
+    ),
+    {
+      method: "GET",
+      next: {
+        revalidate: FETCH_REVALIDATE,
+        tags: [TAG_CATEGORIES],
+      },
     },
-  }).then((response) => response.json());
+  ).then((response) => response.json());
 }
 
 export async function fetchGetQuestionsByCategory(
@@ -79,7 +104,14 @@ export async function fetchGetQuestionsByCategory(
   category: string,
 ): Promise<QuestionData[]> {
   return fetch(
-    createApiUrl("api/questions", qualification, grade, year, category),
+    addBaseUrl(
+      path_api_questions_qualification_grade_year_category(
+        qualification,
+        grade,
+        year,
+        category,
+      ).$url().path,
+    ),
     {
       method: "GET",
       next: {
@@ -98,7 +130,15 @@ export async function fetchGetQuestionsByCategoryAndId(
   id: number,
 ): Promise<QuestionData> {
   return fetch(
-    createApiUrl("api/questions", qualification, grade, year, category, id),
+    addBaseUrl(
+      path_api_questions_qualification_grade_year_category_id(
+        qualification,
+        grade,
+        year,
+        category,
+        id,
+      ).$url().path,
+    ),
     {
       method: "GET",
       next: {

@@ -17,7 +17,7 @@ import {
   getAnswerHistory,
   setAnswerHistory,
 } from "@/lib/localStorage";
-import { createPath } from "@/lib/path";
+import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
 
 interface QuestionProps {
   qualification: string;
@@ -231,14 +231,15 @@ const Question: React.FC<QuestionProps> = ({
       <div className="mt-6 flex justify-between">
         {prevQuestionId ? (
           <Link
-            href={createPath(
-              "quiz",
-              qualification,
-              grade,
-              year,
-              category,
-              prevQuestionId,
-            )}
+            href={
+              path_quiz_qualification_grade_year_category_id(
+                qualification,
+                grade,
+                year,
+                category,
+                prevQuestionId,
+              ).$url().path
+            }
             className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
             前の問題
@@ -248,14 +249,15 @@ const Question: React.FC<QuestionProps> = ({
         )}
         {nextQuestionId ? (
           <Link
-            href={createPath(
-              "quiz",
-              qualification,
-              grade,
-              year,
-              category,
-              nextQuestionId,
-            )}
+            href={
+              path_quiz_qualification_grade_year_category_id(
+                qualification,
+                grade,
+                year,
+                category,
+                nextQuestionId,
+              ).$url().path
+            }
             className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
             次の問題

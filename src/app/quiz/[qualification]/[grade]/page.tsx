@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetYearsByQualificationAndGrade } from "@/lib/api";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import { createPath } from "@/lib/path";
+import { path_quiz_qualification_grade_year } from "@/lib/path";
 
 interface Params {
   qualification: string;
@@ -34,7 +34,13 @@ const YearsPage = async ({ params }: { params: Params }) => {
             {years.map((year) => (
               <li key={year}>
                 <Link
-                  href={createPath("quiz", qualification, grade, year)}
+                  href={
+                    path_quiz_qualification_grade_year(
+                      qualification,
+                      grade,
+                      year,
+                    ).$url().path
+                  }
                   className="block rounded bg-white p-4 shadow hover:bg-blue-50"
                 >
                   {year}
