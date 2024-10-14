@@ -112,11 +112,12 @@ const parseAppDir = (
   url = "",
   parentCatchAll = false,
   parentOptionalCatchAll = false,
-  exportPaths = {},
-  queries = [],
 ) => {
   indent += "  ";
   const pagesObject = [];
+  const exportPaths = {};
+  const queries = [];
+
   const entries = fs
     .readdirSync(input, { withFileTypes: true })
     .filter(
@@ -153,16 +154,21 @@ const parseAppDir = (
         : nameWithoutExt;
 
       if (isDynamic) newSlugs.push(paramName.replace("...", ""));
-      const child = parseAppDir(
+      const {
+        pagesObjectString: child,
+        exportPaths: childExportPaths,
+        queries: childQueries,
+      } = parseAppDir(
         fullPath,
         indent,
         newSlugs,
         newUrl,
         isCatchAll,
         isOptionalCatchAll,
-        exportPaths,
-        queries,
       );
+
+      Object.assign(exportPaths, childExportPaths);
+      queries.push(...childQueries);
 
       if (methodOption === "all" || methodOption === "both") {
         pagesObject.push(
@@ -201,14 +207,19 @@ const parseAppDir = (
     }
   });
 
-  return `{\n${pagesObject.join(",\n")}\n${indent}}`;
+  return {
+    pagesObjectString: `{
+${pagesObject.join(",\n")}
+${indent}}`,
+    exportPaths,
+    queries,
+  };
 };
 
 // ページパス生成
 const generatePages = (baseDir) => {
-  const exportPaths = {};
-  const queries = [];
-  const pagesObjectString = `export const pagesPath = ${parseAppDir(baseDir, "", [], "", false, false, exportPaths, queries)};\n\nexport type PagesPath = typeof pagesPath;`;
+  const { pagesObjectString, exportPaths, queries } = parseAppDir(baseDir);
+  const pagesObject = `export const pagesPath = ${pagesObjectString};\n\nexport type PagesPath = typeof pagesPath;`;
 
   const individualExports = Object.keys(exportPaths)
     .map((key) => `export const path${key} = ${exportPaths[key]};`)
@@ -218,7 +229,7 @@ const generatePages = (baseDir) => {
     ? `${queries.map((query) => query.importString).join("\n")}\n\n`
     : "";
 
-  return `${queryImports}${generateSuffixFunction}${methodOption === "all" || methodOption === "both" ? `\n\n${pagesObjectString}` : ""}${methodOption === "one" || methodOption === "both" ? `\n\n${individualExports}` : ""}`;
+  return `${queryImports}${generateSuffixFunction}${methodOption === "all" || methodOption === "both" ? `\n\n${pagesObject}` : ""}${methodOption === "one" || methodOption === "both" ? `\n\n${individualExports}` : ""}`;
 };
 
 // ファイルに出力
