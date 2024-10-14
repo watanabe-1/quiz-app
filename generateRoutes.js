@@ -51,23 +51,33 @@ let queryCnt = 0;
 const addQueryCnt = (importPath) => `${importPath}_${queryCnt++}`;
 
 // query定義作成
-const parseQuery = (output, file) => {
-  const fileData = fs.readFileSync(file, "utf8");
-  const typeName = ["Query", "OptionalQuery"].find((type) =>
-    new RegExp(`export (interface ${type} ?{|type ${type} ?=)`).test(fileData),
+const parseQuery = (outputFile, inputFile) => {
+  // ファイルからデータを読み込む
+  const fileContents = fs.readFileSync(inputFile, "utf8");
+
+  // Query または OptionalQuery 型が定義されているか確認する
+  const queryType = ["Query", "OptionalQuery"].find((type) =>
+    new RegExp(`export (interface ${type} ?{|type ${type} ?=)`).test(
+      fileContents,
+    ),
   );
 
-  if (!typeName) return;
+  // Query または OptionalQuery 型が見つからない場合は終了
+  if (!queryType) return;
 
-  const importPath = path
-    .relative(path.dirname(output), file)
-    .replace(/\\/g, "/")
-    .replace(/(\/index)?\.tsx?$/, "");
-  const importName = addQueryCnt(typeName);
+  // インポートパスを生成
+  const relativeImportPath = path
+    .relative(path.dirname(outputFile), inputFile)
+    .replace(/\\/g, "/") // Windowsパスをスラッシュに変換
+    .replace(/(\/index)?\.tsx?$/, ""); // index.ts(x) などを削除
 
+  // インポート名にカウントを追加
+  const importAlias = addQueryCnt(queryType);
+
+  // 結果としてインポートに必要な情報を返す
   return {
-    importName,
-    importString: `import { ${typeName} as ${importName} } from '${importPath}';`,
+    importName: importAlias,
+    importString: `import { ${queryType} as ${importAlias} } from '${relativeImportPath}';`,
   };
 };
 
