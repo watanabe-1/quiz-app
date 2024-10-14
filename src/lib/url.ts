@@ -11,7 +11,7 @@ export const addBaseUrl = (path: string): string => {
   return `${createBaseUrl()}${path}`;
 };
 
-export const getQueryParam = <T extends Record<string, any>>(
+export const getQueryParam = <T extends Record<string, string>>(
   searchParams: URLSearchParams,
   key: keyof T,
 ): string | undefined => {
