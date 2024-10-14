@@ -10,3 +10,11 @@ const createBaseUrl = (): string => {
 export const addBaseUrl = (path: string): string => {
   return `${createBaseUrl()}${path}`;
 };
+
+export const getQueryParam = <T extends Record<string, any>>(
+  searchParams: URLSearchParams,
+  key: keyof T,
+): string | undefined => {
+  const value = searchParams.get(key as string); // key を string 型にキャスト
+  return value ?? undefined;
+};
