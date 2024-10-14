@@ -46,10 +46,41 @@ const generateSuffix = (url?: { query?: Record<string, string | number>, hash?: 
 const sanitizeVariableName = (name) =>
   name.replace(/\//g, "_").replace(/\[|\]/g, "").replace("...", "___");
 
+// 連番付与
+let queryCnt = 0;
+const addQueryCnt = (importPath) => `${importPath}_${queryCnt++}`;
+
+// query定義作成
+const parseQuery = (output, file) => {
+  const fileData = fs.readFileSync(file, "utf8");
+  const typeName = ["Query", "OptionalQuery"].find((type) =>
+    new RegExp(`export (interface ${type} ?{|type ${type} ?=)`).test(fileData),
+  );
+
+  if (!typeName) return;
+
+  const importPath = path
+    .relative(path.dirname(output), file)
+    .replace(/\\/g, "/")
+    .replace(/(\/index)?\.tsx?$/, "");
+  const importName = addQueryCnt(typeName);
+
+  return {
+    importName,
+    importString: `import { ${typeName} as ${importName} } from '${importPath}';`,
+  };
+};
+
 // 共通のメソッド生成関数
-const createMethods = (indent, slugs, pathname, isCatchAll, method) => {
-  const queryParam =
-    "url?: { query?: Record<string, string | number>, hash?: string }";
+const createMethods = (
+  indent,
+  slugs,
+  pathname,
+  isCatchAll,
+  method,
+  queryType,
+) => {
+  const queryParam = `url?: { query${queryType && queryType.startsWith("Query") > 0 ? "" : "?"}: ${queryType ? queryType : "Record<string, string | number>"}, hash?: string }`;
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const pathExpression = isCatchAll
     ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
@@ -71,6 +102,7 @@ const parseAppDir = (
   parentCatchAll = false,
   parentOptionalCatchAll = false,
   exportPaths = {},
+  queries = [],
 ) => {
   indent += "  ";
   const pagesObject = [];
@@ -118,6 +150,7 @@ const parseAppDir = (
         isCatchAll,
         isOptionalCatchAll,
         exportPaths,
+        queries,
       );
 
       if (methodOption === "all" || methodOption === "both") {
@@ -128,13 +161,18 @@ const parseAppDir = (
         );
       }
     } else if (entry.isFile() && pageFileNames.includes(entry.name)) {
+      // Query handling
+      const queryDef = parseQuery(outputPath, fullPath);
+      if (queryDef) queries.push(queryDef);
+
       if (methodOption === "all" || methodOption === "both") {
         const method = createMethods(
           indent,
           newSlugs,
           url,
           isCatchAll || isOptionalCatchAll,
-          methodOption === "one" ? "one" : "all",
+          "all",
+          queryDef ? queryDef.importName : null,
         );
         pagesObject.push(method);
       }
@@ -146,6 +184,7 @@ const parseAppDir = (
           url,
           isCatchAll || isOptionalCatchAll,
           "one",
+          queryDef ? queryDef.importName : null,
         );
       }
     }
@@ -157,13 +196,18 @@ const parseAppDir = (
 // ページパス生成
 const generatePages = (baseDir) => {
   const exportPaths = {};
-  const pagesObjectString = `export const pagesPath = ${parseAppDir(baseDir, "", [], "", false, false, exportPaths)};\n\nexport type PagesPath = typeof pagesPath;`;
+  const queries = [];
+  const pagesObjectString = `export const pagesPath = ${parseAppDir(baseDir, "", [], "", false, false, exportPaths, queries)};\n\nexport type PagesPath = typeof pagesPath;`;
 
   const individualExports = Object.keys(exportPaths)
     .map((key) => `export const path${key} = ${exportPaths[key]};`)
     .join("\n\n");
 
-  return `${generateSuffixFunction}${methodOption === "all" || methodOption === "both" ? `\n\n${pagesObjectString}` : ""}${methodOption === "one" || methodOption === "both" ? `\n\n${individualExports}` : ""}`;
+  const queryImports = queries.length
+    ? `${queries.map((query) => query.importString).join("\n")}\n\n`
+    : "";
+
+  return `${queryImports}${generateSuffixFunction}${methodOption === "all" || methodOption === "both" ? `\n\n${pagesObjectString}` : ""}${methodOption === "one" || methodOption === "both" ? `\n\n${individualExports}` : ""}`;
 };
 
 // ファイルに出力
