@@ -26,12 +26,19 @@ validateArguments(baseDir, outputPath, methodOption);
 // 定数の定義
 const pageFileNames = ["page.tsx", "page.jsx", "route.ts", "route.js"];
 const generateSuffixFunction = `
-const generateSuffix = (url?: { query?: Record<string, string>, hash?: string }) => {
+const generateSuffix = (url?: { query?: Record<string, string | number>, hash?: string }) => {
   if (!url) return "";
-  const query = url?.query;
+  const query = url.query;
   const hash = url?.hash;
   if (!query && !hash) return '';
-  const search = query ? \`?\${new URLSearchParams(query)}\` : '';
+  const stringQuery: Record<string, string> = query
+    ? Object.keys(query).reduce((acc, key) => {
+        const value = query[key];
+        acc[key] = typeof value === "number" ? String(value) : value;
+        return acc;
+      }, {} as Record<string, string>)
+    : {};
+  const search = query ? \`?\${new URLSearchParams(stringQuery)}\` : '';
   return \`\${search}\${hash ? \`#\${hash}\` : ''}\`;
 };`;
 
@@ -41,7 +48,8 @@ const sanitizeVariableName = (name) =>
 
 // 共通のメソッド生成関数
 const createMethods = (indent, slugs, pathname, isCatchAll, method) => {
-  const queryParam = "url?: { query?: Record<string, string>, hash?: string }";
+  const queryParam =
+    "url?: { query?: Record<string, string | number>, hash?: string }";
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const pathExpression = isCatchAll
     ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
@@ -49,7 +57,7 @@ const createMethods = (indent, slugs, pathname, isCatchAll, method) => {
 
   return method === "all"
     ? `${indent}$url: (${queryParam}) => ({${printPathname ? ` pathname: '${pathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} })`
-    : `(${slugs.map((slug) => `${slug}: string${isCatchAll ? "[]" : ""}`)}) => {
+    : `(${slugs.map((slug) => `${slug}: ${isCatchAll ? "string[]" : "string | number"}`)}) => {
         return { $url: (${queryParam}) => ({${printPathname ? ` pathname: '${pathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} }) };
       }`;
 };
@@ -115,7 +123,7 @@ const parseAppDir = (
       if (methodOption === "all" || methodOption === "both") {
         pagesObject.push(
           isDynamic
-            ? `${indent}${keyName}: (${paramName}: ${isCatchAll || isOptionalCatchAll ? "string[]" : "string"}) => (${child})`
+            ? `${indent}${keyName}: (${paramName}: ${isCatchAll || isOptionalCatchAll ? "string[]" : "string | number"}) => (${child})`
             : `${indent}"${keyName}": ${child}`,
         );
       }
