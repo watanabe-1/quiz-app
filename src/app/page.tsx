@@ -16,11 +16,7 @@ const HomePage = async () => {
           {qualifications.map((qualification) => (
             <li key={qualification}>
               <Link
-                href={
-                  path_quiz_qualification(qualification).$url({
-                    query: { test: "こんにちは" },
-                  }).path
-                }
+                href={path_quiz_qualification(qualification).$url().path}
                 className="block rounded bg-white p-4 shadow hover:bg-blue-50"
               >
                 {qualification}
