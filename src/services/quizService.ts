@@ -8,6 +8,9 @@ export async function getAllQualifications(): Promise<string[]> {
     select: {
       name: true,
     },
+    orderBy: {
+      name: "asc",
+    },
   });
   return qualifications.map((q) => q.name);
 }
@@ -28,6 +31,9 @@ export async function getGradesByQualification(
     },
     select: {
       name: true,
+    },
+    orderBy: {
+      name: "asc",
     },
   });
 
@@ -54,6 +60,9 @@ export async function getYearsByQualificationAndGrade(
     },
     select: {
       year: true,
+    },
+    orderBy: {
+      year: "asc",
     },
   });
 
@@ -163,6 +172,9 @@ export async function getCategories(
     },
     select: {
       name: true,
+    },
+    orderBy: {
+      id: "asc",
     },
   });
 
@@ -292,6 +304,9 @@ export async function getQuestionById(
           explanation: true,
         },
       },
+    },
+    orderBy: {
+      questionId: "asc",
     },
   });
 
