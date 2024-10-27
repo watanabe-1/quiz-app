@@ -136,7 +136,7 @@ NEXT_PUBLIC_PROTOCOL=https
 ### ハッシュ化スクリプトの実行方法
 
 ```cmd
-node hashPassword.js your-plain-password
+node hashPassword.js <your-plain-password>
 ```
 
 ## シークレットキーの生成
