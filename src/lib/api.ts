@@ -1,4 +1,5 @@
 import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 import { FETCH_REVALIDATE } from "./constants";
 import {
   path_api_questions,
@@ -38,6 +39,9 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
       revalidate: FETCH_REVALIDATE,
       tags: [TAG_QUALIFICATIONS],
     },
+    headers: {
+      Cookie: cookies().toString(),
+    },
   }).then((response) => response.json());
 }
 
@@ -51,6 +55,9 @@ export async function fetchGetGradesByQualification(
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_GRADES],
+      },
+      headers: {
+        Cookie: cookies().toString(),
       },
     },
   ).then((response) => response.json());
@@ -69,6 +76,9 @@ export async function fetchGetYearsByQualificationAndGrade(
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_YEARS],
+      },
+      headers: {
+        Cookie: cookies().toString(),
       },
     },
   ).then((response) => response.json());
@@ -92,6 +102,9 @@ export async function fetchGetCategories(
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_CATEGORIES],
+      },
+      headers: {
+        Cookie: cookies().toString(),
       },
     },
   ).then((response) => response.json());
@@ -117,6 +130,9 @@ export async function fetchGetQuestionsByCategory(
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_QUESTIONS],
+      },
+      headers: {
+        Cookie: cookies().toString(),
       },
     },
   ).then((response) => response.json());
@@ -144,6 +160,9 @@ export async function fetchGetQuestionsByCategoryAndId(
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_ID],
+      },
+      headers: {
+        Cookie: cookies().toString(),
       },
     },
   ).then((response) => response.json());

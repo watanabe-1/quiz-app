@@ -18,7 +18,10 @@ export const authOptions: NextAuthOptions = {
 
         const adminUsername = process.env.ADMIN_USERNAME;
         const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+        const userUsername = process.env.USER_USERNAME;
+        const userPasswordHash = process.env.USER_PASSWORD_HASH;
 
+        // 管理者user
         if (username === adminUsername && adminPasswordHash) {
           // Compare the entered password with the hashed password
           const isPasswordValid = await bcrypt.compare(
@@ -27,6 +30,18 @@ export const authOptions: NextAuthOptions = {
           );
           if (isPasswordValid) {
             return { id: "1", name: "Admin", role: "admin" };
+          }
+        }
+
+        // 通常user
+        if (username === userUsername && userPasswordHash) {
+          // Compare the entered password with the hashed password
+          const isPasswordValid = await bcrypt.compare(
+            password,
+            userPasswordHash,
+          );
+          if (isPasswordValid) {
+            return { id: "2", name: "User", role: "user" };
           }
         }
 
@@ -43,11 +58,11 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   jwt: {
-    maxAge: 60 * 60, // 1 hour (in seconds)
+    maxAge: 60 * 60 * 24 * 31, // 31 days (in seconds)
   },
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60, // 1 hour (in seconds)
+    maxAge: 60 * 60 * 24 * 31, // 31 days (in seconds)
   },
   callbacks: {
     jwt: async ({ token, user }) => {

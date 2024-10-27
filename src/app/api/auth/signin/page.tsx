@@ -42,7 +42,7 @@ const SignInForm = () => {
       redirect: false,
       username: userInfo.username,
       password: userInfo.password,
-      callbackUrl: "/admin",
+      callbackUrl: "/",
     });
 
     setIsLoading(false);
