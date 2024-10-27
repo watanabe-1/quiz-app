@@ -29,8 +29,11 @@
 
 - `ADMIN_USERNAME`: 管理者のユーザー名。
 - `ADMIN_PASSWORD_HASH`: 管理者のパスワードの bcrypt ハッシュ。
+- `USER_USERNAME`: 通常ユーザのユーザー名。
+- `USER_PASSWORD_HASH`: 通常ユーザのパスワードの bcrypt ハッシュ。
 - `SIGN_IN_PAGE`: サインインページのパス。
-- `PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
+- `ADMIN_PROTECTED_PATHS`: 管理者認証が必要なパス（カンマ区切り）
+- `USER_PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
 - `NEXTAUTH_URL`: NextAuth.js の URL。
 - `NEXTAUTH_SECRET`: NextAuth.js のシークレットキー。
 - `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用する PROTOCOL。
