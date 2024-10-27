@@ -60,7 +60,7 @@ SIGN_IN_PAGE=/auth/signin
 ADMIN_PROTECTED_PATHS=/admin,/api/admin
 
 # 認証が必要なパス（カンマ区切り）
-USER_PROTECTED_PATHS=/
+USER_PROTECTED_PATHS=/,/quiz,/api
 
 # NextAuth.js の URL
 NEXTAUTH_URL=http://localhost:3000
@@ -120,7 +120,7 @@ SIGN_IN_PAGE=/auth/signin
 ADMIN_PROTECTED_PATHS=/admin,/api/admin
 
 # 認証が必要なパス（カンマ区切り）
-USER_PROTECTED_PATHS=/
+USER_PROTECTED_PATHS=/,/quiz,/api
 
 # NextAuth.js のシークレットキー
 NEXTAUTH_SECRET=your-very-secure-secret-key
