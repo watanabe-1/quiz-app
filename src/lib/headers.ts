@@ -1,3 +1,5 @@
+"use server";
+
 import { headers } from "next/headers";
 import { HEADERS_URL, HEADERS_PATHNAME } from "@/lib/constants";
 
