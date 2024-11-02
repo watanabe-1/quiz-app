@@ -12,7 +12,7 @@ interface BreadcrumbItem {
 }
 
 const Breadcrumb = async ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
-  const pathname = getPath();
+  const pathname = await getPath();
   const pathArray = pathname.split("/").filter((path) => path);
 
   const breadcrumbs: BreadcrumbItem[] = pathArray.map((path, index) => {

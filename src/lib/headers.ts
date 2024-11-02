@@ -8,8 +8,8 @@ const HEADERS_HOST = "host";
 const headersGet = (name: string) =>
   decodeURIComponent(headers().get(name) || "");
 
-export const getUrl = () => headersGet(HEADERS_URL);
+export const getUrl = async () => headersGet(HEADERS_URL);
 
-export const getPath = () => headersGet(HEADERS_PATHNAME);
+export const getPath = async () => headersGet(HEADERS_PATHNAME);
 
-export const getHost = () => headersGet(HEADERS_HOST);
+export const getHost = async () => headersGet(HEADERS_HOST);
