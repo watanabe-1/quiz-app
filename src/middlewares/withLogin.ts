@@ -19,6 +19,8 @@ const userProtectedPaths = process.env.USER_PROTECTED_PATHS
   : [
       // デフォルトの保護パス(全パス)
       /^\/(\/.*)?$/,
+      /^\/quiz(\/.*)?$/,
+      /^\/api(\/.*)?$/,
     ];
 
 // NextAuth.jsのミドルウェア（認証）
