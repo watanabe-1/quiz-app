@@ -1,8 +1,6 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { NonLinkableSegment } from "@/@types/quizType";
+import { getPath } from "@/lib/headers";
 
 interface BreadcrumbProps {
   nonLinkableSegments?: NonLinkableSegment[]; // Optional prop to specify non-linkable segments
@@ -13,8 +11,8 @@ interface BreadcrumbItem {
   href: string;
 }
 
-const Breadcrumb = ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
-  const pathname = usePathname();
+const Breadcrumb = async ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
+  const pathname = getPath();
   const pathArray = pathname.split("/").filter((path) => path);
 
   const breadcrumbs: BreadcrumbItem[] = pathArray.map((path, index) => {

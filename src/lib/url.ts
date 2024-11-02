@@ -1,7 +1,7 @@
-import { headers } from "next/headers";
+import { getHost } from "@/lib/headers";
 
 const createBaseUrl = (): string => {
-  const host = headers().get("host");
+  const host = getHost();
   const protocol = process.env.NEXT_PUBLIC_PROTOCOL || "https";
 
   return `${protocol}://${host}`;
