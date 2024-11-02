@@ -1,14 +1,14 @@
 import { getHost } from "@/lib/headers";
 
-const createBaseUrl = async (): Promise<string> => {
-  const host = await getHost();
+const createBaseUrl = (): string => {
+  const host = getHost();
   const protocol = process.env.NEXT_PUBLIC_PROTOCOL || "https";
 
   return `${protocol}://${host}`;
 };
 
-export const addBaseUrl = async (path: string): Promise<string> => {
-  return `${await createBaseUrl()}${path}`;
+export const addBaseUrl = (path: string): string => {
+  return `${createBaseUrl()}${path}`;
 };
 
 export const getQueryParam = <T extends Record<string, string>>(

@@ -1,3 +1,5 @@
+"use server";
+
 import Link from "next/link";
 import { NonLinkableSegment } from "@/@types/quizType";
 import { getPath } from "@/lib/headers";
@@ -11,8 +13,8 @@ interface BreadcrumbItem {
   href: string;
 }
 
-const Breadcrumb = async ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
-  const pathname = await getPath();
+const Breadcrumb = ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
+  const pathname = getPath();
   const pathArray = pathname.split("/").filter((path) => path);
 
   const breadcrumbs: BreadcrumbItem[] = pathArray.map((path, index) => {

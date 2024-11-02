@@ -33,7 +33,7 @@ export function revalidateTagByUpdateQuestion() {
 }
 
 export async function fetchGetAllQualifications(): Promise<string[]> {
-  return fetch(await addBaseUrl(path_api_questions().$url().path), {
+  return fetch(addBaseUrl(path_api_questions().$url().path), {
     method: "GET",
     next: {
       revalidate: FETCH_REVALIDATE,
@@ -49,9 +49,7 @@ export async function fetchGetGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
   return fetch(
-    await addBaseUrl(
-      path_api_questions_qualification(qualification).$url().path,
-    ),
+    addBaseUrl(path_api_questions_qualification(qualification).$url().path),
     {
       method: "GET",
       next: {
@@ -70,7 +68,7 @@ export async function fetchGetYearsByQualificationAndGrade(
   grade: string,
 ): Promise<string[]> {
   return fetch(
-    await addBaseUrl(
+    addBaseUrl(
       path_api_questions_qualification_grade(qualification, grade).$url().path,
     ),
     {
@@ -92,7 +90,7 @@ export async function fetchGetCategories(
   year: string,
 ): Promise<string[]> {
   return fetch(
-    await addBaseUrl(
+    addBaseUrl(
       path_api_questions_qualification_grade_year(
         qualification,
         grade,
@@ -119,7 +117,7 @@ export async function fetchGetQuestionsByCategory(
   category: string,
 ): Promise<QuestionData[]> {
   return fetch(
-    await addBaseUrl(
+    addBaseUrl(
       path_api_questions_qualification_grade_year_category(
         qualification,
         grade,
@@ -148,7 +146,7 @@ export async function fetchGetQuestionsByCategoryAndId(
   id: number,
 ): Promise<QuestionData> {
   return fetch(
-    await addBaseUrl(
+    addBaseUrl(
       path_api_questions_qualification_grade_year_category_id(
         qualification,
         grade,
