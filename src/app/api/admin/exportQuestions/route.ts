@@ -5,7 +5,7 @@ import {
   fetchGetYearsByQualificationAndGrade,
 } from "@/lib/api";
 import { ALL_CATEGORY } from "@/lib/constants";
-import { getQueryParam } from "@/lib/url";
+import { createQueryParamsProxy } from "@/lib/url";
 
 export const runtime = "nodejs";
 
@@ -18,9 +18,8 @@ export type Query = {
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const qualification = getQueryParam<Query>(searchParams, "qualification");
-    const grade = getQueryParam<Query>(searchParams, "grade");
-    const year = getQueryParam<Query>(searchParams, "year");
+    const { qualification, grade, year } =
+      createQueryParamsProxy<Query>(searchParams);
 
     if (!qualification || !grade) {
       return NextResponse.json(
