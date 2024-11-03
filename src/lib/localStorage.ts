@@ -1,7 +1,7 @@
 "use client";
 
-import { ANSWER_HISTORY_KEY } from "./constants";
 import { AnswerHistory } from "@/@types/quizType";
+import { ANSWER_HISTORY_KEY } from "@/lib/constants";
 
 /**
  * Retrieves the answer history from localStorage.

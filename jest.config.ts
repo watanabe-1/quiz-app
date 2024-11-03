@@ -1,8 +1,9 @@
 import type { Config } from "jest";
 import nextJest from "next/jest.js";
+import { path } from "@/lib/path";
 
 const createJestConfig = nextJest({
-  dir: "./",
+  dir: path().$url().path,
 });
 
 const config: Config = {

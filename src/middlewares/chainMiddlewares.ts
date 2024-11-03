@@ -1,5 +1,5 @@
 import { NextMiddleware } from "next/server";
-import { makeResponse } from "./makeResponse";
+import { makeResponse } from "@/middlewares/makeResponse";
 
 export type MiddlewareFactory = (middleware: NextMiddleware) => NextMiddleware;
 

@@ -3,15 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import AnswerOption from "./AnswerOption";
-import ExplanationSection from "./ExplanationSection";
-import ReportModal from "./ReportModal";
-import { calculateCorrectCount, calculateAnsweredCount } from "./quizUtils";
 import {
   AnswerHistory,
   QuestionAnswerPair,
   QuestionData,
 } from "@/@types/quizType";
+import AnswerOption from "@/components/quiz/Question/AnswerOption";
+import ExplanationSection from "@/components/quiz/Question/ExplanationSection";
+import ReportModal from "@/components/quiz/Question/ReportModal";
+import {
+  calculateCorrectCount,
+  calculateAnsweredCount,
+} from "@/components/quiz/Question/quizUtils";
 import {
   createAnswerHistoryKey,
   getAnswerHistory,

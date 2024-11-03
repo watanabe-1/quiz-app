@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useSWR from "swr";
-import ErrorState from "./ErrorState";
-import LoadingState from "./LoadingState";
 import { MenuItem } from "@/@types/quizType";
+import ErrorState from "@/components/ui/ErrorState";
+import LoadingState from "@/components/ui/LoadingState";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

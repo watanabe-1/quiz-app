@@ -36,6 +36,7 @@
     "files.insertFinalNewline": true,
     "npm.packageManager": "yarn",
     "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.preferences.importModuleSpecifier": "non-relative",
     "files.autoGuessEncoding": true,
     "[html]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",

@@ -1,4 +1,4 @@
-import { katakanaToNumbersMap } from "./constants";
+import { katakanaToNumbersMap } from "@/lib/constants";
 
 export function extractYear(text: string) {
   const yearPattern = /((令和|平成|昭和)?[0-9０-９]+年度\s?[前後]期)/;
