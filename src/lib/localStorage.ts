@@ -3,76 +3,103 @@
 import { ANSWER_HISTORY_KEY } from "./constants";
 import { AnswerHistory } from "@/@types/quizType";
 
-// Utility function to get history from localStorage
+/**
+ * Retrieves the answer history from localStorage.
+ *
+ * @returns {AnswerHistory} An object representing the answer history.
+ * If no history exists or parsing fails, an empty object is returned.
+ */
 export const getAnswerHistory = (): AnswerHistory => {
   if (typeof window === "undefined") {
     return {};
   }
 
   const historyString = localStorage.getItem(ANSWER_HISTORY_KEY);
-
   if (!historyString) {
     return {};
   }
 
   try {
     const parsedHistory: AnswerHistory = JSON.parse(historyString);
-    return parsedHistory;
+    return typeof parsedHistory === "object" ? parsedHistory : {};
   } catch (error) {
     console.error("Failed to parse answer history:", error);
     return {};
   }
 };
 
-// Utility function to set history in localStorage
+/**
+ * Stores the given answer history in localStorage.
+ *
+ * @param {AnswerHistory} history - The answer history object to store.
+ */
 export const setAnswerHistory = (history: AnswerHistory): void => {
-  localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
+  if (typeof window === "undefined") return;
+
+  try {
+    localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
+  } catch (error) {
+    console.error("Failed to set answer history:", error);
+  }
 };
 
-// Utility function to create a history key
+/**
+ * Creates a unique key for a specific answer history entry based on qualification, grade, year, and question ID.
+ *
+ * @param {string} qualification - The name of the qualification.
+ * @param {string} grade - The grade level.
+ * @param {string} year - The year of the examination.
+ * @param {number} questionId - The question identifier.
+ * @returns {string} A unique key for the answer history entry.
+ */
 export const createAnswerHistoryKey = (
   qualification: string,
   grade: string,
   year: string,
   questionId: number,
-): string => {
-  return `${qualification}-${grade}-${year}-${questionId}`;
-};
+): string => `${qualification}-${grade}-${year}-${questionId}`;
 
-// Utility function to delete all history entries with a matching qualification and year
+/**
+ * Deletes all entries in answer history that match the specified qualification, grade, and year.
+ *
+ * @param {string} qualification - The qualification name to filter by.
+ * @param {string} grade - The grade level to filter by.
+ * @param {string} year - The year to filter by.
+ */
 export const deleteHistoryByQualificationAndYear = (
   qualification: string,
   grade: string,
   year: string,
 ): void => {
-  const history = getAnswerHistory();
+  if (typeof window === "undefined") return;
 
-  // Create the keyPrefix using the qualification and grade and year
+  const history = getAnswerHistory();
   const keyPrefix = `${qualification}-${grade}-${year}`;
 
-  // Iterate over the keys in history and delete matching ones
   Object.keys(history).forEach((key) => {
     if (key.startsWith(keyPrefix)) {
       delete history[key];
     }
   });
 
-  // Save the updated history back to localStorage
   setAnswerHistory(history);
 };
 
-// Utility function to get all history entries with a matching qualification and year
+/**
+ * Retrieves all entries in answer history that match the specified qualification, grade, and year.
+ *
+ * @param {string} qualification - The qualification name to filter by.
+ * @param {string} grade - The grade level to filter by.
+ * @param {string} year - The year to filter by.
+ * @returns {AnswerHistory} A filtered answer history object containing only the matching entries.
+ */
 export const getHistoryByQualificationAndYear = (
   qualification: string,
   grade: string,
   year: string,
 ): AnswerHistory => {
   const history = getAnswerHistory();
-
-  // Create the keyPrefix using the qualification and grade and year
   const keyPrefix = `${qualification}-${grade}-${year}`;
-
-  // Filter the history to return only the matching entries
   const filteredHistory: AnswerHistory = {};
 
   Object.keys(history).forEach((key) => {
