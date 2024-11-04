@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
 import { UploadBccExamSubmit } from "@/app/admin/uploadBccExam/page";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
@@ -37,7 +37,7 @@ interface ExamData {
   categories: CategoryAnswers[];
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const { pdf } = createFormDataProxy<UploadBccExamSubmit>(formData);
 

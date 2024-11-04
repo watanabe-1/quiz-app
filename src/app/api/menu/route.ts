@@ -22,9 +22,9 @@ export type Query = {
   path: string;
 };
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   // URLからクエリパラメータを取得
-  const { searchParams } = new URL(req.url);
+  const searchParams = request.nextUrl.searchParams;
   const { path } = createQueryParamsProxy<Query>(searchParams);
 
   // パスが取得できなかった場合のエラーハンドリング
