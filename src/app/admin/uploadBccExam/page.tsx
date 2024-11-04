@@ -1,6 +1,15 @@
 "use client";
 
 import { useRef, useState } from "react";
+import {
+  path_api_admin_uploadBccExam,
+  path_api_admin_uploadBccExamAns,
+} from "@/lib/path";
+import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
+
+export type UploadBccExamSubmit = {
+  pdf: File;
+};
 
 const BccExamUploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -8,11 +17,11 @@ const BccExamUploadPage = () => {
   const fileAnInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    handleSubmitBase(e, "/api/admin/uploadBccExam");
+    handleSubmitBase(e, path_api_admin_uploadBccExam().$url().path);
   };
 
   const handleSubmitAnswer = async (e: React.FormEvent) => {
-    handleSubmitBase(e, "/api/admin/uploadBccExamAns");
+    handleSubmitBase(e, path_api_admin_uploadBccExamAns().$url().path);
   };
 
   const handleSubmitBase = async (e: React.FormEvent, url: string) => {
@@ -20,13 +29,13 @@ const BccExamUploadPage = () => {
 
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("pdf", file);
+    const formDataProxy = createFormDataProxy<UploadBccExamSubmit>();
+    formDataProxy.pdf = file;
 
     try {
       const res = await fetch(url, {
         method: "POST",
-        body: formData,
+        body: formDataProxy.getFormData(),
       });
 
       if (!res.ok) {

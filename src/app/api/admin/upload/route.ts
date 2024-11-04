@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { QuestionData } from "@/@types/quizType";
+import { UploadSubmit } from "@/app/admin/upload/page";
+import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import { saveQuestions } from "@/services/quizService";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const file = formData.get("file") as File;
-  const qualification = formData.get("qualification") as string;
-  const grade = formData.get("grade") as string;
-  const year = formData.get("year") as string;
+  const { file, qualification, grade, year } =
+    createFormDataProxy<UploadSubmit>(formData);
 
   if (!file || !qualification || !year) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });

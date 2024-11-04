@@ -1,6 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
+import { UploadImageSubmit } from "@/app/admin/[qualification]/[grade]/[year]/edit/[id]/page";
+import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 
 function sanitizePathSegment(segment: string): string {
   return segment.replace(/[^a-zA-Z0-9\-_]/g, "_");
@@ -8,10 +10,8 @@ function sanitizePathSegment(segment: string): string {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const file = formData.get("file") as File;
-  const targetDir = formData.get("targetDir") as string;
-  const qualification = formData.get("qualification") as string;
-  const year = formData.get("year") as string;
+  const { file, targetDir, qualification, year } =
+    createFormDataProxy<UploadImageSubmit>(formData);
 
   if (!file || !targetDir || !qualification || !year) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });

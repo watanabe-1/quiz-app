@@ -8,6 +8,7 @@ import useSWR from "swr";
 import { MenuItem } from "@/@types/quizType";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import { path_api_menu } from "@/lib/path";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -19,7 +20,11 @@ const Menu: React.FC = () => {
   const pathname = usePathname();
 
   const { data: menuItems, error } = useSWR<MenuItem[]>(
-    `/api/menu?path=${encodeURIComponent(pathname)}`,
+    path_api_menu().$url({
+      query: {
+        path: pathname,
+      },
+    }).path,
     fetcher,
   );
 

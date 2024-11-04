@@ -3,6 +3,11 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import React, { useState, useEffect, Suspense } from "react";
+import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
+
+type SignInReturnParam = {
+  error: string | undefined;
+};
 
 const SignInForm = () => {
   const [userInfo, setUserInfo] = useState({ username: "", password: "" });
@@ -12,9 +17,10 @@ const SignInForm = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const errorParam = searchParams.get("error");
-    if (errorParam) {
-      switch (errorParam) {
+    const { error } = createQueryParamsProxy<SignInReturnParam>(searchParams);
+
+    if (error) {
+      switch (error) {
         case "CredentialsSignin":
           setError("ユーザー名またはパスワードが正しくありません。");
           break;

@@ -12,8 +12,18 @@ import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import {
   path_admin_qualification_grade_year,
   path_api_admin_questions_qualification_grade_year_id,
+  path_api_admin_uploadImage,
   path_api_questions_qualification_grade_year_category_id,
 } from "@/lib/path";
+import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
+
+export type UploadImageSubmit = {
+  file: File;
+  targetDir: string;
+  qualification: string;
+  grade: string;
+  year: string;
+};
 
 interface Params {
   qualification: string;
@@ -60,8 +70,6 @@ const EditQuestion = ({ params }: { params: Params }) => {
   ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const uploadData = new FormData();
-      uploadData.append("file", file);
       let targetDir = "";
 
       if (field === "question") {
@@ -74,14 +82,16 @@ const EditQuestion = ({ params }: { params: Params }) => {
         }
       }
 
-      uploadData.append("targetDir", targetDir);
-      uploadData.append("qualification", qualification);
-      uploadData.append("grade", grade);
-      uploadData.append("year", year);
+      const formDataProxy = createFormDataProxy<UploadImageSubmit>();
+      formDataProxy.file = file;
+      formDataProxy.targetDir = targetDir;
+      formDataProxy.qualification = qualification;
+      formDataProxy.grade = grade;
+      formDataProxy.year = year;
 
-      const res = await fetch("/api/admin/uploadImage", {
+      const res = await fetch(path_api_admin_uploadImage().$url().path, {
         method: "POST",
-        body: uploadData,
+        body: formDataProxy.getFormData(),
       });
 
       if (res.ok) {

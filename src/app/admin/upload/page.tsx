@@ -1,6 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
+import { path_api_admin_upload } from "@/lib/path";
+import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
+
+export type UploadSubmit = {
+  file: File;
+  qualification: string;
+  grade: string;
+  year: string;
+};
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -38,15 +47,15 @@ const UploadPage = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("qualification", qualification);
-    formData.append("grade", grade);
-    formData.append("year", year);
+    const formDataProxy = createFormDataProxy<UploadSubmit>();
+    formDataProxy.file = file;
+    formDataProxy.qualification = qualification;
+    formDataProxy.grade = grade;
+    formDataProxy.year = year;
 
-    const res = await fetch("/api/admin/upload", {
+    const res = await fetch(path_api_admin_upload().$url().path, {
       method: "POST",
-      body: formData,
+      body: formDataProxy.getFormData(),
     });
 
     if (res.ok) {

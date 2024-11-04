@@ -1,4 +1,5 @@
 import { Query as Query_0 } from '../app/api/admin/exportQuestions/route';
+import { Query as Query_1 } from '../app/api/menu/route';
 
 
 const generateSuffix = (url?: { query?: Record<string, string | number>, hash?: string }) => {
@@ -82,7 +83,7 @@ export const path_api_auth_signin = () => {
       };
 
 export const path_api_menu = () => {
-        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/menu${generateSuffix(url)}` }) };
+        return { $url: (url: { query: Query_1, hash?: string }) => ({  hash: url?.hash, path: `/api/menu${generateSuffix(url)}` }) };
       };
 
 export const path_api_questions_qualification_grade_year_category_id = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {

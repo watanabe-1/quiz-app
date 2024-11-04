@@ -11,15 +11,13 @@
  * const params = createQueryParamsProxy<{ param1: string | undefined, param2: string | undefined }>(searchParams);
  * console.log(params.param1); // Outputs: "value1"
  */
-export const createQueryParamsProxy = <
-  T extends Record<string, string | undefined>,
->(
+export const createQueryParamsProxy = <T extends Record<string, string>>(
   searchParams: URLSearchParams,
 ): T => {
   return new Proxy({} as T, {
     get: (_, prop: string) => {
       // Returns the value for the given prop, or undefined if not present
-      return searchParams.get(prop) ?? undefined;
+      return decodeURIComponent(searchParams.get(prop) ?? "");
     },
   });
 };

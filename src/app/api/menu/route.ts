@@ -16,11 +16,16 @@ import {
   path_quiz_qualification_grade_year_category,
   path_quiz_qualification_grade_year_category_id,
 } from "@/lib/path";
+import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
+
+export type Query = {
+  path: string;
+};
 
 export async function GET(req: NextRequest) {
   // URLからクエリパラメータを取得
   const { searchParams } = new URL(req.url);
-  const path = decodeURIComponent(searchParams.get("path") as string);
+  const { path } = createQueryParamsProxy<Query>(searchParams);
 
   // パスが取得できなかった場合のエラーハンドリング
   if (!path) {

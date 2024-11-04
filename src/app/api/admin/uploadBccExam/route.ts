@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
 import { QuestionData, QuestionOption } from "@/@types/quizType";
+import { UploadBccExamSubmit } from "@/app/admin/uploadBccExam/page";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import {
   extractYear,
@@ -9,20 +10,21 @@ import {
   extractGradeAndQualification,
 } from "@/lib/bccuploads";
 import { katakanaToNumbersMap } from "@/lib/constants";
+import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import { saveQuestions } from "@/services/quizService";
 
 export async function POST(request: Request) {
-  const data = await request.formData();
-  const file = data.get("pdf") as File;
+  const formData = await request.formData();
+  const { pdf } = createFormDataProxy<UploadBccExamSubmit>(formData);
 
-  if (!file) {
+  if (!pdf) {
     return NextResponse.json(
       { error: "ファイルがありません" },
       { status: 400 },
     );
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const buffer = Buffer.from(await pdf.arrayBuffer());
 
   try {
     const data = await pdfParse(buffer);
