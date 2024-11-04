@@ -1,4 +1,4 @@
-import { getHost } from "@/lib/headers";
+import { createHeadersProxy } from "@/lib/headers";
 
 /**
  * Creates a base URL string based on the protocol and host.
@@ -9,7 +9,7 @@ import { getHost } from "@/lib/headers";
  * @throws Will throw an error if the host is not defined.
  */
 const createBaseUrl = (): string => {
-  const host = getHost();
+  const { host } = createHeadersProxy();
   if (!host) {
     throw new Error("Host is not defined");
   }

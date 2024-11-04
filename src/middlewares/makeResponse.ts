@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { HEADERS_URL, HEADERS_PATHNAME } from "@/lib/constants";
+import { createHeadersProxy } from "@/lib/headers";
 
 // 全リクエストでのヘッダー設定
 export function makeResponse() {
   return async (request: NextRequest) => {
     const requestHeaders = new Headers(request.headers);
-    requestHeaders.set(HEADERS_URL, request.url);
-    requestHeaders.set(HEADERS_PATHNAME, request.nextUrl.pathname);
+    const headersProxy = createHeadersProxy();
+    headersProxy["x-pathname"] = request.nextUrl.pathname;
+    headersProxy["x-url"] = request.url;
 
     return NextResponse.next({
       request: {

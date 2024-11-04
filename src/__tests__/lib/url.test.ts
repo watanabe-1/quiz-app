@@ -1,15 +1,17 @@
-import { getHost } from "@/lib/headers";
+import { createHeadersProxy } from "@/lib/headers";
 import { addBaseUrl, createQueryParamsProxy, getQueryParam } from "@/lib/url";
 
-// getHostをモック
+const defHeaders = { host: "example.com" };
+
+// createHeadersProxyをモック
 jest.mock("@/lib/headers", () => ({
-  getHost: jest.fn(),
+  createHeadersProxy: jest.fn(),
 }));
 
 describe("Utility Functions", () => {
   describe("createBaseUrl", () => {
     it("should return base URL with protocol and host", () => {
-      (getHost as jest.Mock).mockReturnValue("example.com");
+      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
       process.env.NEXT_PUBLIC_PROTOCOL = "http";
 
       const expectedUrl = "http://example.com";
@@ -18,7 +20,7 @@ describe("Utility Functions", () => {
     });
 
     it("should use 'https' as default protocol if NEXT_PUBLIC_PROTOCOL is not set", () => {
-      (getHost as jest.Mock).mockReturnValue("example.com");
+      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
       delete process.env.NEXT_PUBLIC_PROTOCOL;
 
       const expectedUrl = "https://example.com";
@@ -27,7 +29,7 @@ describe("Utility Functions", () => {
     });
 
     it("should throw an error if host is not defined", () => {
-      (getHost as jest.Mock).mockReturnValue(null);
+      (createHeadersProxy as jest.Mock).mockReturnValue({});
 
       expect(() => addBaseUrl("")).toThrow("Host is not defined");
     });
@@ -35,7 +37,7 @@ describe("Utility Functions", () => {
 
   describe("addBaseUrl", () => {
     it("should add a path to the base URL", () => {
-      (getHost as jest.Mock).mockReturnValue("example.com");
+      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
       process.env.NEXT_PUBLIC_PROTOCOL = "https";
 
       const path = "/test-path";
@@ -45,7 +47,7 @@ describe("Utility Functions", () => {
     });
 
     it("should work without a leading slash in the path", () => {
-      (getHost as jest.Mock).mockReturnValue("example.com");
+      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
       process.env.NEXT_PUBLIC_PROTOCOL = "https";
 
       const path = "/test-path";
