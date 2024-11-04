@@ -19,6 +19,9 @@ const TAG_CATEGORIES = "categories";
 const TAG_QUESTIONS = "questions";
 const TAG_ID = "id";
 
+/**
+ * Revalidates cache tags for qualifications, grades, and years, along with questions.
+ */
 export function revalidateTagByUpdateQuestions() {
   revalidateTag(TAG_QUALIFICATIONS);
   revalidateTag(TAG_GRADES);
@@ -26,12 +29,19 @@ export function revalidateTagByUpdateQuestions() {
   revalidateTagByUpdateQuestion();
 }
 
+/**
+ * Revalidates cache tags for categories, questions, and specific question ID.
+ */
 export function revalidateTagByUpdateQuestion() {
   revalidateTag(TAG_CATEGORIES);
   revalidateTag(TAG_QUESTIONS);
   revalidateTag(TAG_ID);
 }
 
+/**
+ * Fetches all available qualifications.
+ * @returns {Promise<string[]>} - A promise resolving to a list of qualifications.
+ */
 export async function fetchGetAllQualifications(): Promise<string[]> {
   return fetch(addBaseUrl(path_api_questions().$url().path), {
     method: "GET",
@@ -45,6 +55,11 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
   }).then((response) => response.json());
 }
 
+/**
+ * Fetches all grades for a specific qualification.
+ * @param qualification - The qualification identifier.
+ * @returns {Promise<string[]>} - A promise resolving to a list of grades.
+ */
 export async function fetchGetGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
@@ -63,6 +78,12 @@ export async function fetchGetGradesByQualification(
   ).then((response) => response.json());
 }
 
+/**
+ * Fetches all years for a specific qualification and grade.
+ * @param qualification - The qualification identifier.
+ * @param grade - The grade level.
+ * @returns {Promise<string[]>} - A promise resolving to a list of years.
+ */
 export async function fetchGetYearsByQualificationAndGrade(
   qualification: string,
   grade: string,
@@ -84,6 +105,13 @@ export async function fetchGetYearsByQualificationAndGrade(
   ).then((response) => response.json());
 }
 
+/**
+ * Fetches all categories for a given qualification, grade, and year.
+ * @param qualification - The qualification identifier.
+ * @param grade - The grade level.
+ * @param year - The year of examination.
+ * @returns {Promise<string[]>} - A promise resolving to a list of categories.
+ */
 export async function fetchGetCategories(
   qualification: string,
   grade: string,
@@ -110,6 +138,14 @@ export async function fetchGetCategories(
   ).then((response) => response.json());
 }
 
+/**
+ * Fetches questions by category for a specified qualification, grade, year, and category.
+ * @param qualification - The qualification identifier.
+ * @param grade - The grade level.
+ * @param year - The year of examination.
+ * @param category - The question category.
+ * @returns {Promise<QuestionData[]>} - A promise resolving to an array of question data.
+ */
 export async function fetchGetQuestionsByCategory(
   qualification: string,
   grade: string,
@@ -138,6 +174,15 @@ export async function fetchGetQuestionsByCategory(
   ).then((response) => response.json());
 }
 
+/**
+ * Fetches a specific question by ID within a given qualification, grade, year, and category.
+ * @param qualification - The qualification identifier.
+ * @param grade - The grade level.
+ * @param year - The year of examination.
+ * @param category - The question category.
+ * @param id - The unique identifier of the question.
+ * @returns {Promise<QuestionData>} - A promise resolving to the question data.
+ */
 export async function fetchGetQuestionsByCategoryAndId(
   qualification: string,
   grade: string,

@@ -2,8 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { AnswerHistory } from "@/@types/quizType";
-import { ANSWER_HISTORY_KEY } from "@/lib/constants";
+import { AnswerHistory, CustomizableLocalStorage } from "@/@types/quizType";
 import {
   getAnswerHistory,
   setAnswerHistory,
@@ -26,14 +25,16 @@ describe("Answer History Utility Functions", () => {
     setAnswerHistory(history);
 
     const storedHistory = JSON.parse(
-      localStorage.getItem(ANSWER_HISTORY_KEY) as string,
+      (localStorage as unknown as CustomizableLocalStorage)
+        .answerHistory as string,
     );
     expect(storedHistory).toEqual(history);
   });
 
   test("getAnswerHistory should retrieve stored answer history from localStorage", () => {
     const history: AnswerHistory = { sampleKey: 1 };
-    localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
+    (localStorage as unknown as CustomizableLocalStorage).answerHistory =
+      JSON.stringify(history);
 
     expect(getAnswerHistory()).toEqual(history);
   });
@@ -54,7 +55,8 @@ describe("Answer History Utility Functions", () => {
       "Math-A-2024-2": 2,
       "Science-B-2024-1": 3,
     };
-    localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
+    (localStorage as unknown as CustomizableLocalStorage).answerHistory =
+      JSON.stringify(history);
 
     deleteHistoryByQualificationAndYear("Math", "A", "2024");
 
@@ -68,7 +70,8 @@ describe("Answer History Utility Functions", () => {
       "Math-A-2024-2": 2,
       "Science-B-2024-1": 3,
     };
-    localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
+    (localStorage as unknown as CustomizableLocalStorage).answerHistory =
+      JSON.stringify(history);
 
     const result = getHistoryByQualificationAndYear("Math", "A", "2024");
     expect(result).toEqual({
