@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import React, { useState, useEffect, Suspense } from "react";
+import { path } from "@/lib/path";
 import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
 
 type SignInReturnParam = {
@@ -48,7 +49,7 @@ const SignInForm = () => {
       redirect: false,
       username: userInfo.username,
       password: userInfo.password,
-      callbackUrl: "/",
+      callbackUrl: path().$url().path,
     });
 
     setIsLoading(false);
