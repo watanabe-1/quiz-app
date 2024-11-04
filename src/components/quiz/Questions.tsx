@@ -75,8 +75,7 @@ const Questions: React.FC<QuestionsProps> = ({
               className="block rounded bg-white p-4 shadow hover:bg-blue-50"
             >
               <span>
-                {`問題${question.questionId} ${question.question.text}` ||
-                  "（テキストなし）"}
+                {`問題${question.questionId} ${question.question.text}`}
               </span>
             </a>
           </li>

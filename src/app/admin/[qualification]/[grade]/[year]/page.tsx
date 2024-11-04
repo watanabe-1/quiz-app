@@ -48,8 +48,7 @@ const YearAdminPage = async ({ params }: { params: Params }) => {
             >
               <div className="flex items-center justify-between">
                 <span>
-                  {`問題${question.questionId} ${question.question.text}` ||
-                    "（テキストなし）"}
+                  {`問題${question.questionId} ${question.question.text}`}
                 </span>
                 <Link
                   href={
