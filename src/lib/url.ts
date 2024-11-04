@@ -42,6 +42,6 @@ export const getQueryParam = <T extends Record<string, string | undefined>>(
   searchParams: URLSearchParams,
   key: keyof T,
 ): string | undefined => {
-  const value = searchParams.get(key as string); // Cast key to string type
+  const value = searchParams.get(key as string);
   return value ?? undefined;
 };

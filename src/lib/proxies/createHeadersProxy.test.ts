@@ -23,7 +23,7 @@ describe("CustomizableRequestHeaders", () => {
     const mockRequest = { headers: mockHeaders } as NextRequest;
     const proxy = (await createHeadersProxy(
       mockRequest,
-    )) as CustomizableRequestHeaders & { headers: Headers };
+    )) as CustomizableRequestHeaders & { getHeaders: () => Headers };
 
     // Standard headers
     expect(proxy["user-agent"]).toBe("Mozilla/5.0");
@@ -42,7 +42,7 @@ describe("CustomizableRequestHeaders", () => {
     expect(proxy["x-pathname"]).toBe("/request");
 
     // Verify access to the Headers instance
-    expect(proxy.headers.get("user-agent")).toBe("Mozilla/5.0");
+    expect(proxy.getHeaders().get("user-agent")).toBe("Mozilla/5.0");
   });
 
   test("should return undefined for headers not set", async () => {
@@ -50,7 +50,7 @@ describe("CustomizableRequestHeaders", () => {
     const mockRequest = { headers: mockHeaders } as NextRequest;
     const proxy = (await createHeadersProxy(
       mockRequest,
-    )) as CustomizableRequestHeaders & { headers: Headers };
+    )) as CustomizableRequestHeaders & { getHeaders: () => Headers };
 
     expect(proxy["user-agent"]).toBeUndefined();
     expect(proxy.authorization).toBeUndefined();
@@ -71,7 +71,7 @@ describe("CustomizableRequestHeaders", () => {
     const mockRequest = { headers: mockHeaders } as NextRequest;
     const proxy = (await createHeadersProxy(
       mockRequest,
-    )) as CustomizableRequestHeaders & { headers: Headers };
+    )) as CustomizableRequestHeaders & { getHeaders: () => Headers };
 
     // Set custom headers via proxy
     proxy["x-url"] = "https://example.com/request";
@@ -86,7 +86,7 @@ describe("CustomizableRequestHeaders", () => {
     expect(mockHeaders.get("x-pathname")).toBe("/request");
 
     // Verify access to the Headers instance
-    expect(proxy.headers.get("x-url")).toBe("https://example.com/request");
-    expect(proxy.headers.get("x-pathname")).toBe("/request");
+    expect(proxy.getHeaders().get("x-url")).toBe("https://example.com/request");
+    expect(proxy.getHeaders().get("x-pathname")).toBe("/request");
   });
 });
