@@ -35,7 +35,7 @@ const BccExamUploadPage = () => {
     try {
       const res = await fetch(url, {
         method: "POST",
-        body: formDataProxy.formData,
+        body: formDataProxy.getFormData(),
       });
 
       if (!res.ok) {

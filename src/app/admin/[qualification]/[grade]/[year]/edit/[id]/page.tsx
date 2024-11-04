@@ -93,7 +93,7 @@ const EditQuestion = (props: { params: Params }) => {
 
       const res = await fetch(path_api_admin_uploadImage().$url().path, {
         method: "POST",
-        body: formDataProxy.formData,
+        body: formDataProxy.getFormData(),
       });
 
       if (res.ok) {

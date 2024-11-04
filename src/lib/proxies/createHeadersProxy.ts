@@ -5,9 +5,9 @@ import { CustomizableRequestHeaders } from "@/@types/quizType";
 // Define function overloads
 export function createHeadersProxy(
   request: NextRequest,
-): Promise<CustomizableRequestHeaders & { headers: Headers }>;
+): Promise<CustomizableRequestHeaders & { getHeaders: () => Headers }>;
 export function createHeadersProxy(): Promise<
-  Readonly<CustomizableRequestHeaders & { headers: Headers }>
+  Readonly<CustomizableRequestHeaders & { getHeaders: () => Headers }>
 >;
 
 /**
@@ -27,23 +27,23 @@ export function createHeadersProxy(): Promise<
  * // Example 1: Create a mutable headers proxy using an instance of NextRequest
  * async function exampleMutableProxy(request: NextRequest) {
  *   const headersProxy = await createHeadersProxy(request);
- *   console.log(headersProxy.headers.get("Authorization")); // Retrieve the 'Authorization' header
- *   headersProxy.headers.set("Authorization", "Bearer token"); // Set a new value for the 'Authorization' header
+ *   console.log(headersProxy.getHeaders().get("Authorization")); // Retrieve the 'Authorization' header
+ *   headersProxy.getHeaders().set("Authorization", "Bearer token"); // Set a new value for the 'Authorization' header
  * }
  *
  * @example
  * // Example 2: Create an immutable headers proxy with default headers
  * async function exampleImmutableProxy() {
  *   const headersProxy = await createHeadersProxy();
- *   console.log(headersProxy.headers.get("Authorization")); // Retrieve the 'Authorization' header
- *   // headersProxy.headers.set("Authorization", "Bearer token"); // This would cause a compile-time error
+ *   console.log(headersProxy.getHeaders().get("Authorization")); // Retrieve the 'Authorization' header
+ *   // headersProxy.getHeaders().set("Authorization", "Bearer token"); // This would cause a compile-time error
  * }
  */
 export async function createHeadersProxy(
   request?: NextRequest,
 ): Promise<
-  | (CustomizableRequestHeaders & { headers: Headers })
-  | Readonly<CustomizableRequestHeaders & { headers: Headers }>
+  | (CustomizableRequestHeaders & { getHeaders: () => Headers })
+  | Readonly<CustomizableRequestHeaders & { getHeaders: () => Headers }>
 > {
   // Create a new Headers instance from request headers if request is provided
   const initialHeaders = request
@@ -52,18 +52,18 @@ export async function createHeadersProxy(
 
   // Configure Proxy behavior based on the presence of a mutable request
   const proxyHandler: ProxyHandler<
-    CustomizableRequestHeaders & { headers: Headers }
+    CustomizableRequestHeaders & { getHeaders: () => Headers }
   > = {
     /**
      * Retrieves the value of a header or the Headers object itself.
      * If the header is not found in initialHeaders, it returns undefined.
      *
      * @param _ - Unused target object reference.
-     * @param prop - The name of the header to retrieve, or 'headers' to retrieve the entire Headers object.
+     * @param prop - The name of the header to retrieve, or 'getHeaders' to retrieve the entire Headers object.
      * @returns The value of the requested header, or undefined if not present.
      */
     get: (_, prop: string) => {
-      if (prop === "headers") return initialHeaders; // Return the Headers instance itself
+      if (prop === "getHeaders") return () => initialHeaders; // Return the Headers instance through getHeaders method
       return initialHeaders.get(prop) ?? undefined;
     },
   };
@@ -77,7 +77,7 @@ export async function createHeadersProxy(
   }
 
   return new Proxy(
-    {} as CustomizableRequestHeaders & { headers: Headers },
+    {} as CustomizableRequestHeaders & { getHeaders: () => Headers },
     proxyHandler,
   );
 }

@@ -55,7 +55,7 @@ const UploadPage = () => {
 
     const res = await fetch(path_api_admin_upload().$url().path, {
       method: "POST",
-      body: formDataProxy.formData,
+      body: formDataProxy.getFormData(),
     });
 
     if (res.ok) {

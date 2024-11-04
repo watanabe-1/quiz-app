@@ -10,7 +10,7 @@ export function makeResponse() {
 
     return NextResponse.next({
       request: {
-        headers: headersProxy.headers,
+        headers: headersProxy.getHeaders(),
       },
     });
   };
