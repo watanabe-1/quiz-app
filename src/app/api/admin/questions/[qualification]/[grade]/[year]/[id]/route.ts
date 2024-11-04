@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import { existsQuestion, saveQuestion } from "@/services/quizService";
 
-export async function PUT(
-  request: Request,
-  {
-    params,
-  }: {
-    params: { qualification: string; grade: string; year: string; id: string };
-  },
-) {
+type Params = Promise<{
+  qualification: string;
+  grade: string;
+  year: string;
+  id: string;
+}>;
+
+export async function PUT(request: Request, segmentData: { params: Params }) {
+  const params = await segmentData.params;
   const { qualification, grade, year, id } = params;
   const questionId = parseInt(id);
   const updatedQuestion = await request.json();

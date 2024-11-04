@@ -7,15 +7,16 @@ import { fetchGetGradesByQualification } from "@/lib/api";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import { path_quiz_qualification_grade } from "@/lib/path";
 
-interface Params {
+type Params = Promise<{
   qualification: string;
-}
+}>;
 
 export const metadata: Metadata = {
   title: "資格選択",
 };
 
-const GradesPage = async ({ params }: { params: Params }) => {
+const GradesPage = async (props: { params: Params }) => {
+  const params = await props.params;
   const qualification = decodeURIComponent(params.qualification);
   const grades = await fetchGetGradesByQualification(qualification);
 

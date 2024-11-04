@@ -2,19 +2,15 @@ import { NextResponse } from "next/server";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { getQuestions, getQuestionsByCategory } from "@/services/quizService";
 
-export async function GET(
-  request: Request,
-  {
-    params,
-  }: {
-    params: {
-      qualification: string;
-      grade: string;
-      year: string;
-      category: string;
-    };
-  },
-) {
+type Params = Promise<{
+  qualification: string;
+  grade: string;
+  year: string;
+  category: string;
+}>;
+
+export async function GET(request: Request, segmentData: { params: Params }) {
+  const params = await segmentData.params;
   const { qualification, grade, year, category } = params;
   const questions =
     category === ALL_CATEGORY

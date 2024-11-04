@@ -11,11 +11,9 @@ export const metadata: Metadata = {
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = async (props: { children: React.ReactNode }) => {
+  const children = await props.children;
+
   return (
     <html lang="ja">
       <body className={inter.className}>
@@ -23,4 +21,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

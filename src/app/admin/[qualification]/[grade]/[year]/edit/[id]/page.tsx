@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { use, useState, useEffect } from "react";
 import useSWR from "swr";
 import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
 import Breadcrumb from "@/components/ui/Breadcrumb";
@@ -25,20 +25,22 @@ export type UploadImageSubmit = {
   year: string;
 };
 
-interface Params {
+type Params = Promise<{
   qualification: string;
   grade: string;
   year: string;
   id: string;
-}
+}>;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const EditQuestion = ({ params }: { params: Params }) => {
+const EditQuestion = (props: { params: Params }) => {
+  const params = use(props.params);
   const qualification = decodeURIComponent(params.qualification);
   const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);
   const id = decodeURIComponent(params.id);
+
   const { data: questionData, error } = useSWR<QuestionData>(
     path_api_questions_qualification_grade_year_category_id(
       qualification,

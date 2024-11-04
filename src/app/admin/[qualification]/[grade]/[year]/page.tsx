@@ -6,20 +6,22 @@ import { fetchGetQuestionsByCategory } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import { path_admin_qualification_grade_year_edit_id } from "@/lib/path";
 
-interface Params {
+type Params = Promise<{
   qualification: string;
   grade: string;
   year: string;
-}
+}>;
 
 export const metadata: Metadata = {
   title: "問題選択",
 };
 
-const YearAdminPage = async ({ params }: { params: Params }) => {
+const YearAdminPage = async (props: { params: Params }) => {
+  const params = await props.params;
   const qualification = decodeURIComponent(params.qualification);
   const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);
+
   const questions = await fetchGetQuestionsByCategory(
     qualification,
     grade,

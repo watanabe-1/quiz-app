@@ -1,20 +1,16 @@
 import { NextResponse } from "next/server";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
 
-export async function GET(
-  request: Request,
-  {
-    params,
-  }: {
-    params: {
-      qualification: string;
-      grade: string;
-      year: string;
-      category: string;
-      id: string;
-    };
-  },
-) {
+type Params = Promise<{
+  qualification: string;
+  grade: string;
+  year: string;
+  category: string;
+  id: string;
+}>;
+
+export async function GET(request: Request, segmentData: { params: Params }) {
+  const params = await segmentData.params;
   const { qualification, grade, year, category, id } = params;
   const questionId = parseInt(id);
   // できるだけキャッシュから取得したいので、questionId単位でのSQL発行は行わない

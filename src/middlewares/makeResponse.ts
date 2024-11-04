@@ -5,7 +5,7 @@ import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
 export function makeResponse() {
   return async (request: NextRequest) => {
     const requestHeaders = new Headers(request.headers);
-    const headersProxy = createHeadersProxy();
+    const headersProxy = await createHeadersProxy(requestHeaders);
     headersProxy["x-pathname"] = request.nextUrl.pathname;
     headersProxy["x-url"] = request.url;
 

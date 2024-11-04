@@ -10,49 +10,57 @@ jest.mock("@/lib/proxies/createHeadersProxy", () => ({
 
 describe("Utility Functions", () => {
   describe("createBaseUrl", () => {
-    it("should return base URL with protocol and host", () => {
-      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
+    it("should return base URL with protocol and host", async () => {
+      (createHeadersProxy as jest.Mock).mockResolvedValue(
+        Promise.resolve(defHeaders),
+      );
       process.env.NEXT_PUBLIC_PROTOCOL = "http";
 
       const expectedUrl = "http://example.com";
-      const result = addBaseUrl("");
+      const result = await addBaseUrl("");
       expect(result).toBe(expectedUrl);
     });
 
-    it("should use 'https' as default protocol if NEXT_PUBLIC_PROTOCOL is not set", () => {
-      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
+    it("should use 'https' as default protocol if NEXT_PUBLIC_PROTOCOL is not set", async () => {
+      (createHeadersProxy as jest.Mock).mockResolvedValue(
+        Promise.resolve(defHeaders),
+      );
       delete process.env.NEXT_PUBLIC_PROTOCOL;
 
       const expectedUrl = "https://example.com";
-      const result = addBaseUrl("");
+      const result = await addBaseUrl("");
       expect(result).toBe(expectedUrl);
     });
 
-    it("should throw an error if host is not defined", () => {
-      (createHeadersProxy as jest.Mock).mockReturnValue({});
+    it("should throw an error if host is not defined", async () => {
+      (createHeadersProxy as jest.Mock).mockResolvedValue({});
 
-      expect(() => addBaseUrl("")).toThrow("Host is not defined");
+      await expect(addBaseUrl("")).rejects.toThrow("Host is not defined");
     });
   });
 
   describe("addBaseUrl", () => {
-    it("should add a path to the base URL", () => {
-      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
+    it("should add a path to the base URL", async () => {
+      (createHeadersProxy as jest.Mock).mockResolvedValue(
+        Promise.resolve(defHeaders),
+      );
       process.env.NEXT_PUBLIC_PROTOCOL = "https";
 
       const path = "/test-path";
       const expectedUrl = "https://example.com/test-path";
-      const result = addBaseUrl(path);
+      const result = await addBaseUrl(path);
       expect(result).toBe(expectedUrl);
     });
 
-    it("should work without a leading slash in the path", () => {
-      (createHeadersProxy as jest.Mock).mockReturnValue(defHeaders);
+    it("should work without a leading slash in the path", async () => {
+      (createHeadersProxy as jest.Mock).mockResolvedValue(
+        Promise.resolve(defHeaders),
+      );
       process.env.NEXT_PUBLIC_PROTOCOL = "https";
 
       const path = "/test-path";
       const expectedUrl = "https://example.com/test-path";
-      const result = addBaseUrl(path);
+      const result = await addBaseUrl(path);
       expect(result).toBe(expectedUrl);
     });
   });

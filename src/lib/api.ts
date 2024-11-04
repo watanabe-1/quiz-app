@@ -43,14 +43,14 @@ export function revalidateTagByUpdateQuestion() {
  * @returns {Promise<string[]>} - A promise resolving to a list of qualifications.
  */
 export async function fetchGetAllQualifications(): Promise<string[]> {
-  return fetch(addBaseUrl(path_api_questions().$url().path), {
+  return fetch(await addBaseUrl(path_api_questions().$url().path), {
     method: "GET",
     next: {
       revalidate: FETCH_REVALIDATE,
       tags: [TAG_QUALIFICATIONS],
     },
     headers: {
-      Cookie: cookies().toString(),
+      Cookie: (await cookies()).toString(),
     },
   }).then((response) => response.json());
 }
@@ -64,7 +64,9 @@ export async function fetchGetGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
   return fetch(
-    addBaseUrl(path_api_questions_qualification(qualification).$url().path),
+    await addBaseUrl(
+      path_api_questions_qualification(qualification).$url().path,
+    ),
     {
       method: "GET",
       next: {
@@ -72,7 +74,7 @@ export async function fetchGetGradesByQualification(
         tags: [TAG_GRADES],
       },
       headers: {
-        Cookie: cookies().toString(),
+        Cookie: (await cookies()).toString(),
       },
     },
   ).then((response) => response.json());
@@ -89,7 +91,7 @@ export async function fetchGetYearsByQualificationAndGrade(
   grade: string,
 ): Promise<string[]> {
   return fetch(
-    addBaseUrl(
+    await addBaseUrl(
       path_api_questions_qualification_grade(qualification, grade).$url().path,
     ),
     {
@@ -99,7 +101,7 @@ export async function fetchGetYearsByQualificationAndGrade(
         tags: [TAG_YEARS],
       },
       headers: {
-        Cookie: cookies().toString(),
+        Cookie: (await cookies()).toString(),
       },
     },
   ).then((response) => response.json());
@@ -118,7 +120,7 @@ export async function fetchGetCategories(
   year: string,
 ): Promise<string[]> {
   return fetch(
-    addBaseUrl(
+    await addBaseUrl(
       path_api_questions_qualification_grade_year(
         qualification,
         grade,
@@ -132,7 +134,7 @@ export async function fetchGetCategories(
         tags: [TAG_CATEGORIES],
       },
       headers: {
-        Cookie: cookies().toString(),
+        Cookie: (await cookies()).toString(),
       },
     },
   ).then((response) => response.json());
@@ -153,7 +155,7 @@ export async function fetchGetQuestionsByCategory(
   category: string,
 ): Promise<QuestionData[]> {
   return fetch(
-    addBaseUrl(
+    await addBaseUrl(
       path_api_questions_qualification_grade_year_category(
         qualification,
         grade,
@@ -168,7 +170,7 @@ export async function fetchGetQuestionsByCategory(
         tags: [TAG_QUESTIONS],
       },
       headers: {
-        Cookie: cookies().toString(),
+        Cookie: (await cookies()).toString(),
       },
     },
   ).then((response) => response.json());
@@ -191,7 +193,7 @@ export async function fetchGetQuestionsByCategoryAndId(
   id: number,
 ): Promise<QuestionData> {
   return fetch(
-    addBaseUrl(
+    await addBaseUrl(
       path_api_questions_qualification_grade_year_category_id(
         qualification,
         grade,
@@ -207,7 +209,7 @@ export async function fetchGetQuestionsByCategoryAndId(
         tags: [TAG_ID],
       },
       headers: {
-        Cookie: cookies().toString(),
+        Cookie: (await cookies()).toString(),
       },
     },
   ).then((response) => response.json());

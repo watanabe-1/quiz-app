@@ -6,18 +6,19 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 
-interface Params {
+type Params = Promise<{
   qualification: string;
   grade: string;
   year: string;
   category: string;
-}
+}>;
 
 export const metadata: Metadata = {
   title: "問題選択",
 };
 
-const QuestionsPage = async ({ params }: { params: Params }) => {
+const QuestionsPage = async (props: { params: Params }) => {
+  const params = await props.params;
   const qualification = decodeURIComponent(params.qualification);
   const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);

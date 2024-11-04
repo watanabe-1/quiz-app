@@ -7,10 +7,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const AdminLayout = async (props: { children: React.ReactNode }) => {
+  const children = await props.children;
+
   return <div>{children}</div>;
-}
+};
+
+export default AdminLayout;

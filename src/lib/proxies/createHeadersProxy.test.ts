@@ -1,54 +1,74 @@
-import * as nextHeaders from "next/headers";
 import { CustomizableRequestHeaders } from "@/@types/quizType";
 import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
 
-// モジュール全体をモック化
-jest.mock("next/headers", () => ({
-  headers: jest.fn(),
-}));
+describe("CustomizableRequestHeaders", () => {
+  test("should include all standard HTTP request headers and custom headers", async () => {
+    const mockHeaders = new Headers({
+      "user-agent": "Mozilla/5.0",
+      authorization: "Bearer token",
+      cookie: "session_id=12345",
+      accept: "application/json",
+      "content-type": "application/json",
+      referer: "https://example.com",
+      origin: "https://example.com",
+      "accept-language": "en-US,en;q=0.9",
+      host: "example.com",
+      "x-forwarded-for": "192.168.1.1",
+      "x-url": "https://example.com/request",
+      "x-pathname": "/request",
+    });
 
-describe("createHeadersProxy", () => {
-  let headersProxy: CustomizableRequestHeaders;
+    const proxy = (await createHeadersProxy(
+      mockHeaders,
+    )) as CustomizableRequestHeaders;
 
-  beforeEach(() => {
-    headersProxy = createHeadersProxy();
+    // Standard headers
+    expect(proxy["user-agent"]).toBe("Mozilla/5.0");
+    expect(proxy.authorization).toBe("Bearer token");
+    expect(proxy.cookie).toBe("session_id=12345");
+    expect(proxy.accept).toBe("application/json");
+    expect(proxy["content-type"]).toBe("application/json");
+    expect(proxy.referer).toBe("https://example.com");
+    expect(proxy.origin).toBe("https://example.com");
+    expect(proxy["accept-language"]).toBe("en-US,en;q=0.9");
+    expect(proxy.host).toBe("example.com");
+    expect(proxy["x-forwarded-for"]).toBe("192.168.1.1");
+
+    // Custom headers
+    expect(proxy["x-url"]).toBe("https://example.com/request");
+    expect(proxy["x-pathname"]).toBe("/request");
   });
 
-  it("should retrieve an existing header", () => {
-    // モックの headers 関数が 'user-agent' ヘッダーを返すように設定
-    (nextHeaders.headers as jest.Mock).mockImplementation(
-      () => new Map([["user-agent", "TestAgent"]]),
-    );
+  test("should return undefined for headers not set", async () => {
+    const mockHeaders = new Headers();
+    const proxy = (await createHeadersProxy(
+      mockHeaders,
+    )) as CustomizableRequestHeaders;
 
-    const userAgent = headersProxy["user-agent"];
-    expect(userAgent).toBe("TestAgent");
+    expect(proxy["user-agent"]).toBeUndefined();
+    expect(proxy.authorization).toBeUndefined();
+    expect(proxy.cookie).toBeUndefined();
+    expect(proxy.accept).toBeUndefined();
+    expect(proxy["content-type"]).toBeUndefined();
+    expect(proxy.referer).toBeUndefined();
+    expect(proxy.origin).toBeUndefined();
+    expect(proxy["accept-language"]).toBeUndefined();
+    expect(proxy.host).toBeUndefined();
+    expect(proxy["x-forwarded-for"]).toBeUndefined();
+    expect(proxy["x-url"]).toBeUndefined();
+    expect(proxy["x-pathname"]).toBeUndefined();
   });
 
-  it("should return undefined for a non-existent header", () => {
-    // モックの headers 関数が空の Map を返すように設定
-    (nextHeaders.headers as jest.Mock).mockImplementation(() => new Map());
+  test("should allow setting custom headers when headers are mutable", async () => {
+    const mockHeaders = new Headers();
+    const proxy = (await createHeadersProxy(
+      mockHeaders,
+    )) as CustomizableRequestHeaders;
 
-    // 存在しないヘッダーを確認
-    const nonExistentHeader =
-      headersProxy["non-existent" as keyof CustomizableRequestHeaders];
-    expect(nonExistentHeader).toBeUndefined();
-  });
+    proxy["x-url"] = "https://example.com/request";
+    proxy["x-pathname"] = "/request";
 
-  it("should set and retrieve a custom header", () => {
-    headersProxy["x-url"] = "https://example.com";
-    expect(headersProxy["x-url"]).toBe("https://example.com");
-  });
-
-  it("should override an existing standard header", () => {
-    headersProxy["content-type"] = "application/json";
-    expect(headersProxy["content-type"]).toBe("application/json");
-  });
-
-  it("should return the updated value after setting a new value for an existing header", () => {
-    headersProxy["authorization"] = "Bearer old-token";
-    expect(headersProxy["authorization"]).toBe("Bearer old-token");
-
-    headersProxy["authorization"] = "Bearer new-token";
-    expect(headersProxy["authorization"]).toBe("Bearer new-token");
+    expect(mockHeaders.get("x-url")).toBe("https://example.com/request");
+    expect(mockHeaders.get("x-pathname")).toBe("/request");
   });
 });

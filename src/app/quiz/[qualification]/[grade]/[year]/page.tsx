@@ -7,17 +7,18 @@ import { fetchGetCategories } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 import { path_quiz_qualification_grade_year_category } from "@/lib/path";
 
-interface Params {
+type Params = Promise<{
   qualification: string;
   grade: string;
   year: string;
-}
+}>;
 
 export const metadata: Metadata = {
   title: "カテゴリー選択",
 };
 
-const CategoriesPage = async ({ params }: { params: Params }) => {
+const CategoriesPage = async (props: { params: Params }) => {
+  const params = await props.params;
   const qualification = decodeURIComponent(params.qualification);
   const grade = decodeURIComponent(params.grade);
   const year = decodeURIComponent(params.year);

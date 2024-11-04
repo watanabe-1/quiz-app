@@ -6,18 +6,20 @@ import { fetchGetYearsByQualificationAndGrade } from "@/lib/api";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import { path_admin_qualification_grade_year } from "@/lib/path";
 
-interface Params {
+type Params = Promise<{
   qualification: string;
   grade: string;
-}
+}>;
 
 export const metadata: Metadata = {
   title: "年度選択",
 };
 
-const QualificationAdminPage = async ({ params }: { params: Params }) => {
+const QualificationAdminPage = async (props: { params: Params }) => {
+  const params = await props.params;
   const qualification = decodeURIComponent(params.qualification);
   const grade = decodeURIComponent(params.grade);
+
   const years = await fetchGetYearsByQualificationAndGrade(
     qualification,
     grade,

@@ -8,8 +8,8 @@ import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
  * @returns {string} The full base URL (e.g., "https://example.com").
  * @throws Will throw an error if the host is not defined.
  */
-const createBaseUrl = (): string => {
-  const { host } = createHeadersProxy();
+const createBaseUrl = async (): Promise<string> => {
+  const { host } = await createHeadersProxy();
   if (!host) {
     throw new Error("Host is not defined");
   }
@@ -25,8 +25,8 @@ const createBaseUrl = (): string => {
  * @param {string} path - The path to be appended to the base URL.
  * @returns {string} The complete URL with the path appended (e.g., "https://example.com/path").
  */
-export const addBaseUrl = (path: string): string => {
-  return `${createBaseUrl()}${path}`;
+export const addBaseUrl = async (path: string): Promise<string> => {
+  return `${await createBaseUrl()}${path}`;
 };
 
 /**

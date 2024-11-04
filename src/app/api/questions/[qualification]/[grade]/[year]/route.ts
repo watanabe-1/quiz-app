@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { getCategories } from "@/services/quizService";
 
-export async function GET(
-  request: Request,
-  {
-    params,
-  }: {
-    params: { qualification: string; grade: string; year: string };
-  },
-) {
+type Params = Promise<{
+  qualification: string;
+  grade: string;
+  year: string;
+}>;
+
+export async function GET(request: Request, segmentData: { params: Params }) {
+  const params = await segmentData.params;
   const { qualification, grade, year } = params;
   const categories = await getCategories(qualification, grade, year);
 
