@@ -5,7 +5,7 @@ import {
   fetchGetYearsByQualificationAndGrade,
 } from "@/lib/api";
 import { ALL_CATEGORY } from "@/lib/constants";
-import { createQueryParamsProxy } from "@/lib/url";
+import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
 
 export const runtime = "nodejs";
 

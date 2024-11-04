@@ -138,3 +138,7 @@ export interface CustomizableRequestHeaders extends RequestHeaders {
   /** Custom header representing the pathname portion of the URL. */
   "x-pathname"?: string;
 }
+
+export interface CustomizableLocalStorage {
+  answerHistory: string | undefined;
+}

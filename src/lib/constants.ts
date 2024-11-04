@@ -1,3 +1,5 @@
+import { NonLinkableSegment } from "@/@types/quizType";
+
 export const ALL_CATEGORY = "all";
 export const ANSWER_HISTORY_KEY = "answerHistory";
 
@@ -14,15 +16,12 @@ export const numberToKatakanaMap = new Map<number, string>(
   Array.from(katakanaToNumbersMap, ([katakana, number]) => [number, katakana]),
 );
 
-export const HEADERS_URL = "x-url";
-export const HEADERS_PATHNAME = "x-pathname";
-
 export const nonLinkableSegmentsByQuiz = [
-  { label: "quiz", index: 0 }, // 'quiz' is the first part of the URL
+  { label: "quiz", index: 0 } as NonLinkableSegment, // 'quiz' is the first part of the URL
 ];
 
 export const nonLinkableSegmentsByAdmin = [
-  { label: "edit", index: 4 }, // 'edit' is the fifth part of the URL
+  { label: "edit", index: 4 } as NonLinkableSegment, // 'edit' is the fifth part of the URL
 ];
 
 // fetchのcash保持時間 31日

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHeadersProxy } from "@/lib/headers";
+import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
 
 // 全リクエストでのヘッダー設定
 export function makeResponse() {

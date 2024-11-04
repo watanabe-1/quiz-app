@@ -1,6 +1,6 @@
 import * as nextHeaders from "next/headers";
 import { CustomizableRequestHeaders } from "@/@types/quizType";
-import { createHeadersProxy } from "@/lib/headers";
+import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
 
 // モジュール全体をモック化
 jest.mock("next/headers", () => ({

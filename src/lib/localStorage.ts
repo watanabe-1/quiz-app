@@ -1,7 +1,27 @@
 "use client";
 
 import { AnswerHistory } from "@/@types/quizType";
-import { ANSWER_HISTORY_KEY } from "@/lib/constants";
+import { createLocalStorageProxy } from "@/lib/proxies/createLocalStorageProxy";
+
+/**
+ * A proxy instance of CustomizableLocalStorage, allowing direct access
+ * to localStorage items through properties such as `answerHistory`.
+ * This proxy enables convenient retrieval and setting of localStorage
+ * values, automatically handling JSON parsing and stringifying as needed.
+ *
+ * @example
+ * ```typescript
+ * // Get the answer history
+ * const history = localStorageProxy.answerHistory;
+ *
+ * // Set the answer history
+ * localStorageProxy.answerHistory = JSON.stringify({ key: 'value' });
+ *
+ * // Remove the answer history
+ * localStorageProxy.answerHistory = undefined;
+ * ```
+ */
+const localStorageProxy = createLocalStorageProxy();
 
 /**
  * Retrieves the answer history from localStorage.
@@ -14,7 +34,7 @@ export const getAnswerHistory = (): AnswerHistory => {
     return {};
   }
 
-  const historyString = localStorage.getItem(ANSWER_HISTORY_KEY);
+  const historyString = localStorageProxy.answerHistory;
   if (!historyString) {
     return {};
   }
@@ -37,7 +57,7 @@ export const setAnswerHistory = (history: AnswerHistory): void => {
   if (typeof window === "undefined") return;
 
   try {
-    localStorage.setItem(ANSWER_HISTORY_KEY, JSON.stringify(history));
+    localStorageProxy.answerHistory = JSON.stringify(history);
   } catch (error) {
     console.error("Failed to set answer history:", error);
   }
