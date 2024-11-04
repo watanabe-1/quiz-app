@@ -13,15 +13,31 @@ export function createHeadersProxy(): Promise<
 /**
  * Creates a proxy object for managing HTTP headers with caching.
  * This function returns a proxy that supports dynamic retrieval and, if specified, setting of HTTP headers
- * according to the structure defined in CustomizableRequestHeaders.
+ * according to the structure defined in `CustomizableRequestHeaders`.
  *
- * When a NextRequest argument is provided, the returned proxy allows setting headers using set.
+ * When a `NextRequest` argument is provided, the returned proxy allows setting headers using `set`.
  * When omitted, the headers are immutable, and any attempt to set a header will result in a compile-time error.
  *
- * @param request - An optional instance of NextRequest to initialize header values.
- *                  If omitted, defaults to await headers() and provides an immutable proxy.
- * @returns {CustomizableRequestHeaders | Readonly<CustomizableRequestHeaders>} A proxy object that allows flexible
+ * @param request - An optional instance of `NextRequest` to initialize header values.
+ *                  If omitted, defaults to `await headers()` and provides an immutable proxy.
+ * @returns {Promise<CustomizableRequestHeaders | Readonly<CustomizableRequestHeaders>>} A proxy object that allows flexible
  *          access and, if headers are mutable, modification of HTTP headers.
+ *
+ * @example
+ * // Example 1: Create a mutable headers proxy using an instance of NextRequest
+ * async function exampleMutableProxy(request: NextRequest) {
+ *   const headersProxy = await createHeadersProxy(request);
+ *   console.log(headersProxy.headers.get("Authorization")); // Retrieve the 'Authorization' header
+ *   headersProxy.headers.set("Authorization", "Bearer token"); // Set a new value for the 'Authorization' header
+ * }
+ *
+ * @example
+ * // Example 2: Create an immutable headers proxy with default headers
+ * async function exampleImmutableProxy() {
+ *   const headersProxy = await createHeadersProxy();
+ *   console.log(headersProxy.headers.get("Authorization")); // Retrieve the 'Authorization' header
+ *   // headersProxy.headers.set("Authorization", "Bearer token"); // This would cause a compile-time error
+ * }
  */
 export async function createHeadersProxy(
   request?: NextRequest,

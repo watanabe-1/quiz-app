@@ -16,7 +16,7 @@ describe("createFormDataProxy", () => {
       param1: FormDataEntryValue | undefined;
     }>();
     proxyWithoutArg.param1 = "testValue";
-    expect(proxyWithoutArg.getFormData().get("param1")).toBe("testValue");
+    expect(proxyWithoutArg.formData.get("param1")).toBe("testValue");
   });
 
   it("should get string values from FormData", () => {
@@ -69,6 +69,6 @@ describe("createFormDataProxy", () => {
 
   it("should return the original FormData instance via getFormData", () => {
     // Confirm that the formData instance retrieved via getFormData is the same as the original
-    expect(proxy.getFormData()).toBe(formData);
+    expect(proxy.formData).toBe(formData);
   });
 });
