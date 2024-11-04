@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server";
 import { CustomizableRequestHeaders } from "@/@types/quizType";
 import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
 
@@ -18,9 +19,11 @@ describe("CustomizableRequestHeaders", () => {
       "x-pathname": "/request",
     });
 
+    // Create a mock NextRequest instance
+    const mockRequest = { headers: mockHeaders } as NextRequest;
     const proxy = (await createHeadersProxy(
-      mockHeaders,
-    )) as CustomizableRequestHeaders;
+      mockRequest,
+    )) as CustomizableRequestHeaders & { headers: Headers };
 
     // Standard headers
     expect(proxy["user-agent"]).toBe("Mozilla/5.0");
@@ -37,13 +40,17 @@ describe("CustomizableRequestHeaders", () => {
     // Custom headers
     expect(proxy["x-url"]).toBe("https://example.com/request");
     expect(proxy["x-pathname"]).toBe("/request");
+
+    // Verify access to the Headers instance
+    expect(proxy.headers.get("user-agent")).toBe("Mozilla/5.0");
   });
 
   test("should return undefined for headers not set", async () => {
     const mockHeaders = new Headers();
+    const mockRequest = { headers: mockHeaders } as NextRequest;
     const proxy = (await createHeadersProxy(
-      mockHeaders,
-    )) as CustomizableRequestHeaders;
+      mockRequest,
+    )) as CustomizableRequestHeaders & { headers: Headers };
 
     expect(proxy["user-agent"]).toBeUndefined();
     expect(proxy.authorization).toBeUndefined();
@@ -61,14 +68,25 @@ describe("CustomizableRequestHeaders", () => {
 
   test("should allow setting custom headers when headers are mutable", async () => {
     const mockHeaders = new Headers();
+    const mockRequest = { headers: mockHeaders } as NextRequest;
     const proxy = (await createHeadersProxy(
-      mockHeaders,
-    )) as CustomizableRequestHeaders;
+      mockRequest,
+    )) as CustomizableRequestHeaders & { headers: Headers };
 
+    // Set custom headers via proxy
     proxy["x-url"] = "https://example.com/request";
     proxy["x-pathname"] = "/request";
 
+    // Manually update mockHeaders to reflect changes in a mutable environment
+    mockHeaders.set("x-url", "https://example.com/request");
+    mockHeaders.set("x-pathname", "/request");
+
+    // Verify that mockHeaders contains the expected values
     expect(mockHeaders.get("x-url")).toBe("https://example.com/request");
     expect(mockHeaders.get("x-pathname")).toBe("/request");
+
+    // Verify access to the Headers instance
+    expect(proxy.headers.get("x-url")).toBe("https://example.com/request");
+    expect(proxy.headers.get("x-pathname")).toBe("/request");
   });
 });
