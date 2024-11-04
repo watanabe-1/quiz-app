@@ -1,8 +1,15 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
-import { UploadImageSubmit } from "@/app/admin/[qualification]/[grade]/[year]/edit/[id]/page";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
+
+export type UploadImageSubmit = {
+  file: File;
+  targetDir: string;
+  qualification: string;
+  grade: string;
+  year: string;
+};
 
 function sanitizePathSegment(segment: string): string {
   return segment.replace(/[^a-zA-Z0-9\-_]/g, "_");

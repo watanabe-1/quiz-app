@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { QuestionData } from "@/@types/quizType";
-import { UploadSubmit } from "@/app/admin/upload/page";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import { saveQuestions } from "@/services/quizService";
+
+export type UploadSubmit = {
+  file: File;
+  qualification: string;
+  grade: string;
+  year: string;
+};
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();

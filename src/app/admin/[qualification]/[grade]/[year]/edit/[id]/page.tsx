@@ -1,14 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { use, useState, useEffect } from "react";
-import useSWR from "swr";
-import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
+import { UploadImageSubmit } from "@/app/api/admin/uploadImage/route";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
+import { MediaContent, QuestionData, QuestionOption } from "@/@types/quizType";
 import {
   path_admin_qualification_grade_year,
   path_api_admin_questions_qualification_grade_year_id,
@@ -16,14 +13,10 @@ import {
   path_api_questions_qualification_grade_year_category_id,
 } from "@/lib/path";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
-
-export type UploadImageSubmit = {
-  file: File;
-  targetDir: string;
-  qualification: string;
-  grade: string;
-  year: string;
-};
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { use, useEffect, useState } from "react";
+import useSWR from "swr";
 
 type Params = Promise<{
   qualification: string;

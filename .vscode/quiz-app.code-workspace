@@ -10,12 +10,14 @@
     "editor.guides.bracketPairs": "active",
     //prettier,eslint
     "eslint.format.enable": false,
+    "eslint.enable": true,
+    "eslint.experimental.useFlatConfig": true,
     "editor.formatOnSave": true, // ファイル保存時の自動フォーマット有効
     //"editor.formatOnPaste": true, // ペーストした文字の自動フォーマット有効
     "editor.formatOnType": true, // 文字入力行の自動フォーマット有効
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit", // ファイル保存時にESLintの自動修正を実行する
-      "source.addMissingImports": "explicit", // 未importのモジュールを自動で探してimport文を追加する
+      "source.fixAll.eslint": "always", // ファイル保存時にESLintの自動修正を実行する
+      "source.addMissingImports": "always", // 未importのモジュールを自動で探してimport文を追加する
     },
     "markuplint.enable": true, // Markuplintを有効化する
     "[javascript]": {

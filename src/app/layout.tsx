@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 const inter = Inter({ subsets: ["latin"] });
 
-const RootLayout = async (props: { children: React.ReactNode }) => {
-  const children = await props.children;
+const RootLayout = (props: { children: React.ReactNode }) => {
+  const children = props.children;
 
   return (
     <html lang="ja">

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require("bcrypt");
 
 // ソルトのラウンド数（セキュリティレベルに応じて調整）
@@ -13,7 +12,7 @@ const hashPassword = async (plainPassword) => {
   try {
     const hash = await bcrypt.hash(plainPassword, saltRounds);
     return hash;
-  } catch (error) {
+  } catch (_) {
     throw new Error("パスワードのハッシュ化に失敗しました。");
   }
 };

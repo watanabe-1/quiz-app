@@ -1,15 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { UploadSubmit } from "@/app/api/admin/upload/route";
 import { path_api_admin_upload } from "@/lib/path";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
-
-export type UploadSubmit = {
-  file: File;
-  qualification: string;
-  grade: string;
-  year: string;
-};
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);

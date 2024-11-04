@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
-import pdfParse from "pdf-parse";
-import { UploadBccExamSubmit } from "@/app/admin/uploadBccExam/page";
+import { UploadBccExamSubmit } from "@/app/api/admin/uploadBccExam/route";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {
-  extractYear,
-  convertToHalfWidth,
   convertSingleKatakanaToNumber,
-  replaceSpacesWithUnderscore,
+  convertToHalfWidth,
   extractGradeAndQualification,
+  extractYear,
+  replaceSpacesWithUnderscore,
 } from "@/lib/bccuploads";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import {
-  getQuestions,
   existsData,
+  getQuestions,
   updateQuestionAnswer,
 } from "@/services/quizService";
+import { NextRequest, NextResponse } from "next/server";
+import pdfParse from "pdf-parse";
 
 interface AnswerData {
   questionNumber: number;

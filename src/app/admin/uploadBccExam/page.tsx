@@ -1,15 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { UploadBccExamSubmit } from "@/app/api/admin/uploadBccExam/route";
 import {
   path_api_admin_uploadBccExam,
   path_api_admin_uploadBccExamAns,
 } from "@/lib/path";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
-
-export type UploadBccExamSubmit = {
-  pdf: File;
-};
 
 const BccExamUploadPage = () => {
   const [file, setFile] = useState<File | null>(null);

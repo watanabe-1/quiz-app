@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import pdfParse from "pdf-parse";
 import { QuestionData, QuestionOption } from "@/@types/quizType";
-import { UploadBccExamSubmit } from "@/app/admin/uploadBccExam/page";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import {
   extractYear,
@@ -12,6 +11,10 @@ import {
 import { katakanaToNumbersMap } from "@/lib/constants";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import { saveQuestions } from "@/services/quizService";
+
+export type UploadBccExamSubmit = {
+  pdf: File;
+};
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();

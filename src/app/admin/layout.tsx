@@ -7,8 +7,8 @@ export const metadata: Metadata = {
   },
 };
 
-const AdminLayout = async (props: { children: React.ReactNode }) => {
-  const children = await props.children;
+const AdminLayout = (props: { children: React.ReactNode }) => {
+  const children = props.children;
 
   return <div>{children}</div>;
 };
