@@ -11,32 +11,47 @@ export function createHeadersProxy(): Promise<
 >;
 
 /**
- * Creates a proxy object for managing HTTP headers with caching.
- * This function returns a proxy that supports dynamic retrieval and, if specified, setting of HTTP headers
- * according to the structure defined in `CustomizableRequestHeaders`.
+ * Creates a proxy object for dynamically managing HTTP headers, enabling property-based access
+ * for retrieval and updating of individual header values, as well as a method for retrieving
+ * the entire `Headers` object.
  *
- * When a `NextRequest` argument is provided, the returned proxy allows setting headers using `set`.
- * When omitted, the headers are immutable, and any attempt to set a header will result in a compile-time error.
+ * - When a `NextRequest` instance is provided, the returned proxy allows headers to be both retrieved
+ *   and modified through direct property access, making it possible to read or update header values
+ *   without needing to call a `get` or `set` method.
+ * - If the `request` parameter is omitted, headers become immutable, where properties can be read
+ *   but any attempt to modify them will result in a compile-time error.
  *
- * @param request - An optional instance of `NextRequest` to initialize header values.
+ * ### Usage
+ * - **Retrieve a header**: Access any header directly as a property, e.g., `headersProxy.Authorization`
+ *   to get the value of the `Authorization` header.
+ * - **Update a header** (mutable only): Assign a new value to a property, e.g., `headersProxy.Authorization = "Bearer token"`
+ *   to set a new value for the `Authorization` header.
+ * - **Get all headers**: Use `getHeaders()` to retrieve the entire `Headers` object, allowing for
+ *   further inspection or manipulation.
+ *
+ * This proxy design offers intuitive, type-safe access to headers with caching for efficient retrieval.
+ *
+ * @param request - An optional `NextRequest` instance to initialize header values.
  *                  If omitted, defaults to `await headers()` and provides an immutable proxy.
- * @returns {Promise<CustomizableRequestHeaders | Readonly<CustomizableRequestHeaders>>} A proxy object that allows flexible
- *          access and, if headers are mutable, modification of HTTP headers.
+ * @returns {Promise<CustomizableRequestHeaders | Readonly<CustomizableRequestHeaders>>} A proxy object that
+ *          supports property-based access for individual headers and modification if headers are mutable.
  *
  * @example
- * // Example 1: Create a mutable headers proxy using an instance of NextRequest
+ * // Example 1: Creating a mutable headers proxy with a `NextRequest` instance
  * async function exampleMutableProxy(request: NextRequest) {
  *   const headersProxy = await createHeadersProxy(request);
- *   console.log(headersProxy.getHeaders().get("Authorization")); // Retrieve the 'Authorization' header
- *   headersProxy.getHeaders().set("Authorization", "Bearer token"); // Set a new value for the 'Authorization' header
+ *   console.log(headersProxy.Authorization); // Retrieve the 'Authorization' header as a property
+ *   headersProxy.Authorization = "Bearer token"; // Update the 'Authorization' header directly
+ *   console.log(headersProxy.getHeaders()); // Retrieve the entire Headers object
  * }
  *
  * @example
- * // Example 2: Create an immutable headers proxy with default headers
+ * // Example 2: Creating an immutable headers proxy with default headers
  * async function exampleImmutableProxy() {
  *   const headersProxy = await createHeadersProxy();
- *   console.log(headersProxy.getHeaders().get("Authorization")); // Retrieve the 'Authorization' header
- *   // headersProxy.getHeaders().set("Authorization", "Bearer token"); // This would cause a compile-time error
+ *   console.log(headersProxy.Authorization); // Retrieve the 'Authorization' header as a property
+ *   // headersProxy.Authorization = "Bearer token"; // This would cause a compile-time error
+ *   console.log(headersProxy.getHeaders()); // Retrieve the entire Headers object
  * }
  */
 export async function createHeadersProxy(
