@@ -43,4 +43,4 @@ data/*
 .env.test
 
 # git
-*.patch
+generated-prompt.txt

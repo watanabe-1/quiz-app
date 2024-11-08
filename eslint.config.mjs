@@ -28,6 +28,7 @@ const config = [
       // コマンド用ファイル
       "**/generateRoutes.js",
       "**/hashPassword.js",
+      "**/generatePromptFromGitDiff.js",
     ],
   },
   {

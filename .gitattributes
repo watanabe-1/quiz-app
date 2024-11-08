@@ -1,0 +1,28 @@
+# テキストファイル (改行コードは LF)
+*.css         text eol=lf
+*.env         text eol=lf
+*.gitattributes text eol=lf
+*.gitignore   text eol=lf
+*.js          text eol=lf
+*.json        text eol=lf
+*.md          text eol=lf
+*.mjs         text eol=lf
+*.prisma      text eol=lf
+*.sql         text eol=lf
+*.test        text eol=lf
+*.toml        text eol=lf
+*.ts          text eol=lf
+*.tsx         text eol=lf
+*.txt         text eol=lf
+.code-workspace text eol=lf
+.gitignore    text eol=lf
+
+
+# バイナリファイル (Gitの改行変換を無効化)
+*.ico         binary
+*.png         binary
+*.svg         binary
+*.webp        binary
+
+# 開発環境固有の設定ファイルは設定しない
+# .local
