@@ -107,7 +107,7 @@ POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}
 
 ## 環境変数の設定-vercel
 
-vercel にデプロイする場合は、以下の環境変数を設定してください。
+vercel にデプロイする場合のサンプルです。実際の値に置き換えて環境変数を設定してください。
 
 ### `vercel` 環境変数の例
 
