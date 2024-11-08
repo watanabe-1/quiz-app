@@ -118,7 +118,7 @@ const Menu: React.FC = () => {
           className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
           aria-hidden="true"
           onClick={toggleMenu}
-        ></div>
+        />
       )}
 
       {/* メニューコンテンツ */}

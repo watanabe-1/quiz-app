@@ -123,7 +123,11 @@ const config = [
     // プロジェクト固有のカスタムルール
     name: "project-custom",
     rules: {
-      "@typescript-eslint/no-unused-vars": 1, // 未使用の変数に警告を表示 (warn)
+      eqeqeq: "error", // 厳密な等価演算子（===）を使用
+      "react/jsx-boolean-value": ["error", "never"], // boolean propsに値を指定しない形を推奨 (例: <Component isActive />)
+      "react/jsx-curly-brace-presence": "error", // JSX内の{}を最小限に
+      "react/jsx-pascal-case": "error", // コンポーネントにはパスカルケースで命名
+      "react/self-closing-comp": "error", // 子要素のない要素は自己終了タグに変更 (例: <img />)
     },
   },
 ];

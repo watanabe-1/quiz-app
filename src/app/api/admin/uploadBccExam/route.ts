@@ -93,7 +93,7 @@ function parseProblems(text: string): QuestionData[] {
     /^問題\s*([0-9０-９]+)\s*((?:.|\n)*?)(?=^(?:問題\s*[0-9０-９]+|Z))/gm;
   let match;
 
-  while ((match = problemRegex.exec(targetText2)) !== null && match[0] != "") {
+  while ((match = problemRegex.exec(targetText2)) !== null && match[0] !== "") {
     // 全角数字を半角数字に変換
     const idStr = match[1].replace(/[０-９]/g, (s) =>
       String.fromCharCode(s.charCodeAt(0) - 0xfee0),

@@ -82,33 +82,31 @@ const Questions: React.FC<QuestionsProps> = ({
         ))}
       </ul>
 
-      {
-        <Modal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          showCloseButton={false}
-        >
-          <div>
-            <p>
-              {`この年度の解答履歴をすべて消して問題${selectedQuestionId}から開始するか、引き継いで開始するか選んでください。`}
-            </p>
-            <div className="mt-4 space-y-2">
-              <button
-                onClick={() => handleModalSelection(true)}
-                className="w-full rounded bg-red-500 px-4 py-2 text-white"
-              >
-                この年度の解答履歴をすべて消す
-              </button>
-              <button
-                onClick={() => handleModalSelection(false)}
-                className="w-full rounded bg-green-500 px-4 py-2 text-white"
-              >
-                解答履歴を引き継ぐ
-              </button>
-            </div>
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        showCloseButton={false}
+      >
+        <div>
+          <p>
+            {`この年度の解答履歴をすべて消して問題${selectedQuestionId}から開始するか、引き継いで開始するか選んでください。`}
+          </p>
+          <div className="mt-4 space-y-2">
+            <button
+              onClick={() => handleModalSelection(true)}
+              className="w-full rounded bg-red-500 px-4 py-2 text-white"
+            >
+              この年度の解答履歴をすべて消す
+            </button>
+            <button
+              onClick={() => handleModalSelection(false)}
+              className="w-full rounded bg-green-500 px-4 py-2 text-white"
+            >
+              解答履歴を引き継ぐ
+            </button>
           </div>
-        </Modal>
-      }
+        </div>
+      </Modal>
     </div>
   );
 };

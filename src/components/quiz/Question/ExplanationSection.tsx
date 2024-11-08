@@ -30,7 +30,7 @@ const ExplanationSection = forwardRef<HTMLDivElement, ExplanationSectionProps>(
             {question.explanation.image && (
               <Image
                 src={question.explanation.image}
-                alt={`問題の解説画像`}
+                alt="問題の解説画像"
                 className="mt-2"
                 width={600}
                 height={400}
