@@ -10,7 +10,10 @@
     "test": "npm run migrate:test && dotenv -e .env.test -- jest",
     "migrate": "prisma generate && prisma db push --accept-data-loss",
     "migrate:test": "dotenv -e .env.test -- prisma migrate reset -f",
-    "inspect": "npx eslint --inspect-config"
+    "inspect": "npx eslint --inspect-config",
+    "hash:password": "node hashPassword.js",
+    "generate:paths": "node generateRoutes.js ./src/app ./src/lib/path.ts one false",
+    "generate:diff-prompt": "node generatePromptFromGitDiff.js"
   },
   "dependencies": {
     "@prisma/client": "^5.21.1",
