@@ -9,9 +9,11 @@ import eslintPluginUnusedImports from "eslint-plugin-unused-imports";
 
 const config = [
   {
+    // 対象となるファイルの拡張子を指定
     files: ["*.js", "*.jsx", "*.ts", "*.tsx"],
   },
   {
+    // チェックから除外するファイルやディレクトリの指定
     ignores: [
       "**/eslint.config.mjs",
       "**/prettier.config.js",
@@ -20,23 +22,26 @@ const config = [
       "**/tsconfig.json",
       "**/postcss.config.mjs",
       "**/next-env.d.ts",
-      "**/build/",
-      "**/bin/",
-      "**/obj/",
-      "**/out/",
-      "**/.next/",
-      // コマンド用ファイル
+      "**/build/", // ビルド済みファイル
+      "**/bin/", // 実行可能ファイル
+      "**/obj/", // オブジェクトファイル
+      "**/out/", // 出力ファイル
+      "**/.next/", // Next.jsのビルドディレクトリ
+      // コマンド用のユーティリティファイル
       "**/generateRoutes.js",
       "**/hashPassword.js",
       "**/generatePromptFromGitDiff.js",
     ],
   },
   {
+    // JavaScriptの基本的な推奨ルールを適用
     name: "eslint/recommended",
     rules: js.configs.recommended.rules,
   },
+  // TypeScript用の推奨ルールを適用
   ...tseslint.configs.recommended,
   {
+    // ReactのJSXランタイム用設定
     name: "react/jsx-runtime",
     plugins: {
       react: reactPlugin,
@@ -44,11 +49,12 @@ const config = [
     rules: reactPlugin.configs["jsx-runtime"].rules,
     settings: {
       react: {
-        version: "detect",
+        version: "detect", // Reactのバージョンを自動検出
       },
     },
   },
   {
+    // React Hooksの推奨ルールを適用
     name: "react-hooks/recommended",
     plugins: {
       "react-hooks": hooksPlugin,
@@ -56,6 +62,7 @@ const config = [
     rules: hooksPlugin.configs.recommended.rules,
   },
   {
+    // Next.jsのコアWebバイタルルールを適用
     name: "next/core-web-vitals",
     plugins: {
       "@next/next": nextPlugin,
@@ -66,7 +73,7 @@ const config = [
     },
   },
   {
-    // Import rules
+    // import順序のルール設定
     plugins: {
       import: eslintPluginImport,
     },
@@ -75,46 +82,48 @@ const config = [
         "error",
         {
           groups: [
-            "builtin",
-            "external",
-            "internal",
-            ["parent", "sibling"],
-            "index",
-            "object",
-            "type",
+            "builtin", // 組み込みモジュール
+            "external", // 外部モジュール
+            "internal", // 内部モジュール
+            ["parent", "sibling"], // 親フォルダ・兄弟フォルダからのインポート
+            "index", // インデックスファイル
+            "object", // オブジェクトスタイルのインポート
+            "type", // TypeScriptの型インポート
           ],
-          alphabetize: { order: "asc", caseInsensitive: true },
+          alphabetize: { order: "asc", caseInsensitive: true }, // インポートをアルファベット順にソート
         },
       ],
     },
   },
   {
-    // Unused Imports rules
+    // 未使用インポートの削除ルール設定
     plugins: {
       "unused-imports": eslintPluginUnusedImports,
     },
     rules: {
-      "no-unused-vars": "off",
-      "unused-imports/no-unused-imports": "warn",
+      "no-unused-vars": "off", // デフォルトの未使用変数のルールを無効化
+      "unused-imports/no-unused-imports": "warn", // 未使用のインポートを警告
       "unused-imports/no-unused-vars": [
         "warn",
         {
           vars: "all",
-          varsIgnorePattern: "^_",
+          varsIgnorePattern: "^_", // _から始まる変数は無視
           args: "after-used",
-          argsIgnorePattern: "^_",
+          argsIgnorePattern: "^_", // _から始まる引数は無視
         },
       ],
     },
   },
   {
+    // Prettierとの競合を防ぐための設定
     name: "prettier/config",
     ...eslintConfigPrettier,
   },
   {
+    // プロジェクト固有のカスタムルール
     name: "project-custom",
     rules: {
-      "@typescript-eslint/no-unused-vars": 1,
+      "@typescript-eslint/no-unused-vars": 1, // 未使用の変数に警告を表示 (warn)
     },
   },
 ];
