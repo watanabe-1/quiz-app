@@ -6,6 +6,7 @@ const MAX_CONSOLE_LINES = 10;
 
 // 差分を取得してプロンプトを生成する関数
 function generatePromptFromGitDiff() {
+  // ステージされていない変更とステージされた変更を取得
   exec("git diff && git diff --cached", (error, stdout, stderr) => {
     if (error) {
       console.error(`git diff 実行エラー: ${error.message}`);
@@ -17,6 +18,14 @@ function generatePromptFromGitDiff() {
     }
 
     let patchContent = stdout;
+
+    // 差分がない場合の処理
+    if (!patchContent.trim()) {
+      console.log(
+        "差分がありません。コミットメッセージを生成する必要がありません。",
+      );
+      return;
+    }
 
     // 未追跡ファイルのリストを取得
     exec(
@@ -34,6 +43,14 @@ function generatePromptFromGitDiff() {
         const files = filesStdout
           .split("\n")
           .filter((file) => file.trim() !== "");
+
+        // 未追跡ファイルがない場合の処理
+        if (files.length === 0 && !patchContent.trim()) {
+          console.log("変更されたファイルや新規ファイルがありません。");
+          return;
+        }
+
+        // 未追跡ファイルの内容を取得して追加
         if (files.length > 0) {
           patchContent += "\n\n--- 新規ファイルの内容 ---\n";
           files.forEach((file) => {
@@ -85,8 +102,6 @@ ${patchContent}
 - docs: ドキュメントの変更
 - chore: ビルド関連、ツールの設定変更
 - test: テストの追加・修正
-
-メッセージは以下の形式で出力してください。
 
 <type>: <メッセージ>
 
