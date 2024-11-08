@@ -51,7 +51,7 @@
 
 以下は、`.env.local` ファイルのサンプルです。実際の値に置き換えて使用してください。
 
-```.env.local
+```.env
 # 管理者のユーザー名
 ADMIN_USERNAME=admin
 
@@ -98,7 +98,7 @@ POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}
 
 以下は、`.env.test` ファイルのサンプルです。実際の値に置き換えて使用してください。
 
-```.env.test
+```.env
 # テスト環境DB接続用URL
 POSTGRES_PRISMA_URL="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
 POSTGRES_URL_NO_SSL="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
@@ -111,7 +111,7 @@ vercel にデプロイする場合は、以下の環境変数を設定してく�
 
 ### `vercel` 環境変数の例
 
-```vercel-environment-variables
+```.env
 # 管理者のユーザー名
 ADMIN_USERNAME=admin
 
