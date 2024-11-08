@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
+import pdfParse from "pdf-parse";
 import { UploadBccExamSubmit } from "@/app/api/admin/uploadBccExam/route";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {
@@ -13,8 +15,6 @@ import {
   getQuestions,
   updateQuestionAnswer,
 } from "@/services/quizService";
-import { NextRequest, NextResponse } from "next/server";
-import pdfParse from "pdf-parse";
 
 interface AnswerData {
   questionNumber: number;
@@ -121,7 +121,7 @@ function extractCategories(
 
   while ((match = categoryPattern.exec(text)) !== null) {
     categories.push({
-      title: match[0], // e.g., "【２級　人事・人材開発】"
+      title: match[0], // e.g., "【２級 人事・人材開発】"
       startIndex: match.index, // Start index of this category in the text
     });
   }

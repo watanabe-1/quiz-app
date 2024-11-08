@@ -38,8 +38,7 @@ export async function GET(request: NextRequest) {
 }
 
 // 正規表現を使用してURLをパース
-const quizUrlPattern =
-  /^\/quiz\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)\/[^\/]+$/;
+const quizUrlPattern = /^\/quiz\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/[^/]+$/;
 
 /**
  * 現在のURLが `/quiz/[qualification]/[grade]/[year]/[category]/[id]` にマッチするかを判定し、

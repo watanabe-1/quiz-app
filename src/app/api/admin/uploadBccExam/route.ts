@@ -90,7 +90,7 @@ function parseProblems(text: string): QuestionData[] {
 
   // 正規表現パターンを修正（全角数字に対応）
   const problemRegex =
-    /^問題\s*([0-9０-９]+)\s*((?:.|\n)*?)(?=^(?:問題\s*[0-9０-９]+|\Z))/gm;
+    /^問題\s*([0-9０-９]+)\s*((?:.|\n)*?)(?=^(?:問題\s*[0-9０-９]+|Z))/gm;
   let match;
 
   while ((match = problemRegex.exec(targetText2)) !== null && match[0] != "") {
@@ -136,7 +136,7 @@ function extractQuestionAndOptions(content: string): {
   options: QuestionOption[];
 } {
   const optionLabels = Array.from(katakanaToNumbersMap.keys());
-  const optionSeparator = "[．\\.]"; // 全角・半角のピリオドにマッチ
+  const optionSeparator = "[．.]"; // 全角・半角のピリオドにマッチ
   const optionRegexString = optionLabels
     .map((label) => `${label}${optionSeparator}\\s*`)
     .join("|");
@@ -151,7 +151,7 @@ function extractQuestionAndOptions(content: string): {
   let currentOptionText = "";
 
   for (const part of parts) {
-    const trimmedPart = part.replace(/^[\s　\.．]+|[\s　\.．]+$/g, "");
+    const trimmedPart = part.replace(/^[\s\u3000.．]+|[\s\u3000.．]+$/g, "");
     if (optionLabels.some((label) => trimmedPart === label)) {
       if (isOption && currentOptionText) {
         // 不要なテキストを除去
