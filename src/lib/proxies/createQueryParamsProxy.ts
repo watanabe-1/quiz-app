@@ -21,7 +21,7 @@ export const createQueryParamsProxy = <
     get: (_, prop: string) => {
       // Returns the decoded value for the given prop, or undefined if not present
       const value = searchParams.get(prop);
-      return value ? decodeURIComponent(value) : undefined;
+      return value !== null ? decodeURIComponent(value) : undefined;
     },
   });
 };
