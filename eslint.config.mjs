@@ -27,10 +27,6 @@ const config = [
       "**/obj/", // オブジェクトファイル
       "**/out/", // 出力ファイル
       "**/.next/", // Next.jsのビルドディレクトリ
-      // コマンド用のユーティリティファイル
-      "**/generateRoutes.js",
-      "**/hashPassword.js",
-      "**/generatePromptFromGitDiff.js",
     ],
   },
   {
@@ -100,19 +96,6 @@ const config = [
     plugins: {
       "unused-imports": eslintPluginUnusedImports,
     },
-    rules: {
-      "no-unused-vars": "off", // デフォルトの未使用変数のルールを無効化
-      "unused-imports/no-unused-imports": "warn", // 未使用のインポートを警告
-      "unused-imports/no-unused-vars": [
-        "warn",
-        {
-          vars: "all",
-          varsIgnorePattern: "^_", // _から始まる変数は無視
-          args: "after-used",
-          argsIgnorePattern: "^_", // _から始まる引数は無視
-        },
-      ],
-    },
   },
   {
     // Prettierとの競合を防ぐための設定
@@ -128,6 +111,15 @@ const config = [
       "react/jsx-curly-brace-presence": "error", // JSX内の{}を最小限に
       "react/jsx-pascal-case": "error", // コンポーネントにはパスカルケースで命名
       "react/self-closing-comp": "error", // 子要素のない要素は自己終了タグに変更 (例: <img />)
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+        },
+      ],
     },
   },
 ];

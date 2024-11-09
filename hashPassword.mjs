@@ -1,4 +1,6 @@
-const bcrypt = require("bcrypt");
+/* eslint-disable no-undef */
+
+import bcrypt from "bcrypt";
 
 // ソルトのラウンド数（セキュリティレベルに応じて調整）
 const saltRounds = 10;
@@ -24,25 +26,25 @@ if (args.length === 0) {
   console.error(
     "エラー: ハッシュ化したいパスワードを引数として渡してください。",
   );
-  console.error("使用方法: node hashPassword.js <password>");
+  console.error("使用方法: node hashPassword.mjs <password>");
   process.exit(1);
 }
 
 const plainPassword = args[0];
 
 // パスワードをハッシュ化して出力
-hashPassword(plainPassword)
-  .then((hashedPassword) => {
-    // ハッシュ化されたパスワードを表示
-    console.log(`ハッシュ化されたパスワード: ${hashedPassword}`);
+try {
+  const hashedPassword = await hashPassword(plainPassword);
 
-    // '$' を '\' でエスケープ
-    const escapedHash = hashedPassword.replace(/\$/g, "\\$");
+  // ハッシュ化されたパスワードを表示
+  console.log(`ハッシュ化されたパスワード: ${hashedPassword}`);
 
-    // エスケープされたハッシュ化パスワードを表示
-    console.log(`エスケープされたハッシュ化パスワード: ${escapedHash}`);
-  })
-  .catch((error) => {
-    console.error(error.message);
-    process.exit(1);
-  });
+  // '$' を '\' でエスケープ
+  const escapedHash = hashedPassword.replace(/\$/g, "\\$");
+
+  // エスケープされたハッシュ化パスワードを表示
+  console.log(`エスケープされたハッシュ化パスワード: ${escapedHash}`);
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}

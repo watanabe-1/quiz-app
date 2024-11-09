@@ -1,6 +1,7 @@
-const fs = require("fs");
+/* eslint-disable no-undef */
 
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 // コマンドライン引数の処理
 const [baseDir, outputPath, methodOption, printPathnameArg] =
@@ -15,7 +16,7 @@ const validateArguments = (baseDir, outputPath, methodOption) => {
     !["all", "one", "both"].includes(methodOption)
   ) {
     console.error(
-      "Usage: node generatePagesPath.js <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>",
+      "Usage: node generatePagesPath.mjs <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>",
     );
     process.exit(1);
   }
@@ -89,7 +90,7 @@ const createMethods = (
   method,
   queryType,
 ) => {
-  const optional = queryType && queryType.startsWith("Query") > 0 ? "" : "?";
+  const optional = queryType && queryType.startsWith("Query") ? "" : "?";
   const queryParam = `url${optional}: { query${optional}: ${queryType ? queryType : "Record<string, string | number>"}, hash?: string }`;
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const pathExpression = isCatchAll

@@ -146,7 +146,7 @@ NEXT_PUBLIC_PROTOCOL=https
 ### ハッシュ化スクリプトの実行方法
 
 ```cmd
-node hashPassword.js <your-plain-password>
+node hashPassword.mjs <your-plain-password>
 ```
 
 ## シークレットキーの生成
@@ -163,14 +163,14 @@ openssl rand -base64 32
 
 ### パス定義の作成方法
 
-`generateRoutes.js` スクリプトは、[pathpida](https://github.com/aspida/pathpida) を参考に作成しています。アプリディレクトリの構造からページパスを生成するためのツールです。このスクリプトを使用して、指定したディレクトリ内のページに対応する TypeScript オブジェクトを生成できます。
+`generateRoutes.mjs` スクリプトは、[pathpida](https://github.com/aspida/pathpida) を参考に作成しています。アプリディレクトリの構造からページパスを生成するためのツールです。このスクリプトを使用して、指定したディレクトリ内のページに対応する TypeScript オブジェクトを生成できます。
 
 #### コマンドの実行
 
 次のコマンドでスクリプトを実行し、ページパスを生成します。
 
 ```cmd
-node generateRoutes.js <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>
+node generateRoutes.mjs <baseDir> <outputPath> <methodOption(all|one|both)> <printPathname(true|false)>
 ```
 
 - `<baseDir>`: ページの探索を開始するベースディレクトリのパス。
@@ -194,7 +194,7 @@ node generateRoutes.js <baseDir> <outputPath> <methodOption(all|one|both)> <prin
 例えば、`src/app` ディレクトリ内のページパスを生成し、結果を `pagesPath.ts` ファイルに出力するには、次のコマンドを使用します。
 
 ```cmd
-node generateRoutes.js ./src/app ./src/lib/path.ts one false
+node generateRoutes.mjs ./src/app ./src/lib/path.ts one false
 ```
 
 このコマンドにより、指定したディレクトリ内のページに対応するすべてのパスとメソッドが `pagesPath.ts` に出力されます。
@@ -212,15 +212,15 @@ node generateRoutes.js ./src/app ./src/lib/path.ts one false
 
 ### スクリプトの説明
 
-`generatePromptFromGitDiff.js` スクリプトは、Git の差分を取得し、その内容に基づいて ChatGPT 用のプロンプトを自動生成するためのツールです。このスクリプトは、ステージされていない変更、ステージされた変更、そして新規ファイルの内容を含めてプロンプトを作成します。生成されたプロンプトはコンソールに出力され、一部は `generated_prompt.txt` ファイルにも保存されます。
+`generatePromptFromGitDiff.mjs` スクリプトは、Git の差分を取得し、その内容に基づいて ChatGPT 用のプロンプトを自動生成するためのツールです。このスクリプトは、ステージされていない変更、ステージされた変更、そして新規ファイルの内容を含めてプロンプトを作成します。生成されたプロンプトはコンソールに出力され、一部は `generated_prompt.txt` ファイルにも保存されます。
 
 ### 使用方法
 
-1. スクリプトファイル `generatePromptFromGitDiff.js` をプロジェクトのルートディレクトリに配置します。
+1. スクリプトファイル `generatePromptFromGitDiff.mjs` をプロジェクトのルートディレクトリに配置します。
 2. コマンドラインから次のコマンドを実行して、プロンプトを生成します。
 
 ```cmd
-node generatePromptFromGitDiff.js
+node generatePromptFromGitDiff.mjs
 ```
 
 このコマンドにより、現在の Git リポジトリ内の差分が取得され、それに基づいてプロンプトが生成されます。生成されたプロンプトの一部はコンソールに表示され、全文は `generated_prompt.txt` に出力されます。
@@ -281,12 +281,12 @@ Prisma クライアントを生成し、`prisma db push` を使用してデー�
 
 #### `npm run hash:password <your-plain-password>`
 
-`node hashPassword.js` を実行してパスワードをハッシュ化します。指定されたパスワードを bcrypt でハッシュ化し、環境変数に設定する際に使用します。引数にハッシュ化したいパスワードを設定してください。
+`node hashPassword.mjs` を実行してパスワードをハッシュ化します。指定されたパスワードを bcrypt でハッシュ化し、環境変数に設定する際に使用します。引数にハッシュ化したいパスワードを設定してください。
 
 #### `npm run generate:paths`
 
-`node generateRoutes.js ./src/app ./src/lib/path.ts one false` を実行して、ページパスの TypeScript オブジェクトを生成します。これにより、アプリ内でルーティングに使用する便利なパスオブジェクトを作成できます。
+`node generateRoutes.mjs ./src/app ./src/lib/path.ts one false` を実行して、ページパスの TypeScript オブジェクトを生成します。これにより、アプリ内でルーティングに使用する便利なパスオブジェクトを作成できます。
 
 #### `npm run generate:diff-prompt`
 
-`node generatePromptFromGitDiff.js` を実行して、Git の差分からプロンプトを生成します。現在の差分をもとに ChatGPT 用のプロンプトを作成するために使用します。
+`node generatePromptFromGitDiff.mjs` を実行して、Git の差分からプロンプトを生成します。現在の差分をもとに ChatGPT 用のプロンプトを作成するために使用します。
