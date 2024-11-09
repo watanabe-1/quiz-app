@@ -7,6 +7,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginImport from "eslint-plugin-import";
 import eslintPluginUnusedImports from "eslint-plugin-unused-imports";
 
+/** @type {import("eslint").Linter.Config[]} */
 const config = [
   {
     // 対象となるファイルの拡張子を指定
