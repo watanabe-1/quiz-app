@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-
 import { exec } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
@@ -14,24 +13,15 @@ async function generatePromptFromGitDiff() {
     // ステージされていない変更とステージされた変更を取得
     const patchContent = await execCommand("git diff && git diff --cached");
 
-    // 差分がない場合の処理
-    if (!patchContent.trim()) {
-      console.log(
-        "差分がありません。コミットメッセージを生成する必要がありません。",
-      );
-      return;
-    }
-
     // 未追跡ファイルのリストを取得
     const filesStdout = await execCommand(
       "git ls-files --others --exclude-standard",
     );
     const files = filesStdout.split("\n").filter((file) => file.trim() !== "");
 
-    // 未追跡ファイルがない場合の処理
-    if (files.length === 0 && !patchContent.trim()) {
-      console.log("変更されたファイルや新規ファイルがありません。");
-      return;
+    // 差分と新規ファイルの両方がない場合の処理
+    if (!patchContent.trim() && files.length === 0) {
+      throw new Error("変更されたファイルや新規ファイルがありません。");
     }
 
     let fullPatchContent = patchContent;
@@ -69,6 +59,7 @@ async function generatePromptFromGitDiff() {
     console.log(`\nプロンプトがファイルに出力されました: ${outputPath}`);
   } catch (error) {
     console.error(`エラー: ${error.message}`);
+    process.exit(1); // エラー時に終了コード1でプロセスを終了
   }
 }
 
