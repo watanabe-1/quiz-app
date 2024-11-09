@@ -1,21 +1,21 @@
-# 資格問題解答サイト
+# 資格学習支援サイト
 
-このサイトは資格勉強用に問題を解くためのサイトです。
+このサイトは資格試験の勉強を支援するための問題解答サイトです。
 
 ## 目次
 
-1. [環境変数の設定-ローカル](#環境変数の設定-ローカル)
+1. [環境変数の設定 - ローカル](#環境変数の設定---ローカル)
    - [必要な環境変数](#必要な環境変数)
    - [`.env.local` ファイルの例](#envlocal-ファイルの例)
    - [`.env` ファイルの例](#env-ファイルの例)
    - [`.env.test` ファイルの例](#envtest-ファイルの例)
-2. [環境変数の設定-vercel](#環境変数の設定-vercel)
-   - [`vercel` 環境変数の例](#vercel-環境変数の例)
+2. [環境変数の設定 - Vercel](#環境変数の設定---vercel)
+   - [Vercel 環境変数の例](#vercel-環境変数の例)
 3. [パスワードのハッシュ化](#パスワードのハッシュ化)
    - [ハッシュ化スクリプトの実行方法](#ハッシュ化スクリプトの実行方法)
 4. [シークレットキーの生成](#シークレットキーの生成)
    - [シークレットキーの生成方法](#シークレットキーの生成方法)
-5. [path定義の作成](#path定義の作成)
+5. [パス定義の作成](#パス定義の作成)
 6. [Git差分からプロンプトを生成するスクリプト](#git差分からプロンプトを生成するスクリプト)
    - [スクリプトの説明](#スクリプトの説明)
    - [使用方法](#使用方法)
@@ -28,30 +28,29 @@
 
 ---
 
-## 環境変数の設定-ローカル
+## 環境変数の設定 - ローカル
 
-ローカルマシン上で実行する場合は、プロジェクトのルートディレクトリに `.env.local` `.env` `.env.test` ファイルを作成し、以下の環境変数を設定してください。
-これらの環境変数は、認証システムの動作に必要な情報を提供します。
+ローカルで実行するには、プロジェクトのルートに `.env.local`、`.env`、`.env.test` ファイルを作成し、必要な環境変数を設定してください。
 
 ### 必要な環境変数
 
-- `ADMIN_USERNAME`: 管理者のユーザー名。
+- `ADMIN_USERNAME`: 管理者のユーザー名（例: admin）。
 - `ADMIN_PASSWORD_HASH`: 管理者のパスワードの bcrypt ハッシュ。
-- `USER_USERNAME`: 通常ユーザのユーザー名。
+- `USER_USERNAME`: 通常ユーザのユーザー名（例: user）。
 - `USER_PASSWORD_HASH`: 通常ユーザのパスワードの bcrypt ハッシュ。
 - `SIGN_IN_PAGE`: サインインページのパス。
-- `ADMIN_PROTECTED_PATHS`: 管理者認証が必要なパス（カンマ区切り）
+- `ADMIN_PROTECTED_PATHS`: 管理者認証が必要なパス（カンマ区切り）。
 - `USER_PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
 - `NEXTAUTH_URL`: NextAuth.js の URL。
 - `NEXTAUTH_SECRET`: NextAuth.js のシークレットキー。
-- `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用する PROTOCOL。
+- `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用するプロトコル。
 - `POSTGRES_～`: DB 接続用 URL。
 
 ### `.env.local` ファイルの例
 
 以下は、`.env.local` ファイルのサンプルです。実際の値に置き換えて使用してください。
 
-```.env
+```env
 # 管理者のユーザー名
 ADMIN_USERNAME=admin
 
@@ -79,7 +78,7 @@ NEXTAUTH_URL=http://localhost:3000
 # NextAuth.js のシークレットキー（''で囲んで設定）
 NEXTAUTH_SECRET='your-very-secure-secret-key'
 
-# URL 作成に使用する PROTOCOL
+# URL 作成に使用するプロトコル
 NEXT_PUBLIC_PROTOCOL=http
 ```
 
@@ -87,7 +86,7 @@ NEXT_PUBLIC_PROTOCOL=http
 
 以下は、`.env` ファイルのサンプルです。実際の値に置き換えて使用してください。
 
-```.env
+```env
 # DB接続用URL
 POSTGRES_PRISMA_URL="postgresql://${username}:${password}@localhost:${port}/${database}"
 POSTGRES_URL_NO_SSL="postgresql://${username}:${password}@localhost:${port}/${database}"
@@ -98,30 +97,30 @@ POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}
 
 以下は、`.env.test` ファイルのサンプルです。実際の値に置き換えて使用してください。
 
-```.env
+```env
 # テスト環境DB接続用URL
 POSTGRES_PRISMA_URL="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
 POSTGRES_URL_NO_SSL="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
 POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}/${testdatabase}"
 ```
 
-## 環境変数の設定-vercel
+## 環境変数の設定 - Vercel
 
-vercel にデプロイする場合のサンプルです。実際の値に置き換えて環境変数を設定してください。
+Vercel にデプロイする場合のサンプルです。実際の値に置き換えて環境変数を設定してください。
 
-### `vercel` 環境変数の例
+### Vercel 環境変数の例
 
-```.env
+```env
 # 管理者のユーザー名
 ADMIN_USERNAME=admin
 
 # 管理者のパスワードのハッシュ（bcryptでハッシュ化されたもの、エスケープしていない値を設定）
-ADMIN_PASSWORD_HASH=\$2b\$10\$6LjoTU3W7NIIdfVlUCr5X.dnSacabEHoYcgBxoYbU5LtsMcyHRPFO
+ADMIN_PASSWORD_HASH=$2b$10$6LjoTU3W7NIIdfVlUCr5X.dnSacabEHoYcgBxoYbU5LtsMcyHRPFO
 
 # 通常ユーザのユーザー名
 USER_USERNAME=user
 
-# 通常ユーザのパスワードのハッシュ（bcryptでハッシュ化されたもの、$を\でエスケープした値を設定）
+# 通常ユーザのパスワードのハッシュ（bcryptでハッシュ化されたもの、エスケープしていない値を設定）
 USER_PASSWORD_HASH=$2b$10$eA9N4hUuKS1NPjoOi1Mn2e2A0wjHaxVwc6UmJhwcniHc5oIH.23wC
 
 # サインインページのパス
@@ -136,13 +135,13 @@ USER_PROTECTED_PATHS=/,/quiz,/api
 # NextAuth.js のシークレットキー
 NEXTAUTH_SECRET=your-very-secure-secret-key
 
-# URL 作成に使用する PROTOCOL
+# URL 作成に使用するプロトコル
 NEXT_PUBLIC_PROTOCOL=https
 ```
 
 ## パスワードのハッシュ化
 
-ハッシュ化スクリプトをコマンドラインから実行しパスワードをハッシュ化します。エスケープされた値を設定してください。(vercel にはエスケープしていない値を設定)
+ハッシュ化スクリプトをコマンドラインから実行しパスワードをハッシュ化します。エスケープした値を設定してください。（Vercel にはエスケープしていない値を設定）
 
 ### ハッシュ化スクリプトの実行方法
 
@@ -152,7 +151,7 @@ node hashPassword.js <your-plain-password>
 
 ## シークレットキーの生成
 
-openssl などを利用して生成可能です。openssl がインストールされていない場合は別途インストールしてください。
+`openssl` などを利用してシークレットキーを生成します。`openssl` がインストールされていない場合は別途インストールしてください。
 
 ### シークレットキーの生成方法
 
@@ -160,11 +159,11 @@ openssl などを利用して生成可能です。openssl がインストール�
 openssl rand -base64 32
 ```
 
-## path定義の作成
+## パス定義の作成
 
-### `path定義` の作成方法
+### パス定義の作成方法
 
-`generateRoutes.js` スクリプトは、[pathpida](https://github.com/aspida/pathpida)を参考に作成しています。これはアプリディレクトリの構造からページパスを生成するためのツールです。このスクリプトを使用して、指定したディレクトリ内のページに対応する TypeScript オブジェクトを生成できます。また、Queryパラメータをurlに設定したい場合は、設定したいパスに紐づくファイル内で、Query or OptionalQuery 型で型を定義しexportしてください。
+`generateRoutes.js` スクリプトは、[pathpida](https://github.com/aspida/pathpida) を参考に作成しています。アプリディレクトリの構造からページパスを生成するためのツールです。このスクリプトを使用して、指定したディレクトリ内のページに対応する TypeScript オブジェクトを生成できます。
 
 #### コマンドの実行
 
@@ -176,21 +175,21 @@ node generateRoutes.js <baseDir> <outputPath> <methodOption(all|one|both)> <prin
 
 - `<baseDir>`: ページの探索を開始するベースディレクトリのパス。
 - `<outputPath>`: 生成されたページパスを出力するファイルのパス。
-- `<methodOption>`: 生成するメソッドのオプションです。`all`、`one`、`both` のいずれかを指定します。
-- `<printPathname>`: 生成するメソッドのオプションです。`true`、`false` のいずれかを指定します。
+- `<methodOption>`: 生成するメソッドのオプション。`all`、`one`、`both` のいずれかを指定します。
+- `<printPathname>`: `true` または `false` で、pathname を生成するかどうかを指定します。
 
 ##### `methodOption` の説明
 
-- `all`: すべてのページに対して共通のメソッドを生成します。
+- `all`: すべてのページに共通のメソッドを生成します。
 - `one`: 各ページに個別のメソッドを生成します。
 - `both`: 共通の URL メソッドと個別のメソッドの両方を生成します。
 
 ##### `printPathname` の説明
 
-- `true`: pathnameを生成します。
-- `false`: pathnameを生成しません。
+- `true`: pathname を生成します。
+- `false`: pathname を生成しません。
 
-#### 使用例-`path定義`
+#### 使用例 - パス定義
 
 例えば、`src/app` ディレクトリ内のページパスを生成し、結果を `pagesPath.ts` ファイルに出力するには、次のコマンドを使用します。
 
@@ -202,9 +201,9 @@ node generateRoutes.js ./src/app ./src/lib/path.ts one false
 
 #### 出力ファイル
 
-出力ファイルには、ページ構造に対応する TypeScript オブジェクトとメソッドが含まれています。生成されたコードは、アプリ内のさまざまなページやルートにアクセスするための便利な方法を提供します。
+出力ファイルには、ページ構造に対応する TypeScript オブジェクトとメソッドが含まれています。生成されたコードを利用することにより、アプリ内の各ページやルートにアクセスするための一貫した方法を提供します。
 
-#### 注意事項-`path定義`
+#### 注意事項 - パス定義
 
 - ベースディレクトリに `node_modules` や、ファイル名が `_` で始まるディレクトリ・ファイルは無視されます。
 - 出力ファイルのメソッドは `page.tsx`、`page.jsx`、`route.ts`、`route.js` ファイルに基づいて生成されます。
@@ -213,7 +212,7 @@ node generateRoutes.js ./src/app ./src/lib/path.ts one false
 
 ### スクリプトの説明
 
-`generatePromptFromGitDiff.js` スクリプトは、Gitの差分を取得し、その内容に基づいてChatGPT用のプロンプトを自動生成するためのツールです。このスクリプトは、ステージされていない変更、ステージされた変更、そして新規ファイルの内容を含めてプロンプトを作成します。生成されたプロンプトはコンソールに出力され、一部は `generated_prompt.txt` ファイルにも保存されます。
+`generatePromptFromGitDiff.js` スクリプトは、Git の差分を取得し、その内容に基づいて ChatGPT 用のプロンプトを自動生成するためのツールです。このスクリプトは、ステージされていない変更、ステージされた変更、そして新規ファイルの内容を含めてプロンプトを作成します。生成されたプロンプトはコンソールに出力され、一部は `generated_prompt.txt` ファイルにも保存されます。
 
 ### 使用方法
 
@@ -224,11 +223,11 @@ node generateRoutes.js ./src/app ./src/lib/path.ts one false
 node generatePromptFromGitDiff.js
 ```
 
-このコマンドにより、現在のGitリポジトリ内の差分が取得され、それに基づいてプロンプトが生成されます。生成されたプロンプトの一部はコンソールに表示され、全文は `generated_prompt.txt` に出力されます。
+このコマンドにより、現在の Git リポジトリ内の差分が取得され、それに基づいてプロンプトが生成されます。生成されたプロンプトの一部はコンソールに表示され、全文は `generated_prompt.txt` に出力されます。
 
 ### 注意事項
 
-- Gitがインストールされている環境で実行してください。
+- Git がインストールされている環境で実行してください。
 - 差分を正しく取得するため、リポジトリ内で実行してください。
 - 新規ファイルの内容もプロンプトに含めるため、未追跡ファイルがある場合はそれらの内容も読み取られます。
 
@@ -244,11 +243,11 @@ Next.js の開発サーバーをデバッグモード (`--inspect`) で起動し
 
 #### `npm run build`
 
-Prisma クライアントを生成し、`prisma db push`を使ってデータベーススキーマを同期します。この際、`--accept-data-loss`フラグが使用されます（このフラグはデータ損失の可能性があるため、注意が必要です）。その後、Next.js アプリケーションを本番用にビルドします。
+Prisma クライアントを生成し、`prisma db push` を使ってデータベーススキーマを同期します。この際、`--accept-data-loss` フラグが使用されます（データ損失の可能性があるため、注意が必要です）。その後、Next.js アプリケーションを本番用にビルドします。
 
 #### `npm run start`
 
-Next.js アプリケーションを本番モードで起動します。このコマンドを実行する前に、`npm run build`を実行してアプリケーションをビルドする必要があります。
+Next.js アプリケーションを本番モードで起動します。このコマンドを実行する前に、`npm run build` を実行してアプリケーションをビルドする必要があります。
 
 ### コードチェック
 
@@ -258,25 +257,25 @@ Next.js のリントツールを使用して、コードのリントチェック
 
 #### `npm run inspect`
 
-`npx eslint --inspect-config` を実行して ESLint の設定を検査します。現在のプロジェクトの ESLint 設定の詳細を確認するのに役立ちます。[ここ](http://localhost:7777/)から確認できます。
+`npx eslint --inspect-config` を実行して ESLint の設定を検査します。現在のプロジェクトの ESLint 設定の詳細を確認するのに役立ちます。[ここ](http://localhost:7777/) から確認できます。
 
 ### テスト関連
 
 #### `npm run test`
 
-テストスイートを実行する前に、`migrate:test`コマンドを実行してテスト環境のデータベースマイグレーションをリセットし、最新のマイグレーションを適用します。環境変数には`.env.test`ファイルを使用します。マイグレーションが完了した後、Jest を使用してテストを実行します。
+テストスイートを実行する前に、`migrate:test` コマンドを実行してテスト環境のデータベースマイグレーションをリセットし、最新のマイグレーションを適用します。環境変数には `.env.test` ファイルを使用します。マイグレーションが完了した後、Jest を使用してテストを実行します。
 
-**注意**: 別途テスト用のデータベースを設定し、必要な環境変数を`.env.test`ファイルに記載しておいてください。
+**注意**: 別途テスト用のデータベースを設定し、必要な環境変数を `.env.test` ファイルに記載しておいてください。
 
 ### データベースマイグレーション
 
 #### `npm run migrate`
 
-Prisma クライアントを生成し、`prisma db push`を使用してデータベースに最新のスキーマ変更を適用します。`--accept-data-loss`フラグは破壊的なスキーマ変更がある場合、データ損失の可能性があるため、使用には注意が必要です。
+Prisma クライアントを生成し、`prisma db push` を使用してデータベースに最新のスキーマ変更を適用します。`--accept-data-loss` フラグは破壊的なスキーマ変更がある場合、データ損失の可能性があるため、使用には注意が必要です。
 
 #### `npm run migrate:test`
 
-`migrate`コマンドと似ていますが、テスト環境用です。`.env.test`ファイルを使用して環境変数を読み込み、`prisma migrate reset`でテストデータベースをリセットします。このコマンドは、テストを実行する前に使用し、クリーンなデータベース状態を確保します。
+`migrate` コマンドと似ていますが、テスト環境用です。`.env.test` ファイルを使用して環境変数を読み込み、`prisma migrate reset` でテストデータベースをリセットします。このコマンドは、テストを実行する前に使用し、クリーンなデータベース状態を確保します。
 
 ### その他のスクリプト
 
@@ -290,4 +289,4 @@ Prisma クライアントを生成し、`prisma db push`を使用してデータ
 
 #### `npm run generate:diff-prompt`
 
-`node generatePromptFromGitDiff.js` を実行して、Gitの差分からプロンプトを生成します。現在の差分をもとに ChatGPT 用のプロンプトを作成するために使用します。
+`node generatePromptFromGitDiff.js` を実行して、Git の差分からプロンプトを生成します。現在の差分をもとに ChatGPT 用のプロンプトを作成するために使用します。
