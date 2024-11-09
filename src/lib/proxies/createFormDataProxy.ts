@@ -29,8 +29,7 @@ export const createFormDataProxy = <
     {
       get: (target, prop: string) => {
         if (prop === "getFormData") return target.getFormData;
-        const value = formData.get(prop);
-        return value === null ? undefined : value; // null を undefined に変換
+        return formData.get(prop) ?? undefined;
       },
       set: (_, prop: string, value: FormDataEntryValue | undefined) => {
         if (value !== undefined) {
