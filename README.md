@@ -279,7 +279,7 @@ Prisma クライアントを生成し、`prisma db push` を使用してデー�
 
 ### その他のスクリプト
 
-#### `npm run hash:password`
+#### `npm run hash:password <your-plain-password>`
 
 `node hashPassword.js` を実行してパスワードをハッシュ化します。指定されたパスワードを bcrypt でハッシュ化し、環境変数に設定する際に使用します。引数にハッシュ化したいパスワードを設定してください。
 
