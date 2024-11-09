@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MenuItem } from "@/@types/quizType";
 import {
   fetchGetAllQualifications,
   fetchGetCategories,
@@ -17,6 +16,7 @@ import {
   path_quiz_qualification_grade_year_category_id,
 } from "@/lib/path";
 import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
+import { MenuItem } from "@/types/quizType";
 
 export type Query = {
   path: string;

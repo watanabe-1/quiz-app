@@ -1,5 +1,5 @@
-import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
+import { AnswerHistory, QuestionAnswerPair } from "@/types/quizType";
 
 export const calculateCorrectCount = (
   questionIdAnswers: QuestionAnswerPair[],

@@ -146,10 +146,6 @@ const adjustAnswers = (answers: AnswerData[]): Answer[] => {
 export function parseAnsData(text: string): ExamData {
   const year = extractYear(text) || "";
   const sections = extractSections(text);
-  console.log(
-    "🚀 ~ parseAnsData ~ sections:",
-    cleanSectionText(sections[0].sectionText),
-  );
 
   const examData: ExamData = {
     year,

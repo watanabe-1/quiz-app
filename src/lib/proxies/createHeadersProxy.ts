@@ -1,6 +1,6 @@
 import { headers as nextHeaders } from "next/headers";
 import { NextRequest } from "next/server";
-import { CustomizableRequestHeaders } from "@/@types/quizType";
+import { CustomizableRequestHeaders } from "@/types/quizType";
 
 // Define function overloads
 export function createHeadersProxy(

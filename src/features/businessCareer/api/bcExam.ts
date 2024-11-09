@@ -1,5 +1,5 @@
-import { QuestionData, QuestionOption } from "@/@types/quizType";
 import { katakanaToNumbersMap } from "@/lib/constants";
+import { QuestionData, QuestionOption } from "@/types/quizType";
 
 /**
  * Parses the provided text and returns an array of question data.

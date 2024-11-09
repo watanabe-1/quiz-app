@@ -1,10 +1,10 @@
 import Link from "next/link";
 import React, { FC } from "react";
-import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
 import Modal from "@/components/ui/Modal";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
 import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
+import { AnswerHistory, QuestionAnswerPair } from "@/types/quizType";
 
 interface ReportModalProps {
   isOpen: boolean;

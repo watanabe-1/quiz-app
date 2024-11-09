@@ -1,9 +1,9 @@
-import { QuestionData } from "@/@types/quizType";
 import {
   cleanText,
   extractQuestionAndOptions,
   parseProblems,
 } from "@/features/businessCareer/api/bcExam";
+import { QuestionData } from "@/types/quizType";
 
 describe("parseProblems", () => {
   const sampleText = `

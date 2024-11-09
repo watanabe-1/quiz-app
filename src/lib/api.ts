@@ -1,6 +1,5 @@
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
-import { QuestionData } from "@/@types/quizType";
 import { FETCH_REVALIDATE } from "@/lib/constants";
 import {
   path_api_questions,
@@ -11,6 +10,7 @@ import {
   path_api_questions_qualification_grade_year_category_id,
 } from "@/lib/path";
 import { addBaseUrl } from "@/lib/url";
+import { QuestionData } from "@/types/quizType";
 
 const TAG_QUALIFICATIONS = "qualifications";
 const TAG_GRADES = "grades";

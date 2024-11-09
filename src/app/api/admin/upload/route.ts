@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { QuestionData } from "@/@types/quizType";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import { saveQuestions } from "@/services/quizService";
+import { QuestionData } from "@/types/quizType";
 
 export type UploadSubmit = {
   file: File;

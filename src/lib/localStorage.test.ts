@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-import { AnswerHistory, CustomizableLocalStorage } from "@/@types/quizType";
 import {
   getAnswerHistory,
   setAnswerHistory,
@@ -10,6 +9,7 @@ import {
   deleteHistoryByQualificationAndYear,
   getHistoryByQualificationAndYear,
 } from "@/lib/localStorage";
+import { AnswerHistory, CustomizableLocalStorage } from "@/types/quizType";
 
 afterAll(() => {
   global.localStorage.clear();

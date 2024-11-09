@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useSWR from "swr";
-import { MenuItem } from "@/@types/quizType";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import { path_api_menu } from "@/lib/path";
+import { MenuItem } from "@/types/quizType";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

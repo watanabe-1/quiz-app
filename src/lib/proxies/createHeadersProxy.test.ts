@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
-import { CustomizableRequestHeaders } from "@/@types/quizType";
 import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
+import { CustomizableRequestHeaders } from "@/types/quizType";
 
 describe("CustomizableRequestHeaders", () => {
   test("should include all standard HTTP request headers and custom headers", async () => {

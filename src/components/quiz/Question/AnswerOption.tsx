@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { FC } from "react";
-import { QuestionOption } from "@/@types/quizType";
 import { numberToKatakanaMap } from "@/lib/constants";
+import { QuestionOption } from "@/types/quizType";
 
 interface AnswerOptionProps {
   option: QuestionOption;

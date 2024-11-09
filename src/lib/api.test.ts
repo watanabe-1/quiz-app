@@ -1,4 +1,3 @@
-import { QuestionData } from "@/@types/quizType";
 import {
   fetchGetAllQualifications,
   fetchGetGradesByQualification,
@@ -7,6 +6,7 @@ import {
   fetchGetQuestionsByCategory,
   fetchGetQuestionsByCategoryAndId,
 } from "@/lib/api";
+import { QuestionData } from "@/types/quizType";
 
 global.fetch = jest.fn();
 

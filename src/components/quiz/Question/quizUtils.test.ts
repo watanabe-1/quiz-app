@@ -1,9 +1,9 @@
-import { AnswerHistory, QuestionAnswerPair } from "@/@types/quizType";
 import {
   calculateCorrectCount,
   calculateAnsweredCount,
 } from "@/components/quiz/Question/quizUtils";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
+import { AnswerHistory, QuestionAnswerPair } from "@/types/quizType";
 
 jest.mock("@/lib/localStorage", () => ({
   createAnswerHistoryKey: jest.fn(),

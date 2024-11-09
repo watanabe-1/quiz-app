@@ -3,11 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  AnswerHistory,
-  QuestionAnswerPair,
-  QuestionData,
-} from "@/@types/quizType";
 import AnswerOption from "@/components/quiz/Question/AnswerOption";
 import ExplanationSection from "@/components/quiz/Question/ExplanationSection";
 import {
@@ -21,6 +16,11 @@ import {
   setAnswerHistory,
 } from "@/lib/localStorage";
 import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
+import {
+  AnswerHistory,
+  QuestionAnswerPair,
+  QuestionData,
+} from "@/types/quizType";
 
 interface QuestionProps {
   qualification: string;

@@ -1,7 +1,7 @@
 "use client";
 
-import { AnswerHistory } from "@/@types/quizType";
 import { createLocalStorageProxy } from "@/lib/proxies/createLocalStorageProxy";
+import { AnswerHistory } from "@/types/quizType";
 
 /**
  * A proxy instance of CustomizableLocalStorage, allowing direct access

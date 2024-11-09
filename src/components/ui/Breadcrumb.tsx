@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NonLinkableSegment } from "@/@types/quizType";
+import { NonLinkableSegment } from "@/types/quizType";
 
 interface BreadcrumbProps {
   nonLinkableSegments?: NonLinkableSegment[]; // Optional prop to specify non-linkable segments

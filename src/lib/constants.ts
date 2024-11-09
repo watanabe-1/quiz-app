@@ -1,4 +1,4 @@
-import { NonLinkableSegment } from "@/@types/quizType";
+import { NonLinkableSegment } from "@/types/quizType";
 
 /**
  * Represents a string used for selecting all categories in filtering.

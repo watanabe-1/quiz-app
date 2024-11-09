@@ -1,4 +1,4 @@
-import { CustomizableLocalStorage } from "@/@types/quizType";
+import { CustomizableLocalStorage } from "@/types/quizType";
 
 /**
  * Creates a proxy object for managing localStorage items.

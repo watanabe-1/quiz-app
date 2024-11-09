@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { QuestionData } from "@/@types/quizType";
 import Modal from "@/components/ui/Modal";
 import {
   deleteHistoryByQualificationAndYear,
@@ -10,6 +9,7 @@ import {
 } from "@/lib/localStorage";
 import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
 import { isEmptyObject } from "@/lib/utils";
+import { QuestionData } from "@/types/quizType";
 
 interface QuestionsProps {
   qualification: string;

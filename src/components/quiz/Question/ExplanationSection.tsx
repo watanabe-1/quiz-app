@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { forwardRef } from "react";
-import { QuestionData } from "@/@types/quizType";
 import { numberToKatakanaMap } from "@/lib/constants";
+import { QuestionData } from "@/types/quizType";
 
 interface ExplanationSectionProps {
   question: QuestionData;
