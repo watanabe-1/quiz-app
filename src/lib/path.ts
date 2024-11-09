@@ -42,12 +42,12 @@ export const path_admin = () => {
         return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/admin${generateSuffix(url)}` }) };
       };
 
-export const path_admin_upload = () => {
-        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/admin/upload${generateSuffix(url)}` }) };
+export const path_admin_upload_businessCareer = () => {
+        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/admin/upload/businessCareer${generateSuffix(url)}` }) };
       };
 
-export const path_admin_uploadBccExam = () => {
-        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/admin/uploadBccExam${generateSuffix(url)}` }) };
+export const path_admin_upload = () => {
+        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/admin/upload${generateSuffix(url)}` }) };
       };
 
 export const path_api_admin_exportQuestions = () => {
@@ -58,16 +58,16 @@ export const path_api_admin_questions_qualification_grade_year_id = (qualificati
         return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ query: { qualification, grade, year, id }, hash: url?.hash, path: `/api/admin/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(grade)}/${encodeURIComponent(year)}/${encodeURIComponent(id)}${generateSuffix(url)}` }) };
       };
 
+export const path_api_admin_upload_businessCareer_ans = () => {
+        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/admin/upload/businessCareer/ans${generateSuffix(url)}` }) };
+      };
+
+export const path_api_admin_upload_businessCareer_exam = () => {
+        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/admin/upload/businessCareer/exam${generateSuffix(url)}` }) };
+      };
+
 export const path_api_admin_upload = () => {
         return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/admin/upload${generateSuffix(url)}` }) };
-      };
-
-export const path_api_admin_uploadBccExam = () => {
-        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/admin/uploadBccExam${generateSuffix(url)}` }) };
-      };
-
-export const path_api_admin_uploadBccExamAns = () => {
-        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/admin/uploadBccExamAns${generateSuffix(url)}` }) };
       };
 
 export const path_api_admin_uploadImage = () => {

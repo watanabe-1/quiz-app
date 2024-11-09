@@ -1,7 +1,12 @@
 import Link from "next/link";
 import React from "react";
 import { fetchGetAllQualifications } from "@/lib/api";
-import { path_admin_qualification } from "@/lib/path";
+import {
+  path_admin_export,
+  path_admin_qualification,
+  path_admin_upload,
+  path_admin_upload_businessCareer,
+} from "@/lib/path";
 
 const AdminDashboard = async () => {
   const qualifications = await fetchGetAllQualifications();
@@ -16,19 +21,19 @@ const AdminDashboard = async () => {
       </header>
       <main className="p-6">
         <Link
-          href="/admin/upload"
+          href={path_admin_upload().$url().path}
           className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのアップロード
         </Link>
         <Link
-          href="/admin/uploadBccExam"
+          href={path_admin_upload_businessCareer().$url().path}
           className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのアップロード(ビジキャリPDFから)
         </Link>
         <Link
-          href="/admin/export"
+          href={path_admin_export().$url().path}
           className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのエクスポート

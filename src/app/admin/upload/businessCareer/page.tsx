@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { UploadBccExamSubmit } from "@/app/api/admin/uploadBccExam/route";
+import { UploadBccExamSubmit } from "@/features/businessCareer/types/bcTypes";
 import {
-  path_api_admin_uploadBccExam,
-  path_api_admin_uploadBccExamAns,
+  path_api_admin_upload_businessCareer_ans,
+  path_api_admin_upload_businessCareer_exam,
 } from "@/lib/path";
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 
@@ -14,11 +14,14 @@ const BccExamUploadPage = () => {
   const fileAnInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    handleSubmitBase(e, path_api_admin_uploadBccExam().$url().path);
+    handleSubmitBase(
+      e,
+      path_api_admin_upload_businessCareer_exam().$url().path,
+    );
   };
 
   const handleSubmitAnswer = async (e: React.FormEvent) => {
-    handleSubmitBase(e, path_api_admin_uploadBccExamAns().$url().path);
+    handleSubmitBase(e, path_api_admin_upload_businessCareer_ans().$url().path);
   };
 
   const handleSubmitBase = async (e: React.FormEvent, url: string) => {

@@ -56,6 +56,7 @@
     "files.exclude": {
       "**/.next": true,
     },
+    "files.eol": "\n",
     "tailwindCSS.experimental.classRegex": [
       ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ],
