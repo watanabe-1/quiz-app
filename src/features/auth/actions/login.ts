@@ -48,5 +48,4 @@ export const login = async (
 
     throw error;
   }
-  console.log("🚀 ~ LOGIN_REDIRECT:", LOGIN_REDIRECT);
 };
