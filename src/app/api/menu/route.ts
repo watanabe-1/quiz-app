@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
 }
 
 // 正規表現を使用してURLをパース
-const quizUrlPattern = generatePatternFromPath(
+const _quizUrlPattern = generatePatternFromPath(
   path_quiz_qualification_grade_year_category_id,
 );
 
@@ -55,7 +55,7 @@ const parseCurrentUrl = (
   year: string;
   category: string;
 } | null => {
-  const match = url.match(quizUrlPattern);
+  const match = path_quiz_qualification_grade_year_category_id.match(url);
   if (match) {
     const [, qualification, grade, year, category] = match;
     return { qualification, grade, year, category };
