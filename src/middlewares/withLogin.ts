@@ -1,5 +1,14 @@
-import { NextFetchEvent, NextMiddleware, NextRequest } from "next/server";
-import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
+import {
+  NextFetchEvent,
+  NextMiddleware,
+  NextRequest,
+  NextResponse,
+} from "next/server";
+import { auth } from "@/features/auth/auth";
+import {
+  API_AUTH_PREFIX,
+  LOGIN_ROUTE,
+} from "@/features/auth/lib/authConstants";
 
 /**
  * Array of regular expressions representing paths that require admin access.
@@ -49,7 +58,18 @@ const userProtectedPaths = process.env.USER_PROTECTED_PATHS
  */
 export function withLogin(middleware: NextMiddleware) {
   return async (request: NextRequest, event: NextFetchEvent) => {
-    const { pathname } = request.nextUrl;
+    const { nextUrl } = request;
+    const { pathname } = nextUrl;
+
+    const isApiAuthRoute = nextUrl.pathname.startsWith(API_AUTH_PREFIX);
+
+    if (isApiAuthRoute) {
+      return middleware(request, event);
+    }
+
+    // 認証の実行
+    const session = await auth();
+    const user = session?.user;
 
     // Determine if the request path requires admin access
     const isAdminProtectedPath = adminProtectedPaths.some((pathRegex) =>
@@ -61,41 +81,17 @@ export function withLogin(middleware: NextMiddleware) {
       pathRegex.test(pathname),
     );
 
-    if (isAdminProtectedPath || isUserProtectedPath) {
-      const authMiddleware = withAuth(
-        (req: NextRequestWithAuth) => {
-          return middleware(req, event); // Call the next middleware after authentication
-        },
-        {
-          callbacks: {
-            /**
-             * Authorization callback to verify user roles.
-             * @param token - The token object containing user details.
-             * @returns `true` if the user is authorized, otherwise `false`.
-             */
-            authorized: ({ token }) => {
-              // Admin paths require the 'admin' role
-              if (isAdminProtectedPath) {
-                return !!token && token.role === "admin";
-              }
-
-              // User paths require the 'user' or 'admin' role
-              if (isUserProtectedPath) {
-                return (
-                  !!token && (token.role === "user" || token.role === "admin")
-                );
-              }
-
-              // For other paths, deny access
-              return false;
-            },
-          },
-        },
-      );
-      return authMiddleware(request as NextRequestWithAuth, event);
+    // Check authentication and roles
+    if (isAdminProtectedPath) {
+      if (!user || user.role !== "admin") {
+        return NextResponse.redirect(new URL(LOGIN_ROUTE, nextUrl));
+      }
+    } else if (isUserProtectedPath) {
+      if (!user || (user.role !== "user" && user.role !== "admin")) {
+        return NextResponse.redirect(new URL(LOGIN_ROUTE, nextUrl));
+      }
     }
 
-    // If no authentication is required, execute the original middleware
     return middleware(request, event);
   };
 }

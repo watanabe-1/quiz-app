@@ -1,4 +1,7 @@
-import { DefaultSession, DefaultUser } from "next-auth";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 /**
  * Defines the roles available for users in the application.

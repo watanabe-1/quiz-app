@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
-import { NextAuthOptions } from "next-auth";
+import bcrypt from "bcryptjs";
+import { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions: NextAuthOptions = {
+export const authConfig: NextAuthConfig = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -46,16 +46,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         // Return null if authentication fails
-        throw new Error(
-          process.env.AUTH_ERROR_MESSAGE ||
-            "ユーザー名またはパスワードが正しくありません",
-        );
+        return null;
       },
     }),
   ],
-  pages: {
-    signIn: process.env.SIGN_IN_PAGE || "/auth/signin",
-  },
   secret: process.env.NEXTAUTH_SECRET,
   jwt: {
     maxAge: 60 * 60 * 24 * 31, // 31 days (in seconds)

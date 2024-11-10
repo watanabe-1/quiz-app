@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { logout } from "@/features/auth/actions/logout";
 import { fetchGetAllQualifications } from "@/lib/api";
 import {
   path_admin_export,
@@ -15,9 +16,15 @@ const AdminDashboard = async () => {
     <div>
       <header className="flex items-center justify-between bg-gray-800 p-4 text-white">
         <h1 className="text-2xl font-bold">管理者ダッシュボード</h1>
-        <Link href="/api/auth/signout" className="text-sm underline">
-          サインアウト
-        </Link>
+        <form
+          action={async () => {
+            "use server";
+
+            await logout();
+          }}
+        >
+          <button type="submit">Sign Out</button>
+        </form>
       </header>
       <main className="p-6">
         <Link

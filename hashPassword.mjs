@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 // ソルトのラウンド数（セキュリティレベルに応じて調整）
 const saltRounds = 10;

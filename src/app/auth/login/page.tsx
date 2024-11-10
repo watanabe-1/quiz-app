@@ -1,64 +1,32 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
-import React, { useState, useEffect, Suspense } from "react";
-import { path } from "@/lib/path";
-import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
+import React, { useState, Suspense, useTransition } from "react";
+import { login } from "@/features/auth/actions/login";
 
-type SignInReturnParam = {
-  error: string | undefined;
-};
-
-const SignInForm = () => {
+const LogInForm = () => {
   const [userInfo, setUserInfo] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    const { error } = createQueryParamsProxy<SignInReturnParam>(searchParams);
-
-    if (error) {
-      switch (error) {
-        case "CredentialsSignin":
-          setError("ユーザー名またはパスワードが正しくありません。");
-          break;
-        case "SessionRequired":
-          setError("セッションが必要です。再度サインインしてください。");
-          break;
-        default:
-          setError("サインイン中にエラーが発生しました。再試行してください。");
+  const handleLogin = async () => {
+    startTransition(async () => {
+      const { username, password } = userInfo;
+      if (!username || !password) {
+        setError("ユーザー名とパスワードを入力してください。");
+        return;
       }
-    }
-  }, [searchParams]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+      setError(null);
 
-    if (!userInfo.username || !userInfo.password) {
-      setError("ユーザー名とパスワードを入力してください。");
-      return;
-    }
+      const ret = await login(username, password);
 
-    setIsLoading(true);
-    setError(null);
-
-    const result = await signIn("credentials", {
-      redirect: false,
-      username: userInfo.username,
-      password: userInfo.password,
-      callbackUrl: path().$url().path,
+      if (ret.success) {
+        // 明示的にクリアすることでログイン後はメモリに保持していないようにする
+        setUserInfo({ username: "", password: "" });
+      } else {
+        setError(ret.message);
+      }
     });
-
-    setIsLoading(false);
-
-    if (result?.error) {
-      setError(result.error);
-    } else if (result?.url) {
-      router.push(result.url);
-    }
   };
 
   return (
@@ -70,7 +38,7 @@ const SignInForm = () => {
             {error}
           </div>
         )}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form action={handleLogin} className="space-y-4">
           <div>
             <label htmlFor="username" className="block text-sm font-medium">
               ユーザー名
@@ -108,11 +76,11 @@ const SignInForm = () => {
           <button
             type="submit"
             className={`w-full rounded bg-blue-600 py-2 text-white transition duration-200 hover:bg-blue-700 ${
-              isLoading ? "cursor-not-allowed opacity-50" : ""
+              isPending ? "cursor-not-allowed opacity-50" : ""
             }`}
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading ? "サインイン中..." : "サインイン"}
+            {isPending ? "サインイン中..." : "サインイン"}
           </button>
         </form>
       </div>
@@ -122,7 +90,7 @@ const SignInForm = () => {
 
 const SignInPage = () => (
   <Suspense fallback={<div>Loading...</div>}>
-    <SignInForm />
+    <LogInForm />
   </Suspense>
 );
 

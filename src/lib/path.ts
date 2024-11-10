@@ -78,10 +78,6 @@ export const path_api_auth____nextauth = (nextauth: string[]) => {
         return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ query: { nextauth }, hash: url?.hash, path: `/api/auth/${nextauth?.map(encodeURIComponent).join('/') ?? ''}${generateSuffix(url)}` }) };
       };
 
-export const path_api_auth_signin = () => {
-        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/auth/signin${generateSuffix(url)}` }) };
-      };
-
 export const path_api_menu = () => {
         return { $url: (url: { query: Query_1, hash?: string }) => ({  hash: url?.hash, path: `/api/menu${generateSuffix(url)}` }) };
       };
@@ -108,6 +104,10 @@ export const path_api_questions_qualification = (qualification: string | number)
 
 export const path_api_questions = () => {
         return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/api/questions${generateSuffix(url)}` }) };
+      };
+
+export const path_auth_login = () => {
+        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/auth/login${generateSuffix(url)}` }) };
       };
 
 export const path = () => {

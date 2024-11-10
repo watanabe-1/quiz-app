@@ -38,7 +38,7 @@
 - `ADMIN_PASSWORD_HASH`: 管理者のパスワードの bcrypt ハッシュ。
 - `USER_USERNAME`: 通常ユーザのユーザー名（例: user）。
 - `USER_PASSWORD_HASH`: 通常ユーザのパスワードの bcrypt ハッシュ。
-- `SIGN_IN_PAGE`: サインインページのパス。
+- `LOG_IN_PAGE`: ログインページのパス。
 - `ADMIN_PROTECTED_PATHS`: 管理者認証が必要なパス（カンマ区切り）。
 - `USER_PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
 - `NEXTAUTH_URL`: NextAuth.js の URL。
@@ -63,8 +63,8 @@ USER_USERNAME=user
 # 通常ユーザのパスワードのハッシュ（bcryptでハッシュ化されたもの、$を\でエスケープした値を設定）
 USER_PASSWORD_HASH=\$2b\$10\$rIyGkgOR4haBw3q3engi4uy7q.U1gbHfFx/Hj9C2BqodjJ7PV6JIW
 
-# サインインページのパス
-SIGN_IN_PAGE=/auth/signin
+# ログインページのパス
+LOG_IN_PAGE=/auth/login
 
 # 管理者認証が必要なパス（カンマ区切り）
 ADMIN_PROTECTED_PATHS=/admin,/api/admin
@@ -123,8 +123,8 @@ USER_USERNAME=user
 # 通常ユーザのパスワードのハッシュ（bcryptでハッシュ化されたもの、エスケープしていない値を設定）
 USER_PASSWORD_HASH=$2b$10$eA9N4hUuKS1NPjoOi1Mn2e2A0wjHaxVwc6UmJhwcniHc5oIH.23wC
 
-# サインインページのパス
-SIGN_IN_PAGE=/auth/signin
+# ログインページのパス
+LOG_IN_PAGE=/auth/login
 
 # 管理者認証が必要なパス（カンマ区切り）
 ADMIN_PROTECTED_PATHS=/admin,/api/admin
