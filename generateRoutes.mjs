@@ -89,20 +89,41 @@ const createMethods = (
   isCatchAll,
   method,
   queryType,
+  sanitizedExportKey,
 ) => {
   const optional = queryType && queryType.startsWith("Query") ? "" : "?";
-  const queryParam = `url${optional}: { query${optional}: ${queryType ? queryType : "Record<string, string | number>"}, hash?: string }`;
+  const queryParam = `url${optional}: { query${optional}: ${queryType ?? "Record<string, string | number>"}, hash?: string }`;
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
   const adjustedPathname = pathname === "" ? "/" : pathname;
+
+  // パスのエンコードとクエリパラメータの生成
   const pathExpression = isCatchAll
     ? `\`${adjustedPathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
     : `\`${adjustedPathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${encodeURIComponent(${p1})}`)}\${generateSuffix(url)}\``;
 
+  // 正規表現パターンの生成
+  const regexPattern = isCatchAll
+    ? `^${adjustedPathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, "(.+)")}$`
+    : `^${adjustedPathname.replace(/\[([^\]]+)\]/g, "([^/]+)")}$`;
+
+  // パス生成関数の組み立て
   return method === "all"
-    ? `${indent}$url: (${queryParam}) => ({${printPathname ? ` pathname: '${adjustedPathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} })`
-    : `(${slugs.map((slug) => `${slug}: ${isCatchAll ? "string[]" : "string | number"}`)}) => {
-        return { $url: (${queryParam}) => ({${printPathname ? ` pathname: '${adjustedPathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} }) };
-      }`;
+    ? `${indent}$url: (${queryParam}) => ({
+        ${printPathname ? `pathname: '${adjustedPathname}' as const,` : ""}
+        ${slugParam} hash: url?.hash, 
+        path: ${pathExpression}
+      }),
+      match: (path: string) => new RegExp(${JSON.stringify(regexPattern)}).exec(path)`
+    : `export const path${sanitizedExportKey} = (${slugs.map((slug) => `${slug}: ${isCatchAll ? "string[]" : "string | number"}`)}) => {
+        return { 
+          $url: (${queryParam}) => ({
+            ${printPathname ? `pathname: '${adjustedPathname}' as const,` : ""}
+            ${slugParam} hash: url?.hash, 
+            path: ${pathExpression}
+          }),
+        };
+      };
+path${sanitizedExportKey}.match = (path: string) => new RegExp(${JSON.stringify(regexPattern)}).exec(path)`;
 };
 
 // ディレクトリ解析処理
@@ -203,6 +224,7 @@ const parseAppDir = (
           isCatchAll || isOptionalCatchAll,
           "one",
           queryDef ? queryDef.importName : null,
+          sanitizedExportKey,
         );
       }
     }
@@ -223,7 +245,7 @@ const generatePages = (baseDir) => {
   const pagesObject = `export const pagesPath = ${pagesObjectString};\n\nexport type PagesPath = typeof pagesPath;`;
 
   const individualExports = Object.keys(exportPaths)
-    .map((key) => `export const path${key} = ${exportPaths[key]};`)
+    .map((key) => `${exportPaths[key]};`)
     .join("\n\n");
 
   const queryImports = queries.length
