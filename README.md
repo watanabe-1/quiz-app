@@ -41,9 +41,11 @@
 - `LOG_IN_PAGE`: ログインページのパス。
 - `ADMIN_PROTECTED_PATHS`: 管理者認証が必要なパス（カンマ区切り）。
 - `USER_PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
-- `NEXTAUTH_URL`: NextAuth.js の URL。
-- `NEXTAUTH_SECRET`: NextAuth.js のシークレットキー。
+- `NEXTAUTH_URL`: Auth.js の URL。
+- `NEXTAUTH_SECRET`: Auth.js のシークレットキー。
+- `AUTH_TRUST_HOST`:Auth.js の"trust host"設定。reverse proxy からの X-Forwarded-Host header の値を "trust" する。self-hosted な環境では、"trust host" を有効化させる必要あり。
 - `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用するプロトコル。
+
 - `POSTGRES_～`: DB 接続用 URL。
 
 ### `.env.local` ファイルの例
@@ -72,11 +74,14 @@ ADMIN_PROTECTED_PATHS=/admin,/api/admin
 # 認証が必要なパス（カンマ区切り）
 USER_PROTECTED_PATHS=/,/quiz,/api
 
-# NextAuth.js の URL
+# Auth.js の URL
 NEXTAUTH_URL=http://localhost:3000
 
-# NextAuth.js のシークレットキー（''で囲んで設定）
+# Auth.js のシークレットキー（''で囲んで設定）
 NEXTAUTH_SECRET='your-very-secure-secret-key'
+
+# Auth.js の"trust host"設定
+AUTH_TRUST_HOST=true
 
 # URL 作成に使用するプロトコル
 NEXT_PUBLIC_PROTOCOL=http
@@ -132,7 +137,7 @@ ADMIN_PROTECTED_PATHS=/admin,/api/admin
 # 認証が必要なパス（カンマ区切り）
 USER_PROTECTED_PATHS=/,/quiz,/api
 
-# NextAuth.js のシークレットキー
+# Auth.js のシークレットキー
 NEXTAUTH_SECRET=your-very-secure-secret-key
 
 # URL 作成に使用するプロトコル
