@@ -32,7 +32,7 @@ const LogInForm = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md rounded bg-white p-6 shadow">
-        <h1 className="mb-6 text-center text-2xl font-bold">サインイン</h1>
+        <h1 className="mb-6 text-center text-2xl font-bold">ログイン</h1>
         {error && (
           <div className="mb-4 rounded bg-red-100 p-3 text-red-700">
             {error}
@@ -80,7 +80,7 @@ const LogInForm = () => {
             }`}
             disabled={isPending}
           >
-            {isPending ? "サインイン中..." : "サインイン"}
+            {isPending ? "ログイン中..." : "ログイン"}
           </button>
         </form>
       </div>

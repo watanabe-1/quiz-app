@@ -24,7 +24,7 @@ const QualificationAdminPage = async (props: { params: Params }) => {
       <header className="flex items-center justify-between bg-gray-800 p-4 text-white">
         <h1 className="text-2xl font-bold">{qualification} の管理</h1>
         <Link href="/api/auth/signout" className="text-sm underline">
-          サインアウト
+          ログアウト
         </Link>
       </header>
       <main className="p-6">

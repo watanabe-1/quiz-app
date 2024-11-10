@@ -36,7 +36,7 @@ const YearAdminPage = async (props: { params: Params }) => {
           {qualification} - {grade} - {year} の管理
         </h1>
         <Link href="/api/auth/signout" className="text-sm underline">
-          サインアウト
+          ログアウト
         </Link>
       </header>
       <main className="p-6">
