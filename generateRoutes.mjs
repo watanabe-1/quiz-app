@@ -108,16 +108,14 @@ const createMethods = (
 
   // パス生成関数の組み立て
   return method === "all"
-    ? `${indent}$url: (${queryParam}) => ({
-        ${printPathname ? `pathname: '${adjustedPathname}' as const,` : ""}
-        ${slugParam} hash: url?.hash, 
+    ? `${indent}$url: (${queryParam}) => ({${printPathname ? `\n        pathname: '${adjustedPathname}' as const,` : ""}
+        ${slugParam}hash: url?.hash, 
         path: ${pathExpression}
       }),
       match: (path: string) => new RegExp(${JSON.stringify(regexPattern)}).exec(path)`
     : `export const path${sanitizedExportKey} = (${slugs.map((slug) => `${slug}: ${isCatchAll ? "string[]" : "string | number"}`)}) => {
         return { 
-          $url: (${queryParam}) => ({
-            ${printPathname ? `pathname: '${adjustedPathname}' as const,` : ""}
+          $url: (${queryParam}) => ({${printPathname ? `\n            pathname: '${adjustedPathname}' as const,` : ""}
             ${slugParam} hash: url?.hash, 
             path: ${pathExpression}
           }),
@@ -142,12 +140,26 @@ const parseAppDir = (
 
   const entries = fs
     .readdirSync(input, { withFileTypes: true })
-    .filter(
-      (entry) =>
-        !entry.name.startsWith("_") &&
-        !entry.name.startsWith(".") &&
-        entry.name !== "node_modules",
-    )
+    .filter((entry) => {
+      const { name } = entry;
+      // フィルタ条件: 特定の名前やプレフィックスを除外
+      if (
+        name.startsWith("_") ||
+        name.startsWith(".") ||
+        name === "node_modules"
+      ) {
+        return false;
+      }
+
+      // ディレクトリの場合、中身が空でないか確認
+      if (entry.isDirectory()) {
+        const dirPath = path.join(input, name);
+        const contents = fs.readdirSync(dirPath);
+        return contents.length > 0; // 空のディレクトリは除外
+      }
+
+      return true; // ファイルはそのまま通す
+    })
     .sort((a, b) => a.name.localeCompare(b.name));
 
   entries.forEach((entry) => {
