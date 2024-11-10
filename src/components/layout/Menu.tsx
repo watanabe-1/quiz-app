@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useSWR from "swr";
@@ -19,6 +20,9 @@ const Menu: React.FC = () => {
     {},
   );
   const pathname = usePathname();
+
+  // セッション情報を取得
+  const { data: session, status } = useSession();
 
   const { data: menuItems, error } = useSWR<MenuItem[]>(
     path_api_menu().$url({
@@ -129,10 +133,12 @@ const Menu: React.FC = () => {
           <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>
 
-        {/* ログアウトボタン */}
-        <div className="px-4">
-          <LogOutButton />
-        </div>
+        {/* ログインしているときのみログアウトボタンを表示 */}
+        {session && status === "authenticated" && (
+          <div className="px-4">
+            <LogOutButton />
+          </div>
+        )}
 
         {/* メニュー項目 */}
         <nav className="flex-1 overflow-y-auto px-4">

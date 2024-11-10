@@ -1,3 +1,4 @@
+import { SessionProvider } from "next-auth/react";
 import React from "react";
 import Menu from "@/components/layout/Menu";
 
@@ -13,7 +14,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           {title}
         </h1>
         <div>
-          <Menu />
+          <SessionProvider>
+            <Menu />
+          </SessionProvider>
         </div>
       </div>
     </header>
