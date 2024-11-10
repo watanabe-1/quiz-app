@@ -1,5 +1,6 @@
+import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
 import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
-import { addBaseUrl, getQueryParam } from "@/lib/url";
+import { addBaseUrl, generatePatternFromPath, getQueryParam } from "@/lib/url";
 
 const defHeaders = { host: "example.com" };
 
@@ -76,6 +77,46 @@ describe("Utility Functions", () => {
       const searchParams = new URLSearchParams("param=value");
       const result = getQueryParam<{ param2: string }>(searchParams, "param2");
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe("Utility Functions", () => {
+    describe("generatePatternFromPath", () => {
+      it("should generate the correct regex pattern for the quiz URL", () => {
+        // Generate the regex pattern using the path function without specifying paramCount
+        const pattern = generatePatternFromPath(
+          path_quiz_qualification_grade_year_category_id,
+        );
+
+        // Expected regex pattern
+        const expectedPattern =
+          /^\/quiz\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)$/;
+        expect(pattern.toString()).toBe(expectedPattern.toString());
+
+        // Test if the generated pattern matches a sample URL
+        const testUrl = "/quiz/qualification1/grade2/2024/category3/123";
+        const match = testUrl.match(pattern);
+
+        // Validate that the match was successful and parameters are correctly extracted
+        expect(match).not.toBeNull();
+        if (match) {
+          const [_, qualification, grade, year, category, id] = match;
+          expect(qualification).toBe("qualification1");
+          expect(grade).toBe("grade2");
+          expect(year).toBe("2024");
+          expect(category).toBe("category3");
+          expect(id).toBe("123");
+        }
+      });
+
+      it("should not match an incorrect URL pattern", () => {
+        const pattern = generatePatternFromPath(
+          path_quiz_qualification_grade_year_category_id,
+        );
+        const testUrl = "/invalid/url/structure";
+        const match = testUrl.match(pattern);
+        expect(match).toBeNull();
+      });
     });
   });
 });

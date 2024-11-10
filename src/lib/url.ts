@@ -1,5 +1,11 @@
 import { createHeadersProxy } from "@/lib/proxies/createHeadersProxy";
 
+type PathFunction = (...args: (string | number)[]) => {
+  $url: (url?: { query?: Record<string, string | number>; hash?: string }) => {
+    path: string;
+  };
+};
+
 /**
  * Creates a base URL string based on the protocol and host.
  * If `NEXT_PUBLIC_PROTOCOL` is specified in environment variables, it is used as the protocol;
@@ -45,3 +51,34 @@ export const getQueryParam = <T extends Record<string, string | undefined>>(
   const value = searchParams.get(key as string);
   return value ?? undefined;
 };
+
+/**
+ * Generates a regex pattern dynamically based on the provided path function.
+ * Automatically detects the number of parameters in the path.
+ * @param pathFunc - A function that generates a URL path.
+ * @returns A regex pattern that matches the generated path structure.
+ */
+export function generatePatternFromPath(pathFunc: PathFunction): RegExp {
+  // Generate a temporary path with no value to analyze the structure.
+  const tempPath = pathFunc().$url().path;
+
+  // Detect the number of parameters by counting occurrences of "undefined" in the path.
+  const paramCount = (tempPath.match(/undefined/g) || []).length;
+
+  // If no parameters are detected, return an empty regex.
+  if (paramCount === 0) {
+    return new RegExp(`^${tempPath}$`);
+  }
+
+  // Generate the exact number of dummy values needed.
+  const dummyValues = Array.from(
+    { length: paramCount },
+    (_, i) => `param${i + 1}`,
+  );
+  const { path: fullPath } = pathFunc(...dummyValues).$url();
+
+  // Convert the path to a regex pattern by replacing "/param" with "([^/]+)"
+  const pattern = fullPath.replace(/\/param\d+/g, "/([^/]+)");
+
+  return new RegExp(`^${pattern}$`);
+}

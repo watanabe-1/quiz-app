@@ -16,6 +16,7 @@ import {
   path_quiz_qualification_grade_year_category_id,
 } from "@/lib/path";
 import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
+import { generatePatternFromPath } from "@/lib/url";
 import { MenuItem } from "@/types/quizType";
 
 export type Query = {
@@ -38,7 +39,9 @@ export async function GET(request: NextRequest) {
 }
 
 // 正規表現を使用してURLをパース
-const quizUrlPattern = /^\/quiz\/([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/[^/]+$/;
+const quizUrlPattern = generatePatternFromPath(
+  path_quiz_qualification_grade_year_category_id,
+);
 
 /**
  * 現在のURLが `/quiz/[qualification]/[grade]/[year]/[category]/[id]` にマッチするかを判定し、
