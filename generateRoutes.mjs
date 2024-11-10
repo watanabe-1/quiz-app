@@ -93,14 +93,15 @@ const createMethods = (
   const optional = queryType && queryType.startsWith("Query") ? "" : "?";
   const queryParam = `url${optional}: { query${optional}: ${queryType ? queryType : "Record<string, string | number>"}, hash?: string }`;
   const slugParam = slugs.length ? `query: { ${slugs.join(", ")} },` : "";
+  const adjustedPathname = pathname === "" ? "/" : pathname;
   const pathExpression = isCatchAll
-    ? `\`${pathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
-    : `\`${pathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${encodeURIComponent(${p1})}`)}\${generateSuffix(url)}\``;
+    ? `\`${adjustedPathname.replace(/\[\[?\.\.\.(.*?)\]\]?/g, (_, p1) => `\${${p1}?.map(encodeURIComponent).join('/') ?? ''}`)}\${generateSuffix(url)}\``
+    : `\`${adjustedPathname.replace(/\[([^\]]+)\]/g, (_, p1) => `\${encodeURIComponent(${p1})}`)}\${generateSuffix(url)}\``;
 
   return method === "all"
-    ? `${indent}$url: (${queryParam}) => ({${printPathname ? ` pathname: '${pathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} })`
+    ? `${indent}$url: (${queryParam}) => ({${printPathname ? ` pathname: '${adjustedPathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} })`
     : `(${slugs.map((slug) => `${slug}: ${isCatchAll ? "string[]" : "string | number"}`)}) => {
-        return { $url: (${queryParam}) => ({${printPathname ? ` pathname: '${pathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} }) };
+        return { $url: (${queryParam}) => ({${printPathname ? ` pathname: '${adjustedPathname}' as const,` : ""} ${slugParam} hash: url?.hash, path: ${pathExpression} }) };
       }`;
 };
 

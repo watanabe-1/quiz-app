@@ -111,7 +111,7 @@ export const path_auth_login = () => {
       };
 
 export const path = () => {
-        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `${generateSuffix(url)}` }) };
+        return { $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({  hash: url?.hash, path: `/${generateSuffix(url)}` }) };
       };
 
 export const path_quiz_qualification_grade_year_category_id = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {
