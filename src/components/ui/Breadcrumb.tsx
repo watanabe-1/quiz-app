@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { path } from "@/lib/path";
 import { NonLinkableSegment } from "@/types/quizType";
 
 interface BreadcrumbProps {
@@ -27,7 +28,10 @@ const Breadcrumb = ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
     <nav aria-label="breadcrumb">
       <ol className="flex flex-wrap items-center space-x-1 break-words text-sm sm:space-x-2 sm:text-base">
         <li>
-          <Link href="/" className="text-green-500 hover:underline">
+          <Link
+            href={path().$url().path}
+            className="text-green-500 hover:underline"
+          >
             ホーム
           </Link>
         </li>
