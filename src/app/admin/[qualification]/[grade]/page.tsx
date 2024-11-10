@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetYearsByQualificationAndGrade } from "@/lib/api";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
@@ -27,12 +28,7 @@ const QualificationAdminPage = async (props: { params: Params }) => {
 
   return (
     <div>
-      <header className="flex items-center justify-between bg-gray-800 p-4 text-white">
-        <h1 className="text-2xl font-bold">{qualification} の管理</h1>
-        <Link href="/api/auth/signout" className="text-sm underline">
-          ログアウト
-        </Link>
-      </header>
+      <Header title={`${qualification} - ${grade} の管理`} />
       <main className="p-6">
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
         <h2 className="mb-4 text-xl font-semibold">年度一覧</h2>

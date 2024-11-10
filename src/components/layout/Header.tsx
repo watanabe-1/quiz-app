@@ -1,5 +1,5 @@
 import React from "react";
-import Menu from "@/components/ui/Menu";
+import Menu from "@/components/layout/Menu";
 
 interface HeaderProps {
   title: string;

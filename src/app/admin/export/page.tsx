@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import useSWR from "swr";
+import Header from "@/components/layout/Header";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import {
@@ -88,84 +90,86 @@ const ExportPage = () => {
 
   return (
     <div>
-      <h1>過去問データのエクスポート</h1>
-
-      <div>
-        <label>
-          資格を選択:
-          <select
-            value={selectedQualification}
-            onChange={(e) => {
-              setSelectedQualification(e.target.value);
-              setSelectedGrade(""); // 資格が変わったら級をリセット
-              setSelectedYear(""); // 年度もリセット
-            }}
-          >
-            <option value="">選択してください</option>
-            {qualifications.map((q: string) => (
-              <option key={q} value={q}>
-                {q}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      {selectedQualification && (
+      <Header title="過去問データのエクスポート" />
+      <main className="p-6">
+        <Breadcrumb />
         <div>
-          {gradesError && <ErrorState msg="Error loading grades." />}
-          {!grades && <LoadingState msg="Loading grades..." />}
-          {grades && (
-            <label>
-              級を選択:
-              <select
-                value={selectedGrade}
-                onChange={(e) => {
-                  setSelectedGrade(e.target.value);
-                  setSelectedYear(""); // 級が変わったら年度をリセット
-                }}
-              >
-                <option value="">選択してください</option>
-                {grades.map((g: string) => (
-                  <option key={g} value={g}>
-                    {g}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
+          <label>
+            資格を選択:
+            <select
+              value={selectedQualification}
+              onChange={(e) => {
+                setSelectedQualification(e.target.value);
+                setSelectedGrade(""); // 資格が変わったら級をリセット
+                setSelectedYear(""); // 年度もリセット
+              }}
+            >
+              <option value="">選択してください</option>
+              {qualifications.map((q: string) => (
+                <option key={q} value={q}>
+                  {q}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
-      )}
 
-      {selectedQualification && selectedGrade && (
-        <div>
-          {yearsError && <ErrorState msg="Error loading years." />}
-          {!years && <LoadingState msg="Loading years..." />}
-          {years && (
-            <label>
-              年度を選択（オプション）:
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-              >
-                <option value="">すべての年度</option>
-                {years.map((y: string) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-        </div>
-      )}
+        {selectedQualification && (
+          <div>
+            {gradesError && <ErrorState msg="Error loading grades." />}
+            {!grades && <LoadingState msg="Loading grades..." />}
+            {grades && (
+              <label>
+                級を選択:
+                <select
+                  value={selectedGrade}
+                  onChange={(e) => {
+                    setSelectedGrade(e.target.value);
+                    setSelectedYear(""); // 級が変わったら年度をリセット
+                  }}
+                >
+                  <option value="">選択してください</option>
+                  {grades.map((g: string) => (
+                    <option key={g} value={g}>
+                      {g}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </div>
+        )}
 
-      <button
-        onClick={handleDownload}
-        disabled={!selectedQualification || !selectedGrade}
-      >
-        ZIPファイルをダウンロード
-      </button>
+        {selectedQualification && selectedGrade && (
+          <div>
+            {yearsError && <ErrorState msg="Error loading years." />}
+            {!years && <LoadingState msg="Loading years..." />}
+            {years && (
+              <label>
+                年度を選択（オプション）:
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                >
+                  <option value="">すべての年度</option>
+                  {years.map((y: string) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </div>
+        )}
+
+        <button
+          onClick={handleDownload}
+          disabled={!selectedQualification || !selectedGrade}
+        >
+          ZIPファイルをダウンロード
+        </button>
+      </main>
     </div>
   );
 };

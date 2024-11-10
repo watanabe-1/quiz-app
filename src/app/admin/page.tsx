@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { logout } from "@/features/auth/actions/logout";
+import Header from "@/components/layout/Header";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetAllQualifications } from "@/lib/api";
 import {
   path_admin_export,
@@ -14,19 +15,11 @@ const AdminDashboard = async () => {
 
   return (
     <div>
-      <header className="flex items-center justify-between bg-gray-800 p-4 text-white">
-        <h1 className="text-2xl font-bold">管理者ダッシュボード</h1>
-        <form
-          action={async () => {
-            "use server";
-
-            await logout();
-          }}
-        >
-          <button type="submit">Sign Out</button>
-        </form>
-      </header>
+      <Header title="管理者ダッシュボード" />
       <main className="p-6">
+        <div className="mb-4">
+          <Breadcrumb />
+        </div>
         <Link
           href={path_admin_upload().$url().path}
           className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"

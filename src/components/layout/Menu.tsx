@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import useSWR from "swr";
+import LogOutButton from "@/components/layout/LogOutButton";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import { path_api_menu } from "@/lib/path";
@@ -21,9 +22,7 @@ const Menu: React.FC = () => {
 
   const { data: menuItems, error } = useSWR<MenuItem[]>(
     path_api_menu().$url({
-      query: {
-        path: pathname,
-      },
+      query: { path: pathname },
     }).path,
     fetcher,
   );
@@ -41,12 +40,7 @@ const Menu: React.FC = () => {
 
   // メニューが開いているときに背景のスクロールを防止
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    // クリーンアップ関数
+    document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -71,7 +65,6 @@ const Menu: React.FC = () => {
                 <FaChevronDown />
               )}
             </button>
-            {/* サブメニュー */}
             <div
               className={`ml-4 transition-all duration-300 ease-in-out ${
                 openSubmenus[`${item.href}${item.name}`]
@@ -136,8 +129,13 @@ const Menu: React.FC = () => {
           <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>
 
+        {/* ログアウトボタン */}
+        <div className="px-4">
+          <LogOutButton />
+        </div>
+
         {/* メニュー項目 */}
-        <nav className="mt-2 flex-1 overflow-y-auto px-4">
+        <nav className="flex-1 overflow-y-auto px-4">
           {error ? (
             <ErrorState />
           ) : !menuItems ? (

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 import useSWR from "swr";
 import { UploadImageSubmit } from "@/app/api/admin/uploadImage/route";
+import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
@@ -213,167 +214,188 @@ const EditQuestion = (props: { params: Params }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
-      <h1 className="mb-4 text-2xl font-bold">問題の編集</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* 問題文 */}
-        <div>
-          <label className="block font-medium">問題文:</label>
-          <textarea
-            name="text"
-            value={formData.question.text || ""}
-            onChange={(e) => handleChange(e, "question")}
-            className="w-full rounded border p-2"
-            rows={4}
-          />
-        </div>
-        {/* 問題画像 */}
-        <div>
-          <label className="block font-medium">問題画像:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleImageUpload(e, "question")}
-            className="w-full"
-          />
-          {formData.question.image && (
-            <div className="mt-2">
-              <Image
-                src={formData.question.image}
-                alt="問題画像"
-                layout="responsive"
-                width={600}
-                height={400}
-                unoptimized
+    <div>
+      <Header
+        title={`${qualification} - ${grade} - ${year} - 問題${id} の管理`}
+      />
+      <main className="p-6">
+        <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
+        <div className="min-h-screen bg-gray-100 p-6">
+          <h1 className="mb-4 text-2xl font-bold">問題の編集</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* 問題文 */}
+            <div>
+              <label className="block font-medium">問題文:</label>
+              <textarea
+                name="text"
+                value={formData.question.text || ""}
+                onChange={(e) => handleChange(e, "question")}
+                className="w-full rounded border p-2"
+                rows={4}
               />
-              <button
-                type="button"
-                onClick={() => handleImageRemove("question")}
-                className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-              >
-                画像を削除
-              </button>
             </div>
-          )}
-        </div>
-        {/* カテゴリー */}
-        <div>
-          <label className="block font-medium">カテゴリー:</label>
-          <input
-            name="category"
-            value={formData.category}
-            onChange={(e) => handleChange(e, "category")}
-            className="w-full rounded border p-2"
-          />
-        </div>
-        {/* 選択肢と解説 */}
-        <div>
-          <label className="block font-medium">選択肢と解説:</label>
-          {formData.options.map((option, index) => (
-            <div key={index} className="mb-6 rounded border p-4">
-              <div className="mb-2">
-                <label className="block font-medium">選択肢 {index + 1}:</label>
-                <input
-                  name="text"
-                  value={option.text}
-                  onChange={(e) => handleChange(e, "option", index)}
-                  className="mb-2 w-full rounded border p-2"
-                />
-                <label className="block font-medium">選択肢画像:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageUpload(e, "option", index)}
-                  className="w-full"
-                />
-                {option.image && (
-                  <div className="mt-2">
-                    <Image
-                      src={option.image}
-                      alt={`選択肢${index + 1}の画像`}
-                      layout="responsive"
-                      width={600}
-                      height={400}
-                      unoptimized
+            {/* 問題画像 */}
+            <div>
+              <label className="block font-medium">問題画像:</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, "question")}
+                className="w-full"
+              />
+              {formData.question.image && (
+                <div className="mt-2">
+                  <Image
+                    src={formData.question.image}
+                    alt="問題画像"
+                    layout="responsive"
+                    width={600}
+                    height={400}
+                    unoptimized
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleImageRemove("question")}
+                    className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                  >
+                    画像を削除
+                  </button>
+                </div>
+              )}
+            </div>
+            {/* カテゴリー */}
+            <div>
+              <label className="block font-medium">カテゴリー:</label>
+              <input
+                name="category"
+                value={formData.category}
+                onChange={(e) => handleChange(e, "category")}
+                className="w-full rounded border p-2"
+              />
+            </div>
+            {/* 選択肢と解説 */}
+            <div>
+              <label className="block font-medium">選択肢と解説:</label>
+              {formData.options.map((option, index) => (
+                <div key={index} className="mb-6 rounded border p-4">
+                  <div className="mb-2">
+                    <label className="block font-medium">
+                      選択肢 {index + 1}:
+                    </label>
+                    <input
+                      name="text"
+                      value={option.text}
+                      onChange={(e) => handleChange(e, "option", index)}
+                      className="mb-2 w-full rounded border p-2"
                     />
-                    <button
-                      type="button"
-                      onClick={() => handleImageRemove("option", index)}
-                      className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-                    >
-                      画像を削除
-                    </button>
+                    <label className="block font-medium">選択肢画像:</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, "option", index)}
+                      className="w-full"
+                    />
+                    {option.image && (
+                      <div className="mt-2">
+                        <Image
+                          src={option.image}
+                          alt={`選択肢${index + 1}の画像`}
+                          layout="responsive"
+                          width={600}
+                          height={400}
+                          unoptimized
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleImageRemove("option", index)}
+                          className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                        >
+                          画像を削除
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div>
-                <label className="block font-medium">解説:</label>
-                <textarea
-                  name="text"
-                  value={option.explanation?.text || ""}
-                  onChange={(e) =>
-                    handleChange(e, "option", index, "explanation")
-                  }
-                  className="mb-2 w-full rounded border p-2"
-                  rows={2}
-                />
-                <label className="block font-medium">解説画像:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    handleImageUpload(e, "option", index, "explanationImage")
-                  }
-                  className="w-full"
-                />
-                {option.explanation?.image && (
-                  <div className="mt-2">
-                    <Image
-                      src={option.explanation.image}
-                      alt="解説画像"
-                      layout="responsive"
-                      width={600}
-                      height={400}
-                      unoptimized
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleImageRemove("option", index, "explanationImage")
+                  <div>
+                    <label className="block font-medium">解説:</label>
+                    <textarea
+                      name="text"
+                      value={option.explanation?.text || ""}
+                      onChange={(e) =>
+                        handleChange(e, "option", index, "explanation")
                       }
-                      className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-                    >
-                      画像を削除
-                    </button>
+                      className="mb-2 w-full rounded border p-2"
+                      rows={2}
+                    />
+                    <label className="block font-medium">解説画像:</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleImageUpload(
+                          e,
+                          "option",
+                          index,
+                          "explanationImage",
+                        )
+                      }
+                      className="w-full"
+                    />
+                    {option.explanation?.image && (
+                      <div className="mt-2">
+                        <Image
+                          src={option.explanation.image}
+                          alt="解説画像"
+                          layout="responsive"
+                          width={600}
+                          height={400}
+                          unoptimized
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleImageRemove(
+                              "option",
+                              index,
+                              "explanationImage",
+                            )
+                          }
+                          className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                        >
+                          画像を削除
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              ))}
             </div>
-          ))}
+            {/* 正解 */}
+            <div>
+              <label className="block font-medium">
+                正解のインデックス（0から）:
+              </label>
+              <input
+                name="answer"
+                type="number"
+                value={formData.answer}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData!,
+                    answer: parseInt(e.target.value),
+                  })
+                }
+                className="w-full rounded border p-2"
+              />
+            </div>
+            <button
+              type="submit"
+              className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              更新
+            </button>
+          </form>
         </div>
-        {/* 正解 */}
-        <div>
-          <label className="block font-medium">
-            正解のインデックス（0から）:
-          </label>
-          <input
-            name="answer"
-            type="number"
-            value={formData.answer}
-            onChange={(e) =>
-              setFormData({ ...formData!, answer: parseInt(e.target.value) })
-            }
-            className="w-full rounded border p-2"
-          />
-        </div>
-        <button
-          type="submit"
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
-          更新
-        </button>
-      </form>
+      </main>
     </div>
   );
 };
