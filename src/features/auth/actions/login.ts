@@ -20,8 +20,6 @@ export const login = async (
   password: string,
 ): Promise<LoginResult> => {
   try {
-    console.log("🚀 ~ LOGIN_REDIRECT:", LOGIN_REDIRECT);
-
     // NextAuthのsignIn関数を使用してログイン
     await signIn("credentials", {
       username,
