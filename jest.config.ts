@@ -21,7 +21,7 @@ const config: Config = {
   preset: "ts-jest",
   testEnvironment: "node",
   // Add more setup options before each test is run
-  setupFiles: ["dotenv/config", "whatwg-fetch"],
+  setupFiles: ["dotenv/config", "<rootDir>/jest.polyfills.ts"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
     "@/(.*)$": "<rootDir>/src/$1",
