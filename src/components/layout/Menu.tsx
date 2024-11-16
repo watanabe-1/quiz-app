@@ -52,13 +52,13 @@ const Menu: React.FC = () => {
   // メニュー項目を再帰的にレンダリング
   const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
     return items.map((item) => (
-      <div key={`${item.href}${item.name}`}>
+      <div key={`${item.href}${item.name}`} className="relative">
         {item.children ? (
           <>
             <button
               onClick={() => toggleSubmenu(`${item.href}${item.name}`)}
               className={`flex w-full items-center justify-between px-4 py-2 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none ${
-                depth > 0 ? "pl-4" : ""
+                depth > 0 ? `pl-${depth * 4}` : ""
               }`}
             >
               <span>{item.name}</span>
@@ -68,12 +68,11 @@ const Menu: React.FC = () => {
                 <FaChevronDown />
               )}
             </button>
+            {/* サブメニュー */}
             <div
-              className={`ml-4 transition-all duration-300 ease-in-out ${
-                openSubmenus[`${item.href}${item.name}`]
-                  ? "max-h-screen"
-                  : "max-h-0 overflow-hidden"
-              }`}
+              className={`${
+                openSubmenus[`${item.href}${item.name}`] ? "block" : "hidden"
+              } ml-4 border-l border-gray-600 pl-4`}
             >
               {renderMenuItems(item.children, depth + 1)}
             </div>
@@ -82,7 +81,7 @@ const Menu: React.FC = () => {
           <Link
             href={item.href || "#"}
             className={`block px-4 py-2 transition-all duration-300 ease-in-out hover:bg-gray-700 ${
-              depth > 0 ? "pl-6" : ""
+              depth > 0 ? `pl-${depth * 4}` : ""
             }`}
             onClick={toggleMenu}
           >
