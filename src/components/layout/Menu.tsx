@@ -5,14 +5,18 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
-import useSWR from "swr";
 import LogOutButton from "@/components/layout/LogOutButton";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import { useFetch } from "@/hooks/useFetch";
 import { path_api_menu } from "@/lib/path";
 import { MenuItem } from "@/types/quizType";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+function useMenuItems(pathname: string) {
+  return useFetch<MenuItem[]>(
+    path_api_menu().$url({ query: { path: pathname } }).path,
+  );
+}
 
 const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,12 +28,7 @@ const Menu: React.FC = () => {
   // セッション情報を取得
   const { data: session, status } = useSession();
 
-  const { data: menuItems, error } = useSWR<MenuItem[]>(
-    path_api_menu().$url({
-      query: { path: pathname },
-    }).path,
-    fetcher,
-  );
+  const { data: menuItems, error } = useMenuItems(pathname);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

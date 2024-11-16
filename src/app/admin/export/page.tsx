@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import useSWR from "swr";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import { useFetch } from "@/hooks/useFetch";
 import {
   path_api_admin_exportQuestions,
   path_api_questions,
@@ -13,7 +13,21 @@ import {
   path_api_questions_qualification_grade,
 } from "@/lib/path";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const useQualifications = () => {
+  return useFetch<string[]>(path_api_questions().$url().path);
+};
+
+const useGrades = (qualification: string) => {
+  return useFetch<string[]>(
+    path_api_questions_qualification(qualification).$url().path,
+  );
+};
+
+const useYears = (qualification: string, grade: string) => {
+  return useFetch<string[]>(
+    path_api_questions_qualification_grade(qualification, grade).$url().path,
+  );
+};
 
 const ExportPage = () => {
   const [selectedQualification, setSelectedQualification] = useState("");
@@ -21,28 +35,16 @@ const ExportPage = () => {
   const [selectedYear, setSelectedYear] = useState("");
 
   // 資格一覧を取得
-  const { data: qualifications, error: qualificationsError } = useSWR(
-    path_api_questions().$url().path,
-    fetcher,
-  );
+  const { data: qualifications, error: qualificationsError } =
+    useQualifications();
 
   // 選択された資格の級一覧を取得
-  const { data: grades, error: gradesError } = useSWR(
-    selectedQualification
-      ? path_api_questions_qualification(selectedQualification).$url().path
-      : null,
-    fetcher,
-  );
+  const { data: grades, error: gradesError } = useGrades(selectedQualification);
 
   // 選択された資格と級の年度一覧を取得
-  const { data: years, error: yearsError } = useSWR(
-    selectedQualification && selectedGrade
-      ? path_api_questions_qualification_grade(
-          selectedQualification,
-          selectedGrade,
-        ).$url().path
-      : null,
-    fetcher,
+  const { data: years, error: yearsError } = useYears(
+    selectedQualification,
+    selectedGrade,
   );
 
   const handleDownload = async () => {

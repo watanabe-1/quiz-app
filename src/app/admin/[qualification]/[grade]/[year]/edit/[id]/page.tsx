@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
-import useSWR from "swr";
 import { UploadImageSubmit } from "@/app/api/admin/uploadImage/route";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
+import { useFetch } from "@/hooks/useFetch";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
 import {
   path_admin_qualification_grade_year,
@@ -19,14 +19,29 @@ import {
 import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import { MediaContent, QuestionData, QuestionOption } from "@/types/quizType";
 
+const useQuestionData = (
+  qualification: string,
+  grade: string,
+  year: string,
+  id: string,
+) => {
+  return useFetch<QuestionData>(
+    path_api_questions_qualification_grade_year_category_id(
+      qualification,
+      grade,
+      year,
+      ALL_CATEGORY,
+      id,
+    ).$url().path,
+  );
+};
+
 type Params = Promise<{
   qualification: string;
   grade: string;
   year: string;
   id: string;
 }>;
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const EditQuestion = (props: { params: Params }) => {
   const params = use(props.params);
@@ -35,15 +50,11 @@ const EditQuestion = (props: { params: Params }) => {
   const year = decodeURIComponent(params.year);
   const id = decodeURIComponent(params.id);
 
-  const { data: questionData, error } = useSWR<QuestionData>(
-    path_api_questions_qualification_grade_year_category_id(
-      qualification,
-      grade,
-      year,
-      ALL_CATEGORY,
-      id,
-    ).$url().path,
-    fetcher,
+  const { data: questionData, error } = useQuestionData(
+    qualification,
+    grade,
+    year,
+    id,
   );
   const [formData, setFormData] = useState<QuestionData | null>(null);
   const router = useRouter();
