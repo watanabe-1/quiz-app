@@ -90,12 +90,22 @@ export async function getQuestions(
     select: {
       id: true,
       questionId: true,
-      category: {
+      qualification: {
         select: {
           name: true,
         },
       },
       grade: {
+        select: {
+          name: true,
+        },
+      },
+      year: {
+        select: {
+          year: true,
+        },
+      },
+      category: {
         select: {
           name: true,
         },
@@ -118,8 +128,10 @@ export async function getQuestions(
   return questions.map((q) => ({
     id: q.id,
     questionId: q.questionId,
-    category: q.category.name,
+    qualification: q.qualification.name,
     grade: q.grade.name,
+    year: q.year.year,
+    category: q.category.name,
     question: {
       id: q.question?.id,
       text: q.question?.text || undefined,
@@ -206,12 +218,22 @@ export async function getQuestionsByCategory(
     select: {
       id: true,
       questionId: true,
-      category: {
+      qualification: {
         select: {
           name: true,
         },
       },
       grade: {
+        select: {
+          name: true,
+        },
+      },
+      year: {
+        select: {
+          year: true,
+        },
+      },
+      category: {
         select: {
           name: true,
         },
@@ -233,8 +255,10 @@ export async function getQuestionsByCategory(
   return questions.map((q) => ({
     id: q.id,
     questionId: q.questionId,
-    category: q.category.name,
+    qualification: q.qualification.name,
     grade: q.grade.name,
+    year: q.year.year,
+    category: q.category.name,
     question: {
       id: q.question?.id,
       text: q.question?.text || undefined,
@@ -286,12 +310,22 @@ export async function getQuestionById(
     select: {
       id: true,
       questionId: true,
-      category: {
+      qualification: {
         select: {
           name: true,
         },
       },
       grade: {
+        select: {
+          name: true,
+        },
+      },
+      year: {
+        select: {
+          year: true,
+        },
+      },
+      category: {
         select: {
           name: true,
         },
@@ -317,6 +351,9 @@ export async function getQuestionById(
   return {
     id: question.id,
     questionId: question.questionId,
+    qualification: question.qualification.name,
+    grade: question.grade.name,
+    year: question.year.year,
     category: question.category.name,
     question: {
       id: question.question?.id,

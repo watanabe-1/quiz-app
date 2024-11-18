@@ -52,6 +52,12 @@ export interface QuestionData {
   id?: number;
   /** Unique identifier for the question. */
   questionId: number;
+  /** The qualification or qualification of the question. */
+  qualification: string;
+  /** The grade or difficulty level of the question. */
+  grade: string;
+  /** The year or year of the question. */
+  year: string;
   /** The category name for the question, treated as a string. */
   category: string;
   /** The content of the question, which may include text or an image. */

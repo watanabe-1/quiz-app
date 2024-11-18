@@ -43,6 +43,9 @@ export function parseProblems(text: string): QuestionData[] {
     const problem: QuestionData = {
       questionId: id,
       category: "なし",
+      qualification: "",
+      grade: "",
+      year: "",
       question: { text: questionText },
       options,
       answer: 0,
