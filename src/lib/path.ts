@@ -128,16 +128,6 @@ export const path_api_admin_upload_businessCareer_exam = () => {
       };
 path_api_admin_upload_businessCareer_exam.match = (path: string) => new RegExp("^/api/admin/upload/businessCareer/exam$").exec(path);
 
-export const path_api_admin_upload = () => {
-        return { 
-          $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({
-             hash: url?.hash, 
-            path: `/api/admin/upload${generateSuffix(url)}`
-          }),
-        };
-      };
-path_api_admin_upload.match = (path: string) => new RegExp("^/api/admin/upload$").exec(path);
-
 export const path_api_admin_uploadImage = () => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({

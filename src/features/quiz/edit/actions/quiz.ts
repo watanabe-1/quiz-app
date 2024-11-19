@@ -1,27 +1,12 @@
 "use server";
 
-import { type SubmissionResult } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { redirect } from "next/navigation";
 import { questionDataSchema } from "@/features/quiz/edit/lib/schema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import { path_admin_qualification_grade_year } from "@/lib/path";
 import { existsQuestion, saveQuestion } from "@/services/quizService";
-
-type FormState =
-  | {
-      status: "success";
-      message: string;
-      submission?: SubmissionResult;
-    }
-  | {
-      status: "error";
-      submission?: SubmissionResult;
-    }
-  | {
-      status: "idle";
-      submission?: SubmissionResult;
-    };
+import { FormState } from "@/types/conform";
 
 export const updateQuiz = async (
   prevState: FormState,

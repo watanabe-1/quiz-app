@@ -40,3 +40,42 @@ export type OptionalFieldMetadata = "fieldMetadata";
  * Use this type to indicate that a value is related to optional form metadata.
  */
 export type OptionalFormMetadata = "formMetadata";
+
+/**
+ * Represents the state of a form during its lifecycle.
+ */
+export type FormState =
+  | {
+      /**
+       * Indicates the form submission was successful.
+       */
+      status: "success";
+      /**
+       * Message providing additional information about the successful submission.
+       */
+      message: string;
+      /**
+       * Optional data returned as a result of the submission.
+       */
+      submission?: SubmissionResult;
+    }
+  | {
+      /**
+       * Indicates the form encountered an error during submission.
+       */
+      status: "error";
+      /**
+       * Optional data returned as a result of the submission.
+       */
+      submission?: SubmissionResult;
+    }
+  | {
+      /**
+       * Indicates the form is idle and has not been submitted.
+       */
+      status: "idle";
+      /**
+       * Optional data returned as a result of the submission.
+       */
+      submission?: SubmissionResult;
+    };

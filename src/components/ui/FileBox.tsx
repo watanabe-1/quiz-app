@@ -3,37 +3,35 @@ import React from "react";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { ConformProps, OptionalFormMetadata } from "@/types/conform";
 
-type TextBoxProps = Omit<ConformProps<string>, OptionalFormMetadata> & {
+type FileBoxProps = Omit<ConformProps<File>, OptionalFormMetadata> & {
   label: string;
+  accept: string;
   hidden?: boolean;
-  disabled?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-const TextBox = ({
+const FileBox = ({
   label,
+  accept,
   fieldMetadata,
   hidden = false,
-  disabled = false,
-}: TextBoxProps) => {
-  const inputProps = getInputProps(fieldMetadata, { type: "text" });
+  onChange,
+}: FileBoxProps) => {
+  const inputProps = getInputProps(fieldMetadata, { type: "file" });
 
   return (
-    <div hidden={hidden}>
+    <div className="mb-4" hidden={hidden}>
       <label className="mb-2 block font-medium">{label}</label>
       <input
         {...inputProps}
-        className="w-full rounded border p-2"
+        className="w-full"
+        accept={accept}
         key={fieldMetadata.key}
-        hidden={disabled}
+        onChange={onChange}
       />
-      {disabled && (
-        <span className="block w-full rounded border bg-gray-100 p-2 text-gray-600">
-          {fieldMetadata.value}
-        </span>
-      )}
       <ErrorMessage errors={fieldMetadata.errors} />
     </div>
   );
 };
 
-export default TextBox;
+export default FileBox;
