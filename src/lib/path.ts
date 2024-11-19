@@ -108,16 +108,6 @@ export const path_api_admin_exportQuestions = () => {
       };
 path_api_admin_exportQuestions.match = (path: string) => new RegExp("^/api/admin/exportQuestions$").exec(path);
 
-export const path_api_admin_questions_qualification_grade_year_id = (qualification: string | number,grade: string | number,year: string | number,id: string | number) => {
-        return { 
-          $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({
-            query: { qualification, grade, year, id }, hash: url?.hash, 
-            path: `/api/admin/questions/${encodeURIComponent(qualification)}/${encodeURIComponent(grade)}/${encodeURIComponent(year)}/${encodeURIComponent(id)}${generateSuffix(url)}`
-          }),
-        };
-      };
-path_api_admin_questions_qualification_grade_year_id.match = (path: string) => new RegExp("^/api/admin/questions/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
-
 export const path_api_admin_upload_businessCareer_ans = () => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({
