@@ -2,7 +2,7 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorMessage from "@/components/ui/ErrorMessage";
-import EditQuestionForm from "@/features/quiz/edit/components/EditQuestionForm";
+import EditQuizForm from "@/features/quiz/edit/components/EditQuizForm";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
 
@@ -43,7 +43,7 @@ const EditQuestion = async (props: { params: Params }) => {
         <Breadcrumb nonLinkableSegments={nonLinkableSegmentsByAdmin} />
         <div className="min-h-screen bg-gray-100 p-6">
           <h1 className="mb-4 text-2xl font-bold">問題の編集</h1>
-          <EditQuestionForm questionData={question} />
+          <EditQuizForm questionData={question} />
         </div>
       </main>
     </div>

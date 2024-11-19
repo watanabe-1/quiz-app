@@ -10,13 +10,11 @@ import TextBox from "@/components/ui/TextBox";
 import { useQuizForm } from "@/features/quiz/edit/hooks/useQuizForm";
 import { QuestionData } from "@/types/quizType";
 
-type EditQuestionFormParams = {
+type EditQuizFormParams = {
   questionData: QuestionData;
 };
 
-const EditQuestionForm: React.FC<EditQuestionFormParams> = ({
-  questionData,
-}) => {
+const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
   const { submitAction, loading, form, fields } = useQuizForm({
     defaultValues: questionData,
   });
@@ -97,4 +95,4 @@ const EditQuestionForm: React.FC<EditQuestionFormParams> = ({
   );
 };
 
-export default EditQuestionForm;
+export default EditQuizForm;
