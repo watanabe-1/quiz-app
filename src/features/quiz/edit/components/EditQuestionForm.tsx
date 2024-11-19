@@ -84,7 +84,7 @@ const EditQuestionForm: React.FC<EditQuestionFormParams> = ({
         <TextBox label="資格:" fieldMetadata={fields.qualification} hidden />
         <NumberBox label="ID:" fieldMetadata={fields.questionId} hidden />
         <TextBox label="級:" fieldMetadata={fields.grade} hidden />
-        <TextBox label="級:" fieldMetadata={fields.year} hidden />
+        <TextBox label="年:" fieldMetadata={fields.year} hidden />
         <button
           type="submit"
           className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
