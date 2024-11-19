@@ -9,12 +9,12 @@ type TextAreaProps = Omit<ConformProps<string>, OptionalFormMetadata> & {
   hidden?: boolean;
 };
 
-function TextArea({
+const TextArea = ({
   label,
   rows,
   fieldMetadata,
   hidden = false,
-}: TextAreaProps) {
+}: TextAreaProps) => {
   const inputProps = getTextareaProps(fieldMetadata);
 
   return (
@@ -29,6 +29,6 @@ function TextArea({
       <ErrorMessage errors={fieldMetadata.errors} />
     </div>
   );
-}
+};
 
 export default TextArea;

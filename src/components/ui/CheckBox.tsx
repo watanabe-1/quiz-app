@@ -9,12 +9,12 @@ type CheckBoxProps = Omit<ConformProps<boolean>, OptionalFormMetadata> & {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-function CheckBox({
+const CheckBox = ({
   label,
   fieldMetadata,
   hidden = false,
   onChange,
-}: CheckBoxProps) {
+}: CheckBoxProps) => {
   const inputProps = getInputProps(fieldMetadata, { type: "checkbox" });
 
   return (
@@ -29,6 +29,6 @@ function CheckBox({
       <ErrorMessage errors={fieldMetadata.errors} />
     </div>
   );
-}
+};
 
 export default CheckBox;

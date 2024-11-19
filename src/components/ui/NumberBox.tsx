@@ -8,7 +8,11 @@ type NumberBoxProps = Omit<ConformProps<number>, OptionalFormMetadata> & {
   hidden?: boolean;
 };
 
-function NumberBox({ label, fieldMetadata, hidden = false }: NumberBoxProps) {
+const NumberBox = ({
+  label,
+  fieldMetadata,
+  hidden = false,
+}: NumberBoxProps) => {
   const inputProps = getInputProps(fieldMetadata, { type: "number" });
 
   return (
@@ -22,6 +26,6 @@ function NumberBox({ label, fieldMetadata, hidden = false }: NumberBoxProps) {
       <ErrorMessage errors={fieldMetadata.errors} />
     </div>
   );
-}
+};
 
 export default NumberBox;

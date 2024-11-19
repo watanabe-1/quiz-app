@@ -9,12 +9,12 @@ type ImageBoxProps = ConformProps<File> & {
   hidden?: boolean;
 };
 
-function ImageBox({
+const ImageBox = ({
   label,
   fieldMetadata,
   formMetadata,
   hidden = false,
-}: ImageBoxProps) {
+}: ImageBoxProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const inputProps = getInputProps(fieldMetadata, { type: "file" });
@@ -70,6 +70,6 @@ function ImageBox({
       )}
     </div>
   );
-}
+};
 
 export default ImageBox;
