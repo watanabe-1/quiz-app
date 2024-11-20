@@ -25,3 +25,16 @@ export const LOGIN_ROUTE = process.env.LOG_IN_PAGE ?? DEFAULT_LOGIN_ROUTE;
  * Routes that start with this prefix are used for API authentication purposes
  */
 export const API_AUTH_PREFIX = "/api/auth";
+
+/**
+ * A comma-separated string containing paths that are protected and accessible only by admin users.
+ *
+ * Each path in the string represents a route that requires administrative privileges to access.
+ * The paths are separated by commas, allowing easy splitting into an array for further processing.
+ *
+ * @example
+ * // Usage
+ * const paths = ADMIN_PROTECTED_PATHS.split(',');
+ * console.log(paths); // ["/admin", "/api/admin"]
+ */
+export const ADMIN_PROTECTED_PATHS = "/admin,/api/admin";

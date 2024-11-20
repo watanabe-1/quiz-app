@@ -39,7 +39,6 @@
 - `USER_USERNAME`: 通常ユーザのユーザー名（例: user）。
 - `USER_PASSWORD_HASH`: 通常ユーザのパスワードの bcrypt ハッシュ。
 - `LOG_IN_PAGE`: ログインページのパス。
-- `ADMIN_PROTECTED_PATHS`: 管理者認証が必要なパス（カンマ区切り）。
 - `USER_PROTECTED_PATHS`: 認証が必要なパスのリスト（カンマ区切り）。
 - `NEXTAUTH_URL`: Auth.js の URL。
 - `NEXTAUTH_SECRET`: Auth.js のシークレットキー。
@@ -67,9 +66,6 @@ USER_PASSWORD_HASH=\$2b\$10\$rIyGkgOR4haBw3q3engi4uy7q.U1gbHfFx/Hj9C2BqodjJ7PV6J
 
 # ログインページのパス
 LOG_IN_PAGE=/auth/login
-
-# 管理者認証が必要なパス（カンマ区切り）
-ADMIN_PROTECTED_PATHS=/admin,/api/admin
 
 # 認証が必要なパス（カンマ区切り）
 USER_PROTECTED_PATHS=/,/quiz,/api
@@ -130,9 +126,6 @@ USER_PASSWORD_HASH=$2b$10$eA9N4hUuKS1NPjoOi1Mn2e2A0wjHaxVwc6UmJhwcniHc5oIH.23wC
 
 # ログインページのパス
 LOG_IN_PAGE=/auth/login
-
-# 管理者認証が必要なパス（カンマ区切り）
-ADMIN_PROTECTED_PATHS=/admin,/api/admin
 
 # 認証が必要なパス（カンマ区切り）
 USER_PROTECTED_PATHS=/,/quiz,/api

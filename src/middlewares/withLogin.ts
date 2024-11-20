@@ -6,20 +6,17 @@ import {
 } from "next/server";
 import { auth } from "@/features/auth/auth";
 import {
+  ADMIN_PROTECTED_PATHS,
   API_AUTH_PREFIX,
   LOGIN_ROUTE,
 } from "@/features/auth/lib/authConstants";
 
 /**
  * Array of regular expressions representing paths that require admin access.
- * These are loaded from the `ADMIN_PROTECTED_PATHS` environment variable.
- * If not set, defaults to `/admin` and `/api/admin` paths.
  */
-const adminProtectedPaths = process.env.ADMIN_PROTECTED_PATHS
-  ? process.env.ADMIN_PROTECTED_PATHS.split(",").map(
-      (path) => new RegExp(`^${path.trim()}(\\/.*)?$`),
-    )
-  : [/^\/admin(\/.*)?$/, /^\/api\/admin(\/.*)?$/];
+const adminProtectedPaths = ADMIN_PROTECTED_PATHS.split(",").map(
+  (path) => new RegExp(`^${path.trim()}(\\/.*)?$`),
+);
 
 /**
  * Array of regular expressions representing paths that require user access.

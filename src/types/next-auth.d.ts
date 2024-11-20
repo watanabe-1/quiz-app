@@ -6,7 +6,7 @@ import { JWT } from "next-auth/jwt";
 /**
  * Defines the roles available for users in the application.
  */
-type Role = "user" | "admin";
+type Role = "guest" | "user" | "admin";
 
 declare module "next-auth" {
   /**
