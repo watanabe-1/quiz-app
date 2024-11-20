@@ -61,6 +61,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
@@ -91,6 +94,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName1,
+        year: yearValue,
       },
     ];
 
@@ -103,6 +109,9 @@ describe("quizService", () => {
         },
         options: [{ text: "5" }, { text: "6" }, { text: "7" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName2,
+        year: yearValue,
       },
     ];
 
@@ -138,6 +147,9 @@ describe("quizService", () => {
         },
         options: [{ text: "1" }, { text: "2" }, { text: "3" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue1,
       },
     ];
 
@@ -150,6 +162,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue2,
       },
     ];
 
@@ -187,6 +202,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
       {
         questionId: 2,
@@ -196,6 +214,9 @@ describe("quizService", () => {
         },
         options: [{ text: "5" }, { text: "6" }, { text: "7" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
@@ -255,6 +276,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
       {
         questionId: 2,
@@ -264,6 +288,9 @@ describe("quizService", () => {
         },
         options: [{ text: "水" }, { text: "酸素" }, { text: "水素" }],
         answer: 0,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
@@ -291,6 +318,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
       {
         questionId: 2,
@@ -300,6 +330,9 @@ describe("quizService", () => {
         },
         options: [{ text: "水" }, { text: "酸素" }, { text: "水素" }],
         answer: 0,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
@@ -338,6 +371,9 @@ describe("quizService", () => {
       },
       options: [{ text: "3" }, { text: "4" }, { text: "5" }],
       answer: 1,
+      qualification: qualificationName,
+      grade: gradeName,
+      year: yearValue,
     };
 
     await saveQuestions(qualificationName, gradeName, yearValue, [
@@ -353,6 +389,9 @@ describe("quizService", () => {
       },
       options: [{ text: "4" }, { text: "5" }, { text: "6" }],
       answer: 1,
+      qualification: qualificationName,
+      grade: gradeName,
+      year: yearValue,
     };
 
     const saveResult = await saveQuestion(
@@ -392,6 +431,9 @@ describe("quizService", () => {
       },
       options: [{ text: "水" }, { text: "酸素" }, { text: "水素" }],
       answer: 0,
+      qualification: qualificationName,
+      grade: gradeName,
+      year: yearValue,
     };
 
     const saveResult = await saveQuestion(
@@ -428,6 +470,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
@@ -459,6 +504,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
@@ -482,6 +530,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 1,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
@@ -510,6 +561,9 @@ describe("quizService", () => {
         },
         options: [{ text: "3" }, { text: "4" }, { text: "5" }],
         answer: 0,
+        qualification: qualificationName,
+        grade: gradeName,
+        year: yearValue,
       },
     ];
 
