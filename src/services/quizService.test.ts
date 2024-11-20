@@ -1,3 +1,4 @@
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 import prisma from "@/lib/prisma";
 import {
   getAllQualifications,
@@ -13,6 +14,11 @@ import {
   updateQuestionAnswer,
   saveQuestion,
 } from "@/services/quizService";
+
+jest.mock("@/features/permission/lib/withPermissionAll"); // withPermissionAll をモック
+(withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
+  callback(),
+);
 
 describe("quizService", () => {
   beforeAll(async () => {

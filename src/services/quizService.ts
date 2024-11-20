@@ -1,43 +1,49 @@
 import { Prisma } from "@prisma/client";
+import { permission } from "@/features/permission/lib/permission";
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 import prisma from "@/lib/prisma";
 import { QuestionData } from "@/types/quizType";
 
 // 資格一覧を取得
 export async function getAllQualifications(): Promise<string[]> {
-  const qualifications = await prisma.qualification.findMany({
-    select: {
-      name: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
-  return qualifications.map((q) => q.name);
+  return withPermissionAll(async () => {
+    const qualifications = await prisma.qualification.findMany({
+      select: {
+        name: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
+    return qualifications.map((q) => q.name);
+  }, [permission.data.search]);
 }
 
 // 指定した資格の級一覧を取得
 export async function getGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
-  const grades = await prisma.grade.findMany({
-    where: {
-      questions: {
-        some: {
-          qualification: {
-            name: qualification,
+  return withPermissionAll(async () => {
+    const grades = await prisma.grade.findMany({
+      where: {
+        questions: {
+          some: {
+            qualification: {
+              name: qualification,
+            },
           },
         },
       },
-    },
-    select: {
-      name: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
+      select: {
+        name: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
 
-  return grades.map((g) => g.name);
+    return grades.map((g) => g.name);
+  }, [permission.data.search]);
 }
 
 // 指定した資格、級の年度一覧を取得
@@ -45,28 +51,30 @@ export async function getYearsByQualificationAndGrade(
   qualification: string,
   grade: string,
 ): Promise<string[]> {
-  const years = await prisma.year.findMany({
-    where: {
-      questions: {
-        some: {
-          qualification: {
-            name: qualification,
-          },
-          grade: {
-            name: grade,
+  return withPermissionAll(async () => {
+    const years = await prisma.year.findMany({
+      where: {
+        questions: {
+          some: {
+            qualification: {
+              name: qualification,
+            },
+            grade: {
+              name: grade,
+            },
           },
         },
       },
-    },
-    select: {
-      year: true,
-    },
-    orderBy: {
-      year: "asc",
-    },
-  });
+      select: {
+        year: true,
+      },
+      orderBy: {
+        year: "asc",
+      },
+    });
 
-  return years.map((y) => y.year);
+    return years.map((y) => y.year);
+  }, [permission.data.search]);
 }
 
 // 指定した資格、級、年度の問題を取得
@@ -75,89 +83,91 @@ export async function getQuestions(
   grade: string,
   year: string,
 ): Promise<QuestionData[]> {
-  const questions = await prisma.questionData.findMany({
-    where: {
-      qualification: {
-        name: qualification,
-      },
-      grade: {
-        name: grade,
-      },
-      year: {
-        year: year,
-      },
-    },
-    select: {
-      id: true,
-      questionId: true,
-      qualification: {
-        select: {
-          name: true,
+  return withPermissionAll(async () => {
+    const questions = await prisma.questionData.findMany({
+      where: {
+        qualification: {
+          name: qualification,
+        },
+        grade: {
+          name: grade,
+        },
+        year: {
+          year: year,
         },
       },
-      grade: {
-        select: {
-          name: true,
+      select: {
+        id: true,
+        questionId: true,
+        qualification: {
+          select: {
+            name: true,
+          },
+        },
+        grade: {
+          select: {
+            name: true,
+          },
+        },
+        year: {
+          select: {
+            year: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+          },
+        },
+        answer: true,
+        question: true, // MediaContent
+        explanation: true, // MediaContent
+        options: {
+          include: {
+            explanation: true, // MediaContent
+          },
         },
       },
-      year: {
-        select: {
-          year: true,
-        },
+      orderBy: {
+        questionId: "asc",
       },
-      category: {
-        select: {
-          name: true,
-        },
-      },
-      answer: true,
-      question: true, // MediaContent
-      explanation: true, // MediaContent
-      options: {
-        include: {
-          explanation: true, // MediaContent
-        },
-      },
-    },
-    orderBy: {
-      questionId: "asc",
-    },
-  });
+    });
 
-  // PrismaのデータをQuestionData型に変換
-  return questions.map((q) => ({
-    id: q.id,
-    questionId: q.questionId,
-    qualification: q.qualification.name,
-    grade: q.grade.name,
-    year: q.year.year,
-    category: q.category.name,
-    question: {
-      id: q.question?.id,
-      text: q.question?.text || undefined,
-      image: q.question?.image || undefined,
-    },
-    options: q.options.map((o) => ({
-      id: o.id,
-      text: o.text,
-      image: o.image || undefined,
-      explanation: o.explanation
+    // PrismaのデータをQuestionData型に変換
+    return questions.map((q) => ({
+      id: q.id,
+      questionId: q.questionId,
+      qualification: q.qualification.name,
+      grade: q.grade.name,
+      year: q.year.year,
+      category: q.category.name,
+      question: {
+        id: q.question?.id,
+        text: q.question?.text || undefined,
+        image: q.question?.image || undefined,
+      },
+      options: q.options.map((o) => ({
+        id: o.id,
+        text: o.text,
+        image: o.image || undefined,
+        explanation: o.explanation
+          ? {
+              id: o.explanation.id,
+              text: o.explanation.text || undefined,
+              image: o.explanation.image || undefined,
+            }
+          : undefined,
+      })),
+      answer: q.answer,
+      explanation: q.explanation
         ? {
-            id: o.explanation.id,
-            text: o.explanation.text || undefined,
-            image: o.explanation.image || undefined,
+            id: q.explanation.id,
+            text: q.explanation.text || undefined,
+            image: q.explanation.image || undefined,
           }
         : undefined,
-    })),
-    answer: q.answer,
-    explanation: q.explanation
-      ? {
-          id: q.explanation.id,
-          text: q.explanation.text || undefined,
-          image: q.explanation.image || undefined,
-        }
-      : undefined,
-  }));
+    }));
+  }, [permission.data.search]);
 }
 
 // 指定した資格、級、年度のカテゴリ一覧を取得
@@ -166,31 +176,33 @@ export async function getCategories(
   grade: string,
   year: string,
 ): Promise<string[]> {
-  const categories = await prisma.category.findMany({
-    where: {
-      questions: {
-        some: {
-          qualification: {
-            name: qualification,
-          },
-          grade: {
-            name: grade,
-          },
-          year: {
-            year: year,
+  return withPermissionAll(async () => {
+    const categories = await prisma.category.findMany({
+      where: {
+        questions: {
+          some: {
+            qualification: {
+              name: qualification,
+            },
+            grade: {
+              name: grade,
+            },
+            year: {
+              year: year,
+            },
           },
         },
       },
-    },
-    select: {
-      name: true,
-    },
-    orderBy: {
-      id: "asc",
-    },
-  });
+      select: {
+        name: true,
+      },
+      orderBy: {
+        id: "asc",
+      },
+    });
 
-  return categories.map((c) => c.name);
+    return categories.map((c) => c.name);
+  }, [permission.data.search]);
 }
 
 // 指定した資格、級、年度、カテゴリの問題を取得
@@ -200,91 +212,93 @@ export async function getQuestionsByCategory(
   year: string,
   categoryName: string,
 ): Promise<QuestionData[]> {
-  const questions = await prisma.questionData.findMany({
-    where: {
-      qualification: {
-        name: qualification,
-      },
-      grade: {
-        name: grade,
-      },
-      year: {
-        year: year,
-      },
-      category: {
-        name: categoryName,
-      },
-    },
-    select: {
-      id: true,
-      questionId: true,
-      qualification: {
-        select: {
-          name: true,
+  return withPermissionAll(async () => {
+    const questions = await prisma.questionData.findMany({
+      where: {
+        qualification: {
+          name: qualification,
+        },
+        grade: {
+          name: grade,
+        },
+        year: {
+          year: year,
+        },
+        category: {
+          name: categoryName,
         },
       },
-      grade: {
-        select: {
-          name: true,
+      select: {
+        id: true,
+        questionId: true,
+        qualification: {
+          select: {
+            name: true,
+          },
+        },
+        grade: {
+          select: {
+            name: true,
+          },
+        },
+        year: {
+          select: {
+            year: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+          },
+        },
+        answer: true,
+        question: true,
+        explanation: true,
+        options: {
+          include: {
+            explanation: true,
+          },
         },
       },
-      year: {
-        select: {
-          year: true,
-        },
+      orderBy: {
+        questionId: "asc",
       },
-      category: {
-        select: {
-          name: true,
-        },
-      },
-      answer: true,
-      question: true,
-      explanation: true,
-      options: {
-        include: {
-          explanation: true,
-        },
-      },
-    },
-    orderBy: {
-      questionId: "asc",
-    },
-  });
+    });
 
-  return questions.map((q) => ({
-    id: q.id,
-    questionId: q.questionId,
-    qualification: q.qualification.name,
-    grade: q.grade.name,
-    year: q.year.year,
-    category: q.category.name,
-    question: {
-      id: q.question?.id,
-      text: q.question?.text || undefined,
-      image: q.question?.image || undefined,
-    },
-    options: q.options.map((o) => ({
-      id: o.id,
-      text: o.text,
-      image: o.image || undefined,
-      explanation: o.explanation
+    return questions.map((q) => ({
+      id: q.id,
+      questionId: q.questionId,
+      qualification: q.qualification.name,
+      grade: q.grade.name,
+      year: q.year.year,
+      category: q.category.name,
+      question: {
+        id: q.question?.id,
+        text: q.question?.text || undefined,
+        image: q.question?.image || undefined,
+      },
+      options: q.options.map((o) => ({
+        id: o.id,
+        text: o.text,
+        image: o.image || undefined,
+        explanation: o.explanation
+          ? {
+              id: o.explanation.id,
+              text: o.explanation.text || undefined,
+              image: o.explanation.image || undefined,
+            }
+          : undefined,
+      })),
+      answer: q.answer,
+      explanation: q.explanation
         ? {
-            id: o.explanation.id,
-            text: o.explanation.text || undefined,
-            image: o.explanation.image || undefined,
+            id: q.explanation.id,
+            text: q.explanation.text || undefined,
+            image: q.explanation.image || undefined,
           }
         : undefined,
-    })),
-    answer: q.answer,
-    explanation: q.explanation
-      ? {
-          id: q.explanation.id,
-          text: q.explanation.text || undefined,
-          image: q.explanation.image || undefined,
-        }
-      : undefined,
-  }));
+    }));
+  }, [permission.data.search]);
 }
 
 // 指定した資格、級、年度、IDの問題を取得
@@ -294,93 +308,95 @@ export async function getQuestionById(
   year: string,
   id: number,
 ): Promise<QuestionData | undefined> {
-  const question = await prisma.questionData.findFirst({
-    where: {
-      qualification: {
-        name: qualification,
+  return withPermissionAll(async () => {
+    const question = await prisma.questionData.findFirst({
+      where: {
+        qualification: {
+          name: qualification,
+        },
+        grade: {
+          name: grade,
+        },
+        year: {
+          year: year,
+        },
+        questionId: id,
       },
-      grade: {
-        name: grade,
-      },
-      year: {
-        year: year,
-      },
-      questionId: id,
-    },
-    select: {
-      id: true,
-      questionId: true,
-      qualification: {
-        select: {
-          name: true,
+      select: {
+        id: true,
+        questionId: true,
+        qualification: {
+          select: {
+            name: true,
+          },
+        },
+        grade: {
+          select: {
+            name: true,
+          },
+        },
+        year: {
+          select: {
+            year: true,
+          },
+        },
+        category: {
+          select: {
+            name: true,
+          },
+        },
+        answer: true,
+        question: true,
+        explanation: true,
+        options: {
+          include: {
+            explanation: true,
+          },
         },
       },
-      grade: {
-        select: {
-          name: true,
-        },
+      orderBy: {
+        questionId: "asc",
       },
-      year: {
-        select: {
-          year: true,
-        },
-      },
-      category: {
-        select: {
-          name: true,
-        },
-      },
-      answer: true,
-      question: true,
-      explanation: true,
-      options: {
-        include: {
-          explanation: true,
-        },
-      },
-    },
-    orderBy: {
-      questionId: "asc",
-    },
-  });
+    });
 
-  if (!question) {
-    return undefined;
-  }
+    if (!question) {
+      return undefined;
+    }
 
-  return {
-    id: question.id,
-    questionId: question.questionId,
-    qualification: question.qualification.name,
-    grade: question.grade.name,
-    year: question.year.year,
-    category: question.category.name,
-    question: {
-      id: question.question?.id,
-      text: question.question?.text || undefined,
-      image: question.question?.image || undefined,
-    },
-    options: question.options.map((o) => ({
-      id: o.id,
-      text: o.text,
-      image: o.image || undefined,
-      explanation: o.explanation
+    return {
+      id: question.id,
+      questionId: question.questionId,
+      qualification: question.qualification.name,
+      grade: question.grade.name,
+      year: question.year.year,
+      category: question.category.name,
+      question: {
+        id: question.question?.id,
+        text: question.question?.text || undefined,
+        image: question.question?.image || undefined,
+      },
+      options: question.options.map((o) => ({
+        id: o.id,
+        text: o.text,
+        image: o.image || undefined,
+        explanation: o.explanation
+          ? {
+              id: o.explanation.id,
+              text: o.explanation.text || undefined,
+              image: o.explanation.image || undefined,
+            }
+          : undefined,
+      })),
+      answer: question.answer,
+      explanation: question.explanation
         ? {
-            id: o.explanation.id,
-            text: o.explanation.text || undefined,
-            image: o.explanation.image || undefined,
+            id: question.explanation.id,
+            text: question.explanation.text || undefined,
+            image: question.explanation.image || undefined,
           }
         : undefined,
-    })),
-    answer: question.answer,
-    explanation: question.explanation
-      ? {
-          id: question.explanation.id,
-          text: question.explanation.text || undefined,
-          image: question.explanation.image || undefined,
-        }
-      : undefined,
-  };
+    };
+  }, [permission.data.search]);
 }
 
 // 資格の取得または作成
@@ -637,39 +653,41 @@ export async function saveQuestions(
   yearValue: string,
   questionsData: QuestionData[],
 ): Promise<boolean> {
-  try {
-    await prisma.$transaction(
-      async (prismaClient: Prisma.TransactionClient) => {
-        const qualification = await getOrCreateQualification(
-          prismaClient,
-          qualificationName,
-        );
-        const grade = await getOrCreateGrade(prismaClient, gradeName);
-        const year = await getOrCreateYear(prismaClient, yearValue);
-
-        const categoryCache = new Map<string, { id: number }>();
-
-        for (const questionData of questionsData) {
-          await processQuestionData(
+  return withPermissionAll(async () => {
+    try {
+      await prisma.$transaction(
+        async (prismaClient: Prisma.TransactionClient) => {
+          const qualification = await getOrCreateQualification(
             prismaClient,
-            questionData,
-            qualification.id,
-            grade.id,
-            year.id,
-            categoryCache,
+            qualificationName,
           );
-        }
-      },
-      {
-        maxWait: 5000,
-        timeout: 10000,
-      },
-    );
-    return true;
-  } catch (error) {
-    console.error("Error saving questions:", error);
-    return false;
-  }
+          const grade = await getOrCreateGrade(prismaClient, gradeName);
+          const year = await getOrCreateYear(prismaClient, yearValue);
+
+          const categoryCache = new Map<string, { id: number }>();
+
+          for (const questionData of questionsData) {
+            await processQuestionData(
+              prismaClient,
+              questionData,
+              qualification.id,
+              grade.id,
+              year.id,
+              categoryCache,
+            );
+          }
+        },
+        {
+          maxWait: 5000,
+          timeout: 10000,
+        },
+      );
+      return true;
+    } catch (error) {
+      console.error("Error saving questions:", error);
+      return false;
+    }
+  }, [permission.data.search, permission.data.add, permission.data.edit]);
 }
 
 // 単一の問題データを更新
@@ -679,37 +697,39 @@ export async function saveQuestion(
   yearValue: string,
   questionData: QuestionData,
 ): Promise<boolean> {
-  try {
-    await prisma.$transaction(
-      async (prismaClient: Prisma.TransactionClient) => {
-        const qualification = await getOrCreateQualification(
-          prismaClient,
-          qualificationName,
-        );
-        const grade = await getOrCreateGrade(prismaClient, gradeName);
-        const year = await getOrCreateYear(prismaClient, yearValue);
+  return withPermissionAll(async () => {
+    try {
+      await prisma.$transaction(
+        async (prismaClient: Prisma.TransactionClient) => {
+          const qualification = await getOrCreateQualification(
+            prismaClient,
+            qualificationName,
+          );
+          const grade = await getOrCreateGrade(prismaClient, gradeName);
+          const year = await getOrCreateYear(prismaClient, yearValue);
 
-        const categoryCache = new Map<string, { id: number }>();
+          const categoryCache = new Map<string, { id: number }>();
 
-        await processQuestionData(
-          prismaClient,
-          questionData,
-          qualification.id,
-          grade.id,
-          year.id,
-          categoryCache,
-        );
-      },
-      {
-        maxWait: 5000,
-        timeout: 10000,
-      },
-    );
-    return true;
-  } catch (error) {
-    console.error("Error updating question:", error);
-    return false;
-  }
+          await processQuestionData(
+            prismaClient,
+            questionData,
+            qualification.id,
+            grade.id,
+            year.id,
+            categoryCache,
+          );
+        },
+        {
+          maxWait: 5000,
+          timeout: 10000,
+        },
+      );
+      return true;
+    } catch (error) {
+      console.error("Error updating question:", error);
+      return false;
+    }
+  }, [permission.data.search, permission.data.add, permission.data.edit]);
 }
 
 // 指定した資格、級、年度のデータが存在するかチェックする
@@ -718,20 +738,22 @@ export async function existsData(
   grade: string,
   year: string,
 ): Promise<boolean> {
-  const count = await prisma.questionData.count({
-    where: {
-      qualification: {
-        name: qualification,
+  return withPermissionAll(async () => {
+    const count = await prisma.questionData.count({
+      where: {
+        qualification: {
+          name: qualification,
+        },
+        grade: {
+          name: grade,
+        },
+        year: {
+          year: year,
+        },
       },
-      grade: {
-        name: grade,
-      },
-      year: {
-        year: year,
-      },
-    },
-  });
-  return count > 0;
+    });
+    return count > 0;
+  }, [permission.data.search]);
 }
 
 // 指定した資格、級、年度, 問題番号のデータが存在するかチェックする
@@ -741,21 +763,23 @@ export async function existsQuestion(
   year: string,
   questionId: number,
 ): Promise<boolean> {
-  const count = await prisma.questionData.count({
-    where: {
-      qualification: {
-        name: qualification,
+  return withPermissionAll(async () => {
+    const count = await prisma.questionData.count({
+      where: {
+        qualification: {
+          name: qualification,
+        },
+        grade: {
+          name: grade,
+        },
+        year: {
+          year: year,
+        },
+        questionId: questionId,
       },
-      grade: {
-        name: grade,
-      },
-      year: {
-        year: year,
-      },
-      questionId: questionId,
-    },
-  });
-  return count > 0;
+    });
+    return count > 0;
+  }, [permission.data.search]);
 }
 
 export async function updateQuestionAnswer(
@@ -765,21 +789,23 @@ export async function updateQuestionAnswer(
   questionId: number,
   answer: number,
 ) {
-  await prisma.questionData.updateMany({
-    where: {
-      qualification: {
-        name: qualificationName,
+  return withPermissionAll(async () => {
+    await prisma.questionData.updateMany({
+      where: {
+        qualification: {
+          name: qualificationName,
+        },
+        grade: {
+          name: gradeName,
+        },
+        year: {
+          year: yearValue,
+        },
+        questionId: questionId,
       },
-      grade: {
-        name: gradeName,
+      data: {
+        answer: answer,
       },
-      year: {
-        year: yearValue,
-      },
-      questionId: questionId,
-    },
-    data: {
-      answer: answer,
-    },
-  });
+    });
+  }, [permission.data.edit]);
 }
