@@ -99,6 +99,9 @@ describe("API Functions", () => {
         question: { text: "Question 1" },
         options: [],
         answer: 0,
+        qualification: qualification,
+        grade: grade,
+        year: year,
       },
     ];
     (fetch as jest.Mock).mockResolvedValueOnce({
@@ -130,6 +133,9 @@ describe("API Functions", () => {
       question: { text: "Question 1" },
       options: [],
       answer: 0,
+      qualification: qualification,
+      grade: grade,
+      year: year,
     };
     (fetch as jest.Mock).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValueOnce(mockQuestion),
