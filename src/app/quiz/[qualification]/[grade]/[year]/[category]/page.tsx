@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import React from "react";
 import Header from "@/components/layout/Header";
-import Questions from "@/components/quiz/Questions";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import Questions from "@/features/quiz/solve/components/Questions";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
 

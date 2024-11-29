@@ -1,7 +1,7 @@
 import {
   calculateCorrectCount,
   calculateAnsweredCount,
-} from "@/components/quiz/Question/quizUtils";
+} from "@/features/quiz/solve/components/Question/quizUtils";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
 import { AnswerHistory, QuestionAnswerPair } from "@/types/quizType";
 
