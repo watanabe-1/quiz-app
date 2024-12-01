@@ -1,6 +1,6 @@
 import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
-import { uploadBusinessCareerAns } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBusinessCareerAns";
+import { uploadBcAns } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBcAns";
 import {
   parseAnsData,
   modifyGradeText,
@@ -25,7 +25,7 @@ jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils");
 jest.mock("@/lib/api");
 jest.mock("@/services/quizService");
 
-describe("uploadBusinessCareerAns", () => {
+describe("uploadBcAns", () => {
   let mockFormData: FormData;
 
   beforeEach(() => {
@@ -44,10 +44,7 @@ describe("uploadBusinessCareerAns", () => {
       reply: mockReply,
     });
 
-    const result = await uploadBusinessCareerAns(
-      { status: "idle" },
-      mockFormData,
-    );
+    const result = await uploadBcAns({ status: "idle" }, mockFormData);
 
     expect(result.status).toBe("error");
     expect(result.submission.errors).toEqual(["Invalid input"]);
@@ -65,10 +62,7 @@ describe("uploadBusinessCareerAns", () => {
     });
     (pdfParse as jest.Mock).mockRejectedValue(new Error("PDF parsing failed"));
 
-    const result = await uploadBusinessCareerAns(
-      { status: "idle" },
-      mockFormData,
-    );
+    const result = await uploadBcAns({ status: "idle" }, mockFormData);
 
     expect(result.status).toBe("error");
     expect(result.submission.formErrors).toEqual(["PDFの解析に失敗しました"]);
@@ -104,10 +98,7 @@ describe("uploadBusinessCareerAns", () => {
     (convertSingleKatakanaToNumber as jest.Mock).mockReturnValue("1");
     (updateQuestionAnswer as jest.Mock).mockResolvedValue(true);
 
-    const result = await uploadBusinessCareerAns(
-      { status: "idle" },
-      mockFormData,
-    );
+    const result = await uploadBcAns({ status: "idle" }, mockFormData);
 
     expect(result.status).toBe("success");
     expect(replaceSpacesWithUnderscore).toHaveBeenCalledWith("2024");

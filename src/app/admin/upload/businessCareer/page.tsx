@@ -1,7 +1,7 @@
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import BusinessCareerAnsForm from "@/features/quiz/upload/pdf/businessCareer/components/BusinessCareerAnsForm";
-import BusinessCareerForm from "@/features/quiz/upload/pdf/businessCareer/components/BusinessCareerForm";
+import UploadBcAnsForm from "@/features/quiz/upload/pdf/businessCareer/components/UploadBcAnsForm";
+import UploadBcExamForm from "@/features/quiz/upload/pdf/businessCareer/components/UploadBcExamForm";
 
 const BccExamUploadPage = () => {
   return (
@@ -11,11 +11,11 @@ const BccExamUploadPage = () => {
         <Breadcrumb />
         <div className="p-8">
           <h1 className="mb-4 text-2xl">PDFから問題データを抽出</h1>
-          <BusinessCareerForm />
+          <UploadBcExamForm />
         </div>
         <div className="p-8">
           <h1 className="mb-4 text-2xl">PDFから解答データを抽出</h1>
-          <BusinessCareerAnsForm />
+          <UploadBcAnsForm />
         </div>
       </main>
     </div>

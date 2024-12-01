@@ -3,10 +3,10 @@
 import { getFormProps } from "@conform-to/react";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import FileBox from "@/components/ui/FileBox";
-import { useBusinessCareerForm } from "@/features/quiz/upload/pdf/businessCareer/hooks/useBusinessCareerForm";
+import { useUploadBcAnsForm } from "@/features/quiz/upload/pdf/businessCareer/hooks/useUploadBcAnsForm";
 
-const BusinessCareerForm = () => {
-  const { submitAction, loading, form, fields } = useBusinessCareerForm();
+const UploadBcAnsForm = () => {
+  const { submitAction, loading, form, fields } = useUploadBcAnsForm();
 
   return (
     <form {...getFormProps(form)} action={submitAction} className="space-y-4">
@@ -17,10 +17,10 @@ const BusinessCareerForm = () => {
         className="rounded bg-blue-500 px-4 py-2 text-white"
         disabled={loading}
       >
-        アップロードして登録
+        アップロードして更新
       </button>
     </form>
   );
 };
 
-export default BusinessCareerForm;
+export default UploadBcAnsForm;

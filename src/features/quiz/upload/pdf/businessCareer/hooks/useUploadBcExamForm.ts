@@ -1,29 +1,26 @@
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { useActionState } from "react";
-import { uploadBusinessCareerAns } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBusinessCareerAns";
+import { uploadBcExam } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBcExam";
 import {
-  UploadBusinessCareerSchema,
-  uploadBusinessCareerSchema,
+  UploadBcSchema,
+  uploadBcSchema,
 } from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
 import { useZodErrorMap } from "@/hooks/useZodErrorMap";
 
-export const useBusinessCareerAnsForm = () => {
+export const useUploadBcExamForm = () => {
   // zodの初期化
   useZodErrorMap();
 
-  const [state, submitAction, loading] = useActionState(
-    uploadBusinessCareerAns,
-    {
-      status: "idle",
-    },
-  );
+  const [state, submitAction, loading] = useActionState(uploadBcExam, {
+    status: "idle",
+  });
 
-  const [form, fields] = useForm<UploadBusinessCareerSchema>({
+  const [form, fields] = useForm<UploadBcSchema>({
     lastResult: state.submission,
     onValidate({ formData }) {
       const parseWithZoded = parseWithZod(formData, {
-        schema: uploadBusinessCareerSchema,
+        schema: uploadBcSchema,
       });
       return parseWithZoded;
     },

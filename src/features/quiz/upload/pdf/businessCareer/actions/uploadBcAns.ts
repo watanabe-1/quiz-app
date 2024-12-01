@@ -11,7 +11,7 @@ import {
   extractGradeAndQualification,
   convertSingleKatakanaToNumber,
 } from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
-import { uploadBusinessCareerSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
+import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {
   existsData,
@@ -20,12 +20,12 @@ import {
 } from "@/services/quizService";
 import { FormState } from "@/types/conform";
 
-export const uploadBusinessCareerAns = async (
+export const uploadBcAns = async (
   prevState: FormState,
   data: FormData,
 ): Promise<FormState> => {
   const submission = parseWithZod(data, {
-    schema: uploadBusinessCareerSchema,
+    schema: uploadBcSchema,
   });
 
   if (submission.status !== "success") {

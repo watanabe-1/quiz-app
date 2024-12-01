@@ -1,6 +1,6 @@
 import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
-import { uploadBusinessCareer } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBusinessCareer";
+import { uploadBcExam } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBcExam";
 import { parseProblems } from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcExam";
 import {
   extractYear,
@@ -32,7 +32,7 @@ jest.mock("@/lib/api", () => ({
   revalidateTagByUpdateQuestions: jest.fn(),
 }));
 
-describe("uploadBusinessCareer", () => {
+describe("uploadBcExam", () => {
   const mockFormState: FormState = { status: "idle", submission: undefined };
   const mockFormData = new FormData();
   mockFormData.append(
@@ -51,7 +51,7 @@ describe("uploadBusinessCareer", () => {
       reply: mockReply,
     });
 
-    const result = await uploadBusinessCareer(mockFormState, mockFormData);
+    const result = await uploadBcExam(mockFormState, mockFormData);
 
     expect(result).toEqual({
       status: "error",
@@ -76,7 +76,7 @@ describe("uploadBusinessCareer", () => {
     (extractGradeAndQualification as jest.Mock).mockReturnValue(null);
     (parseProblems as jest.Mock).mockReturnValue(null);
 
-    const result = await uploadBusinessCareer(mockFormState, mockFormData);
+    const result = await uploadBcExam(mockFormState, mockFormData);
 
     expect(result).toEqual({
       status: "error",
@@ -112,7 +112,7 @@ describe("uploadBusinessCareer", () => {
     ]);
     (saveQuestions as jest.Mock).mockResolvedValue(false);
 
-    const result = await uploadBusinessCareer(mockFormState, mockFormData);
+    const result = await uploadBcExam(mockFormState, mockFormData);
 
     expect(result).toEqual({
       status: "error",
@@ -148,7 +148,7 @@ describe("uploadBusinessCareer", () => {
     ]);
     (saveQuestions as jest.Mock).mockResolvedValue(true);
 
-    const result = await uploadBusinessCareer(mockFormState, mockFormData);
+    const result = await uploadBcExam(mockFormState, mockFormData);
 
     expect(result).toEqual({
       status: "success",
@@ -171,7 +171,7 @@ describe("uploadBusinessCareer", () => {
 
     (pdfParse as jest.Mock).mockRejectedValue(new Error("PDF parsing failed"));
 
-    const result = await uploadBusinessCareer(mockFormState, mockFormData);
+    const result = await uploadBcExam(mockFormState, mockFormData);
 
     expect(result).toEqual({
       status: "error",

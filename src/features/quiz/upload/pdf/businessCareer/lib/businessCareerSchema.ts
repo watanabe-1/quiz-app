@@ -13,10 +13,8 @@ const fileSchema = z
     message: ".pdfのみ可能です",
   });
 
-export const uploadBusinessCareerSchema = z.object({
+export const uploadBcSchema = z.object({
   file: fileSchema,
 });
 
-export type UploadBusinessCareerSchema = z.infer<
-  typeof uploadBusinessCareerSchema
->;
+export type UploadBcSchema = z.infer<typeof uploadBcSchema>;
