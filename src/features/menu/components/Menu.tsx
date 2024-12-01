@@ -8,15 +8,8 @@ import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import LogOutButton from "@/features/auth/logout/components/LogOutButton";
-import { useFetch } from "@/hooks/useFetch";
-import { path_api_menu } from "@/lib/path";
+import { useMenuItems } from "@/features/menu/hooks/useMenuItems";
 import { MenuItem } from "@/types/quizType";
-
-function useMenuItems(pathname: string) {
-  return useFetch<MenuItem[]>(
-    path_api_menu().$url({ query: { path: pathname } }).path,
-  );
-}
 
 const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
