@@ -1,6 +1,6 @@
 import { getFormProps } from "@conform-to/react";
 import ErrorMessage from "@/components/ui/ErrorMessage";
-import TextBox from "@/components/ui/TextBox";
+import InputBox from "@/components/ui/InputBox";
 import { useLogInForm } from "@/features/auth/login/hooks/useLogInForm";
 
 const LogInForm = () => {
@@ -15,12 +15,12 @@ const LogInForm = () => {
           action={submitAction}
           className="space-y-4"
         >
-          <TextBox
+          <InputBox
             label="ユーザー名"
             placeholder="ユーザー名"
             fieldMetadata={fields.username}
           />
-          <TextBox
+          <InputBox
             type="password"
             label="パスワード"
             placeholder="パスワード"

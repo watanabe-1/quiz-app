@@ -5,7 +5,7 @@ import React from "react";
 import CheckBox from "@/components/ui/CheckBox";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import FileBox from "@/components/ui/FileBox";
-import TextBox from "@/components/ui/TextBox";
+import InputBox from "@/components/ui/InputBox";
 import { useUploadQuizForm } from "@/features/quiz/upload/json/hooks/useUploadQuizForm";
 import { parseFileName } from "@/features/quiz/upload/json/lib/parseFileName";
 
@@ -43,21 +43,21 @@ const UploadQuizForm: React.FC = () => {
       <form {...getFormProps(form)} action={submitAction} className="space-y-4">
         <ErrorMessage errors={form.errors} />
         <div>
-          <TextBox
+          <InputBox
             label="資格名"
             fieldMetadata={fields.qualification}
             disabled={autoFile}
           />
         </div>
         <div>
-          <TextBox
+          <InputBox
             label="級"
             fieldMetadata={fields.grade}
             disabled={autoFile}
           />
         </div>
         <div>
-          <TextBox
+          <InputBox
             label="年度"
             fieldMetadata={fields.year}
             disabled={autoFile}

@@ -4,9 +4,8 @@ import { getFormProps } from "@conform-to/react";
 import React from "react";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import ImageBox from "@/components/ui/ImgaeBox";
-import NumberBox from "@/components/ui/NumberBox";
+import InputBox from "@/components/ui/InputBox";
 import TextArea from "@/components/ui/TextArea";
-import TextBox from "@/components/ui/TextBox";
 import { useQuizForm } from "@/features/quiz/edit/hooks/useQuizForm";
 import { QuestionData } from "@/types/quizType";
 
@@ -36,7 +35,7 @@ const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
           formMetadata={form}
         />
         {/* カテゴリー */}
-        <TextBox label="カテゴリー:" fieldMetadata={fields.category} />
+        <InputBox label="カテゴリー:" fieldMetadata={fields.category} />
         {/* 選択肢と解説 */}
         <div>
           <label className="block font-medium">選択肢と解説:</label>
@@ -47,7 +46,7 @@ const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
             return (
               <div key={option.key} className="mb-6 rounded border p-4">
                 <div className="mb-2">
-                  <TextBox
+                  <InputBox
                     label={`選択肢 ${index + 1}:`}
                     fieldMetadata={optionField.text}
                   />
@@ -74,15 +73,21 @@ const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
           })}
         </div>
         {/* 正解 */}
-        <NumberBox
+        <InputBox
+          type="number"
           label="正解のインデックス（0から）:"
           fieldMetadata={fields.answer}
         />
         {/* hidden */}
-        <TextBox label="資格:" fieldMetadata={fields.qualification} hidden />
-        <NumberBox label="ID:" fieldMetadata={fields.questionId} hidden />
-        <TextBox label="級:" fieldMetadata={fields.grade} hidden />
-        <TextBox label="年:" fieldMetadata={fields.year} hidden />
+        <InputBox label="資格:" fieldMetadata={fields.qualification} hidden />
+        <InputBox
+          type="number"
+          label="ID:"
+          fieldMetadata={fields.questionId}
+          hidden
+        />
+        <InputBox label="級:" fieldMetadata={fields.grade} hidden />
+        <InputBox label="年:" fieldMetadata={fields.year} hidden />
         <button
           type="submit"
           className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"

@@ -3,23 +3,26 @@ import React from "react";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { ConformProps, OptionalFormMetadata } from "@/types/conform";
 
-type TextBoxProps = Omit<ConformProps<string>, OptionalFormMetadata> & {
+type InputBoxProps<T extends "text" | "password" | "number" = "text"> = Omit<
+  ConformProps<T extends "number" ? number : string>,
+  OptionalFormMetadata
+> & {
   label: string;
   placeholder?: string;
   hidden?: boolean;
   disabled?: boolean;
-  type?: "text" | "password";
+  type?: T;
 };
 
-const TextBox = ({
+const InputBox = <T extends "text" | "password" | "number" = "text">({
   label,
   fieldMetadata,
   placeholder = "",
-  type = "text",
+  type = "text" as T,
   hidden = false,
   disabled = false,
-}: TextBoxProps) => {
-  const inputProps = getInputProps(fieldMetadata, { type: type });
+}: InputBoxProps<T>) => {
+  const inputProps = getInputProps(fieldMetadata, { type });
 
   return (
     <div hidden={hidden}>
@@ -41,4 +44,4 @@ const TextBox = ({
   );
 };
 
-export default TextBox;
+export default InputBox;
