@@ -4,7 +4,7 @@ import ErrorMessage from "@/components/ui/ErrorMessage";
 import { ConformProps, OptionalFormMetadata } from "@/types/conform";
 
 type FileBoxProps = Omit<ConformProps<File>, OptionalFormMetadata> & {
-  label: string;
+  label?: string;
   accept: string;
   hidden?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
@@ -21,7 +21,7 @@ const FileBox = ({
 
   return (
     <div className="mb-4" hidden={hidden}>
-      <label className="mb-2 block font-medium">{label}</label>
+      {label && <label className="mb-2 block font-medium">{label}</label>}
       <input
         {...inputProps}
         className="w-full"

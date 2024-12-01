@@ -108,26 +108,6 @@ export const path_api_admin_exportQuestions = () => {
       };
 path_api_admin_exportQuestions.match = (path: string) => new RegExp("^/api/admin/exportQuestions$").exec(path);
 
-export const path_api_admin_upload_businessCareer_ans = () => {
-        return { 
-          $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({
-             hash: url?.hash, 
-            path: `/api/admin/upload/businessCareer/ans${generateSuffix(url)}`
-          }),
-        };
-      };
-path_api_admin_upload_businessCareer_ans.match = (path: string) => new RegExp("^/api/admin/upload/businessCareer/ans$").exec(path);
-
-export const path_api_admin_upload_businessCareer_exam = () => {
-        return { 
-          $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({
-             hash: url?.hash, 
-            path: `/api/admin/upload/businessCareer/exam${generateSuffix(url)}`
-          }),
-        };
-      };
-path_api_admin_upload_businessCareer_exam.match = (path: string) => new RegExp("^/api/admin/upload/businessCareer/exam$").exec(path);
-
 export const path_api_admin_uploadImage = () => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({

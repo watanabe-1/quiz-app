@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+"use server";
+
+import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
 import {
   parseAnsData,
@@ -9,27 +11,34 @@ import {
   extractGradeAndQualification,
   convertSingleKatakanaToNumber,
 } from "@/features/businessCareer/api/bcUtils";
-import { UploadBccExamSubmit } from "@/features/businessCareer/types/bcTypes";
+import { uploadBusinessCareerSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
-import { createFormDataProxy } from "@/lib/proxies/createFormDataProxy";
 import {
   existsData,
   getQuestions,
   updateQuestionAnswer,
 } from "@/services/quizService";
+import { FormState } from "@/types/conform";
 
-export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  const { pdf } = createFormDataProxy<UploadBccExamSubmit>(formData);
+export const uploadBusinessCareerAns = async (
+  prevState: FormState,
+  data: FormData,
+): Promise<FormState> => {
+  const submission = parseWithZod(data, {
+    schema: uploadBusinessCareerSchema,
+  });
 
-  if (!pdf) {
-    return NextResponse.json(
-      { error: "ファイルがありません" },
-      { status: 400 },
-    );
+  if (submission.status !== "success") {
+    return {
+      status: "error",
+      submission: submission.reply(),
+    };
   }
 
-  const buffer = Buffer.from(await pdf.arrayBuffer());
+  const value = submission.value;
+  const { file } = value;
+
+  const buffer = Buffer.from(await file.arrayBuffer());
 
   try {
     const data = await pdfParse(buffer);
@@ -79,12 +88,17 @@ export async function POST(request: NextRequest) {
 
     revalidateTagByUpdateQuestion();
 
-    return NextResponse.json(examData);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { error: "PDFの解析に失敗しました" },
-      { status: 500 },
-    );
+    return {
+      status: "success",
+      message: "データベースへの保存に成功しました",
+      submission: submission.reply(),
+    };
+  } catch (_) {
+    return {
+      status: "error",
+      submission: submission.reply({
+        formErrors: ["PDFの解析に失敗しました"],
+      }),
+    };
   }
-}
+};
