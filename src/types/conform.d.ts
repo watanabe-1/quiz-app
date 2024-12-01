@@ -1,3 +1,5 @@
+import { type FieldMetadata, type FormMetadata } from "@conform-to/react";
+
 /**
  * A generic type representing props used for conform components.
  * This type is designed to be flexible and accommodate different metadata structures for fields and forms.

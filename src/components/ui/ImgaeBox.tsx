@@ -31,7 +31,7 @@ const ImageBox = ({
     setPreviewUrl(null);
     formMetadata.update({
       name: fieldMetadata.name,
-      value: null,
+      value: undefined,
     });
     if (inputRef.current) {
       inputRef.current.value = "";
