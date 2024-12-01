@@ -1,13 +1,13 @@
 import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
-import { parseProblems } from "@/features/businessCareer/api/bcExam";
+import { uploadBusinessCareer } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBusinessCareer";
+import { parseProblems } from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcExam";
 import {
   extractYear,
   extractTitle,
   extractGradeAndQualification,
   replaceSpacesWithUnderscore,
-} from "@/features/businessCareer/api/bcUtils";
-import { uploadBusinessCareer } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBusinessCareer";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import { saveQuestions } from "@/services/quizService";
 import { FormState } from "@/types/conform";
@@ -16,13 +16,13 @@ jest.mock("@conform-to/zod", () => ({
   parseWithZod: jest.fn(),
 }));
 jest.mock("pdf-parse", () => jest.fn());
-jest.mock("@/features/businessCareer/api/bcUtils", () => ({
+jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils", () => ({
   replaceSpacesWithUnderscore: jest.fn(),
   extractYear: jest.fn(),
   extractTitle: jest.fn(),
   extractGradeAndQualification: jest.fn(),
 }));
-jest.mock("@/features/businessCareer/api/bcExam", () => ({
+jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/api/bcExam", () => ({
   parseProblems: jest.fn(),
 }));
 jest.mock("@/services/quizService", () => ({

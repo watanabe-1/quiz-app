@@ -1,15 +1,15 @@
 import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
+import { uploadBusinessCareerAns } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBusinessCareerAns";
 import {
   parseAnsData,
   modifyGradeText,
-} from "@/features/businessCareer/api/bcAns";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcAns";
 import {
   replaceSpacesWithUnderscore,
   extractGradeAndQualification,
   convertSingleKatakanaToNumber,
-} from "@/features/businessCareer/api/bcUtils";
-import { uploadBusinessCareerAns } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBusinessCareerAns";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {
   existsData,
@@ -20,8 +20,8 @@ import {
 jest.mock("@conform-to/zod");
 jest.mock("pdf-parse");
 jest.mock("pdf-parse", () => jest.fn());
-jest.mock("@/features/businessCareer/api/bcAns");
-jest.mock("@/features/businessCareer/api/bcUtils");
+jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/api/bcAns");
+jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils");
 jest.mock("@/lib/api");
 jest.mock("@/services/quizService");
 

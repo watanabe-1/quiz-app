@@ -5,7 +5,7 @@ import {
   convertToHalfWidth,
   convertSingleKatakanaToNumber,
   replaceSpacesWithUnderscore,
-} from "@/features/businessCareer/api/bcUtils";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
 
 // Mock katakanaToNumbersMap
 jest.mock("@/lib/constants", () => ({

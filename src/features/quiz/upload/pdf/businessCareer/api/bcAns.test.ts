@@ -5,7 +5,7 @@ import {
   extractAnswersFromSection,
   parseAnsData,
   cleanSectionText,
-} from "@/features/businessCareer/api/bcAns";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcAns";
 
 describe("bcUtils tests", () => {
   describe("modifyGradeText", () => {

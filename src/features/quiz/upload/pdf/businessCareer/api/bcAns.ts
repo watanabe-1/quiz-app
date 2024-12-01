@@ -1,12 +1,12 @@
 import {
   extractYear,
   convertToHalfWidth,
-} from "@/features/businessCareer/api/bcUtils";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
 import {
   Answer,
   AnswerData,
   ExamData,
-} from "@/features/businessCareer/types/bcTypes";
+} from "@/features/quiz/upload/pdf/businessCareer/types/bcTypes";
 
 /**
  * Modifies the grade text by inserting an underscore between the grade level and text.

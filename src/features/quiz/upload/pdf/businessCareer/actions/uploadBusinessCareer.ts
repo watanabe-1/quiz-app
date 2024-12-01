@@ -2,13 +2,13 @@
 
 import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
-import { parseProblems } from "@/features/businessCareer/api/bcExam";
+import { parseProblems } from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcExam";
 import {
   replaceSpacesWithUnderscore,
   extractYear,
   extractTitle,
   extractGradeAndQualification,
-} from "@/features/businessCareer/api/bcUtils";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
 import { uploadBusinessCareerSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import { saveQuestions } from "@/services/quizService";
