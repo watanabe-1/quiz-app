@@ -5,6 +5,7 @@ import { ConformProps, OptionalFormMetadata } from "@/types/conform";
 
 type TextBoxProps = Omit<ConformProps<string>, OptionalFormMetadata> & {
   label: string;
+  placeholder?: string;
   hidden?: boolean;
   disabled?: boolean;
 };
@@ -12,6 +13,7 @@ type TextBoxProps = Omit<ConformProps<string>, OptionalFormMetadata> & {
 const TextBox = ({
   label,
   fieldMetadata,
+  placeholder = "",
   hidden = false,
   disabled = false,
 }: TextBoxProps) => {
@@ -24,6 +26,7 @@ const TextBox = ({
         {...inputProps}
         className="w-full rounded border p-2"
         key={fieldMetadata.key}
+        placeholder={placeholder}
         hidden={disabled}
       />
       {disabled && (
