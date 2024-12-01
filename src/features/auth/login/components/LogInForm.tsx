@@ -21,6 +21,7 @@ const LogInForm = () => {
             fieldMetadata={fields.username}
           />
           <TextBox
+            type="password"
             label="パスワード"
             placeholder="パスワード"
             fieldMetadata={fields.password}

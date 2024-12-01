@@ -8,16 +8,18 @@ type TextBoxProps = Omit<ConformProps<string>, OptionalFormMetadata> & {
   placeholder?: string;
   hidden?: boolean;
   disabled?: boolean;
+  type?: "text" | "password";
 };
 
 const TextBox = ({
   label,
   fieldMetadata,
   placeholder = "",
+  type = "text",
   hidden = false,
   disabled = false,
 }: TextBoxProps) => {
-  const inputProps = getInputProps(fieldMetadata, { type: "text" });
+  const inputProps = getInputProps(fieldMetadata, { type: type });
 
   return (
     <div hidden={hidden}>
