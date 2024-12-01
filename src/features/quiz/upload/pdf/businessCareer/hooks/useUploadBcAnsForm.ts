@@ -5,7 +5,7 @@ import { uploadBcAns } from "@/features/quiz/upload/pdf/businessCareer/actions/u
 import {
   UploadBcSchema,
   uploadBcSchema,
-} from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { useZodErrorMap } from "@/hooks/useZodErrorMap";
 
 export const useUploadBcAnsForm = () => {

@@ -11,7 +11,7 @@ import {
   extractGradeAndQualification,
   convertSingleKatakanaToNumber,
 } from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
-import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
+import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {
   existsData,

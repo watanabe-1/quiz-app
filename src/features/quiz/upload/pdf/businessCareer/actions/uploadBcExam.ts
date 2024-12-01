@@ -9,7 +9,7 @@ import {
   extractTitle,
   extractGradeAndQualification,
 } from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
-import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/businessCareerSchema";
+import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import { saveQuestions } from "@/services/quizService";
 import { FormState } from "@/types/conform";

@@ -29,10 +29,6 @@ const fileSchema = z
     message: ".jsonのみ可能です",
   });
 
-export const uploadBusinessCareerSchema = z.object({
-  file: fileSchema,
-});
-
 // UploadQuizForm のスキーマ
 export const uploadQuizFormSchema: z.ZodType<UploadQuizForm> = z.object({
   qualification: z.string().min(1, "資格名を入力してください。"),
