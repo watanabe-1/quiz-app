@@ -42,45 +42,49 @@ const Menu: React.FC = () => {
 
   // メニュー項目を再帰的にレンダリング
   const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
-    return items.map((item) => (
-      <div key={`${item.href}${item.name}`} className="relative">
-        {item.children ? (
-          <>
-            <button
-              onClick={() => toggleSubmenu(`${item.href}${item.name}`)}
-              className={`flex w-full items-center justify-between px-4 py-2 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none ${
+    return items.map((item) => {
+      const { name, children, href } = item;
+      const submenusKey = `${href}${name}`;
+      return (
+        <div key={submenusKey} className="relative">
+          {children ? (
+            <>
+              <button
+                onClick={() => toggleSubmenu(submenusKey)}
+                className={`flex w-full items-center justify-between px-4 py-2 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none ${
+                  depth > 0 ? `pl-${depth * 4}` : ""
+                }`}
+              >
+                <span>{name}</span>
+                {openSubmenus[submenusKey] ? (
+                  <FaChevronUp />
+                ) : (
+                  <FaChevronDown />
+                )}
+              </button>
+              {/* サブメニュー */}
+              <div
+                className={`${
+                  openSubmenus[submenusKey] ? "block" : "hidden"
+                } ml-4 border-l border-gray-600 pl-4`}
+              >
+                {renderMenuItems(children, depth + 1)}
+              </div>
+            </>
+          ) : (
+            <Link
+              href={href || "#"}
+              className={`block px-4 py-2 transition-all duration-300 ease-in-out hover:bg-gray-700 ${
                 depth > 0 ? `pl-${depth * 4}` : ""
               }`}
+              onClick={toggleMenu}
             >
-              <span>{item.name}</span>
-              {openSubmenus[`${item.href}${item.name}`] ? (
-                <FaChevronUp />
-              ) : (
-                <FaChevronDown />
-              )}
-            </button>
-            {/* サブメニュー */}
-            <div
-              className={`${
-                openSubmenus[`${item.href}${item.name}`] ? "block" : "hidden"
-              } ml-4 border-l border-gray-600 pl-4`}
-            >
-              {renderMenuItems(item.children, depth + 1)}
-            </div>
-          </>
-        ) : (
-          <Link
-            href={item.href || "#"}
-            className={`block px-4 py-2 transition-all duration-300 ease-in-out hover:bg-gray-700 ${
-              depth > 0 ? `pl-${depth * 4}` : ""
-            }`}
-            onClick={toggleMenu}
-          >
-            {item.name}
-          </Link>
-        )}
-      </div>
-    ));
+              {name}
+            </Link>
+          )}
+        </div>
+      );
+    });
   };
 
   return (
