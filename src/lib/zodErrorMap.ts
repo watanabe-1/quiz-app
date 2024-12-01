@@ -1,5 +1,39 @@
 import { ZodErrorMap, ZodIssueCode, ZodParsedType, util, z } from "zod";
 
+/**
+ * A custom error map for Zod schema validation errors. This function maps Zod issues to
+ * human-readable error messages in Japanese.
+ *
+ * @param issue - An object containing details about the validation issue.
+ * @param _ctx - The context for the error, including a default error message.
+ * @returns An object containing a localized error message.
+ *
+ * ### Error Handling
+ * - `ZodIssueCode.invalid_type`: Handles type mismatches, including undefined values.
+ * - `ZodIssueCode.invalid_literal`: Handles invalid literal values.
+ * - `ZodIssueCode.unrecognized_keys`: Reports unrecognized keys in an object.
+ * - `ZodIssueCode.invalid_union`: Handles invalid union types.
+ * - `ZodIssueCode.invalid_union_discriminator`: Handles invalid discriminators for union types.
+ * - `ZodIssueCode.invalid_enum_value`: Handles invalid enum values.
+ * - `ZodIssueCode.invalid_arguments`: Handles invalid arguments passed to a function.
+ * - `ZodIssueCode.invalid_return_type`: Handles invalid return values from a function.
+ * - `ZodIssueCode.invalid_date`: Handles invalid dates.
+ * - `ZodIssueCode.invalid_string`: Handles invalid string values with detailed checks
+ *   (e.g., includes, startsWith, endsWith).
+ * - `ZodIssueCode.too_small`: Handles constraints for minimum values or lengths.
+ * - `ZodIssueCode.too_big`: Handles constraints for maximum values or lengths.
+ * - `ZodIssueCode.custom`: Handles custom validation errors.
+ * - `ZodIssueCode.invalid_intersection_types`: Reports errors when types cannot be merged.
+ * - `ZodIssueCode.not_multiple_of`: Reports errors for values that are not multiples of a given number.
+ * - `ZodIssueCode.not_finite`: Reports errors for non-finite numbers.
+ *
+ * ### Usage
+ * Set this error map as the global error handler for Zod by calling `initializeZodErrorMap`.
+ *
+ * @example
+ * import { initializeZodErrorMap } from './path/to/this/file';
+ * initializeZodErrorMap();
+ */
 const errorMap: ZodErrorMap = (issue, _ctx) => {
   let message: string;
   switch (issue.code) {
@@ -124,7 +158,13 @@ const errorMap: ZodErrorMap = (issue, _ctx) => {
   return { message };
 };
 
-// エラーマップの設定
+/**
+ * Sets the custom error map as the default error handler for Zod validation errors.
+ *
+ * @example
+ * import { initializeZodErrorMap } from './path/to/this/file';
+ * initializeZodErrorMap();
+ */
 export const initializeZodErrorMap = () => {
   z.setErrorMap(errorMap);
 };
