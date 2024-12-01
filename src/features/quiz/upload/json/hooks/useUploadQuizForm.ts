@@ -13,7 +13,7 @@ export const useUploadQuizForm = () => {
   });
 
   const [form, fields] = useForm<UploadQuizFormSchema>({
-    lastResult: state.submission?.initialValue,
+    lastResult: state.submission,
     onValidate({ formData }) {
       const parseWithZoded = parseWithZod(formData, {
         schema: uploadQuizFormSchema,

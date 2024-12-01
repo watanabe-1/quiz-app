@@ -16,7 +16,7 @@ export const useQuizForm = (props: Props) => {
   });
 
   const [form, fields] = useForm<QuestionDataSchema>({
-    lastResult: state.submission?.initialValue,
+    lastResult: state.submission,
     onValidate({ formData }) {
       const parseWithZoded = parseWithZod(formData, {
         schema: questionDataSchema,
