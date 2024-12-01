@@ -1,6 +1,6 @@
 "use client";
 
-import { logout } from "@/features/auth/actions/logout";
+import { logout } from "@/features/auth/logout/actions/logout";
 
 export async function logOutAction() {
   await logout();
