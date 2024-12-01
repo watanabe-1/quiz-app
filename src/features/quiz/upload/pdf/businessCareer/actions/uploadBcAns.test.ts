@@ -4,12 +4,12 @@ import { uploadBcAns } from "@/features/quiz/upload/pdf/businessCareer/actions/u
 import {
   parseAnsData,
   modifyGradeText,
-} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcAns";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/bcAns";
 import {
   replaceSpacesWithUnderscore,
   extractGradeAndQualification,
   convertSingleKatakanaToNumber,
-} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/bcUtils";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {
   existsData,
@@ -20,8 +20,8 @@ import {
 jest.mock("@conform-to/zod");
 jest.mock("pdf-parse");
 jest.mock("pdf-parse", () => jest.fn());
-jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/api/bcAns");
-jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils");
+jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/bcAns");
+jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/bcUtils");
 jest.mock("@/lib/api");
 jest.mock("@/services/quizService");
 

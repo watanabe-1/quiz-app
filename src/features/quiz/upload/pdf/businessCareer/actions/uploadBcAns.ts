@@ -5,12 +5,12 @@ import pdfParse from "pdf-parse";
 import {
   parseAnsData,
   modifyGradeText,
-} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcAns";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/bcAns";
 import {
   replaceSpacesWithUnderscore,
   extractGradeAndQualification,
   convertSingleKatakanaToNumber,
-} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/bcUtils";
 import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import {

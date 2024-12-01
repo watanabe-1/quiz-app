@@ -2,7 +2,7 @@ import {
   cleanText,
   extractQuestionAndOptions,
   parseProblems,
-} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcExam";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/bcExam";
 import { QuestionData } from "@/types/quizType";
 
 describe("parseProblems", () => {

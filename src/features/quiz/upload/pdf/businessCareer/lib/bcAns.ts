@@ -1,7 +1,7 @@
 import {
   extractYear,
   convertToHalfWidth,
-} from "@/features/quiz/upload/pdf/businessCareer/lib/api/bcUtils";
+} from "@/features/quiz/upload/pdf/businessCareer/lib/bcUtils";
 import {
   Answer,
   AnswerData,
