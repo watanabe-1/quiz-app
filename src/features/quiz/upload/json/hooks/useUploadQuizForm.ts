@@ -6,8 +6,12 @@ import {
   UploadQuizFormSchema,
   uploadQuizFormSchema,
 } from "@/features/quiz/upload/json/lib/schema";
+import { useZodErrorMap } from "@/hooks/useZodErrorMap";
 
 export const useUploadQuizForm = () => {
+  // zodの初期化
+  useZodErrorMap();
+
   const [state, submitAction, loading] = useActionState(uploadQuiz, {
     status: "idle",
   });

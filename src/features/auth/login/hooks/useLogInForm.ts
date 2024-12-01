@@ -6,8 +6,12 @@ import {
   loginSchema,
   type LoginSchema,
 } from "@/features/auth/login/lib/logInFormSchema";
+import { useZodErrorMap } from "@/hooks/useZodErrorMap";
 
 export const useLogInForm = () => {
+  // zodの初期化
+  useZodErrorMap();
+
   const [state, submitAction, loading] = useActionState(login, {
     status: "idle",
   });
@@ -20,7 +24,7 @@ export const useLogInForm = () => {
       });
       return parseWithZoded;
     },
-    shouldValidate: "onSubmit",
+    shouldValidate: "onInput",
   });
 
   return { submitAction, loading, form, fields };

@@ -6,11 +6,15 @@ import {
   questionDataSchema,
   type QuestionDataSchema,
 } from "@/features/quiz/edit/lib/schema";
+import { useZodErrorMap } from "@/hooks/useZodErrorMap";
 import { QuestionData } from "@/types/quizType";
 
 type Props = { defaultValues: QuestionData };
 
 export const useQuizForm = (props: Props) => {
+  // zodの初期化
+  useZodErrorMap();
+
   const [state, submitAction, loading] = useActionState(updateQuiz, {
     status: "idle",
   });
