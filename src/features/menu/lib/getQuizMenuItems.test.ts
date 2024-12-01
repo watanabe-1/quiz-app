@@ -1,4 +1,12 @@
 import {
+  parseQuizCurrentUrl,
+  getQualificationItems,
+  getGradeItemsByQualification,
+  getYearItemsByQualificationAndGrade,
+  getCategoryItemsByGradeAndYear,
+  getCurrentQuestionItems,
+} from "@/features/menu/lib/getQuizMenuItems";
+import {
   fetchGetAllQualifications,
   fetchGetGradesByQualification,
   fetchGetYearsByQualificationAndGrade,
@@ -6,14 +14,6 @@ import {
   fetchGetQuestionsByCategory,
 } from "@/lib/api";
 import { ALL_CATEGORY } from "@/lib/constants";
-import {
-  parseQuizCurrentUrl,
-  getQualificationItems,
-  getGradeItemsByQualification,
-  getYearItemsByQualificationAndGrade,
-  getCategoryItemsByGradeAndYear,
-  getCurrentQuestionItems,
-} from "@/lib/menu/getQuizMenuItems";
 
 // モックの設定
 jest.mock("@/lib/api", () => ({

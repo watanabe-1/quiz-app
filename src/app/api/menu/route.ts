@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMenuItems } from "@/lib/menu/getMenuItems";
+import { getMenuItems } from "@/features/menu/lib/getMenuItems";
 import { createQueryParamsProxy } from "@/lib/proxies/createQueryParamsProxy";
 import { MenuItem } from "@/types/quizType";
 

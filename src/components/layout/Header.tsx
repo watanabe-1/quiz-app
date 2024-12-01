@@ -1,6 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import React from "react";
-import Menu from "@/components/layout/Menu";
+import Menu from "@/features/menu/components/Menu";
 
 interface HeaderProps {
   title: string;

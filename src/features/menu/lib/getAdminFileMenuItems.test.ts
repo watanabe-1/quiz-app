@@ -1,8 +1,8 @@
 import {
+  getAdminFileMenuItems,
   getAdminFileUploadMenuItem,
   getAdminFileExportMenuItem,
-  getAdminFileMenuItems,
-} from "@/lib/menu/getAdminFileMenuItems";
+} from "@/features/menu/lib/getAdminFileMenuItems";
 
 // モック関数を設定
 jest.mock("@/lib/path", () => ({

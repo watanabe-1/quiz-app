@@ -1,26 +1,35 @@
-/**
- * @jest-environment jsdom
- */
-
 import { auth } from "@/features/auth/auth";
-import { getAdminFileMenuItems } from "@/lib/menu/getAdminFileMenuItems";
+import { getAdminFileMenuItems } from "@/features/menu/lib/getAdminFileMenuItems";
 import {
-  getAdminQualificationItems,
   getAdminCurrentQuestionItems,
-} from "@/lib/menu/getAdminQuizMenuItems";
-import { getMenuItems } from "@/lib/menu/getMenuItems";
+  getAdminQualificationItems,
+} from "@/features/menu/lib/getAdminQuizMenuItems";
+import { getMenuItems } from "@/features/menu/lib/getMenuItems";
 import {
   getQualificationItems,
   getCurrentQuestionItems,
-} from "@/lib/menu/getQuizMenuItems";
+} from "@/features/menu/lib/getQuizMenuItems";
 import { path_admin_qualification, path_quiz_qualification } from "@/lib/path";
 
-jest.mock("@/features/auth/auth");
-jest.mock("@/lib/menu/getAdminFileMenuItems");
-jest.mock("@/lib/menu/getAdminQuizMenuItems");
-jest.mock("@/lib/menu/getQuizMenuItems");
+// モックの設定
+jest.mock("@/features/auth/auth", () => ({
+  auth: jest.fn(),
+}));
 
-// 各関数をモック
+jest.mock("@/features/menu/lib/getAdminFileMenuItems", () => ({
+  getAdminFileMenuItems: jest.fn(),
+}));
+
+jest.mock("@/features/menu/lib/getAdminQuizMenuItems", () => ({
+  getAdminCurrentQuestionItems: jest.fn(),
+  getAdminQualificationItems: jest.fn(),
+}));
+
+jest.mock("@/features/menu/lib/getQuizMenuItems", () => ({
+  getQualificationItems: jest.fn(),
+  getCurrentQuestionItems: jest.fn(),
+}));
+
 const mockAuth = auth as jest.Mock;
 const mockGetAdminFileMenuItems = getAdminFileMenuItems as jest.Mock;
 const mockGetAdminQualificationItems = getAdminQualificationItems as jest.Mock;

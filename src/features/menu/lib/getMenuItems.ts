@@ -1,13 +1,13 @@
 import { auth } from "@/features/auth/auth";
-import { getAdminFileMenuItems } from "@/lib/menu/getAdminFileMenuItems";
+import { getAdminFileMenuItems } from "@/features/menu/lib/getAdminFileMenuItems";
 import {
   getAdminCurrentQuestionItems,
   getAdminQualificationItems,
-} from "@/lib/menu/getAdminQuizMenuItems";
+} from "@/features/menu/lib/getAdminQuizMenuItems";
 import {
   getQualificationItems,
   getCurrentQuestionItems,
-} from "@/lib/menu/getQuizMenuItems";
+} from "@/features/menu/lib/getQuizMenuItems";
 import { path } from "@/lib/path";
 import { MenuItem } from "@/types/quizType";
 
