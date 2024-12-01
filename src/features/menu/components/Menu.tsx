@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -16,12 +15,11 @@ const Menu: React.FC = () => {
   const [openSubmenus, setOpenSubmenus] = useState<{ [key: string]: boolean }>(
     {},
   );
-  const pathname = usePathname();
 
   // セッション情報を取得
   const { data: session, status } = useSession();
 
-  const { data: menuItems, error } = useMenuItems(pathname);
+  const { data: menuItems, error } = useMenuItems();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
