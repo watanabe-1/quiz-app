@@ -4,10 +4,10 @@
 
 import { renderHook } from "@testing-library/react";
 import { useZodErrorMap } from "@/hooks/useZodErrorMap";
-import { initializeZodErrorMap } from "@/lib/zodErrorMap";
+import { initializeZodErrorMap } from "@/lib/zod/zodErrorMap";
 
 // initializeZodErrorMap のモックを作成
-jest.mock("@/lib/zodErrorMap", () => ({
+jest.mock("@/lib/zod/zodErrorMap", () => ({
   initializeZodErrorMap: jest.fn(),
 }));
 

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { initializeZodErrorMap } from "@/lib/zodErrorMap";
+import { initializeZodErrorMap } from "@/lib/zod/zodErrorMap";
 
 /**
  * Custom hook to initialize the Zod error map.

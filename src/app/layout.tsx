@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { initializeZodErrorMap } from "@/lib/zodErrorMap";
+import { initializeZodErrorMap } from "@/lib/zod/zodErrorMap";
 
 export const metadata: Metadata = {
   title: {

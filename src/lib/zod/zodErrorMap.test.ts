@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { initializeZodErrorMap } from "@/lib/zodErrorMap";
+import { initializeZodErrorMap } from "@/lib/zod/zodErrorMap";
 
 describe("initializeZodErrorMap", () => {
   beforeAll(() => {

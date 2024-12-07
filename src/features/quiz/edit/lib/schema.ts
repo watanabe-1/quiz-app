@@ -1,4 +1,5 @@
-import { z, ZodType } from "zod";
+import { z } from "zod";
+import { createFileSchema } from "@/lib/zod/zodSchema";
 import { MediaContent, QuestionOption, QuestionData } from "@/types/quizType";
 
 /**
@@ -31,30 +32,14 @@ interface QuestionDataForm extends QuestionData {
   explanation?: MediaContentForm;
 }
 
-// 画像ファイルのみに限定した Zod スキーマ
-const imageFileSchema: ZodType<File> = z.custom<File>(
-  (file) => {
-    if (!(file instanceof File)) return false;
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif"];
+const MAX_IMAGE_SIZE = 5;
 
-    if (!file || file.size === 0) return true;
-
-    // 許可する画像の MIME タイプ
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-
-    // MIME タイプが許可リストに含まれているか
-    if (!allowedTypes.includes(file.type)) return false;
-
-    // ファイルサイズの上限 (例: 5MB 以下)
-    const maxSizeInMB = 5;
-    if (file.size > maxSizeInMB * 1024 * 1024) return false;
-
-    return true;
-  },
-  {
-    message:
-      "Invalid file. Only JPEG, PNG, or GIF images under 5MB are allowed.",
-  },
-);
+const imageFileSchema = createFileSchema({
+  required: false,
+  allowedTypes: IMAGE_TYPES,
+  maxSize: MAX_IMAGE_SIZE,
+});
 
 // MediaContentForm のスキーマ
 const mediaContentSchema: z.ZodType<MediaContentForm> = z.object({
