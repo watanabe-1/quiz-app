@@ -37,5 +37,3 @@ export const uploadQuizFormSchema: z.ZodType<UploadQuizForm> = z.object({
   file: fileSchema,
   autoFill: z.boolean().optional(), // オプションフィールド（エラーメッセージ不要）
 });
-
-export type UploadQuizFormSchema = z.infer<typeof uploadQuizFormSchema>;

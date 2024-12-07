@@ -16,5 +16,3 @@ const fileSchema = z
 export const uploadBcSchema = z.object({
   file: fileSchema,
 });
-
-export type UploadBcSchema = z.infer<typeof uploadBcSchema>;
