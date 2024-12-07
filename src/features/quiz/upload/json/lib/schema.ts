@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createFileSchema } from "@/lib/zod/zodSchema";
+import { FileMimeType } from "@/types/conform";
 
 /**
  * Represents upload data for form usage.
@@ -17,7 +18,7 @@ export interface UploadQuizForm {
   autoFill?: boolean;
 }
 
-const JSON_TYPES = ["application/json"];
+const JSON_TYPES = ["application/json"] as FileMimeType[];
 const MAX_JSON_SIZE = 5;
 
 const jsonFileSchema = createFileSchema({

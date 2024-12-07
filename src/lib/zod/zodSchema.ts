@@ -1,27 +1,6 @@
 import { z } from "zod";
 import { sizeInMB } from "@/lib/file";
-
-type MimeType =
-  | "image/jpeg"
-  | "image/png"
-  | "image/gif"
-  | "image/svg+xml"
-  | "video/mp4"
-  | "video/webm"
-  | "video/ogg"
-  | "audio/mpeg"
-  | "audio/ogg"
-  | "audio/wav"
-  | "text/plain"
-  | "text/html"
-  | "text/css"
-  | "text/csv"
-  | "application/json"
-  | "application/pdf"
-  | "application/zip"
-  | "application/vnd.ms-excel"
-  | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  | ""; // For unknown file formats, an empty string ("") is used
+import { FileMimeType } from "@/types/conform";
 
 /**
  * Determines if the provided file is either undefined or invalid.
@@ -58,7 +37,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
   maxSize,
 }: {
   required?: Required;
-  allowedTypes: MimeType[];
+  allowedTypes: FileMimeType[];
   maxSize: number;
 }) => {
   // 許可されているタイプを簡略化した形式に変換
@@ -89,7 +68,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
     .refine(
       (file) => {
         if (isEmptyOrInvalidFile(file)) return true;
-        return allowedTypes.includes(file.type as MimeType);
+        return allowedTypes.includes(file.type as FileMimeType);
       },
       {
         message: `${allowedDescriptions.join(", ")} のみ可能です`,

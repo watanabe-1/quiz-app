@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createFileSchema } from "@/lib/zod/zodSchema";
+import { FileMimeType } from "@/types/conform";
 import { MediaContent, QuestionOption, QuestionData } from "@/types/quizType";
 
 /**
@@ -32,7 +33,7 @@ interface QuestionDataForm extends QuestionData {
   explanation?: MediaContentForm;
 }
 
-const IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif"];
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif"] as FileMimeType[];
 const MAX_IMAGE_SIZE = 5;
 
 const imageFileSchema = createFileSchema({

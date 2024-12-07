@@ -108,3 +108,28 @@ export type SchemaConstraint = Record<string, any>;
  */
 export type SchemaDefaultValue<Schema extends ZodType<SchemaConstraint>> =
   DefaultValue<z.infer<Schema>>;
+
+/**
+ * MimeType
+ */
+export type FileMimeType =
+  | "image/jpeg"
+  | "image/png"
+  | "image/gif"
+  | "image/svg+xml"
+  | "video/mp4"
+  | "video/webm"
+  | "video/ogg"
+  | "audio/mpeg"
+  | "audio/ogg"
+  | "audio/wav"
+  | "text/plain"
+  | "text/html"
+  | "text/css"
+  | "text/csv"
+  | "application/json"
+  | "application/pdf"
+  | "application/zip"
+  | "application/vnd.ms-excel"
+  | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  | ""; // For unknown file formats, an empty string ("") is used
