@@ -55,9 +55,12 @@ const ImageBox = ({
           <Image
             src={previewUrl}
             alt={label}
-            layout="responsive"
             width={600}
             height={400}
+            style={{
+              width: "100%",
+              height: "auto",
+            }}
             unoptimized
           />
           <button
