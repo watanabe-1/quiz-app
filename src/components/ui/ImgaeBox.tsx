@@ -1,7 +1,6 @@
-import { getInputProps } from "@conform-to/react";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
-import ErrorMessage from "@/components/ui/ErrorMessage";
+import FileBox from "@/components/ui/FileBox";
 import { ConformProps } from "@/types/conform";
 
 type ImageBoxProps = ConformProps<File> & {
@@ -17,7 +16,6 @@ const ImageBox = ({
 }: ImageBoxProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const inputProps = getInputProps(fieldMetadata, { type: "file" });
 
   useEffect(() => {
     if (fieldMetadata.value instanceof File) {
@@ -41,15 +39,13 @@ const ImageBox = ({
 
   return (
     <div className="mb-4" hidden={hidden}>
-      <label className="mb-2 block font-medium">{label}</label>
-      <input
-        {...inputProps}
-        className="w-full"
+      <FileBox
+        label={label}
         accept="image/*"
-        key={fieldMetadata.key}
+        fieldMetadata={fieldMetadata}
+        hidden={hidden}
         ref={inputRef}
       />
-      <ErrorMessage errors={fieldMetadata.errors} />
       {previewUrl && (
         <div className="mt-2">
           <Image

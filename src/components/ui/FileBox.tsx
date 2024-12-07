@@ -8,6 +8,7 @@ type FileBoxProps = Omit<ConformProps<File>, OptionalFormMetadata> & {
   accept: string;
   hidden?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  ref?: React.RefObject<HTMLInputElement>;
 };
 
 const FileBox = ({
@@ -16,6 +17,7 @@ const FileBox = ({
   fieldMetadata,
   hidden = false,
   onChange,
+  ref,
 }: FileBoxProps) => {
   const inputProps = getInputProps(fieldMetadata, { type: "file" });
 
@@ -28,6 +30,7 @@ const FileBox = ({
         accept={accept}
         key={fieldMetadata.key}
         onChange={onChange}
+        ref={ref}
       />
       <ErrorMessage errors={fieldMetadata.errors} />
     </div>
