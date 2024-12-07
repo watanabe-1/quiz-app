@@ -21,35 +21,36 @@ type MimeType =
   | "application/zip"
   | "application/vnd.ms-excel"
   | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  | ""; // 未知のファイル形式の場合は空文字列 ("") になる
+  | ""; // For unknown file formats, an empty string ("") is used
 
 /**
- * チェック対象のファイルが未定義または無効であるかを判定します。
- * @param file - チェック対象の `File` オブジェクトまたは `undefined`
- * @returns ファイルが未定義または無効の場合は `true`
+ * Determines if the provided file is either undefined or invalid.
+ * @param file - The `File` object to check, or `undefined`.
+ * @returns `true` if the file is undefined, has zero size, or is not an instance of `File`.
  */
 const isEmptyOrInvalidFile = (file: File | undefined): file is undefined => {
   return !file || file.size === 0 || !(file instanceof File);
 };
 
 /**
- * MIMEタイプから "application/" や "image/" を取り除き、大文字に変換します。
- * @param mimeType - MIMEタイプの文字列
- * @returns 簡略化された MIMEタイプ
+ * Helper function to simplify a MIME type by removing "application/" or "image/"
+ * and converting the result to uppercase.
+ * @param mimeType - The MIME type string.
+ * @returns The simplified MIME type string.
  */
 const simplifyMimeType = (mimeType: string) =>
   mimeType.replace(/^(application|image)\//, "").toUpperCase();
 
 /**
- * ファイルスキーマを生成するための関数。
- * ファイルの必須性、許可されるMIMEタイプ、最大サイズを基にバリデーションを行います。
+ * Creates a validation schema for a file, allowing checks for its required status,
+ * permitted MIME types, and maximum file size.
  *
- * @template Required - ファイルが必須かどうかを表す型（`true` または `undefined`）
- * @param options - ファイルスキーマのオプション
- * @param options.required - ファイルが必須かどうか（デフォルト: `true`）
- * @param options.allowedTypes - 許可されるMIMEタイプの配列
- * @param options.maxSize - ファイルの最大サイズ（MB単位）
- * @returns ファイルスキーマ
+ * @template Required - Indicates whether the file is required (`true`) or not (`undefined`).
+ * @param options - Options to configure the schema.
+ * @param options.required - Whether the file is required. Defaults to `true`.
+ * @param options.allowedTypes - An array of allowed MIME types.
+ * @param options.maxSize - The maximum file size allowed, in megabytes.
+ * @returns A Zod schema for validating the file.
  */
 export const createFileSchema = <Required extends boolean | undefined = true>({
   required = true,
@@ -60,20 +61,20 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
   allowedTypes: MimeType[];
   maxSize: number;
 }) => {
-  // 許可されているタイプを簡略化した形式に変換
+  // Convert allowed MIME types into simplified formats
   const allowedDescriptions = allowedTypes.map(simplifyMimeType);
 
-  // 必須かどうかで型を動的に切り替え
+  // Dynamically switch the schema type based on whether the file is required
   return z
     .custom<Required extends true ? File : File | undefined>(
       (file) => {
-        // 必須でない場合、undefinedを許容
+        // Allow `undefined` if the file is not required
         if (!required && (!file || file.size === 0)) return true;
-        // File型かどうかのチェック
+        // Check if the file is an instance of `File`
         return file instanceof File;
       },
       {
-        message: required ? "必須です" : undefined,
+        message: required ? "This field is required." : undefined,
       },
     )
     .refine(
@@ -82,7 +83,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
         return sizeInMB(file.size) <= maxSize;
       },
       {
-        message: `ファイルサイズは最大${maxSize}MBです`,
+        message: `The file size must not exceed ${maxSize}MB.`,
       },
     )
     .refine(
@@ -91,7 +92,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
         return allowedTypes.includes(file.type as MimeType);
       },
       {
-        message: `${allowedDescriptions.join(", ")} のみ可能です`,
+        message: `Only the following types are allowed: ${allowedDescriptions.join(", ")}.`,
       },
     );
 };
