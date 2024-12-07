@@ -84,5 +84,3 @@ export const questionDataSchema: z.ZodType<QuestionDataForm> = z.object({
   answer: z.number(),
   explanation: mediaContentSchema.optional(),
 });
-
-export type QuestionDataSchema = z.infer<typeof questionDataSchema>;
