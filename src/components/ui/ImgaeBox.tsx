@@ -36,6 +36,7 @@ const ImageBox = ({
     if (inputRef.current) {
       inputRef.current.value = "";
     }
+    formMetadata.validate();
   };
 
   return (
