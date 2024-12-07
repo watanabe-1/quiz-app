@@ -61,20 +61,20 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
   allowedTypes: MimeType[];
   maxSize: number;
 }) => {
-  // Convert allowed MIME types into simplified formats
+  // 許可されているタイプを簡略化した形式に変換
   const allowedDescriptions = allowedTypes.map(simplifyMimeType);
 
-  // Dynamically switch the schema type based on whether the file is required
+  // 必須かどうかで型を動的に切り替え
   return z
     .custom<Required extends true ? File : File | undefined>(
       (file) => {
-        // Allow `undefined` if the file is not required
+        // 必須でない場合、undefinedを許容
         if (!required && (!file || file.size === 0)) return true;
-        // Check if the file is an instance of `File`
+        // File型かどうかのチェック
         return file instanceof File;
       },
       {
-        message: required ? "This field is required." : undefined,
+        message: required ? "必須です" : undefined,
       },
     )
     .refine(
@@ -83,7 +83,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
         return sizeInMB(file.size) <= maxSize;
       },
       {
-        message: `The file size must not exceed ${maxSize}MB.`,
+        message: `ファイルサイズは最大${maxSize}MBです`,
       },
     )
     .refine(
@@ -92,7 +92,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
         return allowedTypes.includes(file.type as MimeType);
       },
       {
-        message: `Only the following types are allowed: ${allowedDescriptions.join(", ")}.`,
+        message: `${allowedDescriptions.join(", ")} のみ可能です`,
       },
     );
 };
