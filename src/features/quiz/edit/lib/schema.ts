@@ -4,7 +4,7 @@ import { MediaContent, QuestionOption, QuestionData } from "@/types/quizType";
 /**
  * Represents media content for form usage, which can include text, an image URL, and/or an image file.
  */
-export interface MediaContentForm extends MediaContent {
+interface MediaContentForm extends MediaContent {
   /** Optional image file for the media content. */
   imageFile?: File;
 }
@@ -12,7 +12,7 @@ export interface MediaContentForm extends MediaContent {
 /**
  * Represents an option in a question for form usage, including possible image file.
  */
-export interface QuestionOptionForm extends QuestionOption {
+interface QuestionOptionForm extends QuestionOption {
   /** Optional image file representing the option. */
   imageFile?: File;
   /** Optional explanation related to the option, using MediaContentForm. */
@@ -22,7 +22,7 @@ export interface QuestionOptionForm extends QuestionOption {
 /**
  * Represents question data for form usage.
  */
-export interface QuestionDataForm extends QuestionData {
+interface QuestionDataForm extends QuestionData {
   /** The content of the question, using MediaContentForm. */
   question: MediaContentForm;
   /** List of possible options for answering the question, using QuestionOptionForm. */
@@ -57,14 +57,14 @@ const imageFileSchema: ZodType<File> = z.custom<File>(
 );
 
 // MediaContentForm のスキーマ
-export const mediaContentSchema: z.ZodType<MediaContentForm> = z.object({
+const mediaContentSchema: z.ZodType<MediaContentForm> = z.object({
   text: z.string().optional(),
   image: z.string().optional(),
   imageFile: imageFileSchema.optional(),
 });
 
 // QuestionOptionForm のスキーマ
-export const questionOptionSchema: z.ZodType<QuestionOptionForm> = z.object({
+const questionOptionSchema: z.ZodType<QuestionOptionForm> = z.object({
   text: z.string(),
   image: z.string().optional(),
   imageFile: imageFileSchema.optional(),
