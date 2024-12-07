@@ -3,10 +3,7 @@ import { parseWithZod } from "@conform-to/zod";
 import { useActionState } from "react";
 import type { ZodType, ZodTypeDef } from "zod";
 import { useZodErrorMap } from "@/hooks/useZodErrorMap";
-import { FormState } from "@/types/conform";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SchemaConstraint = Record<string, any>;
+import { FormState, SchemaConstraint } from "@/types/conform";
 
 /**
  * Options for configuring the `useZodConForm` hook.
