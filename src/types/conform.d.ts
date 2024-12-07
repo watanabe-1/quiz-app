@@ -1,4 +1,9 @@
-import { type FieldMetadata, type FormMetadata } from "@conform-to/react";
+import {
+  type FieldMetadata,
+  type FormMetadata,
+  type DefaultValue,
+} from "@conform-to/react";
+import { z, type ZodType } from "zod";
 
 /**
  * A generic type representing props used for conform components.
@@ -91,3 +96,15 @@ export type FormState =
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SchemaConstraint = Record<string, any>;
+
+/**
+ * Represents the default value for a schema constraint.
+ *
+ * @template Schema - A Zod schema that extends `ZodType` with a specific schema constraint.
+ * The schema constraint is inferred and used to determine the default value type.
+ *
+ * This type is resolved by inferring the type from the provided Zod schema
+ * and passing it to the `DefaultValue` type utility.
+ */
+export type SchemaDefaultValue<Schema extends ZodType<SchemaConstraint>> =
+  DefaultValue<z.infer<Schema>>;
