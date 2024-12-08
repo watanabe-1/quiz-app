@@ -4,6 +4,7 @@ import React from "react";
 import FormContainer from "@/components/ui/FormContainer";
 import ImageBox from "@/components/ui/ImgaeBox";
 import InputBox from "@/components/ui/InputBox";
+import SubmitButton from "@/components/ui/SubmitButton";
 import TextArea from "@/components/ui/TextArea";
 import { useQuizForm } from "@/features/quiz/edit/hooks/useQuizForm";
 import { QuestionData } from "@/types/quizType";
@@ -86,13 +87,7 @@ const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
         />
         <InputBox label="級:" fieldMetadata={fields.grade} hidden />
         <InputBox label="年:" fieldMetadata={fields.year} hidden />
-        <button
-          type="submit"
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-          disabled={loading}
-        >
-          更新
-        </button>
+        <SubmitButton loading={loading} text="更新" />
       </FormContainer>
     </div>
   );

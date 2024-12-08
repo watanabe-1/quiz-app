@@ -6,6 +6,7 @@ import CheckBox from "@/components/ui/CheckBox";
 import FileBox from "@/components/ui/FileBox";
 import FormContainer from "@/components/ui/FormContainer";
 import InputBox from "@/components/ui/InputBox";
+import SubmitButton from "@/components/ui/SubmitButton";
 import { useUploadQuizForm } from "@/features/quiz/upload/json/hooks/useUploadQuizForm";
 import { parseFileName } from "@/features/quiz/upload/json/lib/parseFileName";
 
@@ -78,13 +79,7 @@ const UploadQuizForm: React.FC = () => {
             fieldMetadata={fields.autoFill}
           />
         </div>
-        <button
-          type="submit"
-          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-          disabled={loading}
-        >
-          アップロード
-        </button>
+        <SubmitButton loading={loading} text="アップロード" />
       </FormContainer>
     </div>
   );
