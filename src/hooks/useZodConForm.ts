@@ -10,7 +10,7 @@ import { FormState, SchemaConstraint } from "@/types/conform";
  *
  * @template Schema - The type of the form schema.
  */
-interface UseZodFormOptions<Schema extends SchemaConstraint> {
+interface UseZodConFormOptions<Schema extends SchemaConstraint> {
   /**
    * The Zod schema used to validate form data.
    */
@@ -50,7 +50,7 @@ export const useZodConForm = <Schema extends SchemaConstraint>({
   schema,
   action,
   defaultValues,
-}: UseZodFormOptions<Schema>) => {
+}: UseZodConFormOptions<Schema>) => {
   // Initialize the Zod error map
   useZodErrorMap();
 
