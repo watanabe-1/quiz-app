@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetAllQualifications } from "@/lib/api";
 import {
   path_admin_export,
-  path_admin_qualification,
+  path_admin_Dqualification,
   path_admin_upload,
   path_admin_upload_businessCareer,
 } from "@/lib/path";
@@ -45,7 +45,7 @@ const AdminDashboard = async () => {
               <div className="flex items-center justify-between">
                 <span>{qualification}</span>
                 <Link
-                  href={path_admin_qualification(qualification).$url().path}
+                  href={path_admin_Dqualification(qualification).$url().path}
                   className="text-blue-600 hover:underline"
                 >
                   管理

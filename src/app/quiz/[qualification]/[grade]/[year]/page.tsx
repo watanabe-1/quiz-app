@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetCategories } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import { path_quiz_qualification_grade_year_category } from "@/lib/path";
+import { path_quiz_Dqualification_Dgrade_Dyear_Dcategory } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -40,7 +40,7 @@ const CategoriesPage = async (props: { params: Params }) => {
               <li key={category}>
                 <Link
                   href={
-                    path_quiz_qualification_grade_year_category(
+                    path_quiz_Dqualification_Dgrade_Dyear_Dcategory(
                       qualification,
                       grade,
                       year,

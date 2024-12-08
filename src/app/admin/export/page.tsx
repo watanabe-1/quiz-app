@@ -9,8 +9,8 @@ import { useFetch } from "@/hooks/useFetch";
 import {
   path_api_admin_exportQuestions,
   path_api_questions,
-  path_api_questions_qualification,
-  path_api_questions_qualification_grade,
+  path_api_questions_Dqualification,
+  path_api_questions_Dqualification_Dgrade,
 } from "@/lib/path";
 
 const useQualifications = () => {
@@ -19,13 +19,13 @@ const useQualifications = () => {
 
 const useGrades = (qualification: string) => {
   return useFetch<string[]>(
-    path_api_questions_qualification(qualification).$url().path,
+    path_api_questions_Dqualification(qualification).$url().path,
   );
 };
 
 const useYears = (qualification: string, grade: string) => {
   return useFetch<string[]>(
-    path_api_questions_qualification_grade(qualification, grade).$url().path,
+    path_api_questions_Dqualification_Dgrade(qualification, grade).$url().path,
   );
 };
 

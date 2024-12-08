@@ -13,7 +13,10 @@ import {
   getQualificationItems,
   getCurrentQuestionItems,
 } from "@/features/menu/lib/getQuizMenuItems";
-import { path_admin_qualification, path_quiz_qualification } from "@/lib/path";
+import {
+  path_admin_Dqualification,
+  path_quiz_Dqualification,
+} from "@/lib/path";
 
 jest.mock("@/features/auth/auth");
 jest.mock("@/features/menu/lib/getAdminFileMenuItems");
@@ -38,7 +41,7 @@ describe("getMenuItems 関数のテスト", () => {
     // モックの設定
     mockAuth.mockResolvedValue({ user: { role: "admin" } });
     mockGetAdminQualificationItems.mockResolvedValue([
-      { name: "資格A", href: path_admin_qualification("資格A").$url().path },
+      { name: "資格A", href: path_admin_Dqualification("資格A").$url().path },
     ]);
     mockGetAdminCurrentQuestionItems.mockResolvedValue([
       { name: "問題 1", href: "/admin/question/1" },
@@ -47,7 +50,7 @@ describe("getMenuItems 関数のテスト", () => {
       { name: "ファイルアップロード", href: "/admin/files" },
     ]);
     mockGetQualificationItems.mockResolvedValue([
-      { name: "資格B", href: path_quiz_qualification("資格B").$url().path },
+      { name: "資格B", href: path_quiz_Dqualification("資格B").$url().path },
     ]);
     mockGetCurrentQuestionItems.mockResolvedValue([
       { name: "解答中の問題", href: "/quiz/current" },
@@ -63,7 +66,7 @@ describe("getMenuItems 関数のテスト", () => {
         children: [
           {
             name: "資格A",
-            href: path_admin_qualification("資格A").$url().path,
+            href: path_admin_Dqualification("資格A").$url().path,
           },
         ],
       },
@@ -78,7 +81,10 @@ describe("getMenuItems 関数のテスト", () => {
       {
         name: "資格",
         children: [
-          { name: "資格B", href: path_quiz_qualification("資格B").$url().path },
+          {
+            name: "資格B",
+            href: path_quiz_Dqualification("資格B").$url().path,
+          },
         ],
       },
       {
@@ -92,7 +98,7 @@ describe("getMenuItems 関数のテスト", () => {
     // モックの設定
     mockAuth.mockResolvedValue(null);
     mockGetQualificationItems.mockResolvedValue([
-      { name: "資格B", href: path_quiz_qualification("資格B").$url().path },
+      { name: "資格B", href: path_quiz_Dqualification("資格B").$url().path },
     ]);
     mockGetCurrentQuestionItems.mockResolvedValue([
       { name: "解答中の問題", href: "/quiz/current" },
@@ -106,7 +112,10 @@ describe("getMenuItems 関数のテスト", () => {
       {
         name: "資格",
         children: [
-          { name: "資格B", href: path_quiz_qualification("資格B").$url().path },
+          {
+            name: "資格B",
+            href: path_quiz_Dqualification("資格B").$url().path,
+          },
         ],
       },
       {

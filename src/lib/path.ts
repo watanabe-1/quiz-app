@@ -18,7 +18,7 @@ const generateSuffix = (url?: { query?: Record<string, string | number>, hash?: 
   return `${search}${hash ? `#${hash}` : ''}`;
 };
 
-export const path_admin_qualification_grade_year_edit_id = (qualification: string | number,grade: string | number,year: string | number,id: string | number) => {
+export const path_admin_Dqualification_Dgrade_Dyear_edit_Did = (qualification: string | number,grade: string | number,year: string | number,id: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year, id }, hash: url?.hash, 
@@ -26,14 +26,14 @@ export const path_admin_qualification_grade_year_edit_id = (qualification: strin
           }),
         };
       };
-path_admin_qualification_grade_year_edit_id.match = (path: string) => {
+path_admin_Dqualification_Dgrade_Dyear_edit_Did.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)/([^/]+)/([^/]+)/edit/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, id] = match;
           return { qualification, grade, year, id };
       };;
 
-export const path_admin_qualification_grade_year = (qualification: string | number,grade: string | number,year: string | number) => {
+export const path_admin_Dqualification_Dgrade_Dyear = (qualification: string | number,grade: string | number,year: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year }, hash: url?.hash, 
@@ -41,14 +41,14 @@ export const path_admin_qualification_grade_year = (qualification: string | numb
           }),
         };
       };
-path_admin_qualification_grade_year.match = (path: string) => {
+path_admin_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year] = match;
           return { qualification, grade, year };
       };;
 
-export const path_admin_qualification_grade = (qualification: string | number,grade: string | number) => {
+export const path_admin_Dqualification_Dgrade = (qualification: string | number,grade: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade }, hash: url?.hash, 
@@ -56,14 +56,14 @@ export const path_admin_qualification_grade = (qualification: string | number,gr
           }),
         };
       };
-path_admin_qualification_grade.match = (path: string) => {
+path_admin_Dqualification_Dgrade.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade] = match;
           return { qualification, grade };
       };;
 
-export const path_admin_qualification = (qualification: string | number) => {
+export const path_admin_Dqualification = (qualification: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification }, hash: url?.hash, 
@@ -71,7 +71,7 @@ export const path_admin_qualification = (qualification: string | number) => {
           }),
         };
       };
-path_admin_qualification.match = (path: string) => {
+path_admin_Dqualification.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification] = match;
@@ -162,7 +162,7 @@ path_api_admin_uploadImage.match = (path: string) => {
         return null;
       };;
 
-export const path_api_auth____nextauth = (nextauth: string[]) => {
+export const path_api_auth_D___nextauth = (nextauth: string[]) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { nextauth }, hash: url?.hash, 
@@ -170,7 +170,7 @@ export const path_api_auth____nextauth = (nextauth: string[]) => {
           }),
         };
       };
-path_api_auth____nextauth.match = (path: string) => {
+path_api_auth_D___nextauth.match = (path: string) => {
         const match = new RegExp("^/api/auth/(.+)$").exec(path);
         if (!match) return null;
         const [, nextauth] = match;
@@ -191,7 +191,7 @@ path_api_menu.match = (path: string) => {
         return null;
       };;
 
-export const path_api_questions_qualification_grade_year_category_id = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {
+export const path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year, category, id }, hash: url?.hash, 
@@ -199,14 +199,14 @@ export const path_api_questions_qualification_grade_year_category_id = (qualific
           }),
         };
       };
-path_api_questions_qualification_grade_year_category_id.match = (path: string) => {
+path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category, id] = match;
           return { qualification, grade, year, category, id };
       };;
 
-export const path_api_questions_qualification_grade_year_category = (qualification: string | number,grade: string | number,year: string | number,category: string | number) => {
+export const path_api_questions_Dqualification_Dgrade_Dyear_Dcategory = (qualification: string | number,grade: string | number,year: string | number,category: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year, category }, hash: url?.hash, 
@@ -214,14 +214,14 @@ export const path_api_questions_qualification_grade_year_category = (qualificati
           }),
         };
       };
-path_api_questions_qualification_grade_year_category.match = (path: string) => {
+path_api_questions_Dqualification_Dgrade_Dyear_Dcategory.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category] = match;
           return { qualification, grade, year, category };
       };;
 
-export const path_api_questions_qualification_grade_year = (qualification: string | number,grade: string | number,year: string | number) => {
+export const path_api_questions_Dqualification_Dgrade_Dyear = (qualification: string | number,grade: string | number,year: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year }, hash: url?.hash, 
@@ -229,14 +229,14 @@ export const path_api_questions_qualification_grade_year = (qualification: strin
           }),
         };
       };
-path_api_questions_qualification_grade_year.match = (path: string) => {
+path_api_questions_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year] = match;
           return { qualification, grade, year };
       };;
 
-export const path_api_questions_qualification_grade = (qualification: string | number,grade: string | number) => {
+export const path_api_questions_Dqualification_Dgrade = (qualification: string | number,grade: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade }, hash: url?.hash, 
@@ -244,14 +244,14 @@ export const path_api_questions_qualification_grade = (qualification: string | n
           }),
         };
       };
-path_api_questions_qualification_grade.match = (path: string) => {
+path_api_questions_Dqualification_Dgrade.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade] = match;
           return { qualification, grade };
       };;
 
-export const path_api_questions_qualification = (qualification: string | number) => {
+export const path_api_questions_Dqualification = (qualification: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification }, hash: url?.hash, 
@@ -259,7 +259,7 @@ export const path_api_questions_qualification = (qualification: string | number)
           }),
         };
       };
-path_api_questions_qualification.match = (path: string) => {
+path_api_questions_Dqualification.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification] = match;
@@ -308,7 +308,7 @@ path.match = (path: string) => {
         return null;
       };;
 
-export const path_quiz_qualification_grade_year_category_id = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {
+export const path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year, category, id }, hash: url?.hash, 
@@ -316,14 +316,14 @@ export const path_quiz_qualification_grade_year_category_id = (qualification: st
           }),
         };
       };
-path_quiz_qualification_grade_year_category_id.match = (path: string) => {
+path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category, id] = match;
           return { qualification, grade, year, category, id };
       };;
 
-export const path_quiz_qualification_grade_year_category = (qualification: string | number,grade: string | number,year: string | number,category: string | number) => {
+export const path_quiz_Dqualification_Dgrade_Dyear_Dcategory = (qualification: string | number,grade: string | number,year: string | number,category: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year, category }, hash: url?.hash, 
@@ -331,14 +331,14 @@ export const path_quiz_qualification_grade_year_category = (qualification: strin
           }),
         };
       };
-path_quiz_qualification_grade_year_category.match = (path: string) => {
+path_quiz_Dqualification_Dgrade_Dyear_Dcategory.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category] = match;
           return { qualification, grade, year, category };
       };;
 
-export const path_quiz_qualification_grade_year = (qualification: string | number,grade: string | number,year: string | number) => {
+export const path_quiz_Dqualification_Dgrade_Dyear = (qualification: string | number,grade: string | number,year: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade, year }, hash: url?.hash, 
@@ -346,14 +346,14 @@ export const path_quiz_qualification_grade_year = (qualification: string | numbe
           }),
         };
       };
-path_quiz_qualification_grade_year.match = (path: string) => {
+path_quiz_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year] = match;
           return { qualification, grade, year };
       };;
 
-export const path_quiz_qualification_grade = (qualification: string | number,grade: string | number) => {
+export const path_quiz_Dqualification_Dgrade = (qualification: string | number,grade: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification, grade }, hash: url?.hash, 
@@ -361,14 +361,14 @@ export const path_quiz_qualification_grade = (qualification: string | number,gra
           }),
         };
       };
-path_quiz_qualification_grade.match = (path: string) => {
+path_quiz_Dqualification_Dgrade.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade] = match;
           return { qualification, grade };
       };;
 
-export const path_quiz_qualification = (qualification: string | number) => {
+export const path_quiz_Dqualification = (qualification: string | number) => {
         return { 
           $url: (url?: { query?: Record<string, string | number>, hash?: string }) => ({ 
             query: { qualification }, hash: url?.hash, 
@@ -376,7 +376,7 @@ export const path_quiz_qualification = (qualification: string | number) => {
           }),
         };
       };
-path_quiz_qualification.match = (path: string) => {
+path_quiz_Dqualification.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification] = match;

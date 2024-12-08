@@ -3,11 +3,11 @@ import { cookies } from "next/headers";
 import { FETCH_REVALIDATE } from "@/lib/constants";
 import {
   path_api_questions,
-  path_api_questions_qualification,
-  path_api_questions_qualification_grade,
-  path_api_questions_qualification_grade_year,
-  path_api_questions_qualification_grade_year_category,
-  path_api_questions_qualification_grade_year_category_id,
+  path_api_questions_Dqualification,
+  path_api_questions_Dqualification_Dgrade,
+  path_api_questions_Dqualification_Dgrade_Dyear,
+  path_api_questions_Dqualification_Dgrade_Dyear_Dcategory,
+  path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did,
 } from "@/lib/path";
 import { addBaseUrl } from "@/lib/url";
 import { QuestionData } from "@/types/quizType";
@@ -65,7 +65,7 @@ export async function fetchGetGradesByQualification(
 ): Promise<string[]> {
   return fetch(
     await addBaseUrl(
-      path_api_questions_qualification(qualification).$url().path,
+      path_api_questions_Dqualification(qualification).$url().path,
     ),
     {
       method: "GET",
@@ -92,7 +92,8 @@ export async function fetchGetYearsByQualificationAndGrade(
 ): Promise<string[]> {
   return fetch(
     await addBaseUrl(
-      path_api_questions_qualification_grade(qualification, grade).$url().path,
+      path_api_questions_Dqualification_Dgrade(qualification, grade).$url()
+        .path,
     ),
     {
       method: "GET",
@@ -121,7 +122,7 @@ export async function fetchGetCategories(
 ): Promise<string[]> {
   return fetch(
     await addBaseUrl(
-      path_api_questions_qualification_grade_year(
+      path_api_questions_Dqualification_Dgrade_Dyear(
         qualification,
         grade,
         year,
@@ -156,7 +157,7 @@ export async function fetchGetQuestionsByCategory(
 ): Promise<QuestionData[]> {
   return fetch(
     await addBaseUrl(
-      path_api_questions_qualification_grade_year_category(
+      path_api_questions_Dqualification_Dgrade_Dyear_Dcategory(
         qualification,
         grade,
         year,
@@ -194,7 +195,7 @@ export async function fetchGetQuestionsByCategoryAndId(
 ): Promise<QuestionData> {
   return fetch(
     await addBaseUrl(
-      path_api_questions_qualification_grade_year_category_id(
+      path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did(
         qualification,
         grade,
         year,

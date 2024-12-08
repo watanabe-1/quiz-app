@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetGradesByQualification } from "@/lib/api";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
-import { path_admin_qualification_grade } from "@/lib/path";
+import { path_admin_Dqualification_Dgrade } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -33,8 +33,10 @@ const QualificationAdminPage = async (props: { params: Params }) => {
                 <span>{grade}</span>
                 <Link
                   href={
-                    path_admin_qualification_grade(qualification, grade).$url()
-                      .path
+                    path_admin_Dqualification_Dgrade(
+                      qualification,
+                      grade,
+                    ).$url().path
                   }
                   className="text-blue-600 hover:underline"
                 >

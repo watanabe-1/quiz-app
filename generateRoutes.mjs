@@ -44,7 +44,10 @@ const generateSuffix = (url?: { query?: Record<string, string | number>, hash?: 
 
 // 変数名のサニタイズ
 const sanitizeVariableName = (name) =>
-  name.replace(/\//g, "_").replace(/\[|\]/g, "").replace("...", "___");
+  name
+    .replace(/\//g, "_") // スラッシュをアンダースコアに置き換える
+    .replace(/\[(.*?)\]/g, (_, match) => `D${match}`) // 角括弧を削除し、頭に `$` を付ける
+    .replace("...", "___"); // "..." を "___" に置き換える
 
 // 連番付与
 let queryCnt = 0;
@@ -237,7 +240,7 @@ const parseAppDir = (
       // Query handling
       const queryDef = parseQuery(outputPath, fullPath);
       if (queryDef) queries.push(queryDef);
-      const sanitizedExportKey = sanitizeVariableName(url);
+
       if (methodOption === "all" || methodOption === "both") {
         const method = createMethods(
           indent,
@@ -246,11 +249,12 @@ const parseAppDir = (
           isCatchAll || isOptionalCatchAll,
           "all",
           queryDef ? queryDef.importName : null,
-          sanitizedExportKey,
+          "",
         );
         pagesObject.push(method);
       }
       if (methodOption === "one" || methodOption === "both") {
+        const sanitizedExportKey = sanitizeVariableName(url);
         exportPaths[sanitizedExportKey] = createMethods(
           "",
           newSlugs,

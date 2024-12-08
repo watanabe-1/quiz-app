@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import Modal from "@/components/ui/Modal";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
-import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
+import { path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did } from "@/lib/path";
 import { AnswerHistory, QuestionAnswerPair } from "@/types/quizType";
 
 interface ReportModalProps {
@@ -79,7 +79,7 @@ const ReportModal: FC<ReportModalProps> = ({
                         )
                       ] === qAnswer.answer;
                     const questionLink =
-                      path_quiz_qualification_grade_year_category_id(
+                      path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
                         qualification,
                         grade,
                         year,

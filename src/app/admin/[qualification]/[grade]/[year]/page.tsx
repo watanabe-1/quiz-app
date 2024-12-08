@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
-import { path_admin_qualification_grade_year_edit_id } from "@/lib/path";
+import { path_admin_Dqualification_Dgrade_Dyear_edit_Did } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -48,7 +48,7 @@ const YearAdminPage = async (props: { params: Params }) => {
                 </span>
                 <Link
                   href={
-                    path_admin_qualification_grade_year_edit_id(
+                    path_admin_Dqualification_Dgrade_Dyear_edit_Did(
                       qualification,
                       grade,
                       year,

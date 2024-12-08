@@ -6,10 +6,10 @@ import {
 } from "@/lib/api";
 import { ALL_CATEGORY } from "@/lib/constants";
 import {
-  path_admin_qualification_grade_year_edit_id,
-  path_admin_qualification,
-  path_admin_qualification_grade,
-  path_admin_qualification_grade_year,
+  path_admin_Dqualification_Dgrade_Dyear_edit_Did,
+  path_admin_Dqualification,
+  path_admin_Dqualification_Dgrade,
+  path_admin_Dqualification_Dgrade_Dyear,
 } from "@/lib/path";
 import { MenuItem } from "@/types/quizType";
 
@@ -24,7 +24,7 @@ export const parseAdminQuizCurrentUrl = (
   grade: string;
   year: string;
 } | null => {
-  const match = path_admin_qualification_grade_year_edit_id.match(url);
+  const match = path_admin_Dqualification_Dgrade_Dyear_edit_Did.match(url);
 
   if (match) {
     const { qualification, grade, year } = match;
@@ -41,7 +41,7 @@ export const getAdminQualificationItems = async (): Promise<MenuItem[]> => {
       const yearItems = await getAdminGradeItemsByQualification(qualification);
       return {
         name: qualification,
-        href: path_admin_qualification(qualification).$url().path,
+        href: path_admin_Dqualification(qualification).$url().path,
         children: yearItems,
       };
     }),
@@ -61,7 +61,8 @@ export const getAdminGradeItemsByQualification = async (
       );
       return {
         name: grade,
-        href: path_admin_qualification_grade(qualification, grade).$url().path,
+        href: path_admin_Dqualification_Dgrade(qualification, grade).$url()
+          .path,
         children: yearsItems,
       };
     }),
@@ -81,7 +82,7 @@ export const getAdminYearItemsByQualificationAndGrade = async (
     years.map(async (year) => {
       return {
         name: year,
-        href: path_admin_qualification_grade_year(
+        href: path_admin_Dqualification_Dgrade_Dyear(
           qualification,
           grade,
           year,
@@ -110,7 +111,7 @@ export const getAdminCurrentQuestionItems = async (
 
   return questions.map((question) => ({
     name: `問題 ${question.questionId}`,
-    href: path_admin_qualification_grade_year_edit_id(
+    href: path_admin_Dqualification_Dgrade_Dyear_edit_Did(
       qualification,
       grade,
       year,

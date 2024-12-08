@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetYearsByQualificationAndGrade } from "@/lib/api";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import { path_quiz_qualification_grade_year } from "@/lib/path";
+import { path_quiz_Dqualification_Dgrade_Dyear } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -36,7 +36,7 @@ const YearsPage = async (props: { params: Params }) => {
               <li key={year}>
                 <Link
                   href={
-                    path_quiz_qualification_grade_year(
+                    path_quiz_Dqualification_Dgrade_Dyear(
                       qualification,
                       grade,
                       year,

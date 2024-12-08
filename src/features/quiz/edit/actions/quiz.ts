@@ -4,7 +4,7 @@ import { parseWithZod } from "@conform-to/zod";
 import { redirect } from "next/navigation";
 import { questionDataSchema } from "@/features/quiz/edit/lib/schema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
-import { path_admin_qualification_grade_year } from "@/lib/path";
+import { path_admin_Dqualification_Dgrade_Dyear } from "@/lib/path";
 import { existsQuestion, saveQuestion } from "@/services/quizService";
 import { FormState } from "@/types/conform";
 
@@ -49,7 +49,8 @@ export const updateQuiz = async (
   revalidateTagByUpdateQuestion();
 
   redirect(
-    path_admin_qualification_grade_year(qualification, grade, year).$url().path,
+    path_admin_Dqualification_Dgrade_Dyear(qualification, grade, year).$url()
+      .path,
   );
 
   // ここに到達しない想定だが一応記載

@@ -15,7 +15,7 @@ import {
   getAnswerHistory,
   setAnswerHistory,
 } from "@/lib/localStorage";
-import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
+import { path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did } from "@/lib/path";
 import {
   AnswerHistory,
   QuestionAnswerPair,
@@ -235,7 +235,7 @@ const Question: React.FC<QuestionProps> = ({
         {prevQuestionId ? (
           <Link
             href={
-              path_quiz_qualification_grade_year_category_id(
+              path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
                 qualification,
                 grade,
                 year,
@@ -253,7 +253,7 @@ const Question: React.FC<QuestionProps> = ({
         {nextQuestionId ? (
           <Link
             href={
-              path_quiz_qualification_grade_year_category_id(
+              path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
                 qualification,
                 grade,
                 year,

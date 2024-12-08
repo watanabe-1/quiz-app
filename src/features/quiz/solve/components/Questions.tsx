@@ -7,7 +7,7 @@ import {
   deleteHistoryByQualificationAndYear,
   getHistoryByQualificationAndYear,
 } from "@/lib/localStorage";
-import { path_quiz_qualification_grade_year_category_id } from "@/lib/path";
+import { path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did } from "@/lib/path";
 import { isEmptyObject } from "@/lib/utils";
 import { QuestionData } from "@/types/quizType";
 
@@ -33,7 +33,7 @@ const Questions: React.FC<QuestionsProps> = ({
   const router = useRouter();
 
   const navigateToQuestionPage = (questionId: number) => {
-    const href = path_quiz_qualification_grade_year_category_id(
+    const href = path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
       qualification,
       grade,
       year,

@@ -5,7 +5,7 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetGradesByQualification } from "@/lib/api";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import { path_quiz_qualification_grade } from "@/lib/path";
+import { path_quiz_Dqualification_Dgrade } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -31,7 +31,7 @@ const GradesPage = async (props: { params: Params }) => {
               <li key={grade}>
                 <Link
                   href={
-                    path_quiz_qualification_grade(qualification, grade).$url()
+                    path_quiz_Dqualification_Dgrade(qualification, grade).$url()
                       .path
                   }
                   className="block rounded bg-white p-4 shadow hover:bg-blue-50"
