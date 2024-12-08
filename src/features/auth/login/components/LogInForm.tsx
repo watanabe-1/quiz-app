@@ -1,5 +1,4 @@
-import { getFormProps } from "@conform-to/react";
-import ErrorMessage from "@/components/ui/ErrorMessage";
+import FormContainer from "@/components/ui/FormContainer";
 import InputBox from "@/components/ui/InputBox";
 import { useLogInForm } from "@/features/auth/login/hooks/useLogInForm";
 
@@ -10,10 +9,10 @@ const LogInForm = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md rounded bg-white p-6 shadow">
         <h1 className="mb-6 text-center text-2xl font-bold">ログイン</h1>
-        <form
-          {...getFormProps(form)}
-          action={submitAction}
-          className="space-y-4"
+        <FormContainer
+          formMetadata={form}
+          submitAction={submitAction}
+          errorPosition="bottom"
         >
           <InputBox
             label="ユーザー名"
@@ -35,8 +34,7 @@ const LogInForm = () => {
           >
             {loading ? "ログイン中..." : "ログイン"}
           </button>
-          <ErrorMessage errors={form.errors} />
-        </form>
+        </FormContainer>
       </div>
     </div>
   );

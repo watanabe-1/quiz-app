@@ -1,16 +1,14 @@
 "use client";
 
-import { getFormProps } from "@conform-to/react";
-import ErrorMessage from "@/components/ui/ErrorMessage";
 import FileBox from "@/components/ui/FileBox";
+import FormContainer from "@/components/ui/FormContainer";
 import { useUploadBcAnsForm } from "@/features/quiz/upload/pdf/businessCareer/hooks/useUploadBcAnsForm";
 
 const UploadBcAnsForm = () => {
   const { submitAction, loading, form, fields } = useUploadBcAnsForm();
 
   return (
-    <form {...getFormProps(form)} action={submitAction} className="space-y-4">
-      <ErrorMessage errors={form.errors} />
+    <FormContainer formMetadata={form} submitAction={submitAction}>
       <FileBox accept="application/pdf" fieldMetadata={fields.file} />
       <button
         type="submit"
@@ -19,7 +17,7 @@ const UploadBcAnsForm = () => {
       >
         アップロードして更新
       </button>
-    </form>
+    </FormContainer>
   );
 };
 

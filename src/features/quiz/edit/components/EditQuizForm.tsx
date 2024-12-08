@@ -1,8 +1,7 @@
 "use client";
 
-import { getFormProps } from "@conform-to/react";
 import React from "react";
-import ErrorMessage from "@/components/ui/ErrorMessage";
+import FormContainer from "@/components/ui/FormContainer";
 import ImageBox from "@/components/ui/ImgaeBox";
 import InputBox from "@/components/ui/InputBox";
 import TextArea from "@/components/ui/TextArea";
@@ -20,8 +19,7 @@ const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
 
   return (
     <div>
-      <form {...getFormProps(form)} action={submitAction} className="space-y-4">
-        <ErrorMessage errors={form.errors} />
+      <FormContainer formMetadata={form} submitAction={submitAction}>
         {/* 問題文 */}
         <TextArea
           label="問題文:"
@@ -95,7 +93,7 @@ const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
         >
           更新
         </button>
-      </form>
+      </FormContainer>
     </div>
   );
 };

@@ -1,10 +1,10 @@
 "use client";
 
-import { FieldName, getFormProps } from "@conform-to/react";
+import { FieldName } from "@conform-to/react";
 import React from "react";
 import CheckBox from "@/components/ui/CheckBox";
-import ErrorMessage from "@/components/ui/ErrorMessage";
 import FileBox from "@/components/ui/FileBox";
+import FormContainer from "@/components/ui/FormContainer";
 import InputBox from "@/components/ui/InputBox";
 import { useUploadQuizForm } from "@/features/quiz/upload/json/hooks/useUploadQuizForm";
 import { parseFileName } from "@/features/quiz/upload/json/lib/parseFileName";
@@ -40,8 +40,7 @@ const UploadQuizForm: React.FC = () => {
 
   return (
     <div>
-      <form {...getFormProps(form)} action={submitAction} className="space-y-4">
-        <ErrorMessage errors={form.errors} />
+      <FormContainer formMetadata={form} submitAction={submitAction}>
         <div>
           <InputBox
             label="資格名"
@@ -86,7 +85,7 @@ const UploadQuizForm: React.FC = () => {
         >
           アップロード
         </button>
-      </form>
+      </FormContainer>
     </div>
   );
 };
