@@ -29,7 +29,7 @@ export const parseQuizCurrentUrl = (
 } | null => {
   const match = path_quiz_qualification_grade_year_category_id.match(url);
   if (match) {
-    const [, qualification, grade, year, category] = match;
+    const { qualification, grade, year, category } = match;
     return { qualification, grade, year, category };
   }
   return null;

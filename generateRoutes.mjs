@@ -112,16 +112,34 @@ const createMethods = (
         ${slugParam}hash: url?.hash, 
         path: ${pathExpression}
       }),
-      match: (path: string) => new RegExp(${JSON.stringify(regexPattern)}).exec(path)`
+      match: (path: string) => {
+        const match = new RegExp(${JSON.stringify(regexPattern)}).exec(path);
+        if (!match) return null;
+        ${
+          slugs.length
+            ? `const [, ${slugs.join(", ")}] = match;
+          return { ${slugs.join(", ")} };`
+            : "return null;"
+        }
+      }`
     : `export const path${sanitizedExportKey} = (${slugs.map((slug) => `${slug}: ${isCatchAll ? "string[]" : "string | number"}`)}) => {
         return { 
-          $url: (${queryParam}) => ({${printPathname ? `\n            pathname: '${adjustedPathname}' as const,` : ""}
+          $url: (${queryParam}) => ({${printPathname ? `\n            pathname: '${adjustedPathname}' as const,` : ""} 
             ${slugParam} hash: url?.hash, 
             path: ${pathExpression}
           }),
         };
       };
-path${sanitizedExportKey}.match = (path: string) => new RegExp(${JSON.stringify(regexPattern)}).exec(path)`;
+path${sanitizedExportKey}.match = (path: string) => {
+        const match = new RegExp(${JSON.stringify(regexPattern)}).exec(path);
+        if (!match) return null;
+        ${
+          slugs.length
+            ? `const [, ${slugs.join(", ")}] = match;
+          return { ${slugs.join(", ")} };`
+            : "return null;"
+        }
+      };`;
 };
 
 // ディレクトリ解析処理
@@ -207,7 +225,11 @@ const parseAppDir = (
       if (methodOption === "all" || methodOption === "both") {
         pagesObject.push(
           isDynamic
-            ? `${indent}${keyName}: (${paramName}: ${isCatchAll || isOptionalCatchAll ? "string[]" : "string | number"}) => (${child})`
+            ? `${indent}${keyName}: (${paramName}: ${
+                isCatchAll || isOptionalCatchAll
+                  ? "string[]"
+                  : "string | number"
+              }) => (${child})`
             : `${indent}"${keyName}": ${child}`,
         );
       }
@@ -215,7 +237,7 @@ const parseAppDir = (
       // Query handling
       const queryDef = parseQuery(outputPath, fullPath);
       if (queryDef) queries.push(queryDef);
-
+      const sanitizedExportKey = sanitizeVariableName(url);
       if (methodOption === "all" || methodOption === "both") {
         const method = createMethods(
           indent,
@@ -224,11 +246,11 @@ const parseAppDir = (
           isCatchAll || isOptionalCatchAll,
           "all",
           queryDef ? queryDef.importName : null,
+          sanitizedExportKey,
         );
         pagesObject.push(method);
       }
       if (methodOption === "one" || methodOption === "both") {
-        const sanitizedExportKey = sanitizeVariableName(url);
         exportPaths[sanitizedExportKey] = createMethods(
           "",
           newSlugs,
@@ -264,7 +286,15 @@ const generatePages = (baseDir) => {
     ? `${queries.map((query) => query.importString).join("\n")}\n\n`
     : "";
 
-  return `${queryImports}${generateSuffixFunction}${methodOption === "all" || methodOption === "both" ? `\n\n${pagesObject}` : ""}${methodOption === "one" || methodOption === "both" ? `\n\n${individualExports}` : ""}`;
+  return `${queryImports}${generateSuffixFunction}${
+    methodOption === "all" || methodOption === "both"
+      ? `\n\n${pagesObject}`
+      : ""
+  }${
+    methodOption === "one" || methodOption === "both"
+      ? `\n\n${individualExports}`
+      : ""
+  }`;
 };
 
 // ファイルに出力

@@ -15,7 +15,7 @@ import { MenuItem } from "@/types/quizType";
 
 /**
  * 現在のURLが `/admin/[qualification]/[grade]/[year]/edit/[id]` にマッチするかを判定し、
- * マッチする場合は `{ qualification, grade, year, category }` を返す。
+ * マッチする場合は `{ qualification, grade, year }` を返す。
  */
 export const parseAdminQuizCurrentUrl = (
   url: string,
@@ -25,8 +25,9 @@ export const parseAdminQuizCurrentUrl = (
   year: string;
 } | null => {
   const match = path_admin_qualification_grade_year_edit_id.match(url);
+
   if (match) {
-    const [, qualification, grade, year] = match;
+    const { qualification, grade, year } = match;
     return { qualification, grade, year };
   }
   return null;
