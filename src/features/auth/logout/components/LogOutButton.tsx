@@ -2,11 +2,11 @@
 
 import { logout } from "@/features/auth/logout/actions/logout";
 
-export async function logOutAction() {
+const logOutAction = async () => {
   await logout();
-}
+};
 
-export default function LogOutButton({ onClick }: { onClick?: () => void }) {
+const LogOutButton = ({ onClick }: { onClick?: () => void }) => {
   return (
     <form action={logOutAction} className="w-full">
       <button
@@ -24,4 +24,6 @@ export default function LogOutButton({ onClick }: { onClick?: () => void }) {
       </button>
     </form>
   );
-}
+};
+
+export default LogOutButton;
