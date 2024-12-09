@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React, { FC } from "react";
+import { tv } from "tailwind-variants";
 import Modal from "@/components/ui/Modal";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
@@ -19,6 +20,16 @@ interface ReportModalProps {
   answeredCount: number;
   accuracy: string;
 }
+
+const resultClass = tv({
+  base: "border border-gray-300 px-4 py-2",
+  variants: {
+    isCorrect: {
+      true: "text-green-600",
+      false: "text-red-600",
+    },
+  },
+});
 
 const ReportModal: FC<ReportModalProps> = ({
   isOpen,
@@ -97,11 +108,7 @@ const ReportModal: FC<ReportModalProps> = ({
                             問題 {qAnswer.questionId}
                           </Link>
                         </td>
-                        <td
-                          className={`border border-gray-300 px-4 py-2 ${
-                            isCorrect ? "text-green-600" : "text-red-600"
-                          }`}
-                        >
+                        <td className={resultClass({ isCorrect })}>
                           {isCorrect ? "正解" : "不正解"}
                         </td>
                       </tr>

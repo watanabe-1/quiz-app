@@ -4,11 +4,34 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { tv } from "tailwind-variants";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import LogOutButton from "@/features/auth/logout/components/LogOutButton";
 import { useMenuItems } from "@/features/menu/hooks/useMenuItems";
 import { MenuItem } from "@/types/quizType";
+
+// サブメニューのスタイルを定義
+const submenuStyles = tv({
+  base: "ml-4 border-l border-gray-600 pl-4",
+  variants: {
+    open: {
+      true: "block",
+      false: "hidden",
+    },
+  },
+});
+
+// メニューのコンテナスタイル
+const menuContainerStyles = tv({
+  base: "fixed right-0 top-0 z-50 flex h-full w-64 transform flex-col bg-gray-800 text-white transition-transform duration-300 ease-in-out",
+  variants: {
+    open: {
+      true: "translate-x-0",
+      false: "translate-x-full",
+    },
+  },
+});
 
 const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,9 +39,7 @@ const Menu: React.FC = () => {
     {},
   );
 
-  // セッション情報を取得
   const { data: session, status } = useSession();
-
   const { data: menuItems, error } = useMenuItems();
 
   const toggleMenu = () => {
@@ -32,7 +53,6 @@ const Menu: React.FC = () => {
     }));
   };
 
-  // メニューが開いているときに背景のスクロールを防止
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
@@ -40,8 +60,8 @@ const Menu: React.FC = () => {
     };
   }, [isOpen]);
 
-  // メニュー項目を再帰的にレンダリング
   const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
+    console.log(depth);
     return items.map((item) => {
       const { name, children, href } = item;
       const submenusKey = `${href}${name}`;
@@ -51,9 +71,7 @@ const Menu: React.FC = () => {
             <>
               <button
                 onClick={() => toggleSubmenu(submenusKey)}
-                className={`flex w-full items-center justify-between px-4 py-2 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none ${
-                  depth > 0 ? `pl-${depth * 4}` : ""
-                }`}
+                className="flex w-full items-center justify-between px-4 py-2 pl-4 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none"
               >
                 <span>{name}</span>
                 {openSubmenus[submenusKey] ? (
@@ -62,11 +80,8 @@ const Menu: React.FC = () => {
                   <FaChevronDown />
                 )}
               </button>
-              {/* サブメニュー */}
               <div
-                className={`${
-                  openSubmenus[submenusKey] ? "block" : "hidden"
-                } ml-4 border-l border-gray-600 pl-4`}
+                className={submenuStyles({ open: openSubmenus[submenusKey] })}
               >
                 {renderMenuItems(children, depth + 1)}
               </div>
@@ -74,9 +89,7 @@ const Menu: React.FC = () => {
           ) : (
             <Link
               href={href || "#"}
-              className={`block px-4 py-2 transition-all duration-300 ease-in-out hover:bg-gray-700 ${
-                depth > 0 ? `pl-${depth * 4}` : ""
-              }`}
+              className="flex w-full items-center justify-between px-4 py-2 pl-4 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none"
               onClick={toggleMenu}
             >
               {name}
@@ -89,7 +102,6 @@ const Menu: React.FC = () => {
 
   return (
     <div className="relative">
-      {/* ハンバーガーメニューボタン */}
       <button
         onClick={toggleMenu}
         className="text-white focus:outline-none"
@@ -102,7 +114,6 @@ const Menu: React.FC = () => {
         )}
       </button>
 
-      {/* オーバーレイ */}
       {isOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
@@ -111,29 +122,18 @@ const Menu: React.FC = () => {
         />
       )}
 
-      {/* メニューコンテンツ */}
-      <div
-        id="menu"
-        className={`fixed right-0 top-0 z-50 flex h-full w-64 transform flex-col bg-gray-800 text-white transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        {/* メニュー内の閉じるボタン */}
+      <div id="menu" className={menuContainerStyles({ open: isOpen })}>
         <button
           onClick={toggleMenu}
           className="p-4 text-white focus:outline-none"
         >
           <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>
-
-        {/* ログインしているときのみログアウトボタンを表示 */}
         {session && status === "authenticated" && (
           <div className="px-4">
             <LogOutButton />
           </div>
         )}
-
-        {/* メニュー項目 */}
         <nav className="flex-1 overflow-y-auto px-4">
           {error ? (
             <ErrorState />

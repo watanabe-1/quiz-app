@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React, { FC } from "react";
+import { tv } from "tailwind-variants";
 import { numberToKatakanaMap } from "@/lib/constants";
 import { QuestionOption } from "@/types/quizType";
 
@@ -12,6 +13,42 @@ interface AnswerOptionProps {
   handleOptionClick: (index: number) => void;
 }
 
+const optionClass = tv({
+  base: "w-full cursor-pointer rounded border p-4 text-left", // 共通部分
+  variants: {
+    isAnswered: {
+      true: "",
+      false: "hover:bg-gray-100",
+    },
+    isCorrect: {
+      true: "",
+      false: "",
+    },
+    isSelected: {
+      true: "",
+      false: "",
+    },
+  },
+  compoundVariants: [
+    {
+      isAnswered: true,
+      isCorrect: true,
+      class: "bg-green-200", // 回答済みかつ正解
+    },
+    {
+      isAnswered: true,
+      isCorrect: false,
+      isSelected: true,
+      class: "bg-red-200", // 回答済みかつ不正解かつ選択済み
+    },
+  ],
+  defaultVariants: {
+    isAnswered: false,
+    isCorrect: false,
+    isSelected: false,
+  },
+});
+
 const AnswerOption: FC<AnswerOptionProps> = ({
   option,
   index,
@@ -20,19 +57,11 @@ const AnswerOption: FC<AnswerOptionProps> = ({
   isAnswered,
   handleOptionClick,
 }) => {
-  const optionClass = isAnswered
-    ? isCorrect
-      ? "bg-green-200"
-      : isSelected
-        ? "bg-red-200"
-        : ""
-    : "hover:bg-gray-100";
-
   return (
     <li>
       <button
         onClick={() => handleOptionClick(index)}
-        className={`w-full cursor-pointer rounded border p-4 text-left ${optionClass}`}
+        className={optionClass({ isAnswered, isCorrect, isSelected })}
         aria-pressed={isSelected}
       >
         <div>
