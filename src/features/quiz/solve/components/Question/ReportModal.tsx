@@ -24,7 +24,7 @@ interface ReportModalProps {
 const resultClass = tv({
   base: "border border-gray-300 px-4 py-2",
   variants: {
-    isCorrect: {
+    correct: {
       true: "text-green-600",
       false: "text-red-600",
     },
@@ -108,7 +108,7 @@ const ReportModal: FC<ReportModalProps> = ({
                             問題 {qAnswer.questionId}
                           </Link>
                         </td>
-                        <td className={resultClass({ isCorrect })}>
+                        <td className={resultClass({ correct: isCorrect })}>
                           {isCorrect ? "正解" : "不正解"}
                         </td>
                       </tr>
