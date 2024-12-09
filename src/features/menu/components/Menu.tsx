@@ -53,6 +53,7 @@ const Menu: React.FC = () => {
     }));
   };
 
+  // メニューが開いているときに背景のスクロールを防止
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
@@ -60,6 +61,7 @@ const Menu: React.FC = () => {
     };
   }, [isOpen]);
 
+  // メニュー項目を再帰的にレンダリング
   const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
     console.log(depth);
     return items.map((item) => {
@@ -80,6 +82,7 @@ const Menu: React.FC = () => {
                   <FaChevronDown />
                 )}
               </button>
+              {/* サブメニュー */}
               <div
                 className={submenuStyles({ open: openSubmenus[submenusKey] })}
               >
@@ -102,6 +105,7 @@ const Menu: React.FC = () => {
 
   return (
     <div className="relative">
+      {/* ハンバーガーメニューボタン */}
       <button
         onClick={toggleMenu}
         className="text-white focus:outline-none"
@@ -114,6 +118,7 @@ const Menu: React.FC = () => {
         )}
       </button>
 
+      {/* オーバーレイ */}
       {isOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
@@ -122,18 +127,22 @@ const Menu: React.FC = () => {
         />
       )}
 
+      {/* メニューコンテンツ */}
       <div id="menu" className={menuContainerStyles({ open: isOpen })}>
+        {/* メニュー内の閉じるボタン */}
         <button
           onClick={toggleMenu}
           className="p-4 text-white focus:outline-none"
         >
           <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>
+        {/* ログインしているときのみログアウトボタンを表示 */}
         {session && status === "authenticated" && (
           <div className="px-4">
             <LogOutButton />
           </div>
         )}
+        {/* メニュー項目 */}
         <nav className="flex-1 overflow-y-auto px-4">
           {error ? (
             <ErrorState />
