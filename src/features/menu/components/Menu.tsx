@@ -63,7 +63,6 @@ const Menu: React.FC = () => {
 
   // メニュー項目を再帰的にレンダリング
   const renderMenuItems = (items: MenuItem[], depth: number = 0) => {
-    console.log(depth);
     return items.map((item) => {
       const { name, children, href } = item;
       const submenusKey = `${href}${name}`;
