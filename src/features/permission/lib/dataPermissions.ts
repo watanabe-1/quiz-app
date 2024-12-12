@@ -1,14 +1,16 @@
 import {
-  PermissionKind,
+  DataPermissionKind,
   dataPermissions,
-} from "@/features/permission/permissionsConfig";
+} from "@/features/permission/dataPermissionsConfig";
 
 /**
  * Checks if the provided permission kinds allow searching data.
- * @param {PermissionKind[]} permissionKinds - List of permissions the user has.
- * @returns {boolean} True if the user can search data.
+ * @param permissionKinds - List of permissions the user has.
+ * @returns True if the user can search data.
  */
-export const canSearchData = (permissionKinds: PermissionKind[]): boolean => {
+export const canSearchData = (
+  permissionKinds: DataPermissionKind[],
+): boolean => {
   return permissionKinds.some((kind) =>
     dataPermissions.searchable.includes(kind),
   );
@@ -16,19 +18,19 @@ export const canSearchData = (permissionKinds: PermissionKind[]): boolean => {
 
 /**
  * Checks if the provided permission kinds allow adding data.
- * @param {PermissionKind[]} permissionKinds - List of permissions the user has.
- * @returns {boolean} True if the user can add data.
+ * @param permissionKinds - List of permissions the user has.
+ * @returns True if the user can add data.
  */
-export const canAddData = (permissionKinds: PermissionKind[]): boolean => {
+export const canAddData = (permissionKinds: DataPermissionKind[]): boolean => {
   return permissionKinds.some((kind) => dataPermissions.addable.includes(kind));
 };
 
 /**
  * Checks if the provided permission kinds allow editing data.
- * @param {PermissionKind[]} permissionKinds - List of permissions the user has.
- * @returns {boolean} True if the user can edit data.
+ * @param permissionKinds - List of permissions the user has.
+ * @returns True if the user can edit data.
  */
-export const canEditData = (permissionKinds: PermissionKind[]): boolean => {
+export const canEditData = (permissionKinds: DataPermissionKind[]): boolean => {
   return permissionKinds.some((kind) =>
     dataPermissions.editable.includes(kind),
   );
@@ -36,10 +38,12 @@ export const canEditData = (permissionKinds: PermissionKind[]): boolean => {
 
 /**
  * Checks if the provided permission kinds allow deleting data.
- * @param {PermissionKind[]} permissionKinds - List of permissions the user has.
- * @returns {boolean} True if the user can delete data.
+ * @param permissionKinds - List of permissions the user has.
+ * @returns True if the user can delete data.
  */
-export const canDeleteData = (permissionKinds: PermissionKind[]): boolean => {
+export const canDeleteData = (
+  permissionKinds: DataPermissionKind[],
+): boolean => {
   return permissionKinds.some((kind) =>
     dataPermissions.deletable.includes(kind),
   );

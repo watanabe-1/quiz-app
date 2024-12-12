@@ -5,7 +5,7 @@ import {
   canDeleteData,
 } from "@/features/permission/lib/dataPermissions";
 
-jest.mock("@/features/permission/permissionsConfig", () => {
+jest.mock("@/features/permission/dataPermissionsConfig", () => {
   const mockDataPermissions = {
     searchable: ["viewer", "admin"],
     addable: ["editor", "admin"],

@@ -4,30 +4,12 @@ import {
   NextRequest,
   NextResponse,
 } from "next/server";
-import { auth } from "@/features/auth/auth";
 import {
-  ADMIN_PROTECTED_PATHS,
   API_AUTH_PREFIX,
   LOGIN_ROUTE,
 } from "@/features/auth/lib/authConstants";
-
-/**
- * Array of regular expressions representing paths that require admin access.
- */
-const adminProtectedPaths = ADMIN_PROTECTED_PATHS.split(",").map(
-  (path) => new RegExp(`^${path.trim()}(\\/.*)?$`),
-);
-
-/**
- * Array of regular expressions representing paths that require user access.
- * These are loaded from the `USER_PROTECTED_PATHS` environment variable.
- * If not set, defaults to all paths and `/quiz`, `/api`.
- */
-const userProtectedPaths = process.env.USER_PROTECTED_PATHS
-  ? process.env.USER_PROTECTED_PATHS.split(",").map(
-      (path) => new RegExp(`^${path.trim()}(\\/.*)?$`),
-    )
-  : [/^\/(\/.*)?$/, /^\/quiz(\/.*)?$/, /^\/api(\/.*)?$/];
+import { permission } from "@/features/permission/lib/permission";
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 
 /**
  * Wraps a given middleware with NextAuth authentication.
@@ -58,37 +40,21 @@ export function withLogin(middleware: NextMiddleware) {
     const { nextUrl } = request;
     const { pathname } = nextUrl;
 
-    const isApiAuthRoute = nextUrl.pathname.startsWith(API_AUTH_PREFIX);
+    const isApiAuthRoute = pathname.startsWith(API_AUTH_PREFIX);
 
     if (isApiAuthRoute) {
       return middleware(request, event);
     }
 
     // 認証の実行
-    const session = await auth();
-    const user = session?.user;
-
-    // Determine if the request path requires admin access
-    const isAdminProtectedPath = adminProtectedPaths.some((pathRegex) =>
-      pathRegex.test(pathname),
-    );
-
-    // Determine if the request path requires user access
-    const isUserProtectedPath = userProtectedPaths.some((pathRegex) =>
-      pathRegex.test(pathname),
-    );
-
-    // Check authentication and roles
-    if (isAdminProtectedPath) {
-      if (!user || user.role !== "admin") {
+    return withPermissionAll(
+      async () => {
+        return middleware(request, event);
+      },
+      [() => permission.page.access(pathname)],
+      async () => {
         return NextResponse.redirect(new URL(LOGIN_ROUTE, nextUrl));
-      }
-    } else if (isUserProtectedPath) {
-      if (!user || (user.role !== "user" && user.role !== "admin")) {
-        return NextResponse.redirect(new URL(LOGIN_ROUTE, nextUrl));
-      }
-    }
-
-    return middleware(request, event);
+      },
+    );
   };
 }

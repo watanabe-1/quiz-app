@@ -21,6 +21,7 @@
 export const withPermissionAll = async <T>(
   operation: () => Promise<T>,
   permissionChecks: Array<() => Promise<boolean>>,
+  hasNotPermission?: () => Promise<T>,
 ): Promise<T> => {
   if (permissionChecks.length === 0) {
     throw new Error("Permission Denied");
@@ -30,7 +31,11 @@ export const withPermissionAll = async <T>(
   const hasPermission = results.every((result) => result);
 
   if (!hasPermission) {
-    throw new Error("Permission Denied");
+    if (hasNotPermission) {
+      return await hasNotPermission();
+    } else {
+      throw new Error("Permission Denied");
+    }
   }
 
   return await operation();
