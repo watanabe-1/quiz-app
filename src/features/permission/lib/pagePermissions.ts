@@ -30,30 +30,6 @@ interface PathPermissionWithRegex extends PagePermission {
 }
 
 /**
- * Checks if a given role is allowed to access a specific path based on permissions.
- * If no matching regular expression is found, the path is accessible to everyone by default.
- *
- * @param path - The target path to check.
- * @param role - The role attempting to access the path.
- * @returns `true` if the role is allowed, otherwise `false`.
- */
-export const isRoleAllowedForPathWithMap = (
-  path: string,
-  role: Role,
-): boolean => {
-  // Iterate through the pagePermissionsMap to find a matching regex
-  for (const [regex, roles] of pagePermissionsMap) {
-    if (regex.test(path)) {
-      // Return true if the role is included, false otherwise
-      return roles.includes(role);
-    }
-  }
-
-  // If no matching regex is found, allow access by default
-  return true;
-};
-
-/**
  * Generates an array of page permissions by combining `protectedPaths` and `roleHierarchy`.
  * Ensures unique roles are combined for paths shared among multiple roles.
  */
@@ -114,3 +90,27 @@ const pagePermissionsMap: Map<RegExp, Role[]> = new Map(
     allowedRoles,
   ]),
 );
+
+/**
+ * Checks if a given role is allowed to access a specific path based on permissions.
+ * If no matching regular expression is found, the path is accessible to everyone by default.
+ *
+ * @param path - The target path to check.
+ * @param role - The role attempting to access the path.
+ * @returns `true` if the role is allowed, otherwise `false`.
+ */
+export const isRoleAllowedForPathWithMap = (
+  path: string,
+  role: Role,
+): boolean => {
+  // Iterate through the pagePermissionsMap to find a matching regex
+  for (const [regex, roles] of pagePermissionsMap) {
+    if (regex.test(path)) {
+      // Return true if the role is included, false otherwise
+      return roles.includes(role);
+    }
+  }
+
+  // If no matching regex is found, allow access by default
+  return true;
+};
