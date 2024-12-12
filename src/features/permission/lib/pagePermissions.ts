@@ -81,24 +81,19 @@ const pagePermissions: PagePermission[] = Object.entries(protectedPaths)
   }, []);
 
 /**
- * Replaces dynamic parameters in a path string (e.g., `[id]` or `...`) with regex-compatible patterns.
+ * Converts a path string to a regular expression for matching dynamic paths.
  *
- * @param path - The path string containing dynamic parameters.
- * @returns A string with dynamic parameters replaced by regex patterns.
- */
-const replaceDynamicParams = (path: string): string =>
-  path.replace(/\[.*?\]/g, "[^/]+").replace(/\.\.\./g, ".*");
-
-/**
- * Converts a path string to a regular expression for matching paths dynamically.
+ * This function trims any extra whitespace from the input path and converts it
+ * into a regular expression. The resulting regular expression matches the given
+ * path and any subpaths that start with it.
  *
- * @param path - The path string to convert.
- * @returns A `RegExp` object representing the path pattern.
+ * @param path - The path string to convert. It should be a base path without
+ * trailing slashes unless explicitly required.
+ * @returns A `RegExp` object that matches the specified path and its subpaths.
+ * For example, the path `/example` would match `/example` and `/example/subpath`.
  */
 const toPageRegExp = (path: string): RegExp =>
-  new RegExp(
-    `^${replaceDynamicParams(path).replace(/\//g, "\\/").trim()}(\\/.*)?$`,
-  );
+  new RegExp(`^${path.trim()}(\\/.*)?$`);
 
 /**
  * An array of `PathPermissionWithRegex` objects that includes regex for each path.
