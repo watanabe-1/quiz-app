@@ -39,13 +39,14 @@ const dataCallBacker = async (
 /**
  * Executes a callback function with the page permission kinds and current path name.
  *
+ * @param path - The target path to check.
  * @param func - A callback function that takes an array of page permission kinds and a path string.
  * @returns A promise that resolves to a boolean indicating the result of the callback function.
  * @throws If the path name header is not defined.
  */
 const pageCallBacker = async (
-  func: (path: string, role: Role) => boolean,
   path: string,
+  func: (path: string, role: Role) => boolean,
 ): Promise<boolean> => {
   const role = await getRole();
 
@@ -87,6 +88,6 @@ export const permission = {
      *
      * @returns A promise that resolves to true if the user can access the page, otherwise false.
      */
-    access: (path: string) => pageCallBacker(isRoleAllowedForPathWithMap, path),
+    access: (path: string) => pageCallBacker(path, isRoleAllowedForPathWithMap),
   },
 };
