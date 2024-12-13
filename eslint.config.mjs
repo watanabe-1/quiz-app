@@ -16,12 +16,6 @@ const config = [
   {
     // チェックから除外するファイルやディレクトリの指定
     ignores: [
-      "**/eslint.config.mjs",
-      "**/prettier.config.js",
-      "**/next.config.mjs",
-      "**/tailwind.config.js",
-      "**/tsconfig.json",
-      "**/postcss.config.mjs",
       "**/next-env.d.ts",
       "**/build/", // ビルド済みファイル
       "**/bin/", // 実行可能ファイル
