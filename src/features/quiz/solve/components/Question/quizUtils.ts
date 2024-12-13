@@ -19,6 +19,7 @@ export const calculateCorrectCount = (
     if (storedAnswer === idAnswer.answer) {
       return count + 1;
     }
+
     return count;
   }, 0);
 };
@@ -40,6 +41,7 @@ export const calculateAnsweredCount = (
     if (history[key] !== undefined) {
       return count + 1;
     }
+
     return count;
   }, 0);
 };

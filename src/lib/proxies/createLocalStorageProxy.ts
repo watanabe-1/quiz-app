@@ -50,6 +50,7 @@ export const createLocalStorageProxy = (): CustomizableLocalStorage => {
       } else {
         localStorage.setItem(prop, value);
       }
+
       return true;
     },
   });

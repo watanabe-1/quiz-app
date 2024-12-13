@@ -49,6 +49,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
       (file) => {
         // 必須でない場合、undefinedを許容
         if (!required && (!file || file.size === 0)) return true;
+
         // File型かどうかのチェック
         return file instanceof File;
       },
@@ -59,6 +60,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
     .refine(
       (file) => {
         if (isEmptyOrInvalidFile(file)) return true;
+
         return sizeInMB(file.size) <= maxSize;
       },
       {
@@ -68,6 +70,7 @@ export const createFileSchema = <Required extends boolean | undefined = true>({
     .refine(
       (file) => {
         if (isEmptyOrInvalidFile(file)) return true;
+
         return allowedTypes.includes(file.type as FileMimeType);
       },
       {

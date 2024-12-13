@@ -21,6 +21,7 @@ export const getDataPermissionKinds = async (): Promise<
 > => {
   const role = await getRole();
   const permissions = roleDataPermissions[role];
+
   return permissions;
 };
 
@@ -33,6 +34,7 @@ const dataCallBacker = async (
   func: (permissionKind: DataPermissionKind[]) => boolean,
 ): Promise<boolean> => {
   const permissionKinds = await getDataPermissionKinds();
+
   return func(permissionKinds);
 };
 

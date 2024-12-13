@@ -30,17 +30,21 @@ export const parseQuizCurrentUrl = (
   const match = path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did.match(url);
   if (match) {
     const { qualification, grade, year, category } = match;
+
     return { qualification, grade, year, category };
   }
+
   return null;
 };
 
 // 資格ごとのメニュー項目を取得
 export const getQualificationItems = async (): Promise<MenuItem[]> => {
   const qualifications = await fetchGetAllQualifications();
+
   return Promise.all(
     qualifications.map(async (qualification) => {
       const yearItems = await getGradeItemsByQualification(qualification);
+
       return {
         name: qualification,
         href: path_quiz_Dqualification(qualification).$url().path,
@@ -55,12 +59,14 @@ export const getGradeItemsByQualification = async (
   qualification: string,
 ): Promise<MenuItem[]> => {
   const grades = await fetchGetGradesByQualification(qualification);
+
   return Promise.all(
     grades.map(async (grade) => {
       const yearsItems = await getYearItemsByQualificationAndGrade(
         qualification,
         grade,
       );
+
       return {
         name: grade,
         href: path_quiz_Dqualification_Dgrade(qualification, grade).$url().path,
@@ -79,6 +85,7 @@ export const getYearItemsByQualificationAndGrade = async (
     qualification,
     grade,
   );
+
   return Promise.all(
     years.map(async (year) => {
       const categoryItems = await getCategoryItemsByGradeAndYear(
@@ -86,6 +93,7 @@ export const getYearItemsByQualificationAndGrade = async (
         grade,
         year,
       );
+
       return {
         name: year,
         href: path_quiz_Dqualification_Dgrade_Dyear(

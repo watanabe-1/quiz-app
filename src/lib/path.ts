@@ -11,10 +11,12 @@ const generateSuffix = (url?: { query?: Record<string, string | number>, hash?: 
     ? Object.keys(query).reduce((acc, key) => {
         const value = query[key];
         acc[key] = typeof value === "number" ? String(value) : value;
+
         return acc;
       }, {} as Record<string, string>)
     : {};
   const search = query ? `?${new URLSearchParams(stringQuery)}` : '';
+
   return `${search}${hash ? `#${hash}` : ''}`;
 };
 
@@ -30,6 +32,7 @@ path_admin_Dqualification_Dgrade_Dyear_edit_Did.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)/([^/]+)/([^/]+)/edit/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, id] = match;
+
           return { qualification, grade, year, id };
       };;
 
@@ -45,6 +48,7 @@ path_admin_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year] = match;
+
           return { qualification, grade, year };
       };;
 
@@ -60,6 +64,7 @@ path_admin_Dqualification_Dgrade.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade] = match;
+
           return { qualification, grade };
       };;
 
@@ -75,6 +80,7 @@ path_admin_Dqualification.match = (path: string) => {
         const match = new RegExp("^/admin/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification] = match;
+
           return { qualification };
       };;
 
@@ -89,6 +95,7 @@ export const path_admin_export = () => {
 path_admin_export.match = (path: string) => {
         const match = new RegExp("^/admin/export$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -103,6 +110,7 @@ export const path_admin = () => {
 path_admin.match = (path: string) => {
         const match = new RegExp("^/admin$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -117,6 +125,7 @@ export const path_admin_upload_businessCareer = () => {
 path_admin_upload_businessCareer.match = (path: string) => {
         const match = new RegExp("^/admin/upload/businessCareer$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -131,6 +140,7 @@ export const path_admin_upload = () => {
 path_admin_upload.match = (path: string) => {
         const match = new RegExp("^/admin/upload$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -145,6 +155,7 @@ export const path_api_admin_exportQuestions = () => {
 path_api_admin_exportQuestions.match = (path: string) => {
         const match = new RegExp("^/api/admin/exportQuestions$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -159,6 +170,7 @@ export const path_api_admin_uploadImage = () => {
 path_api_admin_uploadImage.match = (path: string) => {
         const match = new RegExp("^/api/admin/uploadImage$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -174,6 +186,7 @@ path_api_auth_D___nextauth.match = (path: string) => {
         const match = new RegExp("^/api/auth/(.+)$").exec(path);
         if (!match) return null;
         const [, nextauth] = match;
+
           return { nextauth };
       };;
 
@@ -188,6 +201,7 @@ export const path_api_menu = () => {
 path_api_menu.match = (path: string) => {
         const match = new RegExp("^/api/menu$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -203,6 +217,7 @@ path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did.match = (path: stri
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category, id] = match;
+
           return { qualification, grade, year, category, id };
       };;
 
@@ -218,6 +233,7 @@ path_api_questions_Dqualification_Dgrade_Dyear_Dcategory.match = (path: string) 
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category] = match;
+
           return { qualification, grade, year, category };
       };;
 
@@ -233,6 +249,7 @@ path_api_questions_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year] = match;
+
           return { qualification, grade, year };
       };;
 
@@ -248,6 +265,7 @@ path_api_questions_Dqualification_Dgrade.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade] = match;
+
           return { qualification, grade };
       };;
 
@@ -263,6 +281,7 @@ path_api_questions_Dqualification.match = (path: string) => {
         const match = new RegExp("^/api/questions/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification] = match;
+
           return { qualification };
       };;
 
@@ -277,6 +296,7 @@ export const path_api_questions = () => {
 path_api_questions.match = (path: string) => {
         const match = new RegExp("^/api/questions$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -291,6 +311,7 @@ export const path_auth_login = () => {
 path_auth_login.match = (path: string) => {
         const match = new RegExp("^/auth/login$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -305,6 +326,7 @@ export const path = () => {
 path.match = (path: string) => {
         const match = new RegExp("^/$").exec(path);
         if (!match) return null;
+
         return null;
       };;
 
@@ -320,6 +342,7 @@ path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category, id] = match;
+
           return { qualification, grade, year, category, id };
       };;
 
@@ -335,6 +358,7 @@ path_quiz_Dqualification_Dgrade_Dyear_Dcategory.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year, category] = match;
+
           return { qualification, grade, year, category };
       };;
 
@@ -350,6 +374,7 @@ path_quiz_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade, year] = match;
+
           return { qualification, grade, year };
       };;
 
@@ -365,6 +390,7 @@ path_quiz_Dqualification_Dgrade.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification, grade] = match;
+
           return { qualification, grade };
       };;
 
@@ -380,5 +406,6 @@ path_quiz_Dqualification.match = (path: string) => {
         const match = new RegExp("^/quiz/([^/]+)$").exec(path);
         if (!match) return null;
         const [, qualification] = match;
+
           return { qualification };
       };;

@@ -73,6 +73,7 @@ export function cleanText(text: string): string {
   for (const pattern of unwantedPatterns) {
     cleanedText = cleanedText.replace(pattern, "");
   }
+
   return cleanedText;
 }
 

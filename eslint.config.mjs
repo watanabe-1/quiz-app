@@ -121,6 +121,10 @@ const config = [
           destructuredArrayIgnorePattern: "^_",
         },
       ],
+      "padding-line-between-statements": [
+        "error",
+        { blankLine: "always", prev: "*", next: "return" },
+      ], // returnの前には1行開ける ただし、returnのみ1行の関数の場合は空行はいらない
     },
   },
 ];

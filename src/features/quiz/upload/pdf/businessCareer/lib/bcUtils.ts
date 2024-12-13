@@ -10,6 +10,7 @@ import { katakanaToNumbersMap } from "@/lib/constants";
 export function extractYear(text: string): string | null {
   const yearPattern = /((令和|平成|昭和)?[0-9０-９]+年度\s?[前後]期)/;
   const yearMatch = text.match(yearPattern);
+
   return yearMatch ? convertToHalfWidth(yearMatch[0]) : null;
 }
 
@@ -23,6 +24,7 @@ export function extractYear(text: string): string | null {
 export function extractTitle(text: string): string | null {
   const titlePattern = /([0-9０-９]+級\s?[^\s]+)/;
   const titleMatch = text.match(titlePattern);
+
   return titleMatch ? convertToHalfWidth(titleMatch[0]) : null;
 }
 
@@ -41,6 +43,7 @@ export function extractGradeAndQualification(
   if (match) {
     const grade = match[1];
     const qualification = match[2];
+
     return { grade, qualification };
   }
 

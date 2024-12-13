@@ -56,6 +56,7 @@ export function chainMiddlewares(
   const current = functions[index];
   if (current) {
     const next = chainMiddlewares(functions, index + 1);
+
     return current(next);
   }
 

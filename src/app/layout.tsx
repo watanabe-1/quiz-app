@@ -17,6 +17,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const RootLayout = (props: { children: React.ReactNode }) => {
   const children = props.children;
+
   return (
     <html lang="ja">
       <body className={inter.className}>

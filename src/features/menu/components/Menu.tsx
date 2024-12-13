@@ -56,6 +56,7 @@ const Menu: React.FC = () => {
   // メニューが開いているときに背景のスクロールを防止
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
@@ -66,6 +67,7 @@ const Menu: React.FC = () => {
     return items.map((item) => {
       const { name, children, href } = item;
       const submenusKey = `${href}${name}`;
+
       return (
         <div key={submenusKey} className="relative">
           {children ? (

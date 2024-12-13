@@ -41,9 +41,11 @@ export const getAnswerHistory = (): AnswerHistory => {
 
   try {
     const parsedHistory: AnswerHistory = JSON.parse(historyString);
+
     return typeof parsedHistory === "object" ? parsedHistory : {};
   } catch (error) {
     console.error("Failed to parse answer history:", error);
+
     return {};
   }
 };

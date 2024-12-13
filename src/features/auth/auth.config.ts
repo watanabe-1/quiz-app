@@ -65,6 +65,7 @@ export const authConfig: NextAuthConfig = {
         token.name = user.name || "";
         token.role = user.role;
       }
+
       return token;
     },
     session: async ({ session, token }) => {
@@ -73,6 +74,7 @@ export const authConfig: NextAuthConfig = {
         session.user.name = token.name;
         session.user.role = token.role;
       }
+
       return session;
     },
   },

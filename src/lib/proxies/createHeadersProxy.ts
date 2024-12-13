@@ -79,6 +79,7 @@ export async function createHeadersProxy(
      */
     get: (_, prop: string) => {
       if (prop === "getHeaders") return () => initialHeaders; // Return the Headers instance through getHeaders method
+
       return initialHeaders.get(prop) ?? undefined;
     },
   };
@@ -87,6 +88,7 @@ export async function createHeadersProxy(
   if (request) {
     proxyHandler.set = (_, prop: string, value: string) => {
       initialHeaders.set(prop, value);
+
       return true;
     };
   }

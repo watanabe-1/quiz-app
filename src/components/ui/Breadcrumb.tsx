@@ -21,6 +21,7 @@ const Breadcrumb = ({ nonLinkableSegments = [] }: BreadcrumbProps) => {
   const breadcrumbs: BreadcrumbItem[] = pathArray.map((path, index) => {
     const href = "/" + pathArray.slice(0, index + 1).join("/");
     const label = decodeURIComponent(path);
+
     return { label, href };
   });
 

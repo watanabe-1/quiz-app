@@ -53,6 +53,7 @@ const pagePermissions: PagePermission[] = Object.entries(protectedPaths)
       // Add new path permission
       acc.push({ path, allowedRoles });
     }
+
     return acc;
   }, []);
 

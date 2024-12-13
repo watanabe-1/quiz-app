@@ -155,6 +155,7 @@ const errorMap: ZodErrorMap = (issue, _ctx) => {
       message = _ctx.defaultError;
       util.assertNever(issue);
   }
+
   return { message };
 };
 

@@ -28,17 +28,21 @@ export const parseAdminQuizCurrentUrl = (
 
   if (match) {
     const { qualification, grade, year } = match;
+
     return { qualification, grade, year };
   }
+
   return null;
 };
 
 // 資格ごとのメニュー項目を取得
 export const getAdminQualificationItems = async (): Promise<MenuItem[]> => {
   const qualifications = await fetchGetAllQualifications();
+
   return Promise.all(
     qualifications.map(async (qualification) => {
       const yearItems = await getAdminGradeItemsByQualification(qualification);
+
       return {
         name: qualification,
         href: path_admin_Dqualification(qualification).$url().path,
@@ -53,12 +57,14 @@ export const getAdminGradeItemsByQualification = async (
   qualification: string,
 ): Promise<MenuItem[]> => {
   const grades = await fetchGetGradesByQualification(qualification);
+
   return Promise.all(
     grades.map(async (grade) => {
       const yearsItems = await getAdminYearItemsByQualificationAndGrade(
         qualification,
         grade,
       );
+
       return {
         name: grade,
         href: path_admin_Dqualification_Dgrade(qualification, grade).$url()
@@ -78,6 +84,7 @@ export const getAdminYearItemsByQualificationAndGrade = async (
     qualification,
     grade,
   );
+
   return Promise.all(
     years.map(async (year) => {
       return {

@@ -29,6 +29,7 @@ export const createFormDataProxy = <
     {
       get: (target, prop: string) => {
         if (prop === "getFormData") return target.getFormData;
+
         return formData.get(prop) ?? undefined;
       },
       set: (_, prop: string, value: FormDataEntryValue | undefined) => {
@@ -37,6 +38,7 @@ export const createFormDataProxy = <
         } else {
           formData.delete(prop);
         }
+
         return true;
       },
     },

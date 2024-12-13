@@ -87,6 +87,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error exporting questions:", error);
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

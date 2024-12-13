@@ -15,6 +15,7 @@ const LogOutButton = ({ onClick }: { onClick?: () => void }) => {
         onClick={(e) => {
           if (!confirm("ログアウトしますか？")) {
             e.preventDefault();
+
             return;
           }
           if (onClick) onClick();

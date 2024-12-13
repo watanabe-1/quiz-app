@@ -15,6 +15,7 @@ export async function getAllQualifications(): Promise<string[]> {
         name: "asc",
       },
     });
+
     return qualifications.map((q) => q.name);
   }, [permission.data.search]);
 }
@@ -450,6 +451,7 @@ async function getOrCreateCategory(
     update: {},
   });
   categoryCache.set(categoryName, category);
+
   return category;
 }
 
@@ -682,9 +684,11 @@ export async function saveQuestions(
           timeout: 10000,
         },
       );
+
       return true;
     } catch (error) {
       console.error("Error saving questions:", error);
+
       return false;
     }
   }, [permission.data.search, permission.data.add, permission.data.edit]);
@@ -724,9 +728,11 @@ export async function saveQuestion(
           timeout: 10000,
         },
       );
+
       return true;
     } catch (error) {
       console.error("Error updating question:", error);
+
       return false;
     }
   }, [permission.data.search, permission.data.add, permission.data.edit]);
@@ -752,6 +758,7 @@ export async function existsData(
         },
       },
     });
+
     return count > 0;
   }, [permission.data.search]);
 }
@@ -778,6 +785,7 @@ export async function existsQuestion(
         questionId: questionId,
       },
     });
+
     return count > 0;
   }, [permission.data.search]);
 }
