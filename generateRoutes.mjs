@@ -35,10 +35,12 @@ const generateSuffix = (url?: { query?: Record<string, string | number>, hash?: 
     ? Object.keys(query).reduce((acc, key) => {
         const value = query[key];
         acc[key] = typeof value === "number" ? String(value) : value;
+
         return acc;
       }, {} as Record<string, string>)
     : {};
   const search = query ? \`?\${new URLSearchParams(stringQuery)}\` : '';
+
   return \`\${search}\${hash ? \`#\${hash}\` : ''}\`;
 };`;
 
@@ -112,7 +114,7 @@ const createMethods = (
   // パス生成関数の組み立て
   return method === "all"
     ? `${indent}$url: (${queryParam}) => ({${printPathname ? `\n        pathname: '${adjustedPathname}' as const,` : ""}
-        ${slugParam}hash: url?.hash, 
+        ${slugParam ? `${slugParam}\n${indent}` : ""}hash: url?.hash, 
         path: ${pathExpression}
       }),
       match: (path: string) => {
@@ -121,14 +123,16 @@ const createMethods = (
         ${
           slugs.length
             ? `const [, ${slugs.join(", ")}] = match;
-          return { ${slugs.join(", ")} };`
-            : "return null;"
+
+        return { ${slugs.join(", ")} };`
+            : `
+        return null;`
         }
       }`
     : `export const path${sanitizedExportKey} = (${slugs.map((slug) => `${slug}: ${isCatchAll ? "string[]" : "string | number"}`)}) => {
         return { 
           $url: (${queryParam}) => ({${printPathname ? `\n            pathname: '${adjustedPathname}' as const,` : ""} 
-            ${slugParam} hash: url?.hash, 
+            ${slugParam ? `${slugParam}\n            ` : ""}hash: url?.hash, 
             path: ${pathExpression}
           }),
         };
@@ -139,8 +143,10 @@ path${sanitizedExportKey}.match = (path: string) => {
         ${
           slugs.length
             ? `const [, ${slugs.join(", ")}] = match;
-          return { ${slugs.join(", ")} };`
-            : "return null;"
+
+        return { ${slugs.join(", ")} };`
+            : `
+        return null;`
         }
       };`;
 };
@@ -176,6 +182,7 @@ const parseAppDir = (
       if (entry.isDirectory()) {
         const dirPath = path.join(input, name);
         const contents = fs.readdirSync(dirPath);
+
         return contents.length > 0; // 空のディレクトリは除外
       }
 
