@@ -13,6 +13,7 @@ const saltRounds = 10;
 const hashPassword = async (plainPassword) => {
   try {
     const hash = await bcrypt.hash(plainPassword, saltRounds);
+
     return hash;
   } catch (_) {
     throw new Error("パスワードのハッシュ化に失敗しました。");
