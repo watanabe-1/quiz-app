@@ -161,7 +161,7 @@ describe("permission service", () => {
         return path === "/admin" && role === "admin";
       });
 
-      const result = await permission.page.access("/admin");
+      const result = await permission.page.access("/admin")();
 
       // 結果検証
       expect(result).toBe(true);
@@ -178,7 +178,7 @@ describe("permission service", () => {
         return path !== "/restricted" || role !== "user";
       });
 
-      const result = await permission.page.access("/restricted");
+      const result = await permission.page.access("/restricted")();
 
       expect(result).toBe(false);
       expect(mockIsRoleAllowedForPathWithMap).toHaveBeenCalledWith(

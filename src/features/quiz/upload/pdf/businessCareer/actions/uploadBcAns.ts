@@ -90,8 +90,5 @@ export const uploadBcAns = createServerAction(
       };
     }
   },
-  [
-    async () =>
-      permission.page.access(path_admin_upload_businessCareer().$url().path),
-  ],
+  [permission.page.access(path_admin_upload_businessCareer().$url().path)],
 );

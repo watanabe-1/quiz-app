@@ -36,5 +36,5 @@ export const uploadQuiz = createServerAction(
       submission: submission.reply(),
     };
   },
-  [async () => permission.page.access(path_admin_upload().$url().path)],
+  [permission.page.access(path_admin_upload().$url().path)],
 );

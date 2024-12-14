@@ -51,7 +51,7 @@ export function withLogin(middleware: NextMiddleware) {
       async () => {
         return middleware(request, event);
       },
-      [() => permission.page.access(pathname)],
+      [permission.page.access(pathname)],
       async () => {
         return NextResponse.redirect(new URL(LOGIN_ROUTE, nextUrl));
       },

@@ -45,15 +45,10 @@ export const updateQuiz = createServerAction(
     );
   },
   [
-    async () =>
-      permission.page.access(
-        // dynamic パラメータにはダミー値を設定
-        path_admin_Dqualification_Dgrade_Dyear_edit_Did(
-          "d",
-          "d",
-          "d",
-          "d",
-        ).$url().path,
-      ),
+    permission.page.access(
+      // dynamic パラメータにはダミー値を設定
+      path_admin_Dqualification_Dgrade_Dyear_edit_Did("d", "d", "d", "d").$url()
+        .path,
+    ),
   ],
 );

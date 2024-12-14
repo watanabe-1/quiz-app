@@ -51,5 +51,5 @@ export const login = createServerAction(
       throw error;
     }
   },
-  [async () => permission.page.access(path_auth_login().$url().path)],
+  [permission.page.access(path_auth_login().$url().path)],
 );

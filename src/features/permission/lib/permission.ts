@@ -89,6 +89,8 @@ export const permission = {
      *
      * @returns A promise that resolves to true if the user can access the page, otherwise false.
      */
-    access: (path: string) => pageCallBacker(path, canAccessPage),
+    access: (path: string): (() => ReturnType<typeof pageCallBacker>) => {
+      return () => pageCallBacker(path, canAccessPage);
+    },
   },
 };
