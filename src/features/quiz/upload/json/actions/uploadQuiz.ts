@@ -1,6 +1,5 @@
 "use server";
 
-import { permission } from "@/features/permission/lib/permission";
 import { uploadQuizFormSchema } from "@/features/quiz/upload/json/lib/schema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import { createServerAction } from "@/lib/createServerAction";
@@ -10,7 +9,7 @@ import { QuestionData } from "@/types/quizType";
 
 export const uploadQuiz = createServerAction(
   uploadQuizFormSchema,
-  [permission.page.access(path_admin_upload().$url().path)],
+  path_admin_upload().$url().path,
   async (submission) => {
     const { qualification, grade, year, file } = submission.value;
 

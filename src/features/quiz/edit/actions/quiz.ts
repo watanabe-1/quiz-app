@@ -1,7 +1,6 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { permission } from "@/features/permission/lib/permission";
 import { questionDataSchema } from "@/features/quiz/edit/lib/schema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import { createServerAction } from "@/lib/createServerAction";
@@ -13,13 +12,9 @@ import { existsQuestion, saveQuestion } from "@/services/quizService";
 
 export const updateQuiz = createServerAction(
   questionDataSchema,
-  [
-    permission.page.access(
-      // dynamic パラメータにはダミー値を設定
-      path_admin_Dqualification_Dgrade_Dyear_edit_Did("d", "d", "d", "d").$url()
-        .path,
-    ),
-  ],
+  // dynamic パラメータにはダミー値を設定
+  path_admin_Dqualification_Dgrade_Dyear_edit_Did("d", "d", "d", "d").$url()
+    .path,
   async (submission) => {
     const value = submission.value;
     const { qualification, grade, year, questionId } = value;

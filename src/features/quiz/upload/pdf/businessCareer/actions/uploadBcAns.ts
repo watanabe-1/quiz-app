@@ -1,7 +1,6 @@
 "use server";
 
 import pdfParse from "pdf-parse";
-import { permission } from "@/features/permission/lib/permission";
 import {
   parseAnsData,
   modifyGradeText,
@@ -23,7 +22,7 @@ import {
 
 export const uploadBcAns = createServerAction(
   uploadBcSchema,
-  [permission.page.access(path_admin_upload_businessCareer().$url().path)],
+  path_admin_upload_businessCareer().$url().path,
   async (submission) => {
     const { file } = submission.value;
 

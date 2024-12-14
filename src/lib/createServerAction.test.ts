@@ -19,7 +19,7 @@ jest.mock("@/features/permission/lib/withPermissionAll");
 describe("createServerAction", () => {
   const mockSchema = { parse: jest.fn() } as unknown as ZodSchema<unknown>;
   const mockCallback = jest.fn();
-  const mockPermissions = [async () => true];
+  const mockPath = "dummy";
 
   const mockPrevState: FormState = {
     status: "idle",
@@ -43,11 +43,7 @@ describe("createServerAction", () => {
       callback(),
     );
 
-    const serverAction = createServerAction(
-      mockSchema,
-      mockPermissions,
-      mockCallback,
-    );
+    const serverAction = createServerAction(mockSchema, mockPath, mockCallback);
 
     const result = await serverAction(mockPrevState, mockFormData);
 
@@ -78,11 +74,7 @@ describe("createServerAction", () => {
       callback(),
     );
 
-    const serverAction = createServerAction(
-      mockSchema,
-      mockPermissions,
-      mockCallback,
-    );
+    const serverAction = createServerAction(mockSchema, mockPath, mockCallback);
 
     const result = await serverAction(mockPrevState, mockFormData);
 
@@ -99,11 +91,7 @@ describe("createServerAction", () => {
       async (_, __, onFailure) => onFailure(),
     );
 
-    const serverAction = createServerAction(
-      mockSchema,
-      mockPermissions,
-      mockCallback,
-    );
+    const serverAction = createServerAction(mockSchema, mockPath, mockCallback);
 
     await serverAction(mockPrevState, mockFormData);
 
