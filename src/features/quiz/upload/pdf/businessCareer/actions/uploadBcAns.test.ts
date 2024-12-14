@@ -1,5 +1,6 @@
 import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 import { uploadBcAns } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBcAns";
 import {
   parseAnsData,
@@ -24,6 +25,10 @@ jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/bcAns");
 jest.mock("@/features/quiz/upload/pdf/businessCareer/lib/bcUtils");
 jest.mock("@/lib/api");
 jest.mock("@/services/quizService");
+jest.mock("@/features/permission/lib/withPermissionAll");
+(withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
+  callback(),
+);
 
 describe("uploadBcAns", () => {
   let mockFormData: FormData;

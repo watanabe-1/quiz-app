@@ -2,9 +2,14 @@ import { parseWithZod } from "@conform-to/zod";
 import { signIn } from "@/features/auth/auth";
 import { LOGIN_REDIRECT } from "@/features/auth/lib/authConstants";
 import { login } from "@/features/auth/login/actions/login";
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 
 jest.mock("@conform-to/zod");
 jest.mock("@/features/auth/auth");
+jest.mock("@/features/permission/lib/withPermissionAll");
+(withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
+  callback(),
+);
 
 describe("login", () => {
   const mockParseWithZod = parseWithZod as jest.Mock;

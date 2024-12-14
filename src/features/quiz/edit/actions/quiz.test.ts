@@ -1,10 +1,15 @@
 import { parseWithZod } from "@conform-to/zod";
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 import { updateQuiz } from "@/features/quiz/edit/actions/quiz";
 import { existsQuestion, saveQuestion } from "@/services/quizService";
 
 jest.mock("@conform-to/zod");
 jest.mock("@/lib/api");
 jest.mock("@/services/quizService");
+jest.mock("@/features/permission/lib/withPermissionAll");
+(withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
+  callback(),
+);
 
 describe("updateQuiz", () => {
   const mockParseWithZod = parseWithZod as jest.Mock;

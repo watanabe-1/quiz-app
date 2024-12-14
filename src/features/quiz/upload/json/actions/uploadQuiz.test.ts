@@ -1,4 +1,5 @@
 import { parseWithZod } from "@conform-to/zod";
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 import { uploadQuiz } from "@/features/quiz/upload/json/actions/uploadQuiz";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import { saveQuestions } from "@/services/quizService";
@@ -13,6 +14,10 @@ jest.mock("@/services/quizService", () => ({
 jest.mock("@/lib/api", () => ({
   revalidateTagByUpdateQuestions: jest.fn(),
 }));
+jest.mock("@/features/permission/lib/withPermissionAll");
+(withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
+  callback(),
+);
 
 describe("uploadQuiz", () => {
   const mockFormState: FormState = { status: "idle", submission: undefined };

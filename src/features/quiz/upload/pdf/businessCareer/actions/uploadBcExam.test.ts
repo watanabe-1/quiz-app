@@ -1,5 +1,6 @@
 import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
+import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 import { uploadBcExam } from "@/features/quiz/upload/pdf/businessCareer/actions/uploadBcExam";
 import { parseProblems } from "@/features/quiz/upload/pdf/businessCareer/lib/bcExam";
 import {
@@ -31,6 +32,10 @@ jest.mock("@/services/quizService", () => ({
 jest.mock("@/lib/api", () => ({
   revalidateTagByUpdateQuestions: jest.fn(),
 }));
+jest.mock("@/features/permission/lib/withPermissionAll");
+(withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
+  callback(),
+);
 
 describe("uploadBcExam", () => {
   const mockFormState: FormState = { status: "idle", submission: undefined };

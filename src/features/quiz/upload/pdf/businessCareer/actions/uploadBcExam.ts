@@ -1,7 +1,7 @@
 "use server";
 
-import { parseWithZod } from "@conform-to/zod";
 import pdfParse from "pdf-parse";
+import { permission } from "@/features/permission/lib/permission";
 import { parseProblems } from "@/features/quiz/upload/pdf/businessCareer/lib/bcExam";
 import {
   replaceSpacesWithUnderscore,
@@ -11,44 +11,62 @@ import {
 } from "@/features/quiz/upload/pdf/businessCareer/lib/bcUtils";
 import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
+import { createServerAction } from "@/lib/createServerAction";
+import { path_admin_upload_businessCareer } from "@/lib/path";
 import { saveQuestions } from "@/services/quizService";
-import { FormState, ServerActionHandler } from "@/types/conform";
 
-export const uploadBcExam: ServerActionHandler = async (
-  prevState: FormState,
-  data: FormData,
-): Promise<FormState> => {
-  const submission = parseWithZod(data, {
-    schema: uploadBcSchema,
-  });
+export const uploadBcExam = createServerAction(
+  uploadBcSchema,
+  async (submission) => {
+    const value = submission.value;
+    const { file } = value;
 
-  if (submission.status !== "success") {
-    return {
-      status: "error",
-      submission: submission.reply(),
-    };
-  }
+    const buffer = Buffer.from(await file.arrayBuffer());
 
-  const value = submission.value;
-  const { file } = value;
+    try {
+      const data = await pdfParse(buffer);
+      const text = data.text;
 
-  const buffer = Buffer.from(await file.arrayBuffer());
+      // 年度を取得
+      const year = replaceSpacesWithUnderscore(extractYear(text) || "");
 
-  try {
-    const data = await pdfParse(buffer);
-    const text = data.text;
+      // タイトルを取得
+      const title = replaceSpacesWithUnderscore(extractTitle(text) || "");
+      const { grade, qualification } =
+        extractGradeAndQualification(title) || {};
 
-    // 年度を取得
-    const year = replaceSpacesWithUnderscore(extractYear(text) || "");
+      // テキストを解析してQuestionData形式のJSONに変換
+      const problems = parseProblems(text);
 
-    // タイトルを取得
-    const title = replaceSpacesWithUnderscore(extractTitle(text) || "");
-    const { grade, qualification } = extractGradeAndQualification(title) || {};
+      if (!problems || !qualification || !grade || !year) {
+        return {
+          status: "error",
+          submission: submission.reply({
+            formErrors: ["PDFの解析に失敗しました"],
+          }),
+        };
+      }
 
-    // テキストを解析してQuestionData形式のJSONに変換
-    const problems = parseProblems(text);
+      // 問題データをデータベースに保存
+      const success = await saveQuestions(qualification, grade, year, problems);
 
-    if (!problems || !qualification || !grade || !year) {
+      if (!success) {
+        return {
+          status: "error",
+          submission: submission.reply({
+            formErrors: ["データベースへの保存に失敗しました"],
+          }),
+        };
+      }
+
+      revalidateTagByUpdateQuestions();
+
+      return {
+        status: "success",
+        message: "データベースへの保存に成功しました",
+        submission: submission.reply(),
+      };
+    } catch (_) {
       return {
         status: "error",
         submission: submission.reply({
@@ -56,32 +74,9 @@ export const uploadBcExam: ServerActionHandler = async (
         }),
       };
     }
-
-    // 問題データをデータベースに保存
-    const success = await saveQuestions(qualification, grade, year, problems);
-
-    if (!success) {
-      return {
-        status: "error",
-        submission: submission.reply({
-          formErrors: ["データベースへの保存に失敗しました"],
-        }),
-      };
-    }
-
-    revalidateTagByUpdateQuestions();
-
-    return {
-      status: "success",
-      message: "データベースへの保存に成功しました",
-      submission: submission.reply(),
-    };
-  } catch (_) {
-    return {
-      status: "error",
-      submission: submission.reply({
-        formErrors: ["PDFの解析に失敗しました"],
-      }),
-    };
-  }
-};
+  },
+  [
+    async () =>
+      permission.page.access(path_admin_upload_businessCareer().$url().path),
+  ],
+);

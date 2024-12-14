@@ -1,3 +1,9 @@
+import {
+  FallbackOperation,
+  Operation,
+  PermissionCheck,
+} from "@/features/permission/types/permission";
+
 /**
  * Executes an operation if all provided permission checks pass.
  *
@@ -19,9 +25,9 @@
  * ```
  */
 export const withPermissionAll = async <T>(
-  operation: () => Promise<T>,
-  permissionChecks: Array<() => Promise<boolean>>,
-  hasNotPermission?: () => Promise<T>,
+  operation: Operation<T>,
+  permissionChecks: PermissionCheck[],
+  hasNotPermission?: FallbackOperation<T>,
 ): Promise<T> => {
   if (permissionChecks.length === 0) {
     throw new Error("Permission Denied");
