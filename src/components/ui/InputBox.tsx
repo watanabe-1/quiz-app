@@ -23,6 +23,8 @@ const InputBox = <T extends "text" | "password" | "number" = "text">({
   disabled = false,
 }: InputBoxProps<T>) => {
   const inputProps = getInputProps(fieldMetadata, { type });
+  // conformはproxyで値が管理されているので、valueはここで必ず参照するようにする
+  const { value } = fieldMetadata;
 
   return (
     <div hidden={hidden}>
@@ -36,9 +38,9 @@ const InputBox = <T extends "text" | "password" | "number" = "text">({
       />
       {disabled && (
         <span className="block w-full rounded border bg-gray-100 p-2 text-gray-600">
-          {fieldMetadata.value}
+          {value}
           {/* 値が空の場合でも高さが保たれるよう、ダミー文字 - を見えない形（invisible）で挿入 */}
-          {!fieldMetadata.value && <span className="invisible">-</span>}
+          {!value && <span className="invisible">-</span>}
         </span>
       )}
       <ErrorMessage errors={fieldMetadata.errors} />
