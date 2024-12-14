@@ -35,6 +35,7 @@ const UploadQuizForm: React.FC = () => {
           name: yearName as FieldName<string>,
           value: parsedFileName.year,
         });
+        form.validate();
       }
     }
   };
