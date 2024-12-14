@@ -14,13 +14,6 @@ import { existsQuestion, saveQuestion } from "@/services/quizService";
 export const updateQuiz = createServerAction(
   questionDataSchema,
   async (submission) => {
-    if (submission.status !== "success") {
-      return {
-        status: "error",
-        submission: submission.reply(),
-      };
-    }
-
     const value = submission.value;
     const { qualification, grade, year, questionId } = value;
 

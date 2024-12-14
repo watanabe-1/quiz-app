@@ -24,8 +24,7 @@ import {
 export const uploadBcAns = createServerAction(
   uploadBcSchema,
   async (submission) => {
-    const value = submission.value;
-    const { file } = value;
+    const { file } = submission.value;
 
     const buffer = Buffer.from(await file.arrayBuffer());
 

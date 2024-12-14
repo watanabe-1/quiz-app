@@ -11,8 +11,7 @@ import { path_auth_login } from "@/lib/path";
 export const login = createServerAction(
   loginSchema,
   async (submission) => {
-    const value = submission.value;
-    const { username, password } = value;
+    const { username, password } = submission.value;
 
     try {
       // NextAuthのsignIn関数を使用してログイン
