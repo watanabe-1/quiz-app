@@ -45,8 +45,8 @@ describe("createServerAction", () => {
 
     const serverAction = createServerAction(
       mockSchema,
-      mockCallback,
       mockPermissions,
+      mockCallback,
     );
 
     const result = await serverAction(mockPrevState, mockFormData);
@@ -80,8 +80,8 @@ describe("createServerAction", () => {
 
     const serverAction = createServerAction(
       mockSchema,
-      mockCallback,
       mockPermissions,
+      mockCallback,
     );
 
     const result = await serverAction(mockPrevState, mockFormData);
@@ -101,8 +101,8 @@ describe("createServerAction", () => {
 
     const serverAction = createServerAction(
       mockSchema,
-      mockCallback,
       mockPermissions,
+      mockCallback,
     );
 
     await serverAction(mockPrevState, mockFormData);

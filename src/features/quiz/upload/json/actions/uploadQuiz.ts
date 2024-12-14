@@ -10,6 +10,7 @@ import { QuestionData } from "@/types/quizType";
 
 export const uploadQuiz = createServerAction(
   uploadQuizFormSchema,
+  [permission.page.access(path_admin_upload().$url().path)],
   async (submission) => {
     const { qualification, grade, year, file } = submission.value;
 
@@ -36,5 +37,4 @@ export const uploadQuiz = createServerAction(
       submission: submission.reply(),
     };
   },
-  [permission.page.access(path_admin_upload().$url().path)],
 );

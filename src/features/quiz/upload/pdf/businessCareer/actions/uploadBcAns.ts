@@ -23,6 +23,7 @@ import {
 
 export const uploadBcAns = createServerAction(
   uploadBcSchema,
+  [permission.page.access(path_admin_upload_businessCareer().$url().path)],
   async (submission) => {
     const { file } = submission.value;
 
@@ -90,5 +91,4 @@ export const uploadBcAns = createServerAction(
       };
     }
   },
-  [permission.page.access(path_admin_upload_businessCareer().$url().path)],
 );

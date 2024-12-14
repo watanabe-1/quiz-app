@@ -10,6 +10,7 @@ import { path_auth_login } from "@/lib/path";
 
 export const login = createServerAction(
   loginSchema,
+  [permission.page.access(path_auth_login().$url().path)],
   async (submission) => {
     const { username, password } = submission.value;
 
@@ -51,5 +52,4 @@ export const login = createServerAction(
       throw error;
     }
   },
-  [permission.page.access(path_auth_login().$url().path)],
 );

@@ -13,6 +13,13 @@ import { existsQuestion, saveQuestion } from "@/services/quizService";
 
 export const updateQuiz = createServerAction(
   questionDataSchema,
+  [
+    permission.page.access(
+      // dynamic パラメータにはダミー値を設定
+      path_admin_Dqualification_Dgrade_Dyear_edit_Did("d", "d", "d", "d").$url()
+        .path,
+    ),
+  ],
   async (submission) => {
     const value = submission.value;
     const { qualification, grade, year, questionId } = value;
@@ -44,11 +51,4 @@ export const updateQuiz = createServerAction(
         .path,
     );
   },
-  [
-    permission.page.access(
-      // dynamic パラメータにはダミー値を設定
-      path_admin_Dqualification_Dgrade_Dyear_edit_Did("d", "d", "d", "d").$url()
-        .path,
-    ),
-  ],
 );

@@ -17,6 +17,7 @@ import { saveQuestions } from "@/services/quizService";
 
 export const uploadBcExam = createServerAction(
   uploadBcSchema,
+  [permission.page.access(path_admin_upload_businessCareer().$url().path)],
   async (submission) => {
     const { file } = submission.value;
 
@@ -74,5 +75,4 @@ export const uploadBcExam = createServerAction(
       };
     }
   },
-  [permission.page.access(path_admin_upload_businessCareer().$url().path)],
 );

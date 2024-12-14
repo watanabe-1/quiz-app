@@ -42,8 +42,8 @@ type ServerActionCallback<T> = (
  */
 export function createServerAction<T>(
   schema: ZodSchema<T>,
-  callback: ServerActionCallback<T>,
   permissions: PermissionCheck[],
+  callback: ServerActionCallback<T>,
 ) {
   return async (prevState: FormState, data: FormData): Promise<FormState> => {
     return withPermissionAll(
