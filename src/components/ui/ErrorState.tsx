@@ -8,7 +8,7 @@ interface ErrorStateProps {
 const ErrorState: React.FC<ErrorStateProps> = ({ msg }) => (
   <div className="flex items-center justify-center p-4 text-red-500">
     <FaExclamationCircle className="mr-2" />
-    <span>{msg ? msg : "エラーが発生しました"}</span>
+    <span>{msg ?? "エラーが発生しました"}</span>
   </div>
 );
 
