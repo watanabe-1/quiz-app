@@ -148,7 +148,7 @@ path${sanitizedExportKey}.match = (path: string) => {
             : `
         return null;`
         }
-      };`;
+      }`;
 };
 
 // ディレクトリ解析処理

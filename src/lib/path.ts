@@ -35,7 +35,7 @@ path_admin_Dqualification_Dgrade_Dyear_edit_Did.match = (path: string) => {
         const [, qualification, grade, year, id] = match;
 
         return { qualification, grade, year, id };
-      };;
+      };
 
 export const path_admin_Dqualification_Dgrade_Dyear = (qualification: string | number,grade: string | number,year: string | number) => {
         return { 
@@ -52,7 +52,7 @@ path_admin_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const [, qualification, grade, year] = match;
 
         return { qualification, grade, year };
-      };;
+      };
 
 export const path_admin_Dqualification_Dgrade = (qualification: string | number,grade: string | number) => {
         return { 
@@ -69,7 +69,7 @@ path_admin_Dqualification_Dgrade.match = (path: string) => {
         const [, qualification, grade] = match;
 
         return { qualification, grade };
-      };;
+      };
 
 export const path_admin_Dqualification = (qualification: string | number) => {
         return { 
@@ -86,7 +86,7 @@ path_admin_Dqualification.match = (path: string) => {
         const [, qualification] = match;
 
         return { qualification };
-      };;
+      };
 
 export const path_admin_export = () => {
         return { 
@@ -101,7 +101,7 @@ path_admin_export.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_admin = () => {
         return { 
@@ -116,7 +116,7 @@ path_admin.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_admin_upload_businessCareer = () => {
         return { 
@@ -131,7 +131,7 @@ path_admin_upload_businessCareer.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_admin_upload = () => {
         return { 
@@ -146,7 +146,7 @@ path_admin_upload.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_api_admin_exportQuestions = () => {
         return { 
@@ -161,7 +161,7 @@ path_api_admin_exportQuestions.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_api_admin_uploadImage = () => {
         return { 
@@ -176,7 +176,7 @@ path_api_admin_uploadImage.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_api_auth_D___nextauth = (nextauth: string[]) => {
         return { 
@@ -193,7 +193,7 @@ path_api_auth_D___nextauth.match = (path: string) => {
         const [, nextauth] = match;
 
         return { nextauth };
-      };;
+      };
 
 export const path_api_menu = () => {
         return { 
@@ -208,7 +208,7 @@ path_api_menu.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {
         return { 
@@ -225,7 +225,7 @@ path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did.match = (path: stri
         const [, qualification, grade, year, category, id] = match;
 
         return { qualification, grade, year, category, id };
-      };;
+      };
 
 export const path_api_questions_Dqualification_Dgrade_Dyear_Dcategory = (qualification: string | number,grade: string | number,year: string | number,category: string | number) => {
         return { 
@@ -242,7 +242,7 @@ path_api_questions_Dqualification_Dgrade_Dyear_Dcategory.match = (path: string) 
         const [, qualification, grade, year, category] = match;
 
         return { qualification, grade, year, category };
-      };;
+      };
 
 export const path_api_questions_Dqualification_Dgrade_Dyear = (qualification: string | number,grade: string | number,year: string | number) => {
         return { 
@@ -259,7 +259,7 @@ path_api_questions_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const [, qualification, grade, year] = match;
 
         return { qualification, grade, year };
-      };;
+      };
 
 export const path_api_questions_Dqualification_Dgrade = (qualification: string | number,grade: string | number) => {
         return { 
@@ -276,7 +276,7 @@ path_api_questions_Dqualification_Dgrade.match = (path: string) => {
         const [, qualification, grade] = match;
 
         return { qualification, grade };
-      };;
+      };
 
 export const path_api_questions_Dqualification = (qualification: string | number) => {
         return { 
@@ -293,7 +293,7 @@ path_api_questions_Dqualification.match = (path: string) => {
         const [, qualification] = match;
 
         return { qualification };
-      };;
+      };
 
 export const path_api_questions = () => {
         return { 
@@ -308,7 +308,7 @@ path_api_questions.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_auth_login = () => {
         return { 
@@ -323,7 +323,7 @@ path_auth_login.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path = () => {
         return { 
@@ -338,7 +338,7 @@ path.match = (path: string) => {
         if (!match) return null;
         
         return null;
-      };;
+      };
 
 export const path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did = (qualification: string | number,grade: string | number,year: string | number,category: string | number,id: string | number) => {
         return { 
@@ -355,7 +355,7 @@ path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did.match = (path: string) => {
         const [, qualification, grade, year, category, id] = match;
 
         return { qualification, grade, year, category, id };
-      };;
+      };
 
 export const path_quiz_Dqualification_Dgrade_Dyear_Dcategory = (qualification: string | number,grade: string | number,year: string | number,category: string | number) => {
         return { 
@@ -372,7 +372,7 @@ path_quiz_Dqualification_Dgrade_Dyear_Dcategory.match = (path: string) => {
         const [, qualification, grade, year, category] = match;
 
         return { qualification, grade, year, category };
-      };;
+      };
 
 export const path_quiz_Dqualification_Dgrade_Dyear = (qualification: string | number,grade: string | number,year: string | number) => {
         return { 
@@ -389,7 +389,7 @@ path_quiz_Dqualification_Dgrade_Dyear.match = (path: string) => {
         const [, qualification, grade, year] = match;
 
         return { qualification, grade, year };
-      };;
+      };
 
 export const path_quiz_Dqualification_Dgrade = (qualification: string | number,grade: string | number) => {
         return { 
@@ -406,7 +406,7 @@ path_quiz_Dqualification_Dgrade.match = (path: string) => {
         const [, qualification, grade] = match;
 
         return { qualification, grade };
-      };;
+      };
 
 export const path_quiz_Dqualification = (qualification: string | number) => {
         return { 
@@ -423,4 +423,4 @@ path_quiz_Dqualification.match = (path: string) => {
         const [, qualification] = match;
 
         return { qualification };
-      };;
+      };
