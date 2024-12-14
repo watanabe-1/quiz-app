@@ -44,7 +44,6 @@ const dataCallBacker = async (
  * @param path - The target path to check.
  * @param func - A callback function that takes an array of page permission kinds and a path string.
  * @returns A promise that resolves to a boolean indicating the result of the callback function.
- * @throws If the path name header is not defined.
  */
 const pageCallBacker = async (
   path: string,
