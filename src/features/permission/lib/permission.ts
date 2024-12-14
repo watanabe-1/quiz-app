@@ -9,7 +9,7 @@ import {
   canEditData,
   canDeleteData,
 } from "@/features/permission/lib/dataPermissions";
-import { isRoleAllowedForPathWithMap } from "@/features/permission/lib/pagePermissions";
+import { canAccessPage } from "@/features/permission/lib/pagePermissions";
 import { Role } from "@/types/next-auth";
 
 /**
@@ -89,6 +89,6 @@ export const permission = {
      *
      * @returns A promise that resolves to true if the user can access the page, otherwise false.
      */
-    access: (path: string) => pageCallBacker(path, isRoleAllowedForPathWithMap),
+    access: (path: string) => pageCallBacker(path, canAccessPage),
   },
 };

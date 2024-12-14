@@ -1,4 +1,4 @@
-import { isRoleAllowedForPathWithMap } from "@/features/permission/lib/pagePermissions";
+import { canAccessPage } from "@/features/permission/lib/pagePermissions";
 
 // Replace the actual protectedPaths and roleHierarchy with mocks
 jest.mock("@/features/permission/pagePermissionsConfig", () => {
@@ -20,28 +20,22 @@ jest.mock("@/features/permission/pagePermissionsConfig", () => {
   };
 });
 
-describe("isRoleAllowedForPathWithMap", () => {
+describe("canAccessPage", () => {
   it("should allow access to a path if the role is explicitly allowed", () => {
-    expect(isRoleAllowedForPathWithMap("/admin/dashboard", "admin")).toBe(true);
-    expect(isRoleAllowedForPathWithMap("/admin/dashboard/test", "admin")).toBe(
-      true,
-    );
-    expect(isRoleAllowedForPathWithMap("/user/articles", "user")).toBe(true);
+    expect(canAccessPage("/admin/dashboard", "admin")).toBe(true);
+    expect(canAccessPage("/admin/dashboard/test", "admin")).toBe(true);
+    expect(canAccessPage("/user/articles", "user")).toBe(true);
   });
 
   it("should deny access to a path if the role is not allowed", () => {
-    expect(isRoleAllowedForPathWithMap("/admin/dashboard", "guest")).toBe(
-      false,
-    );
-    expect(isRoleAllowedForPathWithMap("/admin/dashboard/test", "guest")).toBe(
-      false,
-    );
-    expect(isRoleAllowedForPathWithMap("/user/articles", "guest")).toBe(false);
+    expect(canAccessPage("/admin/dashboard", "guest")).toBe(false);
+    expect(canAccessPage("/admin/dashboard/test", "guest")).toBe(false);
+    expect(canAccessPage("/user/articles", "guest")).toBe(false);
   });
 
   it("should allow access to a path by default if no matching regex is found", () => {
-    expect(isRoleAllowedForPathWithMap("/public/home", "user")).toBe(true);
-    expect(isRoleAllowedForPathWithMap("/random/path", "admin")).toBe(true);
+    expect(canAccessPage("/public/home", "user")).toBe(true);
+    expect(canAccessPage("/random/path", "admin")).toBe(true);
   });
 
   it("should generate correct pagePermissionsMap from protectedPaths and roleHierarchy", () => {

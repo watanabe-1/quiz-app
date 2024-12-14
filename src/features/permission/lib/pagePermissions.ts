@@ -100,10 +100,7 @@ const pagePermissionsMap: Map<RegExp, Role[]> = new Map(
  * @param role - The role attempting to access the path.
  * @returns `true` if the role is allowed, otherwise `false`.
  */
-export const isRoleAllowedForPathWithMap = (
-  path: string,
-  role: Role,
-): boolean => {
+export const canAccessPage = (path: string, role: Role): boolean => {
   // Iterate through the pagePermissionsMap to find a matching regex
   for (const [regex, roles] of pagePermissionsMap) {
     if (regex.test(path)) {

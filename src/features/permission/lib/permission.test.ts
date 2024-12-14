@@ -9,7 +9,7 @@ import {
   canEditData,
   canDeleteData,
 } from "@/features/permission/lib/dataPermissions";
-import { isRoleAllowedForPathWithMap } from "@/features/permission/lib/pagePermissions";
+import { canAccessPage } from "@/features/permission/lib/pagePermissions";
 import {
   getDataPermissionKinds,
   permission,
@@ -26,8 +26,7 @@ const mockCanSearchData = canSearchData as jest.Mock;
 const mockCanAddData = canAddData as jest.Mock;
 const mockCanEditData = canEditData as jest.Mock;
 const mockCanDeleteData = canDeleteData as jest.Mock;
-const mockIsRoleAllowedForPathWithMap =
-  isRoleAllowedForPathWithMap as jest.Mock;
+const mockIsRoleAllowedForPathWithMap = canAccessPage as jest.Mock;
 
 describe("permission service", () => {
   afterEach(() => {
