@@ -18,9 +18,9 @@ import {
   getQuestions,
   updateQuestionAnswer,
 } from "@/services/quizService";
-import { FormState } from "@/types/conform";
+import { FormState, ServerActionHandler } from "@/types/conform";
 
-export const uploadBcAns = async (
+export const uploadBcAns: ServerActionHandler = async (
   prevState: FormState,
   data: FormData,
 ): Promise<FormState> => {

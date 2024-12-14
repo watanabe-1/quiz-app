@@ -5,9 +5,9 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/features/auth/auth";
 import { LOGIN_REDIRECT } from "@/features/auth/lib/authConstants";
 import { loginSchema } from "@/features/auth/login/lib/logInFormSchema";
-import { FormState } from "@/types/conform";
+import { FormState, ServerActionHandler } from "@/types/conform";
 
-export const login = async (
+export const login: ServerActionHandler = async (
   prevState: FormState,
   data: FormData,
 ): Promise<FormState> => {

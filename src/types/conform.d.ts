@@ -133,3 +133,19 @@ export type FileMimeType =
   | "application/vnd.ms-excel"
   | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   | ""; // For unknown file formats, an empty string ("") is used
+
+/**
+ * Type definition for a server action function that processes form data.
+ *
+ * This function takes the current form state and new form data as input,
+ * processes them, and returns a Promise resolving to the updated form state.
+ *
+ * @template FormState - The type representing the state of the form.
+ * @param prevState - The current state of the form.
+ * @param data - The new data to be processed.
+ * @returns A Promise resolving to the updated form state.
+ */
+export type ServerActionHandler = (
+  prevState: FormState,
+  data: FormData,
+) => Promise<FormState>;

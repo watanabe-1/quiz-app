@@ -3,7 +3,7 @@ import { parseWithZod } from "@conform-to/zod";
 import { useActionState } from "react";
 import type { ZodType, ZodTypeDef } from "zod";
 import { useZodErrorMap } from "@/hooks/useZodErrorMap";
-import { FormState, SchemaConstraint } from "@/types/conform";
+import { SchemaConstraint, ServerActionHandler } from "@/types/conform";
 
 /**
  * Options for configuring the `useZodConForm` hook.
@@ -23,7 +23,7 @@ interface UseZodConFormOptions<Schema extends SchemaConstraint> {
    * @param data - The submitted form data.
    * @returns A promise resolving to the new form state.
    */
-  action: (prevState: FormState, data: FormData) => Promise<FormState>;
+  action: ServerActionHandler;
 
   /**
    * Default values for the form fields.

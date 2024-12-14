@@ -4,10 +4,10 @@ import { parseWithZod } from "@conform-to/zod";
 import { uploadQuizFormSchema } from "@/features/quiz/upload/json/lib/schema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import { saveQuestions } from "@/services/quizService";
-import { FormState } from "@/types/conform";
+import { FormState, ServerActionHandler } from "@/types/conform";
 import { QuestionData } from "@/types/quizType";
 
-export const uploadQuiz = async (
+export const uploadQuiz: ServerActionHandler = async (
   prevState: FormState,
   data: FormData,
 ): Promise<FormState> => {

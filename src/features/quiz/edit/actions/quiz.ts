@@ -6,9 +6,9 @@ import { questionDataSchema } from "@/features/quiz/edit/lib/schema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
 import { path_admin_Dqualification_Dgrade_Dyear } from "@/lib/path";
 import { existsQuestion, saveQuestion } from "@/services/quizService";
-import { FormState } from "@/types/conform";
+import { FormState, ServerActionHandler } from "@/types/conform";
 
-export const updateQuiz = async (
+export const updateQuiz: ServerActionHandler = async (
   prevState: FormState,
   data: FormData,
 ): Promise<FormState> => {

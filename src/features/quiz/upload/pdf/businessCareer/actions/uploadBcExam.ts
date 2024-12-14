@@ -12,9 +12,9 @@ import {
 import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
 import { saveQuestions } from "@/services/quizService";
-import { FormState } from "@/types/conform";
+import { FormState, ServerActionHandler } from "@/types/conform";
 
-export const uploadBcExam = async (
+export const uploadBcExam: ServerActionHandler = async (
   prevState: FormState,
   data: FormData,
 ): Promise<FormState> => {
