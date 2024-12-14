@@ -101,14 +101,18 @@ const pagePermissionsMap: Map<RegExp, Role[]> = new Map(
  * @returns `true` if the role is allowed, otherwise `false`.
  */
 export const canAccessPage = (path: string, role: Role): boolean => {
-  // Iterate through the pagePermissionsMap to find a matching regex
-  for (const [regex, roles] of pagePermissionsMap) {
-    if (regex.test(path)) {
-      // Return true if the role is included, false otherwise
-      return roles.includes(role);
-    }
+  // Check if the path matches any regex and if the role is allowed
+  const match = Array.from(pagePermissionsMap).find(([regex]) =>
+    regex.test(path),
+  );
+
+  // If a match is found, check if the role is included in the allowed roles
+  if (match) {
+    const [, roles] = match;
+
+    return roles.includes(role);
   }
 
-  // If no matching regex is found, allow access by default
+  // If no match is found, allow access by default
   return true;
 };
