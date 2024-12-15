@@ -1,30 +1,26 @@
 import { Prisma } from "@prisma/client";
 import { permission } from "@/features/permission/lib/permission";
-import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
+import { createServiceFunction } from "@/lib/createServiceFunction";
 import prisma from "@/lib/prisma";
 import { QuestionData } from "@/types/quizType";
 
 // 資格一覧を取得
-export async function getAllQualifications(): Promise<string[]> {
-  return withPermissionAll(async () => {
-    const qualifications = await prisma.qualification.findMany({
-      select: {
-        name: true,
-      },
-      orderBy: {
-        name: "asc",
-      },
-    });
+export const getAllQualifications = createServiceFunction(async () => {
+  const qualifications = await prisma.qualification.findMany({
+    select: {
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
 
-    return qualifications.map((q) => q.name);
-  }, [permission.data.search]);
-}
+  return qualifications.map((q) => q.name);
+}, [permission.data.search]);
 
 // 指定した資格の級一覧を取得
-export async function getGradesByQualification(
-  qualification: string,
-): Promise<string[]> {
-  return withPermissionAll(async () => {
+export const getGradesByQualification = createServiceFunction(
+  async (qualification: string) => {
     const grades = await prisma.grade.findMany({
       where: {
         questions: {
@@ -44,15 +40,13 @@ export async function getGradesByQualification(
     });
 
     return grades.map((g) => g.name);
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
 // 指定した資格、級の年度一覧を取得
-export async function getYearsByQualificationAndGrade(
-  qualification: string,
-  grade: string,
-): Promise<string[]> {
-  return withPermissionAll(async () => {
+export const getYearsByQualificationAndGrade = createServiceFunction(
+  async (qualification: string, grade: string) => {
     const years = await prisma.year.findMany({
       where: {
         questions: {
@@ -75,16 +69,13 @@ export async function getYearsByQualificationAndGrade(
     });
 
     return years.map((y) => y.year);
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
 // 指定した資格、級、年度の問題を取得
-export async function getQuestions(
-  qualification: string,
-  grade: string,
-  year: string,
-): Promise<QuestionData[]> {
-  return withPermissionAll(async () => {
+export const getQuestions = createServiceFunction(
+  async (qualification: string, grade: string, year: string) => {
     const questions = await prisma.questionData.findMany({
       where: {
         qualification: {
@@ -168,16 +159,13 @@ export async function getQuestions(
           }
         : undefined,
     }));
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
 // 指定した資格、級、年度のカテゴリ一覧を取得
-export async function getCategories(
-  qualification: string,
-  grade: string,
-  year: string,
-): Promise<string[]> {
-  return withPermissionAll(async () => {
+export const getCategories = createServiceFunction(
+  async (qualification: string, grade: string, year: string) => {
     const categories = await prisma.category.findMany({
       where: {
         questions: {
@@ -203,17 +191,18 @@ export async function getCategories(
     });
 
     return categories.map((c) => c.name);
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
 // 指定した資格、級、年度、カテゴリの問題を取得
-export async function getQuestionsByCategory(
-  qualification: string,
-  grade: string,
-  year: string,
-  categoryName: string,
-): Promise<QuestionData[]> {
-  return withPermissionAll(async () => {
+export const getQuestionsByCategory = createServiceFunction(
+  async (
+    qualification: string,
+    grade: string,
+    year: string,
+    categoryName: string,
+  ) => {
     const questions = await prisma.questionData.findMany({
       where: {
         qualification: {
@@ -299,17 +288,13 @@ export async function getQuestionsByCategory(
           }
         : undefined,
     }));
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
 // 指定した資格、級、年度、IDの問題を取得
-export async function getQuestionById(
-  qualification: string,
-  grade: string,
-  year: string,
-  id: number,
-): Promise<QuestionData | undefined> {
-  return withPermissionAll(async () => {
+export const getQuestionById = createServiceFunction(
+  async (qualification: string, grade: string, year: string, id: number) => {
     const question = await prisma.questionData.findFirst({
       where: {
         qualification: {
@@ -397,8 +382,9 @@ export async function getQuestionById(
           }
         : undefined,
     };
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
 // 資格の取得または作成
 async function getOrCreateQualification(
@@ -649,13 +635,13 @@ async function processQuestionData(
 }
 
 // 問題データを保存（複数の問題）
-export async function saveQuestions(
-  qualificationName: string,
-  gradeName: string,
-  yearValue: string,
-  questionsData: QuestionData[],
-): Promise<boolean> {
-  return withPermissionAll(async () => {
+export const saveQuestions = createServiceFunction(
+  async (
+    qualificationName: string,
+    gradeName: string,
+    yearValue: string,
+    questionsData: QuestionData[],
+  ) => {
     try {
       await prisma.$transaction(
         async (prismaClient: Prisma.TransactionClient) => {
@@ -691,17 +677,18 @@ export async function saveQuestions(
 
       return false;
     }
-  }, [permission.data.search, permission.data.add, permission.data.edit]);
-}
+  },
+  [permission.data.search, permission.data.add, permission.data.edit],
+);
 
 // 単一の問題データを更新
-export async function saveQuestion(
-  qualificationName: string,
-  gradeName: string,
-  yearValue: string,
-  questionData: QuestionData,
-): Promise<boolean> {
-  return withPermissionAll(async () => {
+export const saveQuestion = createServiceFunction(
+  async (
+    qualificationName: string,
+    gradeName: string,
+    yearValue: string,
+    questionData: QuestionData,
+  ) => {
     try {
       await prisma.$transaction(
         async (prismaClient: Prisma.TransactionClient) => {
@@ -735,16 +722,13 @@ export async function saveQuestion(
 
       return false;
     }
-  }, [permission.data.search, permission.data.add, permission.data.edit]);
-}
+  },
+  [permission.data.search, permission.data.add, permission.data.edit],
+);
 
 // 指定した資格、級、年度のデータが存在するかチェックする
-export async function existsData(
-  qualification: string,
-  grade: string,
-  year: string,
-): Promise<boolean> {
-  return withPermissionAll(async () => {
+export const existsData = createServiceFunction(
+  async (qualification: string, grade: string, year: string) => {
     const count = await prisma.questionData.count({
       where: {
         qualification: {
@@ -760,17 +744,18 @@ export async function existsData(
     });
 
     return count > 0;
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
 // 指定した資格、級、年度, 問題番号のデータが存在するかチェックする
-export async function existsQuestion(
-  qualification: string,
-  grade: string,
-  year: string,
-  questionId: number,
-): Promise<boolean> {
-  return withPermissionAll(async () => {
+export const existsQuestion = createServiceFunction(
+  async (
+    qualification: string,
+    grade: string,
+    year: string,
+    questionId: number,
+  ) => {
     const count = await prisma.questionData.count({
       where: {
         qualification: {
@@ -787,17 +772,18 @@ export async function existsQuestion(
     });
 
     return count > 0;
-  }, [permission.data.search]);
-}
+  },
+  [permission.data.search],
+);
 
-export async function updateQuestionAnswer(
-  qualificationName: string,
-  gradeName: string,
-  yearValue: string,
-  questionId: number,
-  answer: number,
-) {
-  return withPermissionAll(async () => {
+export const updateQuestionAnswer = createServiceFunction(
+  async (
+    qualificationName: string,
+    gradeName: string,
+    yearValue: string,
+    questionId: number,
+    answer: number,
+  ) => {
     await prisma.questionData.updateMany({
       where: {
         qualification: {
@@ -815,5 +801,6 @@ export async function updateQuestionAnswer(
         answer: answer,
       },
     });
-  }, [permission.data.edit]);
-}
+  },
+  [permission.data.edit],
+);
