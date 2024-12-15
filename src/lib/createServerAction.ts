@@ -36,13 +36,13 @@ type ServerActionCallback<T> = (
  *
  * @template T - The schema type.
  * @param schema - The Zod schema used for form validation.
- * @param path - The source path from which the server action is invoked. This path is used for permission checks.
+ * @param accessPath - The source path from which the server action is invoked. This path is used for permission checks.
  * @param callback - The callback containing the business logic to execute on successful validation.
  * @returns A function that handles the server-side form submission.
  */
 export function createServerAction<T>(
   schema: ZodSchema<T>,
-  path: string,
+  accessPath: string,
   callback: ServerActionCallback<T>,
 ) {
   return async (prevState: FormState, data: FormData): Promise<FormState> => {
@@ -64,7 +64,7 @@ export function createServerAction<T>(
         // Execute the provided business logic callback
         return callback(submission);
       },
-      [permission.page.access(path)],
+      [permission.page.access(accessPath)],
       () => redirect(LOGIN_ROUTE), // Redirect to login if permission checks fail
     );
   };
