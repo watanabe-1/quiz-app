@@ -8,8 +8,8 @@ import { PermissionCheck } from "@/features/permission/types/permission";
  * all the provided permissions pass the check.
  *
  * @template T - The type of the callback function.
- * @param callback - The service function to wrap with permission checks.
  * @param permissions - An array of permission checks to validate before executing the callback.
+ * @param callback - The service function to wrap with permission checks.
  * @returns A new function that performs permission checks before invoking the original callback.
  *
  * @example
@@ -19,14 +19,14 @@ import { PermissionCheck } from "@/features/permission/types/permission";
  *   () => true,
  *   () => false
  * ];
- * const serviceFunction = createServiceFunction(callback, permissions);
+ * const serviceFunction = createServiceFunction(permissions, callback);
  * // serviceFunction will not execute if any permission fails.
  * ```
  */
 export function createServiceFunction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends (...args: any[]) => Promise<any>,
->(callback: T, permissions: PermissionCheck[]): T {
+>(permissions: PermissionCheck[], callback: T): T {
   return ((...args: Parameters<T>) => {
     return withPermissionAll(async () => callback(...args), permissions);
   }) as T;

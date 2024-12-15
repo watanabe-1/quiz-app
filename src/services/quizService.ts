@@ -5,21 +5,25 @@ import prisma from "@/lib/prisma";
 import { QuestionData } from "@/types/quizType";
 
 // 資格一覧を取得
-export const getAllQualifications = createServiceFunction(async () => {
-  const qualifications = await prisma.qualification.findMany({
-    select: {
-      name: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
+export const getAllQualifications = createServiceFunction(
+  [permission.data.search],
+  async () => {
+    const qualifications = await prisma.qualification.findMany({
+      select: {
+        name: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
 
-  return qualifications.map((q) => q.name);
-}, [permission.data.search]);
+    return qualifications.map((q) => q.name);
+  },
+);
 
 // 指定した資格の級一覧を取得
 export const getGradesByQualification = createServiceFunction(
+  [permission.data.search],
   async (qualification: string) => {
     const grades = await prisma.grade.findMany({
       where: {
@@ -41,11 +45,11 @@ export const getGradesByQualification = createServiceFunction(
 
     return grades.map((g) => g.name);
   },
-  [permission.data.search],
 );
 
 // 指定した資格、級の年度一覧を取得
 export const getYearsByQualificationAndGrade = createServiceFunction(
+  [permission.data.search],
   async (qualification: string, grade: string) => {
     const years = await prisma.year.findMany({
       where: {
@@ -70,11 +74,11 @@ export const getYearsByQualificationAndGrade = createServiceFunction(
 
     return years.map((y) => y.year);
   },
-  [permission.data.search],
 );
 
 // 指定した資格、級、年度の問題を取得
 export const getQuestions = createServiceFunction(
+  [permission.data.search],
   async (qualification: string, grade: string, year: string) => {
     const questions = await prisma.questionData.findMany({
       where: {
@@ -160,11 +164,11 @@ export const getQuestions = createServiceFunction(
         : undefined,
     }));
   },
-  [permission.data.search],
 );
 
 // 指定した資格、級、年度のカテゴリ一覧を取得
 export const getCategories = createServiceFunction(
+  [permission.data.search],
   async (qualification: string, grade: string, year: string) => {
     const categories = await prisma.category.findMany({
       where: {
@@ -192,11 +196,11 @@ export const getCategories = createServiceFunction(
 
     return categories.map((c) => c.name);
   },
-  [permission.data.search],
 );
 
 // 指定した資格、級、年度、カテゴリの問題を取得
 export const getQuestionsByCategory = createServiceFunction(
+  [permission.data.search],
   async (
     qualification: string,
     grade: string,
@@ -289,11 +293,11 @@ export const getQuestionsByCategory = createServiceFunction(
         : undefined,
     }));
   },
-  [permission.data.search],
 );
 
 // 指定した資格、級、年度、IDの問題を取得
 export const getQuestionById = createServiceFunction(
+  [permission.data.search],
   async (qualification: string, grade: string, year: string, id: number) => {
     const question = await prisma.questionData.findFirst({
       where: {
@@ -383,7 +387,6 @@ export const getQuestionById = createServiceFunction(
         : undefined,
     };
   },
-  [permission.data.search],
 );
 
 // 資格の取得または作成
@@ -636,6 +639,7 @@ async function processQuestionData(
 
 // 問題データを保存（複数の問題）
 export const saveQuestions = createServiceFunction(
+  [permission.data.search, permission.data.add, permission.data.edit],
   async (
     qualificationName: string,
     gradeName: string,
@@ -678,11 +682,11 @@ export const saveQuestions = createServiceFunction(
       return false;
     }
   },
-  [permission.data.search, permission.data.add, permission.data.edit],
 );
 
 // 単一の問題データを更新
 export const saveQuestion = createServiceFunction(
+  [permission.data.search, permission.data.add, permission.data.edit],
   async (
     qualificationName: string,
     gradeName: string,
@@ -723,11 +727,11 @@ export const saveQuestion = createServiceFunction(
       return false;
     }
   },
-  [permission.data.search, permission.data.add, permission.data.edit],
 );
 
 // 指定した資格、級、年度のデータが存在するかチェックする
 export const existsData = createServiceFunction(
+  [permission.data.search],
   async (qualification: string, grade: string, year: string) => {
     const count = await prisma.questionData.count({
       where: {
@@ -745,11 +749,11 @@ export const existsData = createServiceFunction(
 
     return count > 0;
   },
-  [permission.data.search],
 );
 
 // 指定した資格、級、年度, 問題番号のデータが存在するかチェックする
 export const existsQuestion = createServiceFunction(
+  [permission.data.search],
   async (
     qualification: string,
     grade: string,
@@ -773,10 +777,10 @@ export const existsQuestion = createServiceFunction(
 
     return count > 0;
   },
-  [permission.data.search],
 );
 
 export const updateQuestionAnswer = createServiceFunction(
+  [permission.data.edit],
   async (
     qualificationName: string,
     gradeName: string,
@@ -802,5 +806,4 @@ export const updateQuestionAnswer = createServiceFunction(
       },
     });
   },
-  [permission.data.edit],
 );

@@ -15,7 +15,7 @@ describe("createServiceFunction", () => {
       callback(),
     );
 
-    const serviceFunction = createServiceFunction(mockCallback, permissions);
+    const serviceFunction = createServiceFunction(permissions, mockCallback);
     const result = await serviceFunction(2, 3);
 
     expect(withPermissionAll).toHaveBeenCalledWith(
@@ -37,7 +37,7 @@ describe("createServiceFunction", () => {
       throw new Error("Permission denied");
     });
 
-    const serviceFunction = createServiceFunction(mockCallback, permissions);
+    const serviceFunction = createServiceFunction(permissions, mockCallback);
 
     expect(() => serviceFunction(2, 3)).toThrow("Permission denied");
     expect(mockCallback).not.toHaveBeenCalled();
@@ -51,7 +51,7 @@ describe("createServiceFunction", () => {
       callback(),
     );
 
-    const serviceFunction = createServiceFunction(mockCallback, permissions);
+    const serviceFunction = createServiceFunction(permissions, mockCallback);
     const result = await serviceFunction("Hello", "World");
 
     expect(mockCallback).toHaveBeenCalledWith("Hello", "World");
