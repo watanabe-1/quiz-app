@@ -8,7 +8,7 @@ type FileBoxProps = Omit<ConformProps<File>, OptionalFormMetadata> & {
   accept: string;
   hidden?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  ref?: React.RefObject<HTMLInputElement>;
+  ref?: React.RefObject<HTMLInputElement | null>;
 };
 
 const FileBox = ({
