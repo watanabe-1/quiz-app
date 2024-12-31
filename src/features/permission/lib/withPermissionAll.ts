@@ -26,13 +26,9 @@ import {
  */
 export const withPermissionAll = async <T>(
   operation: Operation<T>,
-  permissionChecks: PermissionCheck[],
+  permissionChecks: PermissionCheck[] & { 0: PermissionCheck },
   hasNotPermission?: FallbackOperation<T>,
 ): Promise<T> => {
-  if (permissionChecks.length === 0) {
-    throw new Error("Permission Denied");
-  }
-
   const results = await Promise.all(permissionChecks.map((check) => check()));
   const hasPermission = results.every((result) => result);
 

@@ -26,7 +26,7 @@ import { PermissionCheck } from "@/features/permission/types/permission";
 export function createServiceFunction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends (...args: any[]) => Promise<any>,
->(permissions: PermissionCheck[], callback: T): T {
+>(permissions: PermissionCheck[] & { 0: PermissionCheck }, callback: T): T {
   return ((...args: Parameters<T>) => {
     return withPermissionAll(async () => callback(...args), permissions);
   }) as T;
