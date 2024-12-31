@@ -21,6 +21,23 @@ export type Operation<T> = () => Promise<T>;
 export type PermissionCheck = () => Promise<boolean>;
 
 /**
+ * Represents a list of permission checks that contains at least one `PermissionCheck`.
+ * This ensures that there is always at least one check in the array.
+ *
+ * Each `PermissionCheck` is a function that returns a Promise resolving to a boolean,
+ * indicating whether a specific permission is granted.
+ *
+ * @example
+ * const checks: NonEmptyPermissionCheckList = [
+ *   async () => true,  // First permission check
+ *   async () => false, // Second permission check
+ * ];
+ */
+export type NonEmptyPermissionCheckList = PermissionCheck[] & {
+  0: PermissionCheck;
+};
+
+/**
  * A fallback operation to execute if permissions are not granted.
  * The fallback operation returns a Promise of type T upon completion.
  *

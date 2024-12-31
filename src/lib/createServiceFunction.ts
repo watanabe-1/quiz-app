@@ -1,5 +1,5 @@
 import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
-import { PermissionCheck } from "@/features/permission/types/permission";
+import { NonEmptyPermissionCheckList } from "@/features/permission/types/permission";
 
 /**
  * Wraps a given service function with a permission check.
@@ -26,7 +26,7 @@ import { PermissionCheck } from "@/features/permission/types/permission";
 export function createServiceFunction<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends (...args: any[]) => Promise<any>,
->(permissions: PermissionCheck[] & { 0: PermissionCheck }, callback: T): T {
+>(permissions: NonEmptyPermissionCheckList, callback: T): T {
   return ((...args: Parameters<T>) => {
     return withPermissionAll(async () => callback(...args), permissions);
   }) as T;

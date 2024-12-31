@@ -1,7 +1,7 @@
 import {
   FallbackOperation,
   Operation,
-  PermissionCheck,
+  NonEmptyPermissionCheckList,
 } from "@/features/permission/types/permission";
 
 /**
@@ -26,7 +26,7 @@ import {
  */
 export const withPermissionAll = async <T>(
   operation: Operation<T>,
-  permissionChecks: PermissionCheck[] & { 0: PermissionCheck },
+  permissionChecks: NonEmptyPermissionCheckList,
   hasNotPermission?: FallbackOperation<T>,
 ): Promise<T> => {
   const results = await Promise.all(permissionChecks.map((check) => check()));

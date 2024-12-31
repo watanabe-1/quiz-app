@@ -1,10 +1,10 @@
 import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
-import { PermissionCheck } from "@/features/permission/types/permission";
+import { NonEmptyPermissionCheckList } from "@/features/permission/types/permission";
 
 describe("withPermissionAll", () => {
   it("should execute the operation if all permission checks pass", async () => {
     const mockOperation = jest.fn().mockResolvedValue(undefined);
-    const mockPermissionChecks: PermissionCheck[] & { 0: PermissionCheck } = [
+    const mockPermissionChecks: NonEmptyPermissionCheckList = [
       jest.fn().mockResolvedValue(true),
       jest.fn().mockResolvedValue(true),
     ];
@@ -19,7 +19,7 @@ describe("withPermissionAll", () => {
 
   it("should throw an error if any permission check fails", async () => {
     const mockOperation = jest.fn().mockResolvedValue(undefined);
-    const mockPermissionChecks: PermissionCheck[] & { 0: PermissionCheck } = [
+    const mockPermissionChecks: NonEmptyPermissionCheckList = [
       jest.fn().mockResolvedValue(true),
       jest.fn().mockResolvedValue(false),
     ];

@@ -1,5 +1,5 @@
 import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
-import { PermissionCheck } from "@/features/permission/types/permission";
+import { NonEmptyPermissionCheckList } from "@/features/permission/types/permission";
 import { createServiceFunction } from "@/lib/createServiceFunction";
 
 jest.mock("@/features/permission/lib/withPermissionAll", () => ({
@@ -9,7 +9,10 @@ jest.mock("@/features/permission/lib/withPermissionAll", () => ({
 describe("createServiceFunction", () => {
   it("should call the callback if all permissions pass", async () => {
     const mockCallback = jest.fn(async (x: number, y: number) => x + y);
-    const permissions: PermissionCheck[] = [async () => true, async () => true];
+    const permissions: NonEmptyPermissionCheckList = [
+      async () => true,
+      async () => true,
+    ];
 
     (withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
       callback(),
@@ -28,7 +31,7 @@ describe("createServiceFunction", () => {
 
   it("should not call the callback if any permission fails", () => {
     const mockCallback = jest.fn(async (x: number, y: number) => x + y);
-    const permissions: PermissionCheck[] = [
+    const permissions: NonEmptyPermissionCheckList = [
       async () => true,
       async () => false,
     ];
@@ -45,7 +48,7 @@ describe("createServiceFunction", () => {
 
   it("should pass arguments correctly to the callback", async () => {
     const mockCallback = jest.fn(async (x: string, y: string) => `${x} ${y}`);
-    const permissions: PermissionCheck[] = [async () => true];
+    const permissions: NonEmptyPermissionCheckList = [async () => true];
 
     (withPermissionAll as jest.Mock).mockImplementation(async (callback) =>
       callback(),
