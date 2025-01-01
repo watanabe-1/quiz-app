@@ -4,10 +4,7 @@ import {
   NextRequest,
   NextResponse,
 } from "next/server";
-import {
-  API_AUTH_PREFIX,
-  LOGIN_ROUTE,
-} from "@/features/auth/lib/authConstants";
+import { LOGIN_ROUTE } from "@/features/auth/lib/authConstants";
 import { permission } from "@/features/permission/lib/permission";
 import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
 
@@ -39,12 +36,6 @@ export function withLogin(middleware: NextMiddleware) {
   return async (request: NextRequest, event: NextFetchEvent) => {
     const { nextUrl } = request;
     const { pathname } = nextUrl;
-
-    const isApiAuthRoute = pathname.startsWith(API_AUTH_PREFIX);
-
-    if (isApiAuthRoute) {
-      return middleware(request, event);
-    }
 
     // 認証の実行
     return withPermissionAll(

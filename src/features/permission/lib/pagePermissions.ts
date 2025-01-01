@@ -1,4 +1,5 @@
 import {
+  DEFAULT_ACCESS_ALLOWED,
   protectedPaths,
   roleHierarchy,
 } from "@/features/permission/pagePermissionsConfig";
@@ -45,7 +46,36 @@ const pagePermissions: PagePermission[] = Object.entries(protectedPaths)
     }
 
     return acc;
-  }, []);
+  }, [])
+  .sort((a, b) => b.path.length - a.path.length);
+
+/**
+ * Converts an array of page permissions to a Map for faster lookups
+ *
+ * @example
+ * Input:
+ * ```ts
+ * [
+ *   { path: '/admin', allowedRoles: ['admin'] },
+ *   { path: '/user', allowedRoles: ['user', 'admin'] }
+ * ]
+ * ```
+ * Output:
+ * ```ts
+ * Map {
+ *   '/admin' => ['admin'],
+ *   '/user' => ['user', 'admin']
+ * }
+ * ```
+ *
+ * @returns A `Map` where the key is the path and the value is the array of roles.
+ */
+const permissionMap = new Map<string, Role[]>(
+  pagePermissions.map((permission) => [
+    permission.path,
+    permission.allowedRoles,
+  ]),
+);
 
 /**
  * Checks if a given role is allowed to access a specific path based on permissions.
@@ -56,18 +86,11 @@ const pagePermissions: PagePermission[] = Object.entries(protectedPaths)
  * @returns `true` if the role is allowed, otherwise `false`.
  */
 export const canAccessPage = (path: string, role: Role): boolean => {
-  // Check if the path starts with any defined path and if the role is allowed
-  const match = pagePermissions.find((permission) => {
-    const basePath = permission.path;
-
-    return path === basePath || path.startsWith(`${basePath}/`);
-  });
-
-  // If a match is found, check if the role is included in the allowed roles
-  if (match) {
-    return match.allowedRoles.includes(role);
+  for (const [basePath, allowedRoles] of permissionMap) {
+    if (path === basePath || path.startsWith(`${basePath}/`)) {
+      return allowedRoles.includes(role);
+    }
   }
 
-  // If no match is found, allow access by default
-  return true;
+  return DEFAULT_ACCESS_ALLOWED;
 };

@@ -1,3 +1,7 @@
+import {
+  API_AUTH_PREFIX,
+  LOGIN_REDIRECT,
+} from "@/features/auth/lib/authConstants";
 import { Role } from "@/types/next-auth";
 
 /**
@@ -13,9 +17,16 @@ export const roleHierarchy: Record<Role, Role[]> = {
  * Defines the protected paths for each role.
  */
 export const protectedPaths: Record<Role, string[]> = {
-  guest: [],
+  guest: process.env.GUEST_PROTECTED_PATHS
+    ? process.env.GUEST_PROTECTED_PATHS.split(",")
+    : [LOGIN_REDIRECT, API_AUTH_PREFIX],
   user: process.env.USER_PROTECTED_PATHS
     ? process.env.USER_PROTECTED_PATHS.split(",")
     : ["/", "/quiz", "/api"],
   admin: ["/admin", "/api/admin"],
 } as const;
+
+/**
+ * Default access policy for paths not explicitly defined in the permission map.
+ */
+export const DEFAULT_ACCESS_ALLOWED = false;
