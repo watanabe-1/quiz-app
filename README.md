@@ -155,7 +155,8 @@ NEXT_PUBLIC_PROTOCOL=https
 BLACKLISTED_IPS=192.168.1.1
 
 # アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）
-ALLOWED_COUNTRIES=JP
+# 設定したリージョンの国も許可する必要がある(例:シンガポールリージョンの場合はSG)
+ALLOWED_COUNTRIES=JP,SG
 ```
 
 ## パスワードのハッシュ化
