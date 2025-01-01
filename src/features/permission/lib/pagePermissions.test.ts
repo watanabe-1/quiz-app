@@ -4,7 +4,7 @@ import { canAccessPage } from "@/features/permission/lib/pagePermissions";
 jest.mock("@/features/permission/pagePermissionsConfig", () => {
   /** Mock data for testing */
   const mockProtectedPaths = {
-    user: ["/user/articles", "/user/review"],
+    user: ["/", "/user/articles", "/user/review"],
     admin: ["/admin/dashboard", "/admin/settings"],
   };
 
@@ -22,15 +22,18 @@ jest.mock("@/features/permission/pagePermissionsConfig", () => {
 
 describe("canAccessPage", () => {
   it("should allow access to a path if the role is explicitly allowed", () => {
+    expect(canAccessPage("/", "admin")).toBe(true);
     expect(canAccessPage("/admin/dashboard", "admin")).toBe(true);
     expect(canAccessPage("/admin/dashboard/test", "admin")).toBe(true);
     expect(canAccessPage("/user/articles", "user")).toBe(true);
+    expect(canAccessPage("/", "user")).toBe(true);
   });
 
   it("should deny access to a path if the role is not allowed", () => {
     expect(canAccessPage("/admin/dashboard", "guest")).toBe(false);
     expect(canAccessPage("/admin/dashboard/test", "guest")).toBe(false);
     expect(canAccessPage("/user/articles", "guest")).toBe(false);
+    expect(canAccessPage("/", "guest")).toBe(false);
   });
 
   it("should allow access to a path by default if no matching regex is found", () => {
