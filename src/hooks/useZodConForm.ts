@@ -23,7 +23,7 @@ interface UseZodConFormOptions<Schema extends SchemaConstraint> {
    * @param data - The submitted form data.
    * @returns A promise resolving to the new form state.
    */
-  action: ServerActionHandler;
+  action: ServerActionHandler<Schema>;
 
   /**
    * Default values for the form fields.

@@ -5,7 +5,7 @@ import { ZodSchema } from "zod";
 import { LOGIN_ROUTE } from "@/features/auth/lib/authConstants";
 import { permission } from "@/features/permission/lib/permission";
 import { withPermissionAll } from "@/features/permission/lib/withPermissionAll";
-import { FormState } from "@/types/conform";
+import { FormState, RestrictedFormData } from "@/types/conform";
 
 /**
  * Extracts the successful submission type from a generic submission.
@@ -45,11 +45,14 @@ export function createServerAction<T>(
   accessPath: string,
   callback: ServerActionCallback<T>,
 ) {
-  return async (prevState: FormState, data: FormData): Promise<FormState> => {
+  return async (
+    prevState: FormState,
+    data: RestrictedFormData<T>,
+  ): Promise<FormState> => {
     return withPermissionAll(
       async () => {
         // Parse and validate the form data using the Zod schema
-        const submission = await parseWithZod(data, {
+        const submission = parseWithZod(data as FormData, {
           schema: schema,
         });
 

@@ -135,6 +135,62 @@ export type FileMimeType =
   | ""; // For unknown file formats, an empty string ("") is used
 
 /**
+ * A type-safe extension of the FormData interface that restricts keys and values
+ * based on the generic type parameter `T`.
+ * @template T - An object type that defines the keys and value types for the FormData instance.
+ */
+export interface RestrictedFormData<T> extends FormData {
+  /**
+   * Appends a new value onto an existing key, or adds the key if it does not already exist.
+   * @param key - The key of the form data. Must be a key of `T`.
+   * @param value - The value to append. If the type of the value is Blob, it will be added as-is.
+   *                Otherwise, it will be converted to a string.
+   */
+  append<Key extends keyof T>(
+    key: Key,
+    value: T[Key] extends Blob ? T[Key] : string,
+  ): void;
+
+  /**
+   * Retrieves the first value associated with the specified key.
+   * @param key - The key of the form data. Must be a key of `T`.
+   * @returns The first value associated with the key, or `null` if the key does not exist.
+   */
+  get<Key extends keyof T>(key: Key): FormDataEntryValue | null;
+
+  /**
+   * Retrieves all values associated with the specified key.
+   * @param key - The key of the form data. Must be a key of `T`.
+   * @returns An array of all values associated with the key.
+   */
+  getAll<Key extends keyof T>(key: Key): FormDataEntryValue[];
+
+  /**
+   * Deletes all values associated with the specified key.
+   * @param key - The key of the form data. Must be a key of `T`.
+   */
+  delete<Key extends keyof T>(key: Key): void;
+
+  /**
+   * Checks if a key exists in the FormData instance.
+   * @param key - The key of the form data. Must be a key of `T`.
+   * @returns `true` if the key exists, `false` otherwise.
+   */
+  has<Key extends keyof T>(key: Key): boolean;
+
+  /**
+   * Sets a new value for a key, overwriting any existing value.
+   * @param key - The key of the form data. Must be a key of `T`.
+   * @param value - The value to set. If the type of the value is Blob, it will be added as-is.
+   *                Otherwise, it will be converted to a string.
+   */
+  set<Key extends keyof T>(
+    key: Key,
+    value: T[Key] extends Blob ? T[Key] : string,
+  ): void;
+}
+
+/**
  * Type definition for a server action function that processes form data.
  *
  * This function takes the current form state and new form data as input,
@@ -145,7 +201,7 @@ export type FileMimeType =
  * @param data - The new data to be processed.
  * @returns A Promise resolving to the updated form state.
  */
-export type ServerActionHandler = (
+export type ServerActionHandler<T> = (
   prevState: FormState,
-  data: FormData,
+  data: RestrictedFormData<T>,
 ) => Promise<FormState>;
