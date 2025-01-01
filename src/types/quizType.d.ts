@@ -136,9 +136,101 @@ interface RequestHeaders {
 }
 
 /**
+ * Represents the headers specific to Vercel's edge network.
+ */
+interface VercelRequestHeaders {
+  /**
+   * The deployment URL for the current request.
+   * Example: "my-app.vercel.app"
+   */
+  "x-vercel-deployment-url"?: string;
+
+  /**
+   * The region where the deployment is running.
+   * Example: "iad1" (for Washington D.C.)
+   */
+  "x-vercel-deployment-region"?: string;
+
+  /**
+   * The estimated city of the client based on IP geolocation.
+   * Example: "New York"
+   */
+  "x-vercel-ip-city"?: string;
+
+  /**
+   * The estimated country code of the client based on IP geolocation.
+   * Uses ISO 3166-1 alpha-2 format.
+   * Example: "US" for the United States
+   */
+  "x-vercel-ip-country"?: string;
+
+  /**
+   * The estimated region code of the client based on IP geolocation.
+   * Uses ISO 3166-2 format.
+   * Example: "NY" for New York
+   */
+  "x-vercel-ip-country-region"?: string;
+
+  /**
+   * The estimated latitude of the client based on IP geolocation.
+   * Example: "40.7128"
+   */
+  "x-vercel-ip-latitude"?: string;
+
+  /**
+   * The estimated longitude of the client based on IP geolocation.
+   * Example: "-74.0060"
+   */
+  "x-vercel-ip-longitude"?: string;
+
+  /**
+   * The estimated timezone of the client based on IP geolocation.
+   * Example: "America/New_York"
+   */
+  "x-vercel-ip-timezone"?: string;
+
+  /**
+   * The IP address of the client if proxied through another server.
+   * Example: "192.0.2.1"
+   */
+  "x-vercel-proxied-for"?: string;
+
+  /**
+   * The forwarded IP address of the client. If multiple proxies are involved,
+   * the value will be a comma-separated list of IPs.
+   * Example: "192.0.2.1,203.0.113.5"
+   */
+  "x-vercel-forwarded-for"?: string;
+
+  /**
+   * A unique identifier for the request.
+   * Example: "iad1:xyz123"
+   */
+  "x-vercel-id"?: string;
+
+  /**
+   * The cache status for the request.
+   * Possible values:
+   * - "MISS": The request was not found in the cache.
+   * - "HIT": The request was served from the cache.
+   * - "STALE": The cache entry was stale and refreshed.
+   * - "REVALIDATED": The cache entry was revalidated with the origin.
+   */
+  "x-vercel-cache"?: "MISS" | "HIT" | "STALE" | "REVALIDATED";
+
+  /**
+   * Information about the edge node that processed the request.
+   * Example: "iad1/12345"
+   */
+  "x-vercel-edge"?: string;
+}
+
+/**
  * Extends `RequestHeaders` with additional custom headers for specific use cases.
  */
-export interface CustomizableRequestHeaders extends RequestHeaders {
+export interface CustomizableRequestHeaders
+  extends VercelRequestHeaders,
+    RequestHeaders {
   /** Custom header representing the full URL of the request. */
   "x-url"?: string;
   /** Custom header representing the pathname portion of the URL. */

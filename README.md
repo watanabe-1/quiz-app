@@ -45,6 +45,8 @@
 - `NEXTAUTH_SECRET`: Auth.js のシークレットキー。
 - `AUTH_TRUST_HOST`:Auth.js の"trust host"設定。reverse proxy からの X-Forwarded-Host header の値を "trust" する。self-hosted な環境では、"trust host" を有効化させる必要あり。
 - `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用するプロトコル。
+- `BLACKLISTED_IPS`: アクセスを拒否するIPアドレスのリスト（カンマ区切り）。
+- `ALLOWED_COUNTRIES`: アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）。
 
 - `POSTGRES_～`: DB 接続用 URL。
 
@@ -85,6 +87,12 @@ AUTH_TRUST_HOST=true
 
 # URL 作成に使用するプロトコル
 NEXT_PUBLIC_PROTOCOL=http
+
+# アクセスを拒否するIPアドレスのリスト（カンマ区切り）
+BLACKLISTED_IPS=192.168.1.1
+
+# アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）
+ALLOWED_COUNTRIES=JP
 ```
 
 ### `.env` ファイルの例
@@ -142,6 +150,12 @@ NEXTAUTH_SECRET=your-very-secure-secret-key
 
 # URL 作成に使用するプロトコル
 NEXT_PUBLIC_PROTOCOL=https
+
+# アクセスを拒否するIPアドレスのリスト（カンマ区切り）
+BLACKLISTED_IPS=192.168.1.1
+
+# アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）
+ALLOWED_COUNTRIES=JP
 ```
 
 ## パスワードのハッシュ化
