@@ -1,6 +1,7 @@
 import { withSentryConfig } from "@sentry/nextjs";
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   serverExternalPackages: ["pdf-parse"],
   experimental: {
     serverActions: {
@@ -13,13 +14,10 @@ export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
-  // eslint-disable-next-line no-undef
   org: process.env.SENTRY_ORG,
-  // eslint-disable-next-line no-undef
   project: process.env.SENTRY_PROJECT,
 
   // Only print logs for uploading source maps in CI
-  // eslint-disable-next-line no-undef
   silent: !process.env.CI,
 
   // For all available options, see:
