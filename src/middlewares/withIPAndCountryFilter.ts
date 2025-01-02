@@ -77,9 +77,11 @@ const allowedCountries = (process.env.ALLOWED_COUNTRIES || "")
  */
 export function withIPAndCountryFilter(middleware: NextMiddleware) {
   return async (request: NextRequest, event: NextFetchEvent) => {
-    const headersProxy = await createHeadersProxy(request);
-    // IPアドレスを取得
-    const ip = headersProxy["x-forwarded-for"];
+    // IPアドレス、国情報を取得（Vercel環境などで自動的に付与されるヘッダー）を取得
+    const { "x-forwarded-for": ip, "x-vercel-ip-country": country } =
+      await createHeadersProxy(request);
+
+    // ipがブラックリストに入っているか判定
     if (!ip || blacklist.has(ip)) {
       return NextResponse.json(
         { message: "Access denied: Blacklisted IP" },
@@ -87,9 +89,7 @@ export function withIPAndCountryFilter(middleware: NextMiddleware) {
       );
     }
 
-    // 国情報を取得（Vercel環境などで自動的に付与されるヘッダー）
     // 国情報が取得できなかった場合は素通り（基本的にはローカル環境を想定）
-    const country = headersProxy["x-vercel-ip-country"];
     if (country && !allowedCountries.includes(country)) {
       return NextResponse.json(
         { message: "Access denied: Restricted country" },
