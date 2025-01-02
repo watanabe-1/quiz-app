@@ -44,3 +44,6 @@ data/*
 
 # git
 generated-prompt.txt
+
+# Sentry Config File
+.env.sentry-build-plugin

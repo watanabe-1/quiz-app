@@ -25,6 +25,7 @@
    - [テスト関連](#テスト関連)
    - [データベースマイグレーション](#データベースマイグレーション)
    - [その他のスクリプト](#その他のスクリプト)
+8. [エラー監視とトラッキング](#エラー監視とトラッキング)
 
 ---
 
@@ -47,6 +48,10 @@
 - `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用するプロトコル。
 - `BLACKLISTED_IPS`: アクセスを拒否するIPアドレスのリスト（カンマ区切り）。
 - `ALLOWED_COUNTRIES`: アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）。
+- `SENTRY_AUTH_TOKEN`: SENTRY用のアクセストークン。
+- `NEXT_PUBLIC_SENTRY_DSN`: SENTRY用のDSN。
+- `SENTRY_PROJECT`: SENTRY用のPJ。
+- `SENTRY_ORG`: SENTRY用の所属名。
 
 - `POSTGRES_～`: DB 接続用 URL。
 
@@ -93,6 +98,18 @@ BLACKLISTED_IPS=192.168.1.1
 
 # アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）
 ALLOWED_COUNTRIES=JP
+
+# SENTRY用のアクセストークン
+SENTRY_AUTH_TOKEN=your-sentry-auth-token
+
+# SENTRY用のDSN
+NEXT_PUBLIC_SENTRY_DSN=your-sentry-dsn
+
+# SENTRY用のPJ
+SENTRY_PROJECT=your-sentry-project
+
+# SENTRY用の所属名
+SENTRY_ORG=your-sentry-org
 ```
 
 ### `.env` ファイルの例
@@ -157,6 +174,18 @@ BLACKLISTED_IPS=192.168.1.1
 # アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）
 # 設定したリージョンの国も許可する必要がある(例:シンガポールリージョンの場合はSG)
 ALLOWED_COUNTRIES=JP,SG
+
+# SENTRY用のアクセストークン
+SENTRY_AUTH_TOKEN=your-sentry-auth-token
+
+# SENTRY用のDSN
+NEXT_PUBLIC_SENTRY_DSN=your-sentry-dsn
+
+# SENTRY用のPJ
+SENTRY_PROJECT=your-sentry-project
+
+# SENTRY用の所属名
+SENTRY_ORG=your-sentry-org
 ```
 
 ## パスワードのハッシュ化
@@ -314,3 +343,7 @@ Prisma クライアントを生成し、`prisma db push` を使用してデー�
 #### `npm run generate:diff-prompt`
 
 `node generatePromptFromGitDiff.mjs` を実行して、Git の差分からプロンプトを生成します。現在の差分をもとに ChatGPT 用のプロンプトを作成するために使用します。
+
+## エラー監視とトラッキング
+
+このプロジェクトでは、エラー監視&トラッキングにSENTRYを使用しています。SENTRYの設定関係は[ここ](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/)をご確認ください。SENTRYにログインした状態で確認すると自身にあった設定例を表示してくれます。
