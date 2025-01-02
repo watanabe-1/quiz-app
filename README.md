@@ -10,6 +10,8 @@
    - [`.env` ファイルの例](#env-ファイルの例)
    - [`.env.test` ファイルの例](#envtest-ファイルの例)
 2. [環境変数の設定 - Vercel](#環境変数の設定---vercel)
+   - [データベース (Vercel Postgres)](#データベース-vercel-postgres)
+   - [エラートラッキング (Sentry)](#エラートラッキング-sentry)
    - [Vercel 環境変数の例](#vercel-環境変数の例)
 3. [パスワードのハッシュ化](#パスワードのハッシュ化)
    - [ハッシュ化スクリプトの実行方法](#ハッシュ化スクリプトの実行方法)
@@ -48,10 +50,10 @@
 - `NEXT_PUBLIC_PROTOCOL`: URL 作成に使用するプロトコル。
 - `BLACKLISTED_IPS`: アクセスを拒否するIPアドレスのリスト（カンマ区切り）。
 - `ALLOWED_COUNTRIES`: アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）。
-- `SENTRY_AUTH_TOKEN`: SENTRY用のアクセストークン。
-- `NEXT_PUBLIC_SENTRY_DSN`: SENTRY用のDSN。
-- `SENTRY_PROJECT`: SENTRY用のPJ。
-- `SENTRY_ORG`: SENTRY用の所属名。
+- `SENTRY_AUTH_TOKEN`: Sentry用のアクセストークン。
+- `NEXT_PUBLIC_SENTRY_DSN`: Sentry用のDSN。
+- `SENTRY_PROJECT`: Sentry用のPJ。
+- `SENTRY_ORG`: Sentry用の所属名。
 
 - `POSTGRES_～`: DB 接続用 URL。
 
@@ -99,16 +101,16 @@ BLACKLISTED_IPS=192.168.1.1
 # アクセスを許可する国コードのリスト（ISO 3166-1 alpha-2形式、カンマ区切り）
 ALLOWED_COUNTRIES=JP
 
-# SENTRY用のアクセストークン
+# Sentry用のアクセストークン
 SENTRY_AUTH_TOKEN=your-sentry-auth-token
 
-# SENTRY用のDSN
+# Sentry用のDSN
 NEXT_PUBLIC_SENTRY_DSN=your-sentry-dsn
 
-# SENTRY用のPJ
+# Sentry用のPJ
 SENTRY_PROJECT=your-sentry-project
 
-# SENTRY用の所属名
+# Sentry用の所属名
 SENTRY_ORG=your-sentry-org
 ```
 
@@ -136,7 +138,15 @@ POSTGRES_URL_NON_POOLING="postgresql://${username}:${password}@localhost:${port}
 
 ## 環境変数の設定 - Vercel
 
-Vercel にデプロイする場合のサンプルです。実際の値に置き換えて環境変数を設定してください。
+Vercel にデプロイする際の環境変数設定について説明します。以下の手順を参考に、実際の値を設定してください。
+
+### データベース (Vercel Postgres)
+
+データベースに関する環境変数は、`Vercel Postgres` を作成し、プロジェクトと紐付けることで自動的に設定されます。手動で設定する必要はありません。
+
+### エラートラッキング (Sentry)
+
+Sentry に関する環境変数も、Vercel 上でプロジェクトと紐付けることで自動的に設定されます。こちらも手動設定の必要はありません。
 
 ### Vercel 環境変数の例
 
@@ -175,17 +185,6 @@ BLACKLISTED_IPS=192.168.1.1
 # 設定したリージョンの国も許可する必要がある(例:シンガポールリージョンの場合はSG)
 ALLOWED_COUNTRIES=JP,SG
 
-# SENTRY用のアクセストークン
-SENTRY_AUTH_TOKEN=your-sentry-auth-token
-
-# SENTRY用のDSN
-NEXT_PUBLIC_SENTRY_DSN=your-sentry-dsn
-
-# SENTRY用のPJ
-SENTRY_PROJECT=your-sentry-project
-
-# SENTRY用の所属名
-SENTRY_ORG=your-sentry-org
 ```
 
 ## パスワードのハッシュ化
