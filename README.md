@@ -78,7 +78,7 @@ USER_PASSWORD_HASH=\$2b\$10\$rIyGkgOR4haBw3q3engi4uy7q.U1gbHfFx/Hj9C2BqodjJ7PV6J
 LOG_IN_PAGE=/auth/login
 
 # GUEST権限の認証が必要なパスのリスト（カンマ区切り）
-GUEST_PROTECTED_PATHS=/auth/login,/api/auth
+GUEST_PROTECTED_PATHS=/auth/login,/api/auth,/monitoring
 
 # USER権限の認証が必要なパスのリスト（カンマ区切り）
 USER_PROTECTED_PATHS=/,/quiz,/api
@@ -167,7 +167,7 @@ USER_PASSWORD_HASH=$2b$10$eA9N4hUuKS1NPjoOi1Mn2e2A0wjHaxVwc6UmJhwcniHc5oIH.23wC
 LOG_IN_PAGE=/auth/login
 
 # GUEST権限の認証が必要なパスのリスト（カンマ区切り）
-GUEST_PROTECTED_PATHS=/auth/login,/api/auth
+GUEST_PROTECTED_PATHS=/auth/login,/api/auth,/monitoring
 
 # 認証が必要なパス（カンマ区切り）
 USER_PROTECTED_PATHS=/,/quiz,/api
