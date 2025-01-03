@@ -1,9 +1,10 @@
 import { chainMiddlewares } from "@/middlewares/chainMiddlewares";
-import { withIPAndCountryFilter } from "@/middlewares/withIPAndCountryFilter";
+import { withCountryFilter } from "@/middlewares/withCountryFilter";
+import { withIPFilter } from "@/middlewares/withIPFilter";
 import { withLogin } from "@/middlewares/withLogin";
 
 // ミドルウェアを連結
-export default chainMiddlewares([withIPAndCountryFilter, withLogin]);
+export default chainMiddlewares([withCountryFilter, withIPFilter, withLogin]);
 
 export const config = {
   matcher: [
