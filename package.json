@@ -13,7 +13,7 @@
     "migrate:test": "dotenv -e .env.test -- prisma migrate reset -f",
     "inspect": "npx eslint --inspect-config",
     "hash:password": "node hashPassword.mjs",
-    "generate:paths": "node generateRoutes.mjs ./src/app ./src/lib/path.ts one false",
+    "generate:paths": "node --experimental-strip-types --experimental-transform-types --experimental-detect-module --no-warnings=ExperimentalWarning generateClient.ts  ./src/app ./src/lib/path.ts one false",
     "generate:diff-prompt": "node generatePromptFromGitDiff.mjs"
   },
   "dependencies": {
