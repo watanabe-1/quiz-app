@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run generate:paths && set NODE_OPTIONS=--inspect && next dev",
-    "build": "npm run generate:paths && npm run migrate && next build",
+    "dev": "npm run generate:rpc && set NODE_OPTIONS=--inspect && next dev",
+    "build": "npm run generate:rpc && npm run migrate && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
@@ -13,7 +13,7 @@
     "migrate:test": "dotenv -e .env.test -- prisma migrate reset -f",
     "inspect": "npx eslint --inspect-config",
     "hash:password": "node hashPassword.mjs",
-    "generate:paths": "node --experimental-strip-types --experimental-transform-types --experimental-detect-module --no-warnings=ExperimentalWarning generateClient.ts  ./src/app ./src/lib/path.ts one false",
+    "generate:rpc": "node --experimental-strip-types --experimental-transform-types --experimental-detect-module --no-warnings=ExperimentalWarning scripts/generateRpcClient/script.ts  ./src/app ./src/lib/client/rpc.ts",
     "generate:diff-prompt": "node generatePromptFromGitDiff.mjs"
   },
   "dependencies": {
