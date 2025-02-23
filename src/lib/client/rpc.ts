@@ -49,6 +49,7 @@ interface UrlResult<TQuery = QueryParams> {
   query: TQuery;
   hash?: string;
   path: string;
+  relativePath: string;
 }
 
 // `$url` を `UsedAsProperty` が `true` の場合は削除する
@@ -143,6 +144,7 @@ const createUrl = (
     query: params,
     hash: url?.hash,
     path: `${baseUrl}/${dynamicPath}${buildUrlSuffix(url)}`,
+    relativePath: `/${dynamicPath}${buildUrlSuffix(url)}`,
   });
 };
 

@@ -11,7 +11,7 @@ export const updateQuiz = createServerAction(
   questionDataSchema,
   // dynamic パラメータにはダミー値を設定
   client.admin._qualification("d")._grade("d")._year("d").edit._id("d").$url()
-    .path,
+    .relativePath,
   async (submission) => {
     const value = submission.value;
     const { qualification, grade, year, questionId } = value;

@@ -22,7 +22,7 @@ import {
 
 export const uploadBcAns = createServerAction(
   uploadBcSchema,
-  client.admin.upload.businessCareer.$url().path,
+  client.admin.upload.businessCareer.$url().relativePath,
   async (submission) => {
     const { file } = submission.value;
 

@@ -9,7 +9,7 @@ import { createServerAction } from "@/lib/createServerAction";
 
 export const login = createServerAction(
   loginSchema,
-  client.auth.login.$url().path,
+  client.auth.login.$url().relativePath,
   async (submission) => {
     const { username, password } = submission.value;
 

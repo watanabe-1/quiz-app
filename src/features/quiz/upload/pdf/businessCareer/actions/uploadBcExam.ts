@@ -16,7 +16,7 @@ import { saveQuestions } from "@/services/quizService";
 
 export const uploadBcExam = createServerAction(
   uploadBcSchema,
-  client.admin.upload.businessCareer.$url().path,
+  client.admin.upload.businessCareer.$url().relativePath,
   async (submission) => {
     const { file } = submission.value;
 

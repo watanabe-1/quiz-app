@@ -9,7 +9,7 @@ import { QuestionData } from "@/types/quizType";
 
 export const uploadQuiz = createServerAction(
   uploadQuizFormSchema,
-  client.admin.upload.$url().path,
+  client.admin.upload.$url().relativePath,
   async (submission) => {
     const { qualification, grade, year, file } = submission.value;
 

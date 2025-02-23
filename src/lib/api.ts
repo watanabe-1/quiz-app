@@ -138,15 +138,6 @@ export async function fetchGetQuestionsByCategory(
   year: string,
   category: string,
 ): Promise<QuestionData[]> {
-  console.log(
-    client.api.questions
-      ._qualification(qualification)
-      ._grade(grade)
-      ._year(year)
-      ._category(category)
-      .$url().path,
-  );
-
   return fetch(
     client.api.questions
       ._qualification(qualification)
