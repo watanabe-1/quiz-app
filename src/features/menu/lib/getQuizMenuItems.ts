@@ -5,14 +5,8 @@ import {
   fetchGetCategories,
   fetchGetQuestionsByCategory,
 } from "@/lib/api";
+import { client } from "@/lib/client";
 import { ALL_CATEGORY } from "@/lib/constants";
-import {
-  path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did,
-  path_quiz_Dqualification,
-  path_quiz_Dqualification_Dgrade,
-  path_quiz_Dqualification_Dgrade_Dyear,
-  path_quiz_Dqualification_Dgrade_Dyear_Dcategory,
-} from "@/lib/path";
 import { MenuItem } from "@/types/quizType";
 
 /**
@@ -27,7 +21,8 @@ export const parseQuizCurrentUrl = (
   year: string;
   category: string;
 } | null => {
-  const match = path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did.match(url);
+  const match =
+    client.quiz._qualification._grade._year._category._id.$match(url);
   if (match) {
     const { qualification, grade, year, category } = match;
 
@@ -47,7 +42,7 @@ export const getQualificationItems = async (): Promise<MenuItem[]> => {
 
       return {
         name: qualification,
-        href: path_quiz_Dqualification(qualification).$url().path,
+        href: client.quiz._qualification(qualification).$url().path,
         children: yearItems,
       };
     }),
@@ -69,7 +64,8 @@ export const getGradeItemsByQualification = async (
 
       return {
         name: grade,
-        href: path_quiz_Dqualification_Dgrade(qualification, grade).$url().path,
+        href: client.quiz._qualification(qualification)._grade(grade).$url()
+          .path,
         children: yearsItems,
       };
     }),
@@ -96,11 +92,11 @@ export const getYearItemsByQualificationAndGrade = async (
 
       return {
         name: year,
-        href: path_quiz_Dqualification_Dgrade_Dyear(
-          qualification,
-          grade,
-          year,
-        ).$url().path,
+        href: client.quiz
+          ._qualification(qualification)
+          ._grade(grade)
+          ._year(year)
+          .$url().path,
         children: categoryItems,
       };
     }),
@@ -118,12 +114,12 @@ export const getCategoryItemsByGradeAndYear = async (
 
   return allCategories.map((category) => ({
     name: category === ALL_CATEGORY ? "全ての問題" : category,
-    href: path_quiz_Dqualification_Dgrade_Dyear_Dcategory(
-      qualification,
-      grade,
-      year,
-      category,
-    ).$url().path,
+    href: client.quiz
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      .$url().path,
   }));
 };
 
@@ -145,12 +141,12 @@ export const getCurrentQuestionItems = async (
 
   return questions.map((question) => ({
     name: `問題 ${question.questionId}`,
-    href: path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
-      qualification,
-      grade,
-      year,
-      category,
-      question.questionId,
-    ).$url().path,
+    href: client.quiz
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      ._id(question.questionId)
+      .$url().path,
   }));
 };

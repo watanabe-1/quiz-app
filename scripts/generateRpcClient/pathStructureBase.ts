@@ -21,6 +21,7 @@ type FetcherOptions<TBody = unknown> = {
 };
 
 type QueryParams<T = Record<string, string | number>> = T;
+type MutchResult<T = Record<string, string>> = T;
 
 type UrlOptions<
   TQuery = QueryParams,
@@ -41,9 +42,9 @@ type PathProxy<
   T,
   UsedAsProperty extends boolean = false,
 > = UsedAsProperty extends true
-  ? { $match: (path: string) => QueryParams | null }
+  ? { $match: (path: string) => MutchResult | null }
   : {
-      $match: (path: string) => QueryParams | null;
+      $match: (path: string) => MutchResult | null;
     } & (T extends { query: unknown }
       ? {
           $url: (url: UrlOptions<T["query"], true>) => UrlResult<T["query"]>;
@@ -110,61 +111,63 @@ function buildUrlSuffix(url?: UrlOptions): string {
 }
 
 const createUrl = (
-  basePath: string,
+  paths: string[],
   params: QueryParams,
   dynamicKeys: string[],
 ) => {
-  const modifiedBasePath = dynamicKeys.length > 0 ? basePath : `${basePath}/`;
+  const baseUrl = paths.shift();
+  const basePath = paths.join("/");
 
-  const path = dynamicKeys.reduce(
+  const dynamicPath = dynamicKeys.reduce(
     (acc, key) =>
       acc.replace(`/_${key}`, `/${encodeURIComponent(params[key])}`),
-    modifiedBasePath,
+    basePath,
   );
 
   return (url?: UrlOptions) => ({
-    pathname: modifiedBasePath.replace(/\/_(\w+)/g, "/[$1]"),
+    pathname: basePath.replace(/\/_(\w+)/g, "/[$1]"),
     query: params,
     hash: url?.hash,
-    path: `${path}${buildUrlSuffix(url)}`,
+    path: `${baseUrl}/${dynamicPath}${buildUrlSuffix(url)}`,
   });
 };
 
-export const createRpcClient = <T extends object>(
-  basePath: string = "",
+const createRpcProxy = <T extends object>(
+  paths: string[] = [],
   params: QueryParams = {},
   dynamicKeys: string[] = [],
 ): DynamicPathProxy<T> => {
   const proxy: unknown = new Proxy(
     (_value?: string | number) => {
       if (_value === undefined) {
-        return createRpcClient(basePath, params, dynamicKeys);
+        return createRpcProxy([...paths], params, dynamicKeys);
       }
 
-      const newKey = basePath.split("/").pop() || "";
+      const newKey = paths.at(-1) || "";
       if (newKey.startsWith("_")) {
         // 動的パラメータとして扱う
-        return createRpcClient(
-          basePath,
+        return createRpcProxy(
+          [...paths],
           { ...params, [newKey.substring(1)]: _value },
           dynamicKeys,
         );
       }
 
-      return createRpcClient(
-        `${basePath}/${encodeURIComponent(_value)}`,
+      return createRpcProxy(
+        [...paths, encodeURIComponent(_value)],
         params,
         dynamicKeys,
       );
     },
     {
-      get: (target, key: string) => {
+      get: (_, key: string) => {
         if (key === "$url") {
-          return createUrl(basePath, params, dynamicKeys);
+          return createUrl([...paths], params, dynamicKeys);
         }
 
         if (key === "$match") {
           return (path: string) => {
+            const basePath = `/${paths.slice(1).join("/")}`;
             const regexPattern = basePath.replace(/_[^/]+/g, "([^/]+)");
             const match = new RegExp(`^${regexPattern}$`).exec(path);
             if (!match) return null;
@@ -178,7 +181,7 @@ export const createRpcClient = <T extends object>(
 
         if (key === "$get" || key === "$post") {
           return async (url?: UrlOptions, options?: FetcherOptions) => {
-            const urlObj = createUrl(basePath, params, dynamicKeys)(url);
+            const urlObj = createUrl([...paths], params, dynamicKeys)(url);
             const method = key.replace(/^\$/, "").toUpperCase();
 
             const response = await fetch(urlObj.path, {
@@ -201,16 +204,19 @@ export const createRpcClient = <T extends object>(
 
         if (key.startsWith("_")) {
           // 動的パラメータとして扱う
-          return createRpcClient(`${basePath}/${key}`, params, [
+          return createRpcProxy([...paths, key], params, [
             ...dynamicKeys,
             key.substring(1),
           ]);
         }
 
-        return createRpcClient(`${basePath}/${key}`, params, dynamicKeys);
+        return createRpcProxy([...paths, key], params, dynamicKeys);
       },
     },
   );
 
   return proxy as DynamicPathProxy<T>;
 };
+
+export const createRpcClient = <T extends object>(baseUrl: string) =>
+  createRpcProxy<T>([baseUrl]);

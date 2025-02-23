@@ -1,15 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
+import { client } from "@/lib/client";
 import { FETCH_REVALIDATE } from "@/lib/constants";
-import {
-  path_api_questions,
-  path_api_questions_Dqualification,
-  path_api_questions_Dqualification_Dgrade,
-  path_api_questions_Dqualification_Dgrade_Dyear,
-  path_api_questions_Dqualification_Dgrade_Dyear_Dcategory,
-  path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did,
-} from "@/lib/path";
-import { addBaseUrl } from "@/lib/url";
 import { QuestionData } from "@/types/quizType";
 
 const TAG_QUALIFICATIONS = "qualifications";
@@ -43,7 +35,7 @@ export function revalidateTagByUpdateQuestion() {
  * @returns {Promise<string[]>} - A promise resolving to a list of qualifications.
  */
 export async function fetchGetAllQualifications(): Promise<string[]> {
-  return fetch(await addBaseUrl(path_api_questions().$url().path), {
+  return fetch(client.api.questions.$url().path, {
     method: "GET",
     next: {
       revalidate: FETCH_REVALIDATE,
@@ -63,21 +55,16 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
 export async function fetchGetGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
-  return fetch(
-    await addBaseUrl(
-      path_api_questions_Dqualification(qualification).$url().path,
-    ),
-    {
-      method: "GET",
-      next: {
-        revalidate: FETCH_REVALIDATE,
-        tags: [TAG_GRADES],
-      },
-      headers: {
-        Cookie: (await cookies()).toString(),
-      },
+  return fetch(client.api.questions._qualification(qualification).$url().path, {
+    method: "GET",
+    next: {
+      revalidate: FETCH_REVALIDATE,
+      tags: [TAG_GRADES],
     },
-  ).then((response) => response.json());
+    headers: {
+      Cookie: (await cookies()).toString(),
+    },
+  }).then((response) => response.json());
 }
 
 /**
@@ -91,10 +78,8 @@ export async function fetchGetYearsByQualificationAndGrade(
   grade: string,
 ): Promise<string[]> {
   return fetch(
-    await addBaseUrl(
-      path_api_questions_Dqualification_Dgrade(qualification, grade).$url()
-        .path,
-    ),
+    client.api.questions._qualification(qualification)._grade(grade).$url()
+      .path,
     {
       method: "GET",
       next: {
@@ -121,13 +106,11 @@ export async function fetchGetCategories(
   year: string,
 ): Promise<string[]> {
   return fetch(
-    await addBaseUrl(
-      path_api_questions_Dqualification_Dgrade_Dyear(
-        qualification,
-        grade,
-        year,
-      ).$url().path,
-    ),
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      .$url().path,
     {
       method: "GET",
       next: {
@@ -155,15 +138,22 @@ export async function fetchGetQuestionsByCategory(
   year: string,
   category: string,
 ): Promise<QuestionData[]> {
+  console.log(
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      .$url().path,
+  );
+
   return fetch(
-    await addBaseUrl(
-      path_api_questions_Dqualification_Dgrade_Dyear_Dcategory(
-        qualification,
-        grade,
-        year,
-        category,
-      ).$url().path,
-    ),
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      .$url().path,
     {
       method: "GET",
       next: {
@@ -194,15 +184,13 @@ export async function fetchGetQuestionsByCategoryAndId(
   id: number,
 ): Promise<QuestionData> {
   return fetch(
-    await addBaseUrl(
-      path_api_questions_Dqualification_Dgrade_Dyear_Dcategory_Did(
-        qualification,
-        grade,
-        year,
-        category,
-        id,
-      ).$url().path,
-    ),
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      ._id(id)
+      .$url().path,
     {
       method: "GET",
       next: {

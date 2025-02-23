@@ -6,26 +6,22 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import { useFetch } from "@/hooks/useFetch";
-import {
-  path_api_admin_exportQuestions,
-  path_api_questions,
-  path_api_questions_Dqualification,
-  path_api_questions_Dqualification_Dgrade,
-} from "@/lib/path";
+import { client } from "@/lib/client";
 
 const useQualifications = () => {
-  return useFetch<string[]>(path_api_questions().$url().path);
+  return useFetch<string[]>(client.api.questions.$url().path);
 };
 
 const useGrades = (qualification: string) => {
   return useFetch<string[]>(
-    path_api_questions_Dqualification(qualification).$url().path,
+    client.api.questions._qualification(qualification).$url().path,
   );
 };
 
 const useYears = (qualification: string, grade: string) => {
   return useFetch<string[]>(
-    path_api_questions_Dqualification_Dgrade(qualification, grade).$url().path,
+    client.api.questions._qualification(qualification)._grade(grade).$url()
+      .path,
   );
 };
 
@@ -50,7 +46,7 @@ const ExportPage = () => {
   const handleDownload = async () => {
     try {
       const response = await fetch(
-        path_api_admin_exportQuestions().$url({
+        client.api.admin.exportQuestions.$url({
           query: {
             qualification: selectedQualification,
             grade: selectedGrade,

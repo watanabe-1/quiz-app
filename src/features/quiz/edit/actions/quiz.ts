@@ -3,17 +3,14 @@
 import { redirect } from "next/navigation";
 import { questionDataSchema } from "@/features/quiz/edit/lib/schema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
+import { client } from "@/lib/client";
 import { createServerAction } from "@/lib/createServerAction";
-import {
-  path_admin_Dqualification_Dgrade_Dyear,
-  path_admin_Dqualification_Dgrade_Dyear_edit_Did,
-} from "@/lib/path";
 import { existsQuestion, saveQuestion } from "@/services/quizService";
 
 export const updateQuiz = createServerAction(
   questionDataSchema,
   // dynamic パラメータにはダミー値を設定
-  path_admin_Dqualification_Dgrade_Dyear_edit_Did("d", "d", "d", "d").$url()
+  client.admin._qualification("d")._grade("d")._year("d").edit._id("d").$url()
     .path,
   async (submission) => {
     const value = submission.value;
@@ -42,8 +39,11 @@ export const updateQuiz = createServerAction(
     revalidateTagByUpdateQuestion();
 
     redirect(
-      path_admin_Dqualification_Dgrade_Dyear(qualification, grade, year).$url()
-        .path,
+      client.admin
+        ._qualification(qualification)
+        ._grade(grade)
+        ._year(year)
+        .$url().path,
     );
   },
 );

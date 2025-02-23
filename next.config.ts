@@ -1,12 +1,20 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import { NextConfig } from "next";
 
+const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
+const url = isProd
+  ? process.env.VERCEL_PROJECT_PRODUCTION_URL
+  : process.env.VERCEL_URL;
+
 const nextConfig: NextConfig = {
   serverExternalPackages: ["pdf-parse"],
   experimental: {
     serverActions: {
       bodySizeLimit: "5mb",
     },
+  },
+  env: {
+    NEXT_PUBLIC_BASE_URL: url,
   },
 };
 

@@ -4,8 +4,8 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetYearsByQualificationAndGrade } from "@/lib/api";
+import { client } from "@/lib/client";
 import { nonLinkableSegmentsByAdmin } from "@/lib/constants";
-import { path_admin_Dqualification_Dgrade_Dyear } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -39,11 +39,11 @@ const QualificationAdminPage = async (props: { params: Params }) => {
                 <span>{year}</span>
                 <Link
                   href={
-                    path_admin_Dqualification_Dgrade_Dyear(
-                      qualification,
-                      grade,
-                      year,
-                    ).$url().path
+                    client.admin
+                      ._qualification(qualification)
+                      ._grade(grade)
+                      ._year(year)
+                      .$url().path
                   }
                   className="text-blue-600 hover:underline"
                 >

@@ -3,12 +3,7 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetAllQualifications } from "@/lib/api";
-import {
-  path_admin_export,
-  path_admin_Dqualification,
-  path_admin_upload,
-  path_admin_upload_businessCareer,
-} from "@/lib/path";
+import { client } from "@/lib/client";
 
 const AdminDashboard = async () => {
   const qualifications = await fetchGetAllQualifications();
@@ -21,19 +16,19 @@ const AdminDashboard = async () => {
           <Breadcrumb />
         </div>
         <Link
-          href={path_admin_upload().$url().path}
+          href={client.admin.upload.$url().path}
           className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのアップロード
         </Link>
         <Link
-          href={path_admin_upload_businessCareer().$url().path}
+          href={client.admin.upload.businessCareer.$url().path}
           className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのアップロード(ビジキャリPDFから)
         </Link>
         <Link
-          href={path_admin_export().$url().path}
+          href={client.admin.export.$url().path}
           className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのエクスポート
@@ -45,7 +40,7 @@ const AdminDashboard = async () => {
               <div className="flex items-center justify-between">
                 <span>{qualification}</span>
                 <Link
-                  href={path_admin_Dqualification(qualification).$url().path}
+                  href={client.admin._qualification(qualification).$url().path}
                   className="text-blue-600 hover:underline"
                 >
                   管理

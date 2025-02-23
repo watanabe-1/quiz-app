@@ -10,13 +10,13 @@ import {
 } from "@/features/quiz/upload/pdf/businessCareer/lib/bcUtils";
 import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
+import { client } from "@/lib/client";
 import { createServerAction } from "@/lib/createServerAction";
-import { path_admin_upload_businessCareer } from "@/lib/path";
 import { saveQuestions } from "@/services/quizService";
 
 export const uploadBcExam = createServerAction(
   uploadBcSchema,
-  path_admin_upload_businessCareer().$url().path,
+  client.admin.upload.businessCareer.$url().path,
   async (submission) => {
     const { file } = submission.value;
 

@@ -8,7 +8,7 @@ import {
   getQualificationItems,
   getCurrentQuestionItems,
 } from "@/features/menu/lib/getQuizMenuItems";
-import { path } from "@/lib/path";
+import { client } from "@/lib/client";
 import { MenuItem } from "@/types/quizType";
 
 // メニュー項目を取得するメイン関数
@@ -16,7 +16,7 @@ export const getMenuItems = async (currentUrl: string): Promise<MenuItem[]> => {
   const menuItems: MenuItem[] = [
     {
       name: "ホーム",
-      href: path().$url().path,
+      href: client.$url().path,
     },
   ];
 

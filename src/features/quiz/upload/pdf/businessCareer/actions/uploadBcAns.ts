@@ -12,8 +12,8 @@ import {
 } from "@/features/quiz/upload/pdf/businessCareer/lib/bcUtils";
 import { uploadBcSchema } from "@/features/quiz/upload/pdf/businessCareer/lib/uploadBcSchema";
 import { revalidateTagByUpdateQuestion } from "@/lib/api";
+import { client } from "@/lib/client";
 import { createServerAction } from "@/lib/createServerAction";
-import { path_admin_upload_businessCareer } from "@/lib/path";
 import {
   existsData,
   getQuestions,
@@ -22,7 +22,7 @@ import {
 
 export const uploadBcAns = createServerAction(
   uploadBcSchema,
-  path_admin_upload_businessCareer().$url().path,
+  client.admin.upload.businessCareer.$url().path,
   async (submission) => {
     const { file } = submission.value;
 

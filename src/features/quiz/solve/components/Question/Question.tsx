@@ -10,12 +10,12 @@ import {
   calculateAnsweredCount,
 } from "@/features/quiz/solve/components/Question/quizUtils";
 import ReportModal from "@/features/quiz/solve/components/Question/ReportModal";
+import { client } from "@/lib/client";
 import {
   createAnswerHistoryKey,
   getAnswerHistory,
   setAnswerHistory,
 } from "@/lib/localStorage";
-import { path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did } from "@/lib/path";
 import {
   AnswerHistory,
   QuestionAnswerPair,
@@ -235,13 +235,13 @@ const Question: React.FC<QuestionProps> = ({
         {prevQuestionId ? (
           <Link
             href={
-              path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
-                qualification,
-                grade,
-                year,
-                category,
-                prevQuestionId,
-              ).$url().path
+              client.quiz
+                ._qualification(qualification)
+                ._grade(grade)
+                ._year(year)
+                ._category(category)
+                ._id(prevQuestionId)
+                .$url().path
             }
             className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
@@ -253,13 +253,13 @@ const Question: React.FC<QuestionProps> = ({
         {nextQuestionId ? (
           <Link
             href={
-              path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
-                qualification,
-                grade,
-                year,
-                category,
-                nextQuestionId,
-              ).$url().path
+              client.quiz
+                ._qualification(qualification)
+                ._grade(grade)
+                ._year(year)
+                ._category(category)
+                ._id(nextQuestionId)
+                .$url().path
             }
             className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >

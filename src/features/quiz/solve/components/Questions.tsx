@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Modal from "@/components/ui/Modal";
+import { client } from "@/lib/client";
 import {
   deleteHistoryByQualificationAndYear,
   getHistoryByQualificationAndYear,
 } from "@/lib/localStorage";
-import { path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did } from "@/lib/path";
 import { isEmptyObject } from "@/lib/utils";
 import { QuestionData } from "@/types/quizType";
 
@@ -33,13 +33,13 @@ const Questions: React.FC<QuestionsProps> = ({
   const router = useRouter();
 
   const navigateToQuestionPage = (questionId: number) => {
-    const href = path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
-      qualification,
-      grade,
-      year,
-      category,
-      questionId,
-    ).$url().path;
+    const href = client.quiz
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      ._id(questionId)
+      .$url().path;
 
     router.push(href);
   };

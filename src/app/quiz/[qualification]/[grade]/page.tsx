@@ -4,8 +4,8 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetYearsByQualificationAndGrade } from "@/lib/api";
+import { client } from "@/lib/client";
 import { nonLinkableSegmentsByQuiz } from "@/lib/constants";
-import { path_quiz_Dqualification_Dgrade_Dyear } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -36,11 +36,11 @@ const YearsPage = async (props: { params: Params }) => {
               <li key={year}>
                 <Link
                   href={
-                    path_quiz_Dqualification_Dgrade_Dyear(
-                      qualification,
-                      grade,
-                      year,
-                    ).$url().path
+                    client.quiz
+                      ._qualification(qualification)
+                      ._grade(grade)
+                      ._year(year)
+                      .$url().path
                   }
                   className="block rounded bg-white p-4 shadow hover:bg-blue-50"
                 >

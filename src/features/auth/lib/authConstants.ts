@@ -1,9 +1,9 @@
-import { path, path_auth_login } from "@/lib/path";
+import { client } from "@/lib/client";
 
 /**
  * The default redirect path after logging in
  */
-const DEFAULT_LOGIN_REDIRECT = path().$url().path;
+const DEFAULT_LOGIN_REDIRECT = client.$url().path;
 
 /**
  * The redirect path after logging in
@@ -13,7 +13,7 @@ export const LOGIN_REDIRECT = DEFAULT_LOGIN_REDIRECT;
 /**
  * The default login path
  */
-const DEFAULT_LOGIN_ROUTE = path_auth_login().$url().path;
+const DEFAULT_LOGIN_ROUTE = client.auth.login.$url().path;
 
 /**
  * The login path

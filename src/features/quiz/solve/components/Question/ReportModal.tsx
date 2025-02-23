@@ -2,9 +2,9 @@ import Link from "next/link";
 import React, { FC } from "react";
 import { tv } from "tailwind-variants";
 import Modal from "@/components/ui/Modal";
+import { client } from "@/lib/client";
 import { ALL_CATEGORY } from "@/lib/constants";
 import { createAnswerHistoryKey } from "@/lib/localStorage";
-import { path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did } from "@/lib/path";
 import { AnswerHistory, QuestionAnswerPair } from "@/types/quizType";
 
 interface ReportModalProps {
@@ -89,14 +89,13 @@ const ReportModal: FC<ReportModalProps> = ({
                           qAnswer.questionId,
                         )
                       ] === qAnswer.answer;
-                    const questionLink =
-                      path_quiz_Dqualification_Dgrade_Dyear_Dcategory_Did(
-                        qualification,
-                        grade,
-                        year,
-                        category,
-                        qAnswer.questionId,
-                      ).$url().path;
+                    const questionLink = client.quiz
+                      ._qualification(qualification)
+                      ._grade(grade)
+                      ._year(year)
+                      ._category(category)
+                      ._id(qAnswer.questionId)
+                      .$url().path;
 
                     return (
                       <tr key={qAnswer.questionId} className="text-center">

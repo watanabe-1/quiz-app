@@ -2,14 +2,14 @@
 
 import { uploadQuizFormSchema } from "@/features/quiz/upload/json/lib/schema";
 import { revalidateTagByUpdateQuestions } from "@/lib/api";
+import { client } from "@/lib/client";
 import { createServerAction } from "@/lib/createServerAction";
-import { path_admin_upload } from "@/lib/path";
 import { saveQuestions } from "@/services/quizService";
 import { QuestionData } from "@/types/quizType";
 
 export const uploadQuiz = createServerAction(
   uploadQuizFormSchema,
-  path_admin_upload().$url().path,
+  client.admin.upload.$url().path,
   async (submission) => {
     const { qualification, grade, year, file } = submission.value;
 

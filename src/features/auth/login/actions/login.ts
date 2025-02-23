@@ -4,12 +4,12 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/features/auth/auth";
 import { LOGIN_REDIRECT } from "@/features/auth/lib/authConstants";
 import { loginSchema } from "@/features/auth/login/lib/logInFormSchema";
+import { client } from "@/lib/client";
 import { createServerAction } from "@/lib/createServerAction";
-import { path_auth_login } from "@/lib/path";
 
 export const login = createServerAction(
   loginSchema,
-  path_auth_login().$url().path,
+  client.auth.login.$url().path,
   async (submission) => {
     const { username, password } = submission.value;
 

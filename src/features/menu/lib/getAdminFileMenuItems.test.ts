@@ -5,13 +5,19 @@ import {
 } from "@/features/menu/lib/getAdminFileMenuItems";
 
 // モック関数を設定
-jest.mock("@/lib/path", () => ({
-  path_admin_export: jest.fn(() => ({
-    $url: () => ({ path: "/admin/export" }),
-  })),
-  path_admin_upload_businessCareer: jest.fn(() => ({
-    $url: () => ({ path: "/admin/upload/businessCareer" }),
-  })),
+jest.mock("@/lib/client", () => ({
+  client: {
+    admin: {
+      export: {
+        $url: jest.fn(() => ({ path: "/admin/export" })),
+      },
+      upload: {
+        businessCareer: {
+          $url: jest.fn(() => ({ path: "/admin/upload/businessCareer" })),
+        },
+      },
+    },
+  },
 }));
 
 describe("getAdminFileMenuItem 関数のテスト", () => {

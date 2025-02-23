@@ -1,7 +1,4 @@
-import {
-  path_admin_export,
-  path_admin_upload_businessCareer,
-} from "@/lib/path";
+import { client } from "@/lib/client";
 import { MenuItem } from "@/types/quizType";
 
 // 管理者用ファイル関連メニュー
@@ -15,7 +12,8 @@ export const getAdminFileMenuItems = (): MenuItem[] => {
 export const getAdminFileUploadMenuItem = (): MenuItem => {
   const uploadBusinessCareerMenuItem: MenuItem = {
     name: "ビジネスキャリア",
-    href: path_admin_upload_businessCareer().$url().path,
+
+    href: client.admin.upload.businessCareer.$url().path,
   };
 
   const uploadMenuItems: MenuItem = {
@@ -29,7 +27,7 @@ export const getAdminFileUploadMenuItem = (): MenuItem => {
 export const getAdminFileExportMenuItem = (): MenuItem => {
   const exportQualificationMenuItem: MenuItem = {
     name: "資格",
-    href: path_admin_export().$url().path,
+    href: client.admin.export.$url().path,
   };
 
   const exportMenuItems: MenuItem = {

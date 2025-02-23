@@ -13,6 +13,7 @@ import {
   fetchGetCategories,
   fetchGetQuestionsByCategory,
 } from "@/lib/api";
+import { client } from "@/lib/client";
 import { ALL_CATEGORY } from "@/lib/constants";
 
 // モックの設定
@@ -69,12 +70,12 @@ describe("Menu Functions", () => {
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         name: "資格A",
-        href: `/quiz/${encodeURIComponent("資格A")}`,
+        href: client.quiz._qualification("資格A").$url().path,
         children: expect.any(Array),
       });
       expect(result[1]).toEqual({
         name: "資格B",
-        href: `/quiz/${encodeURIComponent("資格B")}`,
+        href: client.quiz._qualification("資格B").$url().path,
         children: expect.any(Array),
       });
     });
@@ -91,7 +92,7 @@ describe("Menu Functions", () => {
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         name: "1級",
-        href: `/quiz/${encodeURIComponent("資格A")}/${encodeURIComponent("1級")}`,
+        href: client.quiz._qualification("資格A")._grade("1級").$url().path,
         children: expect.any(Array),
       });
     });
@@ -110,7 +111,11 @@ describe("Menu Functions", () => {
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         name: "2023",
-        href: `/quiz/${encodeURIComponent("資格A")}/${encodeURIComponent("1級")}/2023`,
+        href: client.quiz
+          ._qualification("資格A")
+          ._grade("1級")
+          ._year(2023)
+          .$url().path,
         children: expect.any(Array),
       });
     });
@@ -129,11 +134,21 @@ describe("Menu Functions", () => {
       expect(result).toHaveLength(3);
       expect(result[0]).toEqual({
         name: "全ての問題",
-        href: `/quiz/${encodeURIComponent("資格A")}/${encodeURIComponent("1級")}/2023/${encodeURIComponent(ALL_CATEGORY)}`,
+        href: client.quiz
+          ._qualification("資格A")
+          ._grade("1級")
+          ._year(2023)
+          ._category(ALL_CATEGORY)
+          .$url().path,
       });
       expect(result[1]).toEqual({
         name: "カテゴリA",
-        href: `/quiz/${encodeURIComponent("資格A")}/${encodeURIComponent("1級")}/2023/${encodeURIComponent("カテゴリA")}`,
+        href: client.quiz
+          ._qualification("資格A")
+          ._grade("1級")
+          ._year(2023)
+          ._category("カテゴリA")
+          .$url().path,
       });
     });
   });
@@ -151,11 +166,23 @@ describe("Menu Functions", () => {
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({
         name: "問題 1",
-        href: `/quiz/${encodeURIComponent("資格A")}/${encodeURIComponent("1級")}/2024/${encodeURIComponent("カテゴリA")}/1`,
+        href: client.quiz
+          ._qualification("資格A")
+          ._grade("1級")
+          ._year(2024)
+          ._category("カテゴリA")
+          ._id(1)
+          .$url().path,
       });
       expect(result[1]).toEqual({
         name: "問題 2",
-        href: `/quiz/${encodeURIComponent("資格A")}/${encodeURIComponent("1級")}/2024/${encodeURIComponent("カテゴリA")}/2`,
+        href: client.quiz
+          ._qualification("資格A")
+          ._grade("1級")
+          ._year(2024)
+          ._category("カテゴリA")
+          ._id(2)
+          .$url().path,
       });
     });
 

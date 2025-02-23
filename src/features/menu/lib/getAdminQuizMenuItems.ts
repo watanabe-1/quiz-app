@@ -4,13 +4,8 @@ import {
   fetchGetYearsByQualificationAndGrade,
   fetchGetQuestionsByCategory,
 } from "@/lib/api";
+import { client } from "@/lib/client";
 import { ALL_CATEGORY } from "@/lib/constants";
-import {
-  path_admin_Dqualification_Dgrade_Dyear_edit_Did,
-  path_admin_Dqualification,
-  path_admin_Dqualification_Dgrade,
-  path_admin_Dqualification_Dgrade_Dyear,
-} from "@/lib/path";
 import { MenuItem } from "@/types/quizType";
 
 /**
@@ -24,7 +19,7 @@ export const parseAdminQuizCurrentUrl = (
   grade: string;
   year: string;
 } | null => {
-  const match = path_admin_Dqualification_Dgrade_Dyear_edit_Did.match(url);
+  const match = client.admin._qualification._grade._year.edit._id.$match(url);
 
   if (match) {
     const { qualification, grade, year } = match;
@@ -45,7 +40,7 @@ export const getAdminQualificationItems = async (): Promise<MenuItem[]> => {
 
       return {
         name: qualification,
-        href: path_admin_Dqualification(qualification).$url().path,
+        href: client.admin._qualification(qualification).$url().path,
         children: yearItems,
       };
     }),
@@ -67,7 +62,7 @@ export const getAdminGradeItemsByQualification = async (
 
       return {
         name: grade,
-        href: path_admin_Dqualification_Dgrade(qualification, grade).$url()
+        href: client.admin._qualification(qualification)._grade(grade).$url()
           .path,
         children: yearsItems,
       };
@@ -89,11 +84,11 @@ export const getAdminYearItemsByQualificationAndGrade = async (
     years.map(async (year) => {
       return {
         name: year,
-        href: path_admin_Dqualification_Dgrade_Dyear(
-          qualification,
-          grade,
-          year,
-        ).$url().path,
+        href: client.admin
+          ._qualification(qualification)
+          ._grade(grade)
+          ._year(year)
+          .$url().path,
       };
     }),
   );
@@ -118,11 +113,11 @@ export const getAdminCurrentQuestionItems = async (
 
   return questions.map((question) => ({
     name: `問題 ${question.questionId}`,
-    href: path_admin_Dqualification_Dgrade_Dyear_edit_Did(
-      qualification,
-      grade,
-      year,
-      question.questionId,
-    ).$url().path,
+    href: client.admin
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      .edit._id(question.questionId)
+      .$url().path,
   }));
 };

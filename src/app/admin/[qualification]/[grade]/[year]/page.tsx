@@ -4,8 +4,8 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { fetchGetQuestionsByCategory } from "@/lib/api";
+import { client } from "@/lib/client";
 import { ALL_CATEGORY, nonLinkableSegmentsByAdmin } from "@/lib/constants";
-import { path_admin_Dqualification_Dgrade_Dyear_edit_Did } from "@/lib/path";
 
 type Params = Promise<{
   qualification: string;
@@ -48,12 +48,12 @@ const YearAdminPage = async (props: { params: Params }) => {
                 </span>
                 <Link
                   href={
-                    path_admin_Dqualification_Dgrade_Dyear_edit_Did(
-                      qualification,
-                      grade,
-                      year,
-                      question.questionId,
-                    ).$url().path
+                    client.admin
+                      ._qualification(qualification)
+                      ._grade(grade)
+                      ._year(year)
+                      .edit._id(question.questionId)
+                      .$url().path
                   }
                   className="text-blue-600 hover:underline"
                 >
