@@ -50,22 +50,22 @@ const parseFile = (
   // ファイルからデータを読み込む
   const fileContents = fs.readFileSync(inputFile, "utf8");
 
-  const MethodType = findCallBack(fileContents);
+  const type = findCallBack(fileContents);
 
   // Query または OptionalQuery 型が見つからない場合は終了
-  if (!MethodType) return;
+  if (!type) return;
 
   // インポートパスを生成
   const relativeImportPath = getRelativeImportPath(outputFile, inputFile);
 
   // インポート名にカウントを追加
-  const importAlias = addCnt(MethodType, MethodType);
+  const importAlias = addCnt(type, type);
 
   // 結果としてインポートに必要な情報を返す
   return {
     importName: importAlias,
-    importString: `import type { ${MethodType} as ${importAlias} } from '${relativeImportPath}';`,
-    type: typeCallBack(MethodType, importAlias),
+    importString: `import type { ${type} as ${importAlias} } from '${relativeImportPath}';`,
+    type: typeCallBack(type, importAlias),
   };
 };
 
@@ -81,7 +81,7 @@ const parseQuery = (outputFile: string, inputFile: string) => {
         ),
       );
     },
-    (_, asType) => `{${KEY_QUERY}: ${asType}}`,
+    (_, importAlias) => `{${KEY_QUERY}: ${importAlias}}`,
   );
 };
 
@@ -103,7 +103,7 @@ const parseRoute = (
         ).test(fileContents),
       );
     },
-    (type, asType) => `{ $${type.toLowerCase()}: typeof ${asType}}`,
+    (type, importAlias) => `{ $${type.toLowerCase()}: typeof ${importAlias}}`,
   );
 };
 
