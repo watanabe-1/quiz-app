@@ -24,7 +24,7 @@ const submenuStyles = tv({
 
 // メニューのコンテナスタイル
 const menuContainerStyles = tv({
-  base: "fixed right-0 top-0 z-50 flex h-full w-64 transform flex-col bg-gray-800 text-white transition-transform duration-300 ease-in-out",
+  base: "fixed top-0 right-0 z-50 flex h-full w-64 transform flex-col bg-gray-800 text-white transition-transform duration-300 ease-in-out",
   variants: {
     open: {
       true: "translate-x-0",
@@ -122,7 +122,7 @@ const Menu: React.FC = () => {
       {/* オーバーレイ */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out"
+          className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ease-in-out"
           aria-hidden="true"
           onClick={toggleMenu}
         />
