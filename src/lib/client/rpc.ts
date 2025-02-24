@@ -35,36 +35,29 @@ type FetcherOptions<TBody = unknown> = {
 type QueryParams<T = Record<string, string | number>> = T;
 type MatchResult<T = Record<string, string>> = T;
 
-type UrlOptions<
-  TQuery = QueryParams,
-  TIsRequired = false,
-> = TIsRequired extends true
-  ? { query: TQuery; hash?: string }
-  : { query?: TQuery; hash?: string };
+type UrlOptions<T = unknown> = T extends { query: unknown }
+  ? { query: T["query"]; hash?: string }
+  : { query?: QueryParams; hash?: string };
 
-interface UrlResult<TQuery = QueryParams> {
+type UrlResult<T = unknown> = {
   pathname: string;
-  query: TQuery;
-  hash?: string;
   path: string;
   relativePath: string;
-}
-
-type InferResponse<T> = TypedNextResponse<InferNextResponseType<T>>;
+} & UrlOptions<T>;
 
 // queryが指定されたときはUrlOptionsからqueryを必ず指定する
 type UrlArg<T> = T extends { query: unknown }
-  ? [url: UrlOptions<T["query"], true>]
-  : [url?: UrlOptions];
+  ? [url: UrlOptions<T>]
+  : [url?: UrlOptions<T>];
+
+type InferResponse<T> = TypedNextResponse<InferNextResponseType<T>>;
 
 // `_XX` を一度でもプロパティとして呼んだ時の型
 type PathProxyAsProperty = { $match: (path: string) => MatchResult | null };
 
 // `_XX` を一度もプロパティとして呼んでない時の型
 type PathProxyAsFunction<T> = {
-  $url: (
-    ...args: UrlArg<T>
-  ) => UrlResult<T extends { query: unknown } ? T["query"] : QueryParams>;
+  $url: (...args: UrlArg<T>) => UrlResult<T>;
 } & (T extends { $get: unknown }
   ? {
       $get: (
@@ -128,13 +121,14 @@ const createUrl = (
     basePath,
   );
 
-  return (url?: UrlOptions) => ({
-    pathname: basePath.replace(/\/_(\w+)/g, "/[$1]"),
-    query: params,
-    hash: url?.hash,
-    path: `${baseUrl}/${dynamicPath}${buildUrlSuffix(url)}`,
-    relativePath: `/${dynamicPath}${buildUrlSuffix(url)}`,
-  });
+  return (url?: UrlOptions) =>
+    ({
+      pathname: basePath.replace(/\/_(\w+)/g, "/[$1]"),
+      query: params,
+      hash: url?.hash,
+      path: `${baseUrl}/${dynamicPath}${buildUrlSuffix(url)}`,
+      relativePath: `/${dynamicPath}${buildUrlSuffix(url)}`,
+    }) as UrlResult;
 };
 
 const createRpcProxy = <T extends object>(
