@@ -46,10 +46,10 @@ type UrlArg<T> = T extends { query: unknown }
   ? [url: UrlOptions<T["query"], true>]
   : [url?: UrlOptions];
 
-// UsedAsProperty が true の場合の型
-type PathProxyAsProperty = unknown;
+// `_XX` を一度でもプロパティとして呼んだ時の型
+type PathProxyAsProperty = { $match: (path: string) => MatchResult | null };
 
-// UsedAsProperty が false の場合の型
+// `_XX` を一度もプロパティとして呼んでない時の型
 type PathProxyAsFunction<T> = {
   $url: (
     ...args: UrlArg<T>
@@ -69,32 +69,26 @@ type PathProxyAsFunction<T> = {
       }
     : unknown);
 
-// UsedAsProperty の値によらない型
-type PathProxyAsDefault = { $match: (path: string) => MatchResult | null };
-
 type PathProxy<
   T,
-  UsedAsProperty extends boolean = false,
-> = (UsedAsProperty extends true
-  ? PathProxyAsProperty
-  : PathProxyAsFunction<T>) &
-  PathProxyAsDefault;
+  TUsedAsProperty extends boolean = false,
+> = TUsedAsProperty extends true ? PathProxyAsProperty : PathProxyAsFunction<T>;
 
 // `_XX` を関数としても、プロパティとしても扱えるようにする
-type ParamFunction<T, UsedAsProperty extends boolean> = ((
+type ParamFunction<T, TUsedAsProperty extends boolean> = ((
   value: string | number,
-) => DynamicPathProxy<T, UsedAsProperty>) &
+) => DynamicPathProxy<T, TUsedAsProperty>) &
   DynamicPathProxy<T, true>; // `_XX` を一度でもプロパティとして呼んだら `$url` を無効化
 
 type IsPathProxyEnabled<T> = T extends Endpoint ? true : false;
 
-type DynamicPathProxy<T, UsedAsProperty extends boolean = false> = Omit<
+type DynamicPathProxy<T, TUsedAsProperty extends boolean = false> = Omit<
   (IsPathProxyEnabled<T> extends true
-    ? PathProxy<T, UsedAsProperty>
+    ? PathProxy<T, TUsedAsProperty>
     : unknown) & {
     [K in keyof T as K extends `$${string}` ? never : K]: K extends `_${string}`
-      ? ParamFunction<T[K], UsedAsProperty>
-      : DynamicPathProxy<T[K], UsedAsProperty>;
+      ? ParamFunction<T[K], TUsedAsProperty>
+      : DynamicPathProxy<T[K], TUsedAsProperty>;
   },
   "query"
 >;
