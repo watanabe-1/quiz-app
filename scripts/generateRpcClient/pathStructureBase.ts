@@ -39,53 +39,35 @@ interface UrlResult<TQuery = QueryParams> {
   relativePath: string;
 }
 
-// `$url` を `UsedAsProperty` が `true` の場合は削除する
+type InferResponse<T> = TypedNextResponse<InferNextResponseType<T>>;
+
+type UrlArg<T> = T extends { query: unknown }
+  ? [url: UrlOptions<T["query"], true>]
+  : [url?: UrlOptions];
+
 type PathProxy<
   T,
   UsedAsProperty extends boolean = false,
-> = UsedAsProperty extends true
-  ? { $match: (path: string) => MatchResult | null }
+> = (UsedAsProperty extends true
+  ? unknown
   : {
-      $match: (path: string) => MatchResult | null;
-    } & (T extends { query: unknown }
+      $url: (
+        ...args: UrlArg<T>
+      ) => UrlResult<T extends { query: unknown } ? T["query"] : QueryParams>;
+    } & (T extends { $get: unknown }
       ? {
-          $url: (url: UrlOptions<T["query"], true>) => UrlResult<T["query"]>;
+          $get: (
+            ...args: [...UrlArg<T>, option?: FetcherOptions]
+          ) => Promise<InferResponse<T["$get"]>>;
         }
-      : { $url: (url?: UrlOptions) => UrlResult }) &
-      (T extends { $get: unknown }
-        ? T extends { query: unknown }
-          ? {
-              $get: (
-                url: UrlOptions<T["query"], true>,
-                option?: FetcherOptions,
-              ) => Promise<TypedNextResponse<InferNextResponseType<T["$get"]>>>;
-            }
-          : {
-              $get: (
-                url?: UrlOptions,
-                option?: FetcherOptions,
-              ) => Promise<TypedNextResponse<InferNextResponseType<T["$get"]>>>;
-            }
-        : unknown) &
+      : unknown) &
       (T extends { $post: unknown }
-        ? T extends { query: unknown }
-          ? {
-              $post: (
-                url: UrlOptions<T["query"], true>,
-                option?: FetcherOptions,
-              ) => Promise<
-                TypedNextResponse<InferNextResponseType<T["$post"]>>
-              >;
-            }
-          : {
-              $post: (
-                url?: UrlOptions,
-                option?: FetcherOptions,
-              ) => Promise<
-                TypedNextResponse<InferNextResponseType<T["$post"]>>
-              >;
-            }
-        : unknown);
+        ? {
+            $post: (
+              ...args: [...UrlArg<T>, option?: FetcherOptions]
+            ) => Promise<InferResponse<T["$post"]>>;
+          }
+        : unknown)) & { $match: (path: string) => MatchResult | null };
 
 // `_XX` を関数としても、プロパティとしても扱えるようにする
 type ParamFunction<T, UsedAsProperty extends boolean> = ((
