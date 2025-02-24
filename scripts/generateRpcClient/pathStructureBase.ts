@@ -71,14 +71,10 @@ type PathProxy<
 type ParamFunction<T, TUsedAsProperty extends boolean> = ((
   value: string | number,
 ) => DynamicPathProxy<T, TUsedAsProperty>) &
-  DynamicPathProxy<T, true>; // `_XX` を一度でもプロパティとして呼んだら `$url` を無効化
-
-type IsPathProxyEnabled<T> = T extends Endpoint ? true : false;
+  DynamicPathProxy<T, true>; // `_XX` を一度でもプロパティとして呼んだらTUsedAsPropertyはtreuになる
 
 type DynamicPathProxy<T, TUsedAsProperty extends boolean = false> = Omit<
-  (IsPathProxyEnabled<T> extends true
-    ? PathProxy<T, TUsedAsProperty>
-    : unknown) & {
+  (T extends Endpoint ? PathProxy<T, TUsedAsProperty> : unknown) & {
     [K in keyof T as K extends `$${string}` ? never : K]: K extends `_${string}`
       ? ParamFunction<T[K], TUsedAsProperty>
       : DynamicPathProxy<T[K], TUsedAsProperty>;
