@@ -1,12 +1,11 @@
 import { usePathname } from "next/navigation";
-import { useFetch } from "@/hooks/useFetch";
+import { useData } from "@/hooks/useData";
 import { client } from "@/lib/client";
-import { MenuItem } from "@/types/quizType";
 
 export const useMenuItems = () => {
   const pathname = usePathname();
+  const query = { query: { path: pathname } };
+  const rpc = client.api.menu;
 
-  return useFetch<MenuItem[]>(
-    client.api.menu.$url({ query: { path: pathname } }).path,
-  );
+  return useData(() => rpc.$get(query), rpc.$url(query).path);
 };

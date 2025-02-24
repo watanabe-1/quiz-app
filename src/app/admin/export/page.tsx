@@ -5,24 +5,25 @@ import Header from "@/components/layout/Header";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
-import { useFetch } from "@/hooks/useFetch";
+import { useData } from "@/hooks/useData";
 import { client } from "@/lib/client";
 
 const useQualifications = () => {
-  return useFetch<string[]>(client.api.questions.$url().path);
+  const rpc = client.api.questions;
+
+  return useData(() => rpc.$get(), rpc.$url().path);
 };
 
 const useGrades = (qualification: string) => {
-  return useFetch<string[]>(
-    client.api.questions._qualification(qualification).$url().path,
-  );
+  const rpc = client.api.questions._qualification(qualification);
+
+  return useData(() => rpc.$get(), rpc.$url().path);
 };
 
 const useYears = (qualification: string, grade: string) => {
-  return useFetch<string[]>(
-    client.api.questions._qualification(qualification)._grade(grade).$url()
-      .path,
-  );
+  const rpc = client.api.questions._qualification(qualification)._grade(grade);
+
+  return useData(() => rpc.$get(), rpc.$url().path);
 };
 
 const ExportPage = () => {

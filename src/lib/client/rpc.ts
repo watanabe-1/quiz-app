@@ -18,7 +18,7 @@ type InferNextResponseType<T> = T extends (
   ? U
   : never;
 
-interface TypedNextResponse<T> extends NextResponse {
+export interface TypedNextResponse<T> extends NextResponse {
   json: () => Promise<T>;
 }
 

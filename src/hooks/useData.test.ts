@@ -3,7 +3,8 @@
  */
 
 import { renderHook, waitFor } from "@testing-library/react";
-import { useFetch } from "@/hooks/useFetch";
+import { useData } from "@/hooks/useData";
+import { client } from "@/lib/client";
 
 type User = {
   id: number;
@@ -11,7 +12,7 @@ type User = {
   email: string;
 };
 
-describe("useFetch", () => {
+describe("useData", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
@@ -27,7 +28,9 @@ describe("useFetch", () => {
       json: async () => mockData,
     });
 
-    const { result } = renderHook(() => useFetch<User[]>("/api/users"));
+    const { result } = renderHook(() =>
+      useData(() => client.api.questions.$get(), "/api/users"),
+    );
 
     await waitFor(() => expect(result.current.data).toEqual(mockData));
     expect(result.current.error).toBeUndefined();
@@ -35,13 +38,16 @@ describe("useFetch", () => {
   });
 
   it("should handle error on failed fetch", async () => {
+    const mockData = { error: "Failed to fetch: Internal Server Error" };
+
     // fetch の失敗ケースをモック
     (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: false,
-      statusText: "Internal Server Error",
+      json: async () => mockData,
     });
 
-    const { result } = renderHook(() => useFetch<User[]>("/api/users2"));
+    const { result } = renderHook(() =>
+      useData(() => client.api.questions.$get(), "/api/users2"),
+    );
 
     // エラーがスローされるまで待機
     await waitFor(() => expect(result.current.error).toBeDefined());
@@ -52,33 +58,5 @@ describe("useFetch", () => {
 
     expect(result.current.data).toBeUndefined();
     expect(result.current.isLoading).toBeFalsy();
-  });
-
-  it("should send a POST request with a body", async () => {
-    const mockResponse = { success: true };
-    const requestBody = { name: "New User" };
-
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockResponse,
-    });
-
-    const { result } = renderHook(() =>
-      useFetch<{ success: boolean }, typeof requestBody>("/api/create-user", {
-        method: "POST",
-        body: requestBody,
-      }),
-    );
-
-    await waitFor(() => expect(result.current.data).toEqual(mockResponse));
-    expect(result.current.error).toBeUndefined();
-    expect(result.current.isLoading).toBeFalsy();
-
-    expect(global.fetch).toHaveBeenCalledWith("/api/create-user", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
-      credentials: "include",
-    });
   });
 });
