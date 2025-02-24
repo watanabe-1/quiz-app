@@ -24,8 +24,8 @@ type FetcherOptions<TBody = unknown> = {
 type QueryParams<T = Record<string, string | number>> = T;
 type MatchResult<T = Record<string, string>> = T;
 
-type UrlOptions<T = unknown> = T extends { query: unknown }
-  ? { query: T["query"]; hash?: string }
+type UrlOptions<T = unknown> = T extends { __query: unknown }
+  ? { query: T["__query"]; hash?: string }
   : { query?: QueryParams; hash?: string };
 
 type UrlResult<T = unknown> = {
@@ -35,7 +35,7 @@ type UrlResult<T = unknown> = {
 } & UrlOptions<T>;
 
 // queryが指定されたときはUrlOptionsからqueryを必ず指定する
-type UrlArg<T> = T extends { query: unknown }
+type UrlArg<T> = T extends { __query: unknown }
   ? [url: UrlOptions<T>]
   : [url?: UrlOptions<T>];
 
@@ -83,7 +83,7 @@ type DynamicPathProxy<T, TUsedAsProperty extends boolean = false> = Omit<
       ? ParamFunction<T[K], TUsedAsProperty>
       : DynamicPathProxy<T[K], TUsedAsProperty>;
   },
-  "query"
+  "__query"
 >;
 
 function buildUrlSuffix(url?: UrlOptions): string {

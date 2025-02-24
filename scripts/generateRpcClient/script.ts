@@ -23,7 +23,7 @@ const pageFileNames = ["page.tsx", "page.jsx", "route.ts", "route.js"];
 const PATH_PATH_STRUCTURE_BASE =
   "./scripts/generateRpcClient/pathStructureBase.ts";
 const TYPE_END_POINT = "Endpoint";
-const KEY_QUERY = "query";
+const KEY_QUERY = "__query";
 
 // 連番付与
 const cntObj = {} as Record<string, number>;
