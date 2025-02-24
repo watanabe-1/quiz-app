@@ -45,18 +45,13 @@ const ExportPage = () => {
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(
-        client.api.admin.exportQuestions.$url({
-          query: {
-            qualification: selectedQualification,
-            grade: selectedGrade,
-            year: selectedYear,
-          },
-        }).path,
-        {
-          method: "GET",
+      const response = await client.api.admin.exportQuestions.$get({
+        query: {
+          qualification: selectedQualification,
+          grade: selectedGrade,
+          year: selectedYear,
         },
-      );
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

@@ -35,8 +35,7 @@ export function revalidateTagByUpdateQuestion() {
  * @returns {Promise<string[]>} - A promise resolving to a list of qualifications.
  */
 export async function fetchGetAllQualifications(): Promise<string[]> {
-  return fetch(client.api.questions.$url().path, {
-    method: "GET",
+  const res = await client.api.questions.$get(undefined, {
     next: {
       revalidate: FETCH_REVALIDATE,
       tags: [TAG_QUALIFICATIONS],
@@ -44,7 +43,15 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
     headers: {
       Cookie: (await cookies()).toString(),
     },
-  }).then((response) => response.json());
+  });
+
+  const json = await res.json();
+
+  if ("error" in json) {
+    throw new Error(json.error);
+  }
+
+  return json;
 }
 
 /**
@@ -55,16 +62,25 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
 export async function fetchGetGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
-  return fetch(client.api.questions._qualification(qualification).$url().path, {
-    method: "GET",
-    next: {
-      revalidate: FETCH_REVALIDATE,
-      tags: [TAG_GRADES],
-    },
-    headers: {
-      Cookie: (await cookies()).toString(),
-    },
-  }).then((response) => response.json());
+  const res = await client.api.questions
+    ._qualification(qualification)
+    .$get(undefined, {
+      next: {
+        revalidate: FETCH_REVALIDATE,
+        tags: [TAG_GRADES],
+      },
+      headers: {
+        Cookie: (await cookies()).toString(),
+      },
+    });
+
+  const json = await res.json();
+
+  if ("error" in json) {
+    throw new Error(json.error);
+  }
+
+  return json;
 }
 
 /**
@@ -77,11 +93,10 @@ export async function fetchGetYearsByQualificationAndGrade(
   qualification: string,
   grade: string,
 ): Promise<string[]> {
-  return fetch(
-    client.api.questions._qualification(qualification)._grade(grade).$url()
-      .path,
-    {
-      method: "GET",
+  const res = await client.api.questions
+    ._qualification(qualification)
+    ._grade(grade)
+    .$get(undefined, {
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_YEARS],
@@ -89,8 +104,15 @@ export async function fetchGetYearsByQualificationAndGrade(
       headers: {
         Cookie: (await cookies()).toString(),
       },
-    },
-  ).then((response) => response.json());
+    });
+
+  const json = await res.json();
+
+  if ("error" in json) {
+    throw new Error(json.error);
+  }
+
+  return json;
 }
 
 /**
@@ -105,14 +127,11 @@ export async function fetchGetCategories(
   grade: string,
   year: string,
 ): Promise<string[]> {
-  return fetch(
-    client.api.questions
-      ._qualification(qualification)
-      ._grade(grade)
-      ._year(year)
-      .$url().path,
-    {
-      method: "GET",
+  const res = await client.api.questions
+    ._qualification(qualification)
+    ._grade(grade)
+    ._year(year)
+    .$get(undefined, {
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_CATEGORIES],
@@ -120,8 +139,15 @@ export async function fetchGetCategories(
       headers: {
         Cookie: (await cookies()).toString(),
       },
-    },
-  ).then((response) => response.json());
+    });
+
+  const json = await res.json();
+
+  if ("error" in json) {
+    throw new Error(json.error);
+  }
+
+  return json;
 }
 
 /**
@@ -138,15 +164,12 @@ export async function fetchGetQuestionsByCategory(
   year: string,
   category: string,
 ): Promise<QuestionData[]> {
-  return fetch(
-    client.api.questions
-      ._qualification(qualification)
-      ._grade(grade)
-      ._year(year)
-      ._category(category)
-      .$url().path,
-    {
-      method: "GET",
+  const res = await client.api.questions
+    ._qualification(qualification)
+    ._grade(grade)
+    ._year(year)
+    ._category(category)
+    .$get(undefined, {
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_QUESTIONS],
@@ -154,8 +177,15 @@ export async function fetchGetQuestionsByCategory(
       headers: {
         Cookie: (await cookies()).toString(),
       },
-    },
-  ).then((response) => response.json());
+    });
+
+  const json = await res.json();
+
+  if ("error" in json) {
+    throw new Error(json.error);
+  }
+
+  return json;
 }
 
 /**
@@ -174,16 +204,13 @@ export async function fetchGetQuestionsByCategoryAndId(
   category: string,
   id: number,
 ): Promise<QuestionData> {
-  return fetch(
-    client.api.questions
-      ._qualification(qualification)
-      ._grade(grade)
-      ._year(year)
-      ._category(category)
-      ._id(id)
-      .$url().path,
-    {
-      method: "GET",
+  const res = await client.api.questions
+    ._qualification(qualification)
+    ._grade(grade)
+    ._year(year)
+    ._category(category)
+    ._id(id)
+    .$get(undefined, {
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_ID],
@@ -191,6 +218,13 @@ export async function fetchGetQuestionsByCategoryAndId(
       headers: {
         Cookie: (await cookies()).toString(),
       },
-    },
-  ).then((response) => response.json());
+    });
+
+  const json = await res.json();
+
+  if ("error" in json) {
+    throw new Error(json.error);
+  }
+
+  return json;
 }

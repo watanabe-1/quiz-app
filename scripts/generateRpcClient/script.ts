@@ -103,8 +103,7 @@ const parseRoute = (
         ).test(fileContents),
       );
     },
-    (type, asType) =>
-      `{ $${type.toLowerCase()}: InferNextResponseType<typeof ${asType}>}`,
+    (type, asType) => `{ $${type.toLowerCase()}: typeof ${asType}}`,
   );
 };
 

@@ -1,12 +1,17 @@
 import type { NextResponse } from "next/server";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type InferNextResponseType<T> = T extends (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
 ) => Promise<NextResponse<infer U>>
   ? U
   : never;
+
+interface TypedNextResponse<T> extends NextResponse {
+  json: () => Promise<T>;
+}
+
+// type TypedNextResponse<T> = NextResponse<TypedBody<T>>;
 
 // ランタイムの実態では絶対に使用しないので、 'declare const' で宣言する(あくまで型判定にのみ使用する)
 declare const __proxy: unique symbol;
@@ -57,13 +62,13 @@ type PathProxy<
               $get: (
                 url: UrlOptions<T["query"], true>,
                 option?: FetcherOptions,
-              ) => Promise<T["$get"]>;
+              ) => Promise<TypedNextResponse<InferNextResponseType<T["$get"]>>>;
             }
           : {
               $get: (
                 url?: UrlOptions,
                 option?: FetcherOptions,
-              ) => Promise<T["$get"]>;
+              ) => Promise<TypedNextResponse<InferNextResponseType<T["$get"]>>>;
             }
         : unknown) &
       (T extends { $post: unknown }
@@ -72,13 +77,17 @@ type PathProxy<
               $post: (
                 url: UrlOptions<T["query"], true>,
                 option?: FetcherOptions,
-              ) => Promise<T["$post"]>;
+              ) => Promise<
+                TypedNextResponse<InferNextResponseType<T["$post"]>>
+              >;
             }
           : {
               $post: (
                 url?: UrlOptions,
                 option?: FetcherOptions,
-              ) => Promise<T["$post"]>;
+              ) => Promise<
+                TypedNextResponse<InferNextResponseType<T["$post"]>>
+              >;
             }
         : unknown);
 
@@ -140,8 +149,8 @@ const createRpcProxy = <T extends object>(
   dynamicKeys: string[] = [],
 ): DynamicPathProxy<T> => {
   const proxy: unknown = new Proxy(
-    (_value?: string | number) => {
-      if (_value === undefined) {
+    (value?: string | number) => {
+      if (value === undefined) {
         return createRpcProxy([...paths], params, dynamicKeys);
       }
 
@@ -150,16 +159,12 @@ const createRpcProxy = <T extends object>(
         // 動的パラメータとして扱う
         return createRpcProxy(
           [...paths],
-          { ...params, [newKey.substring(1)]: _value },
+          { ...params, [newKey.substring(1)]: value },
           dynamicKeys,
         );
       }
 
-      return createRpcProxy(
-        [...paths, encodeURIComponent(_value)],
-        params,
-        dynamicKeys,
-      );
+      return createRpcProxy([...paths], params, dynamicKeys);
     },
     {
       get: (_, key: string) => {
@@ -197,10 +202,7 @@ const createRpcProxy = <T extends object>(
               credentials: "include",
             });
 
-            if (!response.ok)
-              throw new Error(`${method} request failed: ${response.status}`);
-
-            return response.json();
+            return response;
           };
         }
 
