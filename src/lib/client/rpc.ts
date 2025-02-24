@@ -11,9 +11,6 @@ import type { GET as GET_6 } from '../../app/api/questions/[qualification]/route
 import type { GET as GET_7 } from '../../app/api/questions/route';
 import type { NextResponse } from "next/server";
 
-
-
-
 type InferNextResponseType<T> = T extends (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...args: any[]
@@ -25,12 +22,8 @@ interface TypedNextResponse<T> extends NextResponse {
   json: () => Promise<T>;
 }
 
-// type TypedNextResponse<T> = NextResponse<TypedBody<T>>;
-
 // ランタイムの実態では絶対に使用しないので、 'declare const' で宣言する(あくまで型判定にのみ使用する)
 declare const __proxy: unique symbol;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-declare const query: unique symbol;
 type Endpoint = { [__proxy]?: true };
 
 type FetcherOptions<TBody = unknown> = {

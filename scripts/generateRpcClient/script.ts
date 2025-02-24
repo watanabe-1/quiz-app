@@ -117,8 +117,8 @@ const parseAppDir = (
   parentOptionalCatchAll = false,
 ) => {
   indent += "  ";
-  const pagesObject: string[] = [];
-  const queries: { importName: string; importString: string }[] = [];
+  const pathStructure: string[] = [];
+  const imports: { importName: string; importString: string }[] = [];
   const types: string[] = [];
 
   const entries = fs
@@ -172,7 +172,7 @@ const parseAppDir = (
         : nameWithoutExt;
 
       if (isDynamic) newSlugs.push(paramName?.replace("...", "") ?? "");
-      const { pagesObjectString: child, queries: childQueries } = parseAppDir(
+      const { pathStructureStr: child, queries: childQueries } = parseAppDir(
         fullPath,
         indent,
         newSlugs,
@@ -181,9 +181,9 @@ const parseAppDir = (
         isOptionalCatchAll,
       );
 
-      queries.push(...childQueries);
+      imports.push(...childQueries);
 
-      pagesObject.push(
+      pathStructure.push(
         isDynamic
           ? `${indent}${keyName}: ${child}`
           : `${indent}${keyName}: ${child}`,
@@ -193,7 +193,7 @@ const parseAppDir = (
       const queryDef = parseQuery(outputPath, fullPath);
       if (queryDef) {
         const { importName, importString, type } = queryDef;
-        queries.push({ importName, importString });
+        imports.push({ importName, importString });
         types.push(type);
       }
 
@@ -203,7 +203,7 @@ const parseAppDir = (
         const routeDef = parseRoute(outputPath, fullPath, method);
         if (routeDef) {
           const { importName, importString, type } = routeDef;
-          queries.push({ importName, importString });
+          imports.push({ importName, importString });
           types.push(type);
         }
       });
@@ -213,17 +213,16 @@ const parseAppDir = (
   });
 
   const typeString = types.join(" & ");
-
-  const pagesObjectString =
-    pagesObject.length > 0
+  const pathStructureStr =
+    pathStructure.length > 0
       ? `${typeString}${typeString ? " & " : ""}{
-    ${pagesObject.join(",\n")}
+    ${pathStructure.join(",\n")}
     ${indent}}`
       : typeString;
 
   return {
-    pagesObjectString,
-    queries,
+    pathStructureStr,
+    queries: imports,
   };
 };
 
@@ -237,15 +236,15 @@ const generatePages = (baseDir: string) => {
   // import文を削除したコード
   const pathStructureBaseClean = pathStructureBase.replace(importRegex, "");
 
-  const { pagesObjectString, queries } = parseAppDir(baseDir);
-  const pagesObject = `export type PathStructure = ${pagesObjectString};`;
+  const { pathStructureStr, queries } = parseAppDir(baseDir);
+  const pathStructureTyoe = `export type PathStructure = ${pathStructureStr};`;
 
   const queryImports = queries.map((query) => query.importString);
   const imports = queryImports.concat(pathStructureBaseImports);
 
-  const importsStr = queries.length ? `${imports.join("\n")}\n\n` : "";
+  const importsStr = queries.length ? `${imports.join("\n")}` : "";
 
-  return `${importsStr}\n${pathStructureBaseClean}\n${pagesObject}`;
+  return `${importsStr}${pathStructureBaseClean}\n${pathStructureTyoe}`;
 };
 
 // ファイルに出力
