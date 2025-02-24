@@ -1,6 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { client } from "@/lib/client";
+import { TypedNextResponse } from "@/lib/client/rpc";
 import { FETCH_REVALIDATE } from "@/lib/constants";
 import { QuestionData } from "@/types/quizType";
 
@@ -10,6 +11,23 @@ const TAG_YEARS = "years";
 const TAG_CATEGORIES = "categories";
 const TAG_QUESTIONS = "questions";
 const TAG_ID = "id";
+
+const fetchData = async <T extends object>(
+  fetcherFn: () => Promise<TypedNextResponse<T | { error: string }>>,
+) => {
+  const res = await fetcherFn();
+  const json = await res.json();
+
+  if ("error" in json) {
+    throw new Error(json.error);
+  }
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch: ${res.statusText}`);
+  }
+
+  return json;
+};
 
 /**
  * Revalidates cache tags for qualifications, grades, and years, along with questions.
@@ -35,23 +53,17 @@ export function revalidateTagByUpdateQuestion() {
  * @returns {Promise<string[]>} - A promise resolving to a list of qualifications.
  */
 export async function fetchGetAllQualifications(): Promise<string[]> {
-  const res = await client.api.questions.$get(undefined, {
-    next: {
-      revalidate: FETCH_REVALIDATE,
-      tags: [TAG_QUALIFICATIONS],
-    },
-    headers: {
-      Cookie: (await cookies()).toString(),
-    },
-  });
-
-  const json = await res.json();
-
-  if ("error" in json) {
-    throw new Error(json.error);
-  }
-
-  return json;
+  return fetchData(async () =>
+    client.api.questions.$get(undefined, {
+      next: {
+        revalidate: FETCH_REVALIDATE,
+        tags: [TAG_QUALIFICATIONS],
+      },
+      headers: {
+        Cookie: (await cookies()).toString(),
+      },
+    }),
+  );
 }
 
 /**
@@ -62,9 +74,8 @@ export async function fetchGetAllQualifications(): Promise<string[]> {
 export async function fetchGetGradesByQualification(
   qualification: string,
 ): Promise<string[]> {
-  const res = await client.api.questions
-    ._qualification(qualification)
-    .$get(undefined, {
+  return fetchData(async () =>
+    client.api.questions._qualification(qualification).$get(undefined, {
       next: {
         revalidate: FETCH_REVALIDATE,
         tags: [TAG_GRADES],
@@ -72,15 +83,8 @@ export async function fetchGetGradesByQualification(
       headers: {
         Cookie: (await cookies()).toString(),
       },
-    });
-
-  const json = await res.json();
-
-  if ("error" in json) {
-    throw new Error(json.error);
-  }
-
-  return json;
+    }),
+  );
 }
 
 /**
@@ -93,26 +97,20 @@ export async function fetchGetYearsByQualificationAndGrade(
   qualification: string,
   grade: string,
 ): Promise<string[]> {
-  const res = await client.api.questions
-    ._qualification(qualification)
-    ._grade(grade)
-    .$get(undefined, {
-      next: {
-        revalidate: FETCH_REVALIDATE,
-        tags: [TAG_YEARS],
-      },
-      headers: {
-        Cookie: (await cookies()).toString(),
-      },
-    });
-
-  const json = await res.json();
-
-  if ("error" in json) {
-    throw new Error(json.error);
-  }
-
-  return json;
+  return fetchData(async () =>
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      .$get(undefined, {
+        next: {
+          revalidate: FETCH_REVALIDATE,
+          tags: [TAG_YEARS],
+        },
+        headers: {
+          Cookie: (await cookies()).toString(),
+        },
+      }),
+  );
 }
 
 /**
@@ -127,27 +125,21 @@ export async function fetchGetCategories(
   grade: string,
   year: string,
 ): Promise<string[]> {
-  const res = await client.api.questions
-    ._qualification(qualification)
-    ._grade(grade)
-    ._year(year)
-    .$get(undefined, {
-      next: {
-        revalidate: FETCH_REVALIDATE,
-        tags: [TAG_CATEGORIES],
-      },
-      headers: {
-        Cookie: (await cookies()).toString(),
-      },
-    });
-
-  const json = await res.json();
-
-  if ("error" in json) {
-    throw new Error(json.error);
-  }
-
-  return json;
+  return fetchData(async () =>
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      .$get(undefined, {
+        next: {
+          revalidate: FETCH_REVALIDATE,
+          tags: [TAG_CATEGORIES],
+        },
+        headers: {
+          Cookie: (await cookies()).toString(),
+        },
+      }),
+  );
 }
 
 /**
@@ -164,28 +156,22 @@ export async function fetchGetQuestionsByCategory(
   year: string,
   category: string,
 ): Promise<QuestionData[]> {
-  const res = await client.api.questions
-    ._qualification(qualification)
-    ._grade(grade)
-    ._year(year)
-    ._category(category)
-    .$get(undefined, {
-      next: {
-        revalidate: FETCH_REVALIDATE,
-        tags: [TAG_QUESTIONS],
-      },
-      headers: {
-        Cookie: (await cookies()).toString(),
-      },
-    });
-
-  const json = await res.json();
-
-  if ("error" in json) {
-    throw new Error(json.error);
-  }
-
-  return json;
+  return fetchData(async () =>
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      .$get(undefined, {
+        next: {
+          revalidate: FETCH_REVALIDATE,
+          tags: [TAG_QUESTIONS],
+        },
+        headers: {
+          Cookie: (await cookies()).toString(),
+        },
+      }),
+  );
 }
 
 /**
@@ -204,27 +190,21 @@ export async function fetchGetQuestionsByCategoryAndId(
   category: string,
   id: number,
 ): Promise<QuestionData> {
-  const res = await client.api.questions
-    ._qualification(qualification)
-    ._grade(grade)
-    ._year(year)
-    ._category(category)
-    ._id(id)
-    .$get(undefined, {
-      next: {
-        revalidate: FETCH_REVALIDATE,
-        tags: [TAG_ID],
-      },
-      headers: {
-        Cookie: (await cookies()).toString(),
-      },
-    });
-
-  const json = await res.json();
-
-  if ("error" in json) {
-    throw new Error(json.error);
-  }
-
-  return json;
+  return fetchData(async () =>
+    client.api.questions
+      ._qualification(qualification)
+      ._grade(grade)
+      ._year(year)
+      ._category(category)
+      ._id(id)
+      .$get(undefined, {
+        next: {
+          revalidate: FETCH_REVALIDATE,
+          tags: [TAG_ID],
+        },
+        headers: {
+          Cookie: (await cookies()).toString(),
+        },
+      }),
+  );
 }

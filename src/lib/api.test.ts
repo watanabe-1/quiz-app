@@ -28,6 +28,7 @@ describe("API Functions", () => {
   test("fetchGetAllQualifications should return an array of qualifications", async () => {
     const mockQualifications = ["Qualification1", "Qualification2"];
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: jest.fn().mockResolvedValueOnce(mockQualifications),
     });
 
@@ -40,6 +41,7 @@ describe("API Functions", () => {
     const qualification = "TestQualification";
     const mockGrades = ["Grade1", "Grade2"];
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: jest.fn().mockResolvedValueOnce(mockGrades),
     });
 
@@ -56,6 +58,7 @@ describe("API Functions", () => {
     const grade = "TestGrade";
     const mockYears = ["2021", "2022"];
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: jest.fn().mockResolvedValueOnce(mockYears),
     });
 
@@ -76,6 +79,7 @@ describe("API Functions", () => {
     const year = "2022";
     const mockCategories = ["Category1", "Category2"];
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: jest.fn().mockResolvedValueOnce(mockCategories),
     });
 
@@ -105,6 +109,7 @@ describe("API Functions", () => {
       },
     ];
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: jest.fn().mockResolvedValueOnce(mockQuestions),
     });
 
@@ -138,6 +143,7 @@ describe("API Functions", () => {
       year: year,
     };
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
       json: jest.fn().mockResolvedValueOnce(mockQuestion),
     });
 
