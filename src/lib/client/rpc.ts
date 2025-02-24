@@ -33,7 +33,7 @@ type FetcherOptions<TBody = unknown> = {
 };
 
 type QueryParams<T = Record<string, string | number>> = T;
-type MutchResult<T = Record<string, string>> = T;
+type MatchResult<T = Record<string, string>> = T;
 
 type UrlOptions<
   TQuery = QueryParams,
@@ -55,9 +55,9 @@ type PathProxy<
   T,
   UsedAsProperty extends boolean = false,
 > = UsedAsProperty extends true
-  ? { $match: (path: string) => MutchResult | null }
+  ? { $match: (path: string) => MatchResult | null }
   : {
-      $match: (path: string) => MutchResult | null;
+      $match: (path: string) => MatchResult | null;
     } & (T extends { query: unknown }
       ? {
           $url: (url: UrlOptions<T["query"], true>) => UrlResult<T["query"]>;
