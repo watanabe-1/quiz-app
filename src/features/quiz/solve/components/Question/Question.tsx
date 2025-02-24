@@ -170,13 +170,13 @@ const Question: React.FC<QuestionProps> = ({
       : "0.0";
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-2xl flex-col rounded bg-white p-6 shadow">
-      <div className="flex-grow">
+    <div className="mx-auto flex min-h-screen max-w-2xl flex-col rounded-sm bg-white p-6 shadow-sm">
+      <div className="grow">
         <div className="mb-2 flex flex-col text-left text-sm text-gray-600 md:flex-row md:items-center md:justify-between">
           <span>{`【前問まで】正解数 ${correctCount} / ${answeredCount} 問中 正答率 ${accuracy}%`}</span>
           <button
             onClick={toggleReportModal}
-            className="mt-2 rounded border border-green-500 px-4 py-2 text-green-500 transition-colors hover:bg-green-500 hover:text-white md:mt-0"
+            className="mt-2 rounded-sm border border-green-500 px-4 py-2 text-green-500 transition-colors hover:bg-green-500 hover:text-white md:mt-0"
             aria-label="成績詳細を表示"
           >
             成績詳細
@@ -220,7 +220,7 @@ const Question: React.FC<QuestionProps> = ({
       {/* 解答リセットボタン */}
       <button
         onClick={handleResetAnswer}
-        className="mt-4 rounded bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
+        className="mt-4 rounded-sm bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
       >
         解答をリセットする
       </button>
@@ -243,7 +243,7 @@ const Question: React.FC<QuestionProps> = ({
                 ._id(prevQuestionId)
                 .$url().path
             }
-            className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+            className="rounded-sm bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
             前の問題
           </Link>
@@ -261,7 +261,7 @@ const Question: React.FC<QuestionProps> = ({
                 ._id(nextQuestionId)
                 .$url().path
             }
-            className="rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+            className="rounded-sm bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
             次の問題
           </Link>

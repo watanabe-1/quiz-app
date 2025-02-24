@@ -28,7 +28,7 @@ const QualificationAdminPage = async (props: { params: Params }) => {
         <h2 className="mb-4 text-xl font-semibold">級一覧</h2>
         <ul className="space-y-2">
           {grades.map((grade) => (
-            <li key={grade} className="rounded bg-white p-4 shadow">
+            <li key={grade} className="rounded-sm bg-white p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <span>{grade}</span>
                 <Link

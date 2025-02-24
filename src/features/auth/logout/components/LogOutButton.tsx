@@ -11,7 +11,7 @@ const LogOutButton = ({ onClick }: { onClick?: () => void }) => {
     <form action={logOutAction} className="w-full">
       <button
         type="submit"
-        className="block w-full px-4 py-2 text-left transition duration-300 ease-in-out hover:bg-gray-700 focus:outline-none"
+        className="block w-full px-4 py-2 text-left transition duration-300 ease-in-out hover:bg-gray-700 focus:outline-hidden"
         onClick={(e) => {
           if (!confirm("ログアウトしますか？")) {
             e.preventDefault();

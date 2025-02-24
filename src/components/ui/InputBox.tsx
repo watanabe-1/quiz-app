@@ -31,13 +31,13 @@ const InputBox = <T extends "text" | "password" | "number" = "text">({
       <label className="mb-2 block font-medium">{label}</label>
       <input
         {...inputProps}
-        className="w-full rounded border p-2"
+        className="w-full rounded-sm border p-2"
         key={fieldMetadata.key}
         placeholder={placeholder}
         hidden={disabled}
       />
       {disabled && (
-        <span className="block w-full rounded border bg-gray-100 p-2 text-gray-600">
+        <span className="block w-full rounded-sm border bg-gray-100 p-2 text-gray-600">
           {value}
           {/* 値が空の場合でも高さが保たれるよう、ダミー文字 - を見えない形（invisible）で挿入 */}
           {!value && <span className="invisible">-</span>}

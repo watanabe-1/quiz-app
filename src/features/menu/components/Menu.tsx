@@ -74,7 +74,7 @@ const Menu: React.FC = () => {
             <>
               <button
                 onClick={() => toggleSubmenu(submenusKey)}
-                className="flex w-full items-center justify-between px-4 py-2 pl-4 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none"
+                className="flex w-full items-center justify-between px-4 py-2 pl-4 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-hidden"
               >
                 <span>{name}</span>
                 {openSubmenus[submenusKey] ? (
@@ -93,7 +93,7 @@ const Menu: React.FC = () => {
           ) : (
             <Link
               href={href || "#"}
-              className="flex w-full items-center justify-between px-4 py-2 pl-4 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-none"
+              className="flex w-full items-center justify-between px-4 py-2 pl-4 text-left transition-all duration-300 ease-in-out hover:bg-gray-700 focus:outline-hidden"
               onClick={toggleMenu}
             >
               {name}
@@ -109,7 +109,7 @@ const Menu: React.FC = () => {
       {/* ハンバーガーメニューボタン */}
       <button
         onClick={toggleMenu}
-        className="text-white focus:outline-none"
+        className="text-white focus:outline-hidden"
         aria-label="Toggle menu"
       >
         {isOpen ? (
@@ -133,7 +133,7 @@ const Menu: React.FC = () => {
         {/* メニュー内の閉じるボタン */}
         <button
           onClick={toggleMenu}
-          className="p-4 text-white focus:outline-none"
+          className="p-4 text-white focus:outline-hidden"
         >
           <FaTimes className="text-2xl" aria-label="Close menu" />
         </button>

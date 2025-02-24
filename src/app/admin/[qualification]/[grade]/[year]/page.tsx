@@ -40,7 +40,7 @@ const YearAdminPage = async (props: { params: Params }) => {
           {questions.map((question) => (
             <li
               key={question.questionId}
-              className="rounded bg-white p-4 shadow"
+              className="rounded-sm bg-white p-4 shadow-sm"
             >
               <div className="flex items-center justify-between">
                 <span>

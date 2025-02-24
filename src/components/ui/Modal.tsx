@@ -30,7 +30,7 @@ const Modal: React.FC<ModalProps> = ({
       }}
     >
       <div
-        className="max-h-screen w-full max-w-2xl overflow-y-auto rounded bg-white p-6 shadow-lg"
+        className="max-h-screen w-full max-w-2xl overflow-y-auto rounded-sm bg-white p-6 shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {/* モーダルの内容 */}

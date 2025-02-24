@@ -9,7 +9,7 @@ interface SubmitButtonProps {
 }
 
 const buttonClass = tv({
-  base: "rounded bg-blue-600 px-4 py-2 text-white transition duration-200 hover:bg-blue-700 disabled:opacity-50",
+  base: "rounded-sm bg-blue-600 px-4 py-2 text-white transition duration-200 hover:bg-blue-700 disabled:opacity-50",
   variants: {
     fullWidth: {
       true: "w-full",

@@ -8,7 +8,7 @@ const LogInForm = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded bg-white p-6 shadow">
+      <div className="w-full max-w-md rounded-sm bg-white p-6 shadow-sm">
         <h1 className="mb-6 text-center text-2xl font-bold">ログイン</h1>
         <FormContainer
           formMetadata={form}

@@ -36,7 +36,7 @@ const GradesPage = async (props: { params: Params }) => {
                       ._grade(grade)
                       .$url().path
                   }
-                  className="block rounded bg-white p-4 shadow hover:bg-blue-50"
+                  className="block rounded-sm bg-white p-4 shadow-sm hover:bg-blue-50"
                 >
                   {grade}
                 </Link>

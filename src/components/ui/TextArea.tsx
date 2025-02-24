@@ -22,7 +22,7 @@ const TextArea = ({
       <label className="mb-2 block font-medium">{label}</label>
       <textarea
         {...inputProps}
-        className="w-full rounded border p-2"
+        className="w-full rounded-sm border p-2"
         rows={rows}
         key={fieldMetadata.key}
       />

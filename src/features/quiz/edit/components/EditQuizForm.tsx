@@ -43,7 +43,7 @@ const EditQuizForm: React.FC<EditQuizFormParams> = ({ questionData }) => {
             const explanationField = optionField.explanation.getFieldset();
 
             return (
-              <div key={option.key} className="mb-6 rounded border p-4">
+              <div key={option.key} className="mb-6 rounded-sm border p-4">
                 <div className="mb-2">
                   <InputBox
                     label={`選択肢 ${index + 1}:`}

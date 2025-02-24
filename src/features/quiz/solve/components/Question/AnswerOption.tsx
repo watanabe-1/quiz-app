@@ -14,7 +14,7 @@ interface AnswerOptionProps {
 }
 
 const optionClass = tv({
-  base: "w-full cursor-pointer rounded border p-4 text-left", // 共通部分
+  base: "w-full cursor-pointer rounded-sm border p-4 text-left", // 共通部分
   variants: {
     isAnswered: {
       true: "",

@@ -42,7 +42,7 @@ const YearsPage = async (props: { params: Params }) => {
                       ._year(year)
                       .$url().path
                   }
-                  className="block rounded bg-white p-4 shadow hover:bg-blue-50"
+                  className="block rounded-sm bg-white p-4 shadow-sm hover:bg-blue-50"
                 >
                   {year}
                 </Link>

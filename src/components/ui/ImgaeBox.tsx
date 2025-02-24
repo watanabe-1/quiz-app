@@ -62,7 +62,7 @@ const ImageBox = ({
           <button
             type="button"
             onClick={handleDelete}
-            className="mt-2 rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            className="mt-2 rounded-sm bg-red-600 px-4 py-2 text-white hover:bg-red-700"
           >
             画像を削除
           </button>

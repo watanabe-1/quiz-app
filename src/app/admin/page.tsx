@@ -17,26 +17,26 @@ const AdminDashboard = async () => {
         </div>
         <Link
           href={client.admin.upload.$url().path}
-          className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          className="mb-4 inline-block rounded-sm bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのアップロード
         </Link>
         <Link
           href={client.admin.upload.businessCareer.$url().path}
-          className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          className="mb-4 inline-block rounded-sm bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのアップロード(ビジキャリPDFから)
         </Link>
         <Link
           href={client.admin.export.$url().path}
-          className="mb-4 inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          className="mb-4 inline-block rounded-sm bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           問題データのエクスポート
         </Link>
         <h2 className="mb-4 text-xl font-semibold">資格一覧</h2>
         <ul className="space-y-2">
           {qualifications.map((qualification) => (
-            <li key={qualification} className="rounded bg-white p-4 shadow">
+            <li key={qualification} className="rounded-sm bg-white p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <span>{qualification}</span>
                 <Link

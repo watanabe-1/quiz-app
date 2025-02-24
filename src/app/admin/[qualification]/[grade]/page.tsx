@@ -34,7 +34,7 @@ const QualificationAdminPage = async (props: { params: Params }) => {
         <h2 className="mb-4 text-xl font-semibold">年度一覧</h2>
         <ul className="space-y-2">
           {years.map((year) => (
-            <li key={year} className="rounded bg-white p-4 shadow">
+            <li key={year} className="rounded-sm bg-white p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <span>{year}</span>
                 <Link
