@@ -52,33 +52,44 @@ interface UrlResult<TQuery = QueryParams> {
 
 type InferResponse<T> = TypedNextResponse<InferNextResponseType<T>>;
 
+// queryが指定されたときはUrlOptionsからqueryを必ず指定する
 type UrlArg<T> = T extends { query: unknown }
   ? [url: UrlOptions<T["query"], true>]
   : [url?: UrlOptions];
+
+// UsedAsProperty が true の場合の型
+type PathProxyAsProperty = unknown;
+
+// UsedAsProperty が false の場合の型
+type PathProxyAsFunction<T> = {
+  $url: (
+    ...args: UrlArg<T>
+  ) => UrlResult<T extends { query: unknown } ? T["query"] : QueryParams>;
+} & (T extends { $get: unknown }
+  ? {
+      $get: (
+        ...args: [...UrlArg<T>, option?: FetcherOptions]
+      ) => Promise<InferResponse<T["$get"]>>;
+    }
+  : unknown) &
+  (T extends { $post: unknown }
+    ? {
+        $post: (
+          ...args: [...UrlArg<T>, option?: FetcherOptions]
+        ) => Promise<InferResponse<T["$post"]>>;
+      }
+    : unknown);
+
+// UsedAsProperty の値によらない型
+type PathProxyAsDefault = { $match: (path: string) => MatchResult | null };
 
 type PathProxy<
   T,
   UsedAsProperty extends boolean = false,
 > = (UsedAsProperty extends true
-  ? unknown
-  : {
-      $url: (
-        ...args: UrlArg<T>
-      ) => UrlResult<T extends { query: unknown } ? T["query"] : QueryParams>;
-    } & (T extends { $get: unknown }
-      ? {
-          $get: (
-            ...args: [...UrlArg<T>, option?: FetcherOptions]
-          ) => Promise<InferResponse<T["$get"]>>;
-        }
-      : unknown) &
-      (T extends { $post: unknown }
-        ? {
-            $post: (
-              ...args: [...UrlArg<T>, option?: FetcherOptions]
-            ) => Promise<InferResponse<T["$post"]>>;
-          }
-        : unknown)) & { $match: (path: string) => MatchResult | null };
+  ? PathProxyAsProperty
+  : PathProxyAsFunction<T>) &
+  PathProxyAsDefault;
 
 // `_XX` を関数としても、プロパティとしても扱えるようにする
 type ParamFunction<T, UsedAsProperty extends boolean> = ((
