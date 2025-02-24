@@ -22,10 +22,6 @@ const fetchData = async <T extends object>(
     throw new Error(json.error);
   }
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch: ${res.statusText}`);
-  }
-
   return json;
 };
 
